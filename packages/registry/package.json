@@ -1,0 +1,14 @@
+{
+  "name": "@intense-ui/registry",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build:registry": "node scripts/build-registry.js"
+  },
+  "dependencies": {
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.300.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.0"
+  }
+}
