@@ -370,7 +370,7 @@ export default function CustomisedAccordion() {
     <StackedCardsContainer>
       {ACCORDION_EXAMPLES.map((ex, i) => (
         <StackedCard key={ex.id} index={i} total={ACCORDION_EXAMPLES.length}>
-          <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-8 pb-[4rem]">
+          <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-4 sm:p-6 md:p-8 pb-[4rem]">
             <div className="flex items-start gap-4 py-4">
               <div className="p-2.5 sm:p-3 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-xl shrink-0">
                 {(() => {
@@ -408,7 +408,7 @@ export default function CustomisedAccordion() {
               </div>
 
               {ex.id === "customization" && (
-                <div className="border rounded-2xl p-4 bg-card text-card-foreground shadow-sm">
+                <div className="border rounded-2xl p-4 bg-card text-card-foreground shadow-sm m-4">
                   <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <span className="w-1.5 h-6 bg-[var(--theme-primary)] rounded-full"></span>
                     Interactive Props
