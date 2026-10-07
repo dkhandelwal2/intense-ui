@@ -1,8 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils'; // Assuming they use a cn utility typical to shadcn
 
-export interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AnimatedButtonProps extends HTMLMotionProps<"button"> {
   children: React.ReactNode;
 }
 
