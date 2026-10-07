@@ -58,6 +58,31 @@ export default function AccordionPage() {
           </div>
         ))}
       </div>
+
+      <div className="space-y-4">
+        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">AccordionTrigger</h4>
+        {ACCORDION_TRIGGER_API_REFERENCE.map(api => (
+          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs text-primary">{api.prop}</span>
+              <span className="font-mono text-[10px] text-zinc-500">{api.type}</span>
+            </div>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
+          </div>
+        ))}
+      </div>
+      <div className="space-y-4">
+        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">AccordionContent</h4>
+        {ACCORDION_CONTENT_API_REFERENCE.map(api => (
+          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs text-primary">{api.prop}</span>
+              <span className="font-mono text-[10px] text-zinc-500">{api.type}</span>
+            </div>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 

@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Monitor, Moon, TerminalSquare, Info, X } from "lucide-react";
+import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { ScrollContainerProvider } from "./scroll-context";
@@ -313,6 +313,39 @@ export function ComponentPageLayout({
                     <div className="text-sm text-zinc-600 dark:text-zinc-400">
                       {propsTable}
                     </div>
+
+                <div className="flex flex-col gap-6 pt-6 border-t border-black/5 dark:border-white/5 mt-4">
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <Heart className="w-4 h-4 text-[var(--theme-primary)]" /> Open Source
+                    </h3>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                      This component library is free and open-source. We believe in building accessible, highly customizable, and beautifully animated components for everyone. Contributions are welcome!
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <Scale className="w-4 h-4 text-blue-500" /> License: MIT
+                    </h3>
+                    <ul className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1.5 list-inside list-disc">
+                      <li>Free for commercial and personal use</li>
+                      <li>Modification and distribution allowed</li>
+                      <li>Requires copyright notice preservation</li>
+                      <li>No warranty or liability provided</li>
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <Mail className="w-4 h-4 text-green-500" /> Contact Us
+                    </h3>
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                      Have questions, need custom components, or want to report an issue? Reach out to us at <a href="mailto:hello@intense-ui.com" className="text-[var(--theme-primary)] hover:underline font-medium">hello@intense-ui.com</a> or message us on X (Twitter).
+                    </p>
+                  </div>
+                </div>
+
                   </div>
                 )}
               </motion.div>
