@@ -26,7 +26,7 @@ export function StackedCardsContainer({
 
   return (
     <StackedCardsContext.Provider value={{ scrollYProgress }}>
-      <div ref={containerRef} className={cn("relative block pb-[15vh]", className)}>
+      <div ref={containerRef} className={cn("relative block md:pb-[15vh]", className)}>
         {children}
       </div>
     </StackedCardsContext.Provider>
