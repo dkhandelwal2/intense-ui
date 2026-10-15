@@ -1,0 +1,16 @@
+[
+  {
+    "name": "animated-button",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "registryDependencies": [],
+    "files": [
+      "animated-button.tsx"
+    ]
+  }
+]
