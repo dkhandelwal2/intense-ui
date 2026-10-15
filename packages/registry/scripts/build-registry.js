@@ -10,6 +10,11 @@ const components = {
     name: 'animated-button',
     dependencies: ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
     registryDependencies: [],
+  },
+  'accordion': {
+    name: 'accordion',
+    dependencies: ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
+    registryDependencies: [],
   }
 };
 
@@ -62,17 +67,33 @@ function buildRegistry() {
       type: "registry:ui",
       dependencies: metadata.dependencies,
       registryDependencies: metadata.registryDependencies,
-      files: [`${name}.tsx`]
+      files: [
+        {
+          path: `packages/registry/src/components/${name}.tsx`,
+          type: "registry:ui"
+        }
+      ]
     });
   }
 
-  // Write full registry index
+  // Write full registry index to dist
   fs.writeFileSync(
     path.join(DIST_DIR, 'index.json'),
     JSON.stringify(registryIndex, null, 2)
   );
 
-  console.log('Registry built successfully in dist/ !');
+  // Write root registry.json for GitHub Shadcn CLI support
+  const ROOT_DIR = path.join(__dirname, '../../../');
+  fs.writeFileSync(
+    path.join(ROOT_DIR, 'registry.json'),
+    JSON.stringify({
+      name: "intense-ui",
+      homepage: "https://intense-ui.com",
+      items: registryIndex
+    }, null, 2)
+  );
+
+  console.log('Registry built successfully in dist/ and root registry.json !');
 }
 
 buildRegistry();

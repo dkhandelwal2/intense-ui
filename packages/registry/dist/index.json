@@ -10,7 +10,27 @@
     ],
     "registryDependencies": [],
     "files": [
-      "animated-button.tsx"
+      {
+        "path": "packages/registry/src/components/animated-button.tsx",
+        "type": "registry:ui"
+      }
+    ]
+  },
+  {
+    "name": "accordion",
+    "type": "registry:ui",
+    "dependencies": [
+      "framer-motion",
+      "lucide-react",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "registryDependencies": [],
+    "files": [
+      {
+        "path": "packages/registry/src/components/accordion.tsx",
+        "type": "registry:ui"
+      }
     ]
   }
 ]
