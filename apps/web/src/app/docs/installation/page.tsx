@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -27,7 +27,13 @@ import {
   Package,
   Code2,
   Download,
-  FolderGit2
+  FolderGit2,
+  Boxes,
+  ShieldCheck,
+  Bug,
+  MessageSquare,
+  Mail,
+  ExternalLink
 } from "lucide-react";
 import { toast } from "sonner";
 import { CodeBlock } from "@/components/ui/code-block";
@@ -51,6 +57,86 @@ const COMPONENTS_LIST: { slug: ComponentSlug; label: string; icon: React.ReactNo
   { slug: "tooltip", label: "Tooltip", icon: <Sparkles className="w-3.5 h-3.5" />, desc: "Hover floating preview" },
   { slug: "animated-button", label: "Button", icon: <Box className="w-3.5 h-3.5" />, desc: "Magnetic glow button" },
 ];
+
+/**
+ * ScrollStepCard: Renders a massive atmospheric 3D numeral in the background.
+ * As the user scrolls, the step content emerges and unfolds out from the numeral with spring physics.
+ */
+function ScrollStepCard({
+  stepNumber,
+  badgeText,
+  badgeColor = "text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 border-[var(--theme-primary)]/20",
+  icon,
+  glowColor = "from-[var(--theme-primary)]/30 to-purple-500/10",
+  children
+}: {
+  stepNumber: string;
+  badgeText: string;
+  badgeColor?: string;
+  icon: React.ReactNode;
+  glowColor?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative w-full min-w-0 py-4 sm:py-6">
+      {/* Huge 3D Cinematic Watermark Number that reacts to scroll */}
+      <motion.div
+        initial={{ opacity: 0.1, scale: 0.8, y: 40 }}
+        whileInView={{ opacity: 0.4, scale: 1.05, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className="pointer-events-none select-none absolute -top-8 sm:-top-16 -right-2 sm:right-4 font-black tracking-tighter text-[130px] sm:text-[200px] md:text-[260px] leading-none bg-gradient-to-b from-[var(--theme-primary)]/40 via-purple-500/15 to-transparent bg-clip-text text-transparent z-0 overflow-hidden"
+      >
+        {stepNumber}
+      </motion.div>
+
+      {/* Atmospheric Radial Blur Glow Behind Number */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+        className={cn(
+          "pointer-events-none absolute -top-6 sm:-top-10 right-2 sm:right-8 w-[160px] sm:w-[260px] h-[160px] sm:h-[260px] rounded-full blur-3xl -z-10 bg-gradient-to-tr",
+          glowColor
+        )}
+      />
+
+      {/* Content Card Emerging Out of the Number */}
+      <motion.div
+        initial={{ opacity: 0, y: 50, scale: 0.93 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: false, amount: 0.15 }}
+        transition={{ type: "spring", stiffness: 130, damping: 22 }}
+        className="relative z-10 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-[#0c0c0e]/80 p-4 sm:p-7 md:p-8 backdrop-blur-xl shadow-2xl space-y-5 hover:border-[var(--theme-primary)]/40 transition-all duration-300"
+      >
+        {/* Step Header with Holographic Icon Pill */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 pb-4">
+          <div className="flex items-center gap-3">
+            <motion.div
+              whileHover={{ scale: 1.12, rotate: 6 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="relative flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-[var(--theme-primary)] to-pink-600 text-white shadow-[0_0_25px_rgba(255,0,132,0.45)] border border-white/20 shrink-0"
+            >
+              {icon}
+            </motion.div>
+            <div>
+              <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold uppercase tracking-widest border", badgeColor)}>
+                {badgeText}
+              </span>
+            </div>
+          </div>
+          <span className="text-xs font-mono text-zinc-400 dark:text-zinc-500 font-bold">
+            STEP {stepNumber}
+          </span>
+        </div>
+
+        {/* Step Specific Content */}
+        {children}
+      </motion.div>
+    </div>
+  );
+}
 
 export default function InstallationPage() {
   const [setupMode, setSetupMode] = useState<"fresh" | "existing">("fresh");
@@ -110,10 +196,10 @@ export default function InstallationPage() {
   };
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto py-6 sm:py-10 px-3 sm:px-6 md:px-8 space-y-12 sm:space-y-16 overflow-x-hidden min-w-0">
+    <div className="relative w-full max-w-5xl mx-auto py-6 sm:py-10 px-3 sm:px-6 md:px-8 space-y-14 sm:space-y-20 overflow-x-hidden min-w-0">
       {/* Ambient background glows */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[320px] sm:w-[600px] h-[250px] sm:h-[350px] bg-gradient-to-tr from-[var(--theme-primary)]/20 via-purple-500/10 to-transparent blur-3xl pointer-events-none -z-10 rounded-full" />
-      <div className="absolute top-[600px] right-0 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-[var(--theme-primary)]/8 blur-3xl pointer-events-none -z-10 rounded-full" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[320px] sm:w-[650px] h-[250px] sm:h-[350px] bg-gradient-to-tr from-[var(--theme-primary)]/20 via-purple-500/10 to-transparent blur-3xl pointer-events-none -z-10 rounded-full" />
+      <div className="absolute top-[800px] right-0 w-[250px] sm:w-[450px] h-[250px] sm:h-[450px] bg-[var(--theme-primary)]/8 blur-3xl pointer-events-none -z-10 rounded-full" />
 
       {/* Hero Header with Floating Tech Icons */}
       <div className="flex flex-col items-start gap-4 sm:gap-5 w-full min-w-0">
@@ -128,14 +214,13 @@ export default function InstallationPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)] animate-ping" />
           </motion.div>
 
-          {/* Floating animated icon badges */}
           <motion.div
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/10 text-zinc-600 dark:text-zinc-400"
           >
             <FolderGit2 className="w-3 h-3 text-[var(--theme-primary)]" />
-            <span>GitHub Registry Powered</span>
+            <span>Zero Lock-in Source Distribution</span>
           </motion.div>
         </div>
 
@@ -158,11 +243,11 @@ export default function InstallationPage() {
             transition={{ delay: 0.2 }}
             className="text-sm sm:text-base md:text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed"
           >
-            No external libraries to bundle. Install components directly to your source code using the shadcn CLI with 100% ownership and zero lock-in.
+            Install animated React components directly into your codebase via the official shadcn CLI. Own the code with 100% control over design and physics.
           </motion.p>
         </div>
 
-        {/* Project Setup Persona Switcher (Responsive) */}
+        {/* Project Setup Persona Switcher */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -215,7 +300,7 @@ export default function InstallationPage() {
         </motion.div>
       </div>
 
-      {/* Interactive Terminal Experience (Fully Responsive) */}
+      {/* Interactive Terminal Experience */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -280,7 +365,7 @@ export default function InstallationPage() {
           ))}
         </div>
 
-        {/* Terminal Content Area (Responsive Stacking) */}
+        {/* Terminal Content Area */}
         <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm space-y-4 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
@@ -380,298 +465,222 @@ export default function InstallationPage() {
         </div>
       </motion.div>
 
-      {/* Futuristic Guided Steps with Animated Energy Conduit */}
-      <div className="relative space-y-10 sm:space-y-14 w-full min-w-0">
-        {/* Animated Laser Beam Conduit connecting steps */}
-        <div className="hidden sm:block absolute left-[26px] top-8 bottom-8 w-1 rounded-full bg-zinc-200 dark:bg-white/10 pointer-events-none overflow-hidden">
-          {/* Laser Gradient Beam */}
-          <div className="w-full h-full bg-gradient-to-b from-[var(--theme-primary)] via-purple-500 to-indigo-500 opacity-60" />
-          {/* Traveling energy photon */}
-          <motion.div
-            animate={{ y: ["-100%", "300%"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent via-white to-transparent blur-[1px]"
-          />
-        </div>
-
-        {/* STEP 1: Project Initialization */}
+      {/* 🚀 SCROLL-DRIVEN STEP REVEALS (Content emerges from huge numerals) */}
+      <div className="space-y-12 sm:space-y-16 w-full min-w-0">
+        {/* STEP 1: Initialize */}
         <AnimatePresence>
           {setupMode === "fresh" && (
             <motion.div
-              key="step-init"
-              initial={{ opacity: 0, x: -20, height: 0 }}
-              animate={{ opacity: 1, x: 0, height: "auto" }}
-              exit={{ opacity: 0, x: -20, height: 0 }}
+              key="step-01"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
-              className="relative flex flex-col sm:flex-row items-start gap-3 sm:gap-7 group w-full min-w-0"
             >
-              {/* Modern Animated Step Node Avatar */}
-              <div className="relative shrink-0 flex items-center gap-3 sm:block">
-                <div className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[var(--theme-primary)] to-pink-600 text-white shadow-[0_0_30px_rgba(255,0,132,0.5)] z-10 border border-white/20">
-                  {/* Subtle radar pulse animation */}
-                  <motion.div
-                    animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute inset-0 rounded-2xl bg-[var(--theme-primary)]/40 blur-sm pointer-events-none"
-                  />
-                  <Terminal className="w-6 h-6 text-white" />
-                  <Rocket className="w-3.5 h-3.5 text-pink-200 absolute -top-1 -right-1" />
-                </div>
-                <span className="sm:hidden text-xs font-mono font-bold uppercase tracking-wider text-[var(--theme-primary)]">
-                  Step 01 // Initialize
-                </span>
-              </div>
-
-              {/* Step Card Body */}
-              <div className="flex-1 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/5 dark:border-white/10 bg-zinc-50/70 dark:bg-white/[0.02] p-4 sm:p-7 backdrop-blur-md space-y-4 hover:border-[var(--theme-primary)]/40 hover:shadow-lg transition-all">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <span className="hidden sm:inline-block text-[10px] font-mono font-bold tracking-widest uppercase text-[var(--theme-primary)]">
-                      Step 01 // Project Setup
+              <ScrollStepCard
+                stepNumber="01"
+                badgeText="STEP 01 // INITIALIZE PROJECT"
+                icon={<Terminal className="w-6 h-6 text-white" />}
+                glowColor="from-[var(--theme-primary)]/30 to-pink-500/10"
+              >
+                <div>
+                  <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
+                    <span>Initialize shadcn in your project</span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                      One-Time Only
                     </span>
-                    <h3 className="text-base sm:text-xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                      <span>Initialize shadcn in your project</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                        One-Time Only
-                      </span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                      Generates <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components.json</code> and configures your <code className="font-mono">@/*</code> path alias in TypeScript.
-                    </p>
-                  </div>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
+                    Generates <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components.json</code> and configures your <code className="font-mono">@/*</code> path alias in TypeScript.
+                  </p>
                 </div>
 
-                {/* Command Block */}
                 <div className="w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
                   <CodeBlock code={getInitCommand(selectedPm)} language="bash" />
                 </div>
 
-                <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3 sm:p-3.5 text-xs text-zinc-600 dark:text-zinc-300 flex items-start gap-2.5">
+                <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3.5 text-xs text-zinc-600 dark:text-zinc-300 flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                   <div>
-                    <strong>Why is this needed?</strong> The shadcn CLI requires <code className="font-mono">components.json</code> to configure your components folder. Without it, running <code className="font-mono">shadcn add</code> will throw a configuration error.
+                    <strong>Why is this required?</strong> The shadcn CLI relies on <code className="font-mono">components.json</code> to discover your source directory and styling configuration. Without it, running <code className="font-mono">shadcn add</code> prompts a preset configuration error.
                   </div>
                 </div>
-              </div>
+              </ScrollStepCard>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* STEP 2: Add Component */}
-        <div className="relative flex flex-col sm:flex-row items-start gap-3 sm:gap-7 group w-full min-w-0">
-          {/* Modern Animated Step Node Avatar */}
-          <div className="relative shrink-0 flex items-center gap-3 sm:block">
-            <div className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 text-white shadow-[0_0_30px_rgba(168,85,247,0.45)] z-10 border border-white/20">
-              <motion.div
-                animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute inset-0 rounded-2xl bg-purple-500/40 blur-sm pointer-events-none"
-              />
-              <Package className="w-6 h-6 text-white" />
-              <motion.div
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-1 -right-1"
-              >
-                <Download className="w-3.5 h-3.5 text-purple-200" />
-              </motion.div>
-            </div>
-            <span className="sm:hidden text-xs font-mono font-bold uppercase tracking-wider text-purple-500">
-              {setupMode === "fresh" ? "Step 02 // Pull Component" : "Step 01 // Pull Component"}
-            </span>
+        {/* STEP 2: Pull Component */}
+        <ScrollStepCard
+          stepNumber={setupMode === "fresh" ? "02" : "01"}
+          badgeText={setupMode === "fresh" ? "STEP 02 // PULL COMPONENT" : "STEP 01 // PULL COMPONENT"}
+          badgeColor="text-purple-500 bg-purple-500/10 border-purple-500/20"
+          icon={<Package className="w-6 h-6 text-white" />}
+          glowColor="from-purple-500/30 to-indigo-500/10"
+        >
+          <div>
+            <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
+              <span>Add any Intense UI component</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                Universal Command
+              </span>
+            </h3>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
+              Install any component using its name. The CLI pulls pure source code into your <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components/ui/</code> folder.
+            </p>
           </div>
 
-          {/* Step Card Body */}
-          <div className="flex-1 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/5 dark:border-white/10 bg-zinc-50/70 dark:bg-white/[0.02] p-4 sm:p-7 backdrop-blur-md space-y-4 hover:border-purple-500/40 hover:shadow-lg transition-all">
+          <div className="w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
+            <CodeBlock code={currentAddCmd} language="bash" />
+          </div>
+
+          {/* Interactive Component Badges */}
+          <div className="pt-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Click to select:</span>
+            {COMPONENTS_LIST.map((comp) => (
+              <button
+                key={comp.slug}
+                onClick={() => setSelectedComp(comp.slug)}
+                className={cn(
+                  "px-3 py-1 rounded-xl text-xs font-mono font-medium transition-all duration-200 flex items-center gap-1.5 border active:scale-95",
+                  selectedComp === comp.slug
+                    ? "bg-[var(--theme-primary)] text-white border-[var(--theme-primary)] shadow-sm"
+                    : "bg-zinc-100 dark:bg-white/5 border-black/5 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:border-[var(--theme-primary)]/40"
+                )}
+              >
+                {comp.icon}
+                <span>{comp.slug}</span>
+              </button>
+            ))}
+          </div>
+        </ScrollStepCard>
+
+        {/* STEP 3: Live Interactive Demo Lab */}
+        <ScrollStepCard
+          stepNumber={setupMode === "fresh" ? "03" : "02"}
+          badgeText={setupMode === "fresh" ? "STEP 03 // LIVE DEMO LAB" : "STEP 02 // LIVE DEMO LAB"}
+          badgeColor="text-emerald-500 bg-emerald-500/10 border-emerald-500/20"
+          icon={<Code2 className="w-6 h-6 text-white" />}
+          glowColor="from-indigo-500/30 to-emerald-500/10"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <span className="hidden sm:inline-block text-[10px] font-mono font-bold tracking-widest uppercase text-purple-500">
-                {setupMode === "fresh" ? "Step 02 // Pull Component" : "Step 01 // Pull Component"}
-              </span>
-              <h3 className="text-base sm:text-xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                <span>Add any Intense UI component</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
-                  Universal Syntax
+              <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
+                <span>Import &amp; use with universal syntax</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Interactive Sandbox
                 </span>
               </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                Install any component using its slug. The CLI automatically places source code into <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components/ui/</code> and configures required animations.
+              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
+                Import from your local <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">@/components/ui/</code> directory. Interact with the live component below:
               </p>
             </div>
 
-            {/* Command Block */}
-            <div className="w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
-              <CodeBlock code={currentAddCmd} language="bash" />
-            </div>
-
-            {/* Interactive component chips */}
-            <div className="pt-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Click to select:</span>
-              {COMPONENTS_LIST.map((comp) => (
+            {/* Lab component switcher */}
+            <div className="flex items-center gap-1 bg-zinc-200/50 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 self-start sm:self-auto overflow-x-auto">
+              {(["switch", "slider", "accordion"] as const).map((tab) => (
                 <button
-                  key={comp.slug}
-                  onClick={() => setSelectedComp(comp.slug)}
+                  key={tab}
+                  onClick={() => setActiveLabTab(tab)}
                   className={cn(
-                    "px-2.5 sm:px-3 py-1 rounded-xl text-xs font-mono font-medium transition-all duration-200 flex items-center gap-1.5 border",
-                    selectedComp === comp.slug
-                      ? "bg-[var(--theme-primary)] text-white border-[var(--theme-primary)] shadow-sm"
-                      : "bg-zinc-100 dark:bg-white/5 border-black/5 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:border-[var(--theme-primary)]/40 active:scale-95"
+                    "px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all",
+                    activeLabTab === tab
+                      ? "bg-[var(--theme-primary)] text-white shadow-sm"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
                   )}
                 >
-                  {comp.icon}
-                  <span>{comp.slug}</span>
+                  {tab}
                 </button>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* STEP 3: Universal Import & Live Interactive Lab */}
-        <div className="relative flex flex-col sm:flex-row items-start gap-3 sm:gap-7 group w-full min-w-0">
-          {/* Modern Animated Step Node Avatar */}
-          <div className="relative shrink-0 flex items-center gap-3 sm:block">
-            <div className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 text-white shadow-[0_0_30px_rgba(99,102,241,0.45)] z-10 border border-white/20">
-              <motion.div
-                animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0, 0.6] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute inset-0 rounded-2xl bg-indigo-500/40 blur-sm pointer-events-none"
-              />
-              <Code2 className="w-6 h-6 text-white" />
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                className="absolute -top-1 -right-1"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              </motion.div>
-            </div>
-            <span className="sm:hidden text-xs font-mono font-bold uppercase tracking-wider text-indigo-500">
-              {setupMode === "fresh" ? "Step 03 // Live Demo Lab" : "Step 02 // Live Demo Lab"}
-            </span>
-          </div>
-
-          {/* Step Card Body */}
-          <div className="flex-1 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/5 dark:border-white/10 bg-zinc-50/70 dark:bg-white/[0.02] p-4 sm:p-7 backdrop-blur-md space-y-5 hover:border-indigo-500/40 hover:shadow-lg transition-all">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span className="hidden sm:inline-block text-[10px] font-mono font-bold tracking-widest uppercase text-indigo-500">
-                  {setupMode === "fresh" ? "Step 03 // Live Sandbox" : "Step 02 // Live Sandbox"}
-                </span>
-                <h3 className="text-base sm:text-xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                  <span>Import &amp; use with universal syntax</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                    Live Demo Lab
-                  </span>
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                  Import directly from your local <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">@/components/ui/</code> folder. Test them live below:
-                </p>
+          {/* Live Interactive Canvas + Code Split */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch w-full min-w-0">
+            {/* Interactive Preview Canvas */}
+            <div className="lg:col-span-5 rounded-2xl border border-black/10 dark:border-white/10 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 p-5 sm:p-6 flex flex-col items-center justify-center gap-4 relative min-h-[200px] sm:min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
+              <div className="absolute top-3 left-3 text-[10px] font-mono tracking-wider uppercase text-zinc-400 dark:text-zinc-500">
+                Interactive Preview
               </div>
 
-              {/* Lab component switcher */}
-              <div className="flex items-center gap-1 bg-zinc-200/50 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/10 self-start sm:self-auto overflow-x-auto">
-                {(["switch", "slider", "accordion"] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveLabTab(tab)}
-                    className={cn(
-                      "px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all",
-                      activeLabTab === tab
-                        ? "bg-[var(--theme-primary)] text-white shadow-sm"
-                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
-                    )}
+              <AnimatePresence mode="wait">
+                {activeLabTab === "switch" && (
+                  <motion.div
+                    key="demo-switch"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-col items-center gap-3"
                   >
-                    {tab}
-                  </button>
-                ))}
-              </div>
+                    <Switch
+                      checked={liveSwitchChecked}
+                      onChange={(checked) => setLiveSwitchChecked(checked)}
+                      size="lg"
+                    />
+                    <span className="text-xs font-mono text-zinc-500">
+                      State: <strong className="text-[var(--theme-primary)]">{liveSwitchChecked ? "ON (true)" : "OFF (false)"}</strong>
+                    </span>
+                  </motion.div>
+                )}
+
+                {activeLabTab === "slider" && (
+                  <motion.div
+                    key="demo-slider"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="w-full max-w-[240px] flex flex-col items-center gap-3"
+                  >
+                    <Slider
+                      value={liveSliderValue}
+                      min={0}
+                      max={100}
+                      onChange={(val) => setLiveSliderValue(val)}
+                    />
+                    <span className="text-xs font-mono text-zinc-500">
+                      Value: <strong className="text-[var(--theme-primary)]">{liveSliderValue}%</strong>
+                    </span>
+                  </motion.div>
+                )}
+
+                {activeLabTab === "accordion" && (
+                  <motion.div
+                    key="demo-accordion"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="w-full"
+                  >
+                    <Accordion type="single" collapsible defaultValue="item-1" className="w-full text-xs">
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger className="py-2.5 text-xs font-medium">
+                          Is it animated?
+                        </AccordionTrigger>
+                        <AccordionContent className="text-xs text-zinc-500">
+                          Yes! Smooth Framer Motion spring physics.
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Live Interactive Canvas + Code Split (Responsive) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch w-full min-w-0">
-              {/* Interactive Preview Canvas */}
-              <div className="lg:col-span-5 rounded-2xl border border-black/10 dark:border-white/10 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 p-5 sm:p-6 flex flex-col items-center justify-center gap-4 relative min-h-[200px] sm:min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
-                <div className="absolute top-3 left-3 text-[10px] font-mono tracking-wider uppercase text-zinc-400 dark:text-zinc-500">
-                  Interactive Preview
-                </div>
-
-                <AnimatePresence mode="wait">
-                  {activeLabTab === "switch" && (
-                    <motion.div
-                      key="demo-switch"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="flex flex-col items-center gap-3"
-                    >
-                      <Switch
-                        checked={liveSwitchChecked}
-                        onChange={(checked) => setLiveSwitchChecked(checked)}
-                        size="lg"
-                      />
-                      <span className="text-xs font-mono text-zinc-500">
-                        State: <strong className="text-[var(--theme-primary)]">{liveSwitchChecked ? "ON (true)" : "OFF (false)"}</strong>
-                      </span>
-                    </motion.div>
-                  )}
-
-                  {activeLabTab === "slider" && (
-                    <motion.div
-                      key="demo-slider"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="w-full max-w-[240px] flex flex-col items-center gap-3"
-                    >
-                      <Slider
-                        value={liveSliderValue}
-                        min={0}
-                        max={100}
-                        onChange={(val) => setLiveSliderValue(val)}
-                      />
-                      <span className="text-xs font-mono text-zinc-500">
-                        Value: <strong className="text-[var(--theme-primary)]">{liveSliderValue}%</strong>
-                      </span>
-                    </motion.div>
-                  )}
-
-                  {activeLabTab === "accordion" && (
-                    <motion.div
-                      key="demo-accordion"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="w-full"
-                    >
-                      <Accordion type="single" collapsible defaultValue="item-1" className="w-full text-xs">
-                        <AccordionItem value="item-1">
-                          <AccordionTrigger className="py-2.5 text-xs font-medium">
-                            Is it animated?
-                          </AccordionTrigger>
-                          <AccordionContent className="text-xs text-zinc-500">
-                            Yes! Smooth Framer Motion spring physics.
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Corresponding Source Code */}
-              <div className="lg:col-span-7 w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
-                <AnimatePresence mode="wait">
-                  {activeLabTab === "switch" && (
-                    <motion.div
-                      key="code-switch"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="w-full max-w-full overflow-hidden"
-                    >
-                      <CodeBlock
-                        filename="src/app/page.tsx"
-                        language="tsx"
-                        code={`import { Switch } from "@/components/ui/switch";
+            {/* Corresponding Source Code */}
+            <div className="lg:col-span-7 w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
+              <AnimatePresence mode="wait">
+                {activeLabTab === "switch" && (
+                  <motion.div
+                    key="code-switch"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full max-w-full overflow-hidden"
+                  >
+                    <CodeBlock
+                      filename="src/app/page.tsx"
+                      language="tsx"
+                      code={`import { Switch } from "@/components/ui/switch";
 
 export default function Demo() {
   return (
@@ -682,22 +691,22 @@ export default function Demo() {
     />
   );
 }`}
-                      />
-                    </motion.div>
-                  )}
+                    />
+                  </motion.div>
+                )}
 
-                  {activeLabTab === "slider" && (
-                    <motion.div
-                      key="code-slider"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="w-full max-w-full overflow-hidden"
-                    >
-                      <CodeBlock
-                        filename="src/app/page.tsx"
-                        language="tsx"
-                        code={`import { Slider } from "@/components/ui/slider";
+                {activeLabTab === "slider" && (
+                  <motion.div
+                    key="code-slider"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full max-w-full overflow-hidden"
+                  >
+                    <CodeBlock
+                      filename="src/app/page.tsx"
+                      language="tsx"
+                      code={`import { Slider } from "@/components/ui/slider";
 
 export default function Demo() {
   return (
@@ -709,22 +718,22 @@ export default function Demo() {
     />
   );
 }`}
-                      />
-                    </motion.div>
-                  )}
+                    />
+                  </motion.div>
+                )}
 
-                  {activeLabTab === "accordion" && (
-                    <motion.div
-                      key="code-accordion"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="w-full max-w-full overflow-hidden"
-                    >
-                      <CodeBlock
-                        filename="src/app/page.tsx"
-                        language="tsx"
-                        code={`import {
+                {activeLabTab === "accordion" && (
+                  <motion.div
+                    key="code-accordion"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full max-w-full overflow-hidden"
+                  >
+                    <CodeBlock
+                      filename="src/app/page.tsx"
+                      language="tsx"
+                      code={`import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -741,25 +750,81 @@ export default function Demo() {
     </Accordion>
   );
 }`}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
+          </div>
+        </ScrollStepCard>
+      </div>
+
+      {/* 📦 DEPENDENCIES SECTION */}
+      <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-2xl bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 shadow-sm">
+            <Boxes className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Core Runtime Dependencies</h2>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">Ultra-lean, production-grade ecosystem that powers Intense UI</p>
+          </div>
+        </div>
+
+        {/* Dependency Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full min-w-0">
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">framer-motion</span>
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-pink-500/10 text-pink-500 font-semibold border border-pink-500/20">v11 / v12</span>
+            </div>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Powers spring physics, gestures, fluid layout morphing, and GPU-accelerated enter/exit animations.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">lucide-react</span>
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-purple-500/10 text-purple-500 font-semibold border border-purple-500/20">^0.400+</span>
+            </div>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Ultra-crisp, tree-shakeable SVG icon system matching official shadcn ecosystem standards.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">clsx &amp; tailwind-merge</span>
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-indigo-500/10 text-indigo-500 font-semibold border border-indigo-500/20">Utility</span>
+            </div>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Provides the <code className="font-mono text-zinc-700 dark:text-zinc-300">cn()</code> helper to resolve Tailwind CSS class conflicts safely and conditionally.
+            </p>
+          </div>
+        </div>
+
+        {/* Manual dependency install block */}
+        <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-900/50 p-4 space-y-2">
+          <span className="text-xs text-zinc-400 font-medium flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Installed automatically by the CLI. Manual install command:</span>
+          </span>
+          <div className="w-full max-w-full overflow-hidden rounded-xl border border-white/10">
+            <CodeBlock code="npm install framer-motion lucide-react clsx tailwind-merge" language="bash" />
           </div>
         </div>
       </div>
 
-      {/* Interactive Troubleshooting Bento (Fully Responsive) */}
+      {/* 🛠️ TROUBLESHOOTING DIAGNOSTIC BENTO */}
       <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]">
+          <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
             <Wrench className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-bold text-zinc-950 dark:text-white">Troubleshooting Diagnostic Center</h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">Quick fixes for common first-time installation errors</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Troubleshooting Diagnostic Center</h2>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">Quick fixes for common first-time installation errors</p>
           </div>
         </div>
 
@@ -805,6 +870,94 @@ export default function Demo() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 🤝 STILL FACING AN ISSUE? CONTACT & COMMUNITY SECTION */}
+      <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2.5 rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/20">
+            <HelpCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Still Running Into an Issue?</h2>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">We&apos;re here to help you get Intense UI running smoothly</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full min-w-0">
+          {/* GitHub Issues */}
+          <a
+            href="https://github.com/dkhandelwal2/intense-ui/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-[var(--theme-primary)]/40 hover:shadow-lg transition-all"
+          >
+            <div className="flex items-center justify-between">
+              <div className="p-2 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20">
+                <Bug className="w-4 h-4" />
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors" />
+            </div>
+            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-[var(--theme-primary)] transition-colors">
+              Report a Bug
+            </h3>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Hit a build error or broken styling? Open an issue on GitHub with reproduction steps.
+            </p>
+            <span className="text-xs font-semibold text-[var(--theme-primary)] flex items-center gap-1">
+              <span>Open GitHub Issue</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </a>
+
+          {/* GitHub Discussions */}
+          <a
+            href="https://github.com/dkhandelwal2/intense-ui/discussions"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-purple-500/40 hover:shadow-lg transition-all"
+          >
+            <div className="flex items-center justify-between">
+              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-500 border border-purple-500/20">
+                <MessageSquare className="w-4 h-4" />
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-purple-400 transition-colors" />
+            </div>
+            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-purple-400 transition-colors">
+              Community &amp; Ideas
+            </h3>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Request new components, discuss animation physics, or show off what you built.
+            </p>
+            <span className="text-xs font-semibold text-purple-500 flex items-center gap-1">
+              <span>Join Discussion</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </a>
+
+          {/* Direct Email Support */}
+          <a
+            href="mailto:khandelwal.deepak2@gmail.com"
+            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-emerald-500/40 hover:shadow-lg transition-all"
+          >
+            <div className="flex items-center justify-between">
+              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                <Mail className="w-4 h-4" />
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
+            </div>
+            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-emerald-400 transition-colors">
+              Direct Contact
+            </h3>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Have questions regarding commercial integration or custom requests? Email the maintainers.
+            </p>
+            <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
+              <span>Send Email</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </a>
         </div>
       </div>
 
