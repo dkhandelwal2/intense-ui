@@ -2,9 +2,10 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail } from "lucide-react";
+import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail, Gem, ShieldPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollContainerProvider } from "./scroll-context";
 
 interface TocItem {
@@ -18,12 +19,14 @@ interface ComponentPageLayoutProps {
   description: React.ReactNode;
   dependencies?: { name: string; command: string }[];
   propsTable?: React.ReactNode;
-  tocItems: TocItem[];
+  tocItems?: TocItem[];
   codeContent?: string;
   codeContentJs?: string;
   codes?: Record<string, string>;
   codesJs?: Record<string, string>;
   installContent?: React.ReactNode;
+  slug?: string;
+  usageCode?: string;
   children: React.ReactNode;
 }
 
@@ -32,12 +35,14 @@ export function ComponentPageLayout({
   description,
   dependencies,
   propsTable,
-  tocItems,
+  tocItems = [],
   codeContent,
   codeContentJs,
   codes,
   codesJs,
   installContent,
+  slug,
+  usageCode,
   children,
 }: ComponentPageLayoutProps) {
   const [activeTab, setActiveTab] = useState<'info' | 'code' | 'install'>('info');
@@ -118,119 +123,121 @@ export function ComponentPageLayout({
           </div>
 
           {/* Bottom Floating Navigation (Table of Contents Dock) */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50">
-            <div className="relative">
-              {/* The dock bar itself */}
-              <div className="relative flex items-end px-12 sm:px-12 h-[60px] bg-[#f2f0ef] dark:bg-[#1a1a1a] dark:border-white/5 rounded-[36px] shadow-2xl">
-                <AnimatePresence mode="popLayout">
-                  {(() => {
-                    const allItems = tocItems.map((item, idx) => ({ ...item, idx }));
-                    const N = allItems.length;
-                    const MAX = 7;
-                    const activeIdx = allItems.findIndex(i => i.id === activeTocId) ?? 0;
+          {tocItems.length > 0 && (
+            <div className="hidden xl:block absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+              <div className="relative">
+                {/* The dock bar itself */}
+                <div className="relative flex items-end px-12 sm:px-12 h-[60px] bg-[#f2f0ef] dark:bg-[#1a1a1a] dark:border-white/5 rounded-[36px] shadow-2xl">
+                  <AnimatePresence mode="popLayout">
+                    {(() => {
+                      const allItems = tocItems.map((item, idx) => ({ ...item, idx }));
+                      const N = allItems.length;
+                      const MAX = 7;
+                      const activeIdx = allItems.findIndex(i => i.id === activeTocId) ?? 0;
 
-                    type VisibleBtn =
-                      | { type: 'item'; item: typeof allItems[0] }
-                      | { type: 'prev' | 'next'; count: number; targetIdx: number };
+                      type VisibleBtn =
+                        | { type: 'item'; item: typeof allItems[0] }
+                        | { type: 'prev' | 'next'; count: number; targetIdx: number };
 
-                    let visibleButtons: VisibleBtn[] = [];
-                    if (N <= MAX) {
-                      visibleButtons = allItems.map(item => ({ type: 'item', item }));
-                    } else {
-                      if (activeIdx < 4) {
-                        visibleButtons = [
-                          ...allItems.slice(0, 6).map(item => ({ type: 'item' as const, item })),
-                          { type: 'next', count: N - 6, targetIdx: 6 }
-                        ];
-                      } else if (activeIdx >= N - 4) {
-                        visibleButtons = [
-                          { type: 'prev', count: N - 6, targetIdx: N - 7 },
-                          ...allItems.slice(N - 6, N).map(item => ({ type: 'item' as const, item }))
-                        ];
+                      let visibleButtons: VisibleBtn[] = [];
+                      if (N <= MAX) {
+                        visibleButtons = allItems.map(item => ({ type: 'item', item }));
                       } else {
-                        visibleButtons = [
-                          { type: 'prev', count: activeIdx - 2, targetIdx: activeIdx - 3 },
-                          ...allItems.slice(activeIdx - 2, activeIdx + 3).map(item => ({ type: 'item' as const, item })),
-                          { type: 'next', count: N - (activeIdx + 3), targetIdx: activeIdx + 3 }
-                        ];
+                        if (activeIdx < 4) {
+                          visibleButtons = [
+                            ...allItems.slice(0, 6).map(item => ({ type: 'item' as const, item })),
+                            { type: 'next', count: N - 6, targetIdx: 6 }
+                          ];
+                        } else if (activeIdx >= N - 4) {
+                          visibleButtons = [
+                            { type: 'prev', count: N - 6, targetIdx: N - 7 },
+                            ...allItems.slice(N - 6, N).map(item => ({ type: 'item' as const, item }))
+                          ];
+                        } else {
+                          visibleButtons = [
+                            { type: 'prev', count: activeIdx - 2, targetIdx: activeIdx - 3 },
+                            ...allItems.slice(activeIdx - 2, activeIdx + 3).map(item => ({ type: 'item' as const, item })),
+                            { type: 'next', count: N - (activeIdx + 3), targetIdx: activeIdx + 3 }
+                          ];
+                        }
                       }
-                    }
 
-                    return visibleButtons.map((btn, renderIdx) => {
-                      if (btn.type === 'item') {
-                        const item = btn.item;
-                        const isActive = activeTocId === item.id;
-                        return (
-                          <motion.button
-                            layout
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-                            key={item.id}
-                            onClick={() => scrollToSection(item.id, item.idx)}
-                            className="flex flex-col items-center justify-center h-[60px] w-[64px] sm:w-[72px] relative group outline-none shrink-0"
-                          >
-                            {isActive && (
-                              <motion.div
-                                layoutId="dock-active-bg"
-                                className="absolute bottom-full left-1/2 -translate-x-1/2 w-[100px] h-[24px] z-0"
-                              >
-                                <svg width="100" height="24" viewBox="0 0 100 24" className="fill-[#f2f0ef] dark:fill-[#1a1a1a]">
-                                  <path d="M0 24 C 15 24, 25 0, 50 0 C 75 0, 85 24, 100 24 Z" />
-                                </svg>
-                                <div className="absolute top-[7px] left-1/2 -translate-x-1/2 w-[36px] h-[36px] rounded-full border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 shadow-[0_0_15px_var(--theme-primary)]/20" />
-                              </motion.div>
-                            )}
-
-                            <div className={cn(
-                              "z-10 absolute left-1/2 -translate-x-1/2 transition-all duration-300 flex items-center justify-center",
-                              isActive
-                                ? "top-[1px] -translate-y-1/2 w-5 h-5 text-[var(--theme-primary)]"
-                                : "top-[22px] -translate-y-1/2 w-4 h-4 text-zinc-500 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
-                            )}>
-                              {item.icon || <div className="w-4 h-4 bg-zinc-700 rounded-sm" />}
-                            </div>
-
-                            <span className={cn(
-                              "absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300",
-                              isActive ? "text-zinc-900 dark:text-white font-bold" : "text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
-                            )}>
-                              {item.label}
-                            </span>
-                          </motion.button>
-                        );
-                      } else {
-                        return (
-                          <motion.button
-                            layout
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-                            key={`more-${btn.type}`}
-                            onClick={() => scrollToSection(allItems[btn.targetIdx].id, btn.targetIdx)}
-                            className="flex flex-col items-center justify-center h-[60px] w-[64px] sm:w-[72px] relative group outline-none shrink-0"
-                          >
-                            <div className="z-10 absolute top-[22px] -translate-y-1/2 left-1/2 -translate-x-1/2 w-4 h-4 text-zinc-500 transition-all duration-300 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 flex items-center justify-center">
-                              {btn.type === 'prev' ? (
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
-                              ) : (
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+                      return visibleButtons.map((btn, renderIdx) => {
+                        if (btn.type === 'item') {
+                          const item = btn.item;
+                          const isActive = activeTocId === item.id;
+                          return (
+                            <motion.button
+                              layout
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.8 }}
+                              transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                              key={item.id}
+                              onClick={() => scrollToSection(item.id, item.idx)}
+                              className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative group outline-none shrink-0"
+                            >
+                              {isActive && (
+                                <motion.div
+                                  layoutId="dock-active-bg"
+                                  className="absolute bottom-full left-1/2 -translate-x-1/2 w-[70px] sm:w-[100px] h-[16px] sm:h-[24px] z-0"
+                                >
+                                  <svg width="100%" height="100%" viewBox="0 0 100 24" preserveAspectRatio="none" className="fill-[#f2f0ef] dark:fill-[#1a1a1a]">
+                                    <path d="M0 24 C 15 24, 25 0, 50 0 C 75 0, 85 24, 100 24 Z" />
+                                  </svg>
+                                  <div className="absolute top-[4px] sm:top-[7px] left-1/2 -translate-x-1/2 w-[28px] sm:w-[36px] h-[28px] sm:h-[36px] rounded-full border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 shadow-[0_0_15px_var(--theme-primary)]/20" />
+                                </motion.div>
                               )}
-                            </div>
-                            <span className="absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300">
-                              +{btn.count} {btn.type === 'next' ? 'more' : 'prev'}
-                            </span>
-                          </motion.button>
-                        );
-                      }
-                    });
-                  })()}
-                </AnimatePresence>
+
+                              <div className={cn(
+                                "z-10 absolute left-1/2 -translate-x-1/2 transition-all duration-300 flex items-center justify-center",
+                                isActive
+                                  ? "top-[1px] -translate-y-1/2 w-5 h-5 text-[var(--theme-primary)]"
+                                  : "top-[22px] -translate-y-1/2 w-4 h-4 text-zinc-500 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
+                              )}>
+                                {item.icon || <div className="w-4 h-4 bg-zinc-700 rounded-sm" />}
+                              </div>
+
+                              <span className={cn(
+                                "absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300",
+                                isActive ? "text-zinc-900 dark:text-white font-bold" : "text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
+                              )}>
+                                {item.label}
+                              </span>
+                            </motion.button>
+                          );
+                        } else {
+                          return (
+                            <motion.button
+                              layout
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.8 }}
+                              transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                              key={`more-${btn.type}`}
+                              onClick={() => scrollToSection(allItems[btn.targetIdx].id, btn.targetIdx)}
+                              className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative group outline-none shrink-0"
+                            >
+                              <div className="z-10 absolute top-[22px] -translate-y-1/2 left-1/2 -translate-x-1/2 w-4 h-4 text-zinc-500 transition-all duration-300 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 flex items-center justify-center">
+                                {btn.type === 'prev' ? (
+                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+                                ) : (
+                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+                                )}
+                              </div>
+                              <span className="absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300">
+                                +{btn.count} {btn.type === 'next' ? 'more' : 'prev'}
+                              </span>
+                            </motion.button>
+                          );
+                        }
+                      });
+                    })()}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN: Info & Code */}
@@ -288,19 +295,20 @@ export function ComponentPageLayout({
                 className="flex flex-col gap-10"
               >
                 <div className="flex flex-col gap-4">
-                  <div className="text-xl leading-relaxed text-zinc-600 dark:text-zinc-300 font-light mt-2">
+                  <div className="text-md leading-relaxed text-zinc-600 dark:text-zinc-300 font-light mt-2">
                     {description}
                   </div>
                 </div>
 
                 {dependencies && dependencies.length > 0 && (
                   <div className="flex flex-col gap-4">
-                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Dependencies</h3>
-                    <div className="flex flex-col gap-3">
+                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <ShieldPlus className="w-4 h-4 text-[var(--theme-primary)]" /> Dependencies
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
                       {dependencies.map(dep => (
-                        <div key={dep.name} className="flex items-center justify-between p-3 rounded-xl border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-white/5">
-                          <span className="text-sm text-zinc-700 dark:text-zinc-300 font-mono">{dep.name}</span>
-                          <TerminalSquare className="w-4 h-4 text-zinc-500" />
+                        <div key={dep.name} className="px-3 py-1.5 rounded-full border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-white/5 text-xs text-zinc-700 dark:text-zinc-300 font-mono">
+                          {dep.name}
                         </div>
                       ))}
                     </div>
@@ -309,42 +317,44 @@ export function ComponentPageLayout({
 
                 {propsTable && (
                   <div className="flex flex-col gap-4">
-                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Props</h3>
+                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <Gem className="w-4 h-4 text-[var(--theme-primary)]" /> Props
+                    </h3>
                     <div className="text-sm text-zinc-600 dark:text-zinc-400">
                       {propsTable}
                     </div>
 
-                <div className="flex flex-col gap-6 pt-6 border-t border-black/5 dark:border-white/5 mt-4">
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-[var(--theme-primary)]" /> Open Source
-                    </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                      This component library is free and open-source. We believe in building accessible, highly customizable, and beautifully animated components for everyone. Contributions are welcome!
-                    </p>
-                  </div>
+                    <div className="flex flex-col gap-6 pt-6 border-t border-black/5 dark:border-white/5 mt-4">
+                      <div className="flex flex-col gap-3">
+                        <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                          <Heart className="w-4 h-4 text-[var(--theme-primary)]" /> Open Source
+                        </h3>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                          This component library is free and open-source. We believe in building accessible, highly customizable, and beautifully animated components for everyone. Contributions are welcome!
+                        </p>
+                      </div>
 
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                      <Scale className="w-4 h-4 text-blue-500" /> License: MIT
-                    </h3>
-                    <ul className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1.5 list-inside list-disc">
-                      <li>Free for commercial and personal use</li>
-                      <li>Modification and distribution allowed</li>
-                      <li>Requires copyright notice preservation</li>
-                      <li>No warranty or liability provided</li>
-                    </ul>
-                  </div>
+                      <div className="flex flex-col gap-3">
+                        <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                          <Scale className="w-4 h-4 text-[var(--theme-primary)]" /> License: MIT
+                        </h3>
+                        <ul className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1.5 list-inside list-disc">
+                          <li>Free for commercial and personal use</li>
+                          <li>Modification and distribution allowed</li>
+                          <li>Requires copyright notice preservation</li>
+                          <li>No warranty or liability provided</li>
+                        </ul>
+                      </div>
 
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-green-500" /> Contact Us
-                    </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                      Have questions, need custom components, or want to report an issue? Reach out to us at <a href="mailto:hello@intense-ui.com" className="text-[var(--theme-primary)] hover:underline font-medium">hello@intense-ui.com</a> or message us on X (Twitter).
-                    </p>
-                  </div>
-                </div>
+                      <div className="flex flex-col gap-3">
+                        <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-[var(--theme-primary)]" /> Contact Us
+                        </h3>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                          Have questions, need custom components, or want to report an issue? Reach out to us or message us on X (Twitter).
+                        </p>
+                      </div>
+                    </div>
 
                   </div>
                 )}
@@ -376,9 +386,43 @@ export function ComponentPageLayout({
                   </div>
                 )}
                 <div className="text-zinc-800 dark:text-zinc-300">
-                  {installContent || (
+                  {installContent || (slug ? (
+                    <div className="flex flex-col gap-8 mt-2">
+                      <div className="flex flex-col gap-4">
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400">Run the following command to securely add the component to your project:</p>
+                        <Tabs defaultValue="npm" className="w-full">
+                          <TabsList className="mb-4 bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                            {["npm", "pnpm", "yarn", "bun"].map(pm => (
+                              <TabsTrigger key={pm} value={pm} className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">{pm}</TabsTrigger>
+                            ))}
+                          </TabsList>
+                          {[
+                            { pm: "npm", cmd: `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
+                            { pm: "pnpm", cmd: `pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
+                            { pm: "yarn", cmd: `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
+                            { pm: "bun", cmd: `bunx --bun shadcn@latest add dkhandelwal2/intense-ui/${slug}` }
+                          ].map(({ pm, cmd }) => (
+                            <TabsContent key={pm} value={pm}>
+                              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-[#0c0c0c]">
+                                <CodeBlock code={cmd} language="bash" />
+                              </div>
+                            </TabsContent>
+                          ))}
+                        </Tabs>
+                      </div>
+                      {usageCode && (
+                        <div className="flex flex-col gap-4 border-t border-black/5 dark:border-white/5 pt-6">
+                          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">Usage</h3>
+                          <p className="text-sm text-zinc-600 dark:text-zinc-400">Once installed, import and use the component:</p>
+                          <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-[#0c0c0c]">
+                            <CodeBlock code={usageCode} language="tsx" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
                     <div className="text-sm text-zinc-500">No installation steps provided.</div>
-                  )}
+                  ))}
                 </div>
               </motion.div>
             )}

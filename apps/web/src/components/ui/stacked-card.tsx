@@ -26,7 +26,7 @@ export function StackedCardsContainer({
 
   return (
     <StackedCardsContext.Provider value={{ scrollYProgress }}>
-      <div ref={containerRef} className={cn("relative flex flex-col gap-6 lg:gap-0 lg:block pb-[15vh]", className)}>
+      <div ref={containerRef} className={cn("relative block pb-[15vh]", className)}>
         {children}
       </div>
     </StackedCardsContext.Provider>
@@ -55,7 +55,7 @@ export function StackedCard({
   // Build a progressive array map for perfect cascading physics
   const points = [];
   const scales = [];
-  const brightnesses = [];
+  const overlayOpacities = [];
   const opacities = [];
   const yOffsets = [];
 
@@ -65,7 +65,7 @@ export function StackedCard({
     if (i <= index) {
       // The card hasn't been covered yet
       scales.push(1);
-      brightnesses.push(1);
+      overlayOpacities.push(0);
       opacities.push(1);
       yOffsets.push(0);
     } else {
@@ -74,14 +74,14 @@ export function StackedCard({
         // The last card should NEVER shrink or dim, because there is no card below it to cover it.
         // This ensures the interactive props remain fully visible and usable.
         scales.push(1);
-        brightnesses.push(1);
+        overlayOpacities.push(0);
         opacities.push(1);
         yOffsets.push(0);
       } else {
         const distance = i - index;
         // Progressively shrink and dim the background cards to create a true depth pyramid
         scales.push(1 - distance * 0.04);
-        brightnesses.push(Math.max(0.1, 1 - distance * 0.25));
+        overlayOpacities.push(Math.min(0.5, distance * 0.15));
         yOffsets.push(-(distance * 32)); // Stagger UPWARDS behind the active card
 
         // Hide cards that are more than 3 positions away to prevent a giant vertical staircase when many variants exist
@@ -96,23 +96,22 @@ export function StackedCard({
 
   // Map progress to raw target values
   const scaleTarget = useTransform(scrollYProgress, points, scales);
-  const brightnessTarget = useTransform(scrollYProgress, points, brightnesses);
+  const overlayOpacityTarget = useTransform(scrollYProgress, points, overlayOpacities);
   const opacityTarget = useTransform(scrollYProgress, points, opacities);
   const yTarget = useTransform(scrollYProgress, points, yOffsets);
 
   // Apply ultra-smooth spring physics to the mapped values
   const scale = useSpring(scaleTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
-  const brightness = useSpring(brightnessTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
+  const overlayOpacity = useSpring(overlayOpacityTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
   const opacity = useSpring(opacityTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
   const y = useSpring(yTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
 
-  const filter = useTransform(brightness, (b) => `brightness(${b})`);
 
   // We set transform origin to top so the scaling doesn't pull the top edge down.
   return (
     <div
       className={cn(
-        "lg:sticky w-full mb-8 lg:mb-[30vh]",
+        "sticky w-full mb-[5vh]",
         className
       )}
       style={{
@@ -125,10 +124,10 @@ export function StackedCard({
         style={{
           scale,
           opacity,
-          filter,
-          y
-        }}
-        className="w-full origin-top"
+          y,
+          "--stack-tint": overlayOpacity
+        } as any}
+        className="w-full origin-top [&>*]:relative [&>*]:after:absolute [&>*]:after:inset-0 [&>*]:after:bg-[var(--theme-primary)] [&>*]:after:pointer-events-none [&>*]:after:rounded-[inherit] [&>*]:after:opacity-[var(--stack-tint)] dark:[&>*]:after:opacity-[calc(var(--stack-tint)*0.5)] [&>*]:after:transition-opacity [&>*]:after:duration-0"
       >
         {children}
       </motion.div>

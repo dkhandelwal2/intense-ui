@@ -25,6 +25,25 @@ export function SidebarWrapper() {
     setIsMobileOpen(false);
   }, [pathname]);
 
+  // Auto-collapse sidebar on tablet / small desktop (<1280px)
+  React.useEffect(() => {
+    const mql = window.matchMedia("(max-width: 1280px)");
+    const handleChange = (e: any) => {
+      if (e.matches) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+    
+    // Initial check
+    handleChange(mql);
+    
+    // Add listener for crossing the breakpoint
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
+  }, []);
+
   const startResizing = React.useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     isResizing.current = true;

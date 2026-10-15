@@ -27,7 +27,7 @@ const renderExample = (id: string, customProps: CustomProps = {}) => {
 
   const getAccordionProps = () => {
     switch (id) {
-      case "multiple": return { type: "multiple" as const, className: "w-full" };
+      case "multiple": return { type: "multiple" as const, defaultValue: ["item-1", "item-2"], className: "w-full" };
       case "card": return { type: "single" as const, collapsible: true, className: "w-full space-y-4" };
       case "customization": return { type: "single" as const, collapsible: true, className: "w-full space-y-2", defaultValue: customProps.isDefaultExpanded ? "item-2" : undefined, key: `accordion-${customProps.isDefaultExpanded}` };
       case "border": return { type: "single" as const, collapsible: true, className: "w-full border rounded-md px-4" };
@@ -169,7 +169,7 @@ function CodeViewer({
         <div className="flex items-center gap-2">
           <button
             onClick={handleCopy}
-            className="hidden sm:block px-3 py-1.5 text-[11px] font-medium rounded-full border border-black/5 dark:border-white/10 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors"
+            className="px-3 py-1.5 text-[11px] font-medium rounded-full border border-black/5 dark:border-white/10 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/10 transition-colors"
           >
             {copied ? "Copied!" : "Copy code"}
           </button>
@@ -370,8 +370,8 @@ export default function CustomisedAccordion() {
     <StackedCardsContainer>
       {ACCORDION_EXAMPLES.map((ex, i) => (
         <StackedCard key={ex.id} index={i} total={ACCORDION_EXAMPLES.length}>
-          <section className="bg-card text-card-foreground border shadow-2xl rounded-[2.5rem] p-6 md:p-8 xl:p-10 mb-8 lg:mb-0 relative overflow-hidden ring-1 ring-black/5 dark:ring-white/10 max-w-4xl mx-auto">
-            <div className="flex items-start gap-4 border-b border-white/10 pb-5 mb-6">
+          <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-8 pb-[4rem]">
+            <div className="flex items-start gap-4 py-4">
               <div className="p-2.5 sm:p-3 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-xl shrink-0">
                 {(() => {
                   const IconComponent = AccordionIcons[ex.id as keyof typeof AccordionIcons] || AccordionIcons.basic;
@@ -383,33 +383,32 @@ export default function CustomisedAccordion() {
                 <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-snug">
                   {(() => {
                     switch (ex.id) {
-                      case "basic": return "A simple, single-item accordion with default styling.";
-                      case "multiple": return "Allows multiple items to be expanded simultaneously.";
-                      case "disabled": return "Prevents interaction with specific accordion items.";
-                      case "card": return "Styles the accordion items as distinct elevated cards.";
-                      case "border": return "Adds full borders around the accordion items.";
-                      case "rtl": return "Supports Right-To-Left text direction layouts.";
-                      case "without-border": return "Removes the default bottom borders for a clean look.";
-                      case "without-icon": return "Hides the chevron indicator for custom trigger designs.";
-                      case "with-onclick": return "Fires custom events when a trigger is clicked.";
-                      case "expanded-default": return "Automatically opens specified items on initial render.";
-                      case "customization": return "Playground to test all available interactive properties.";
+                      case "basic": return <>A simple, single-item accordion. Uses the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">type="single"</code> prop on the root component to ensure only one item can be expanded at a time.</>;
+                      case "multiple": return <>Allows multiple items to be expanded simultaneously by passing the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">type="multiple"</code> prop to the root accordion.</>;
+                      case "disabled": return <>Prevents interaction with specific items. Apply the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">disabled</code> prop directly to an <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;AccordionItem&gt;</code> to gray it out and disable clicks.</>;
+                      case "card": return <>Styles the accordion items as distinct elevated cards. Achieve this by passing a custom <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">className</code> with borders and padding to each <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;AccordionItem&gt;</code>.</>;
+                      case "border": return <>Adds full borders around the accordion items. Simply pass a custom <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">className="border"</code> to the root or individual items.</>;
+                      case "rtl": return <>Supports Right-To-Left text direction layouts automatically when placed inside a container with <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">dir="rtl"</code>.</>;
+                      case "without-border": return <>Removes the default bottom borders for a clean look. Pass the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">hideBorder</code> prop directly to the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;AccordionItem&gt;</code> component.</>;
+                      case "without-icon": return <>Hides the chevron indicator for custom trigger designs. Use the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">hideIcon</code> prop on the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;AccordionTrigger&gt;</code> component.</>;
+                      case "with-onclick": return <>Fires custom events when a trigger is clicked. Pass a standard <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">onClick</code> handler to the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;AccordionTrigger&gt;</code>.</>;
+                      case "expanded-default": return <>Automatically opens specified items on initial render by passing the <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">defaultValue</code> prop to the root <code className="text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 px-1.5 py-0.5 rounded font-mono text-xs font-semibold">&lt;Accordion&gt;</code> component.</>;
+                      case "customization": return "Playground to test all available interactive properties dynamically.";
                       default: return "An accordion example.";
                     }
                   })()}
                 </p>
               </div>
             </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex min-h-[350px] w-full items-center justify-center rounded-2xl border bg-zinc-50/50 p-6 md:p-10 dark:bg-zinc-900/20 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/5 blur-[100px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <div className="w-full max-w-[400px] relative z-10">
+            <div className="flex flex-col gap-6 border shadow-2xl rounded-[1.5rem] relative overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
+              <div className="flex items-center justify-center p-10 relative overflow-hidden group">
+                <div className="w-full relative z-10">
                   {renderExample(ex.id, customProps)}
                 </div>
               </div>
 
               {ex.id === "customization" && (
-                <div className="border rounded-2xl p-4 sm:p-6 bg-card text-card-foreground shadow-sm mt-4">
+                <div className="border rounded-2xl p-4 bg-card text-card-foreground shadow-sm">
                   <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <span className="w-1.5 h-6 bg-[var(--theme-primary)] rounded-full"></span>
                     Interactive Props
