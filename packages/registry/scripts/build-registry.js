@@ -107,7 +107,8 @@ function buildRegistry() {
       files: [
         {
           name: `${comp.name}.tsx`,
-          content: content
+          content: content,
+          target: `components/ui/${comp.name}.tsx`
         }
       ]
     };
@@ -128,7 +129,8 @@ function buildRegistry() {
       files: [
         {
           path: `packages/registry/src/components/${comp.name}.tsx`,
-          type: "registry:file"
+          type: "registry:file",
+          target: `components/ui/${comp.name}.tsx`
         }
       ]
     });

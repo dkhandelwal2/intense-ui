@@ -12,7 +12,8 @@
     "files": [
       {
         "path": "packages/registry/src/components/accordion.tsx",
-        "type": "registry:file"
+        "type": "registry:file",
+        "target": "components/ui/accordion.tsx"
       }
     ]
   },
@@ -28,7 +29,8 @@
     "files": [
       {
         "path": "packages/registry/src/components/animated-button.tsx",
-        "type": "registry:file"
+        "type": "registry:file",
+        "target": "components/ui/animated-button.tsx"
       }
     ]
   },
@@ -44,7 +46,8 @@
     "files": [
       {
         "path": "packages/registry/src/components/switch.tsx",
-        "type": "registry:file"
+        "type": "registry:file",
+        "target": "components/ui/switch.tsx"
       }
     ]
   },
@@ -60,7 +63,8 @@
     "files": [
       {
         "path": "packages/registry/src/components/slider.tsx",
-        "type": "registry:file"
+        "type": "registry:file",
+        "target": "components/ui/slider.tsx"
       }
     ]
   },
@@ -76,7 +80,8 @@
     "files": [
       {
         "path": "packages/registry/src/components/tooltip.tsx",
-        "type": "registry:file"
+        "type": "registry:file",
+        "target": "components/ui/tooltip.tsx"
       }
     ]
   }
