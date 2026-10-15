@@ -70,6 +70,8 @@ function ScrollStepCard({
   glowColor = "from-[var(--theme-primary)]/40 to-pink-500/20",
   numberGradient = "from-[var(--theme-primary)] via-pink-400 to-purple-400",
   numberShadow = "drop-shadow-[0_10px_35px_rgba(255,0,132,0.25)]",
+  iconGradient = "bg-gradient-to-br from-[var(--theme-primary)] to-pink-600 shadow-[0_0_25px_rgba(255,0,132,0.45)]",
+  borderHoverColor = "hover:border-[var(--theme-primary)]/40",
   children
 }: {
   stepNumber: string;
@@ -79,6 +81,8 @@ function ScrollStepCard({
   glowColor?: string;
   numberGradient?: string;
   numberShadow?: string;
+  iconGradient?: string;
+  borderHoverColor?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -116,7 +120,10 @@ function ScrollStepCard({
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ type: "spring", stiffness: 130, damping: 22, delay: 0.05 }}
-        className="relative z-10 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-white/85 dark:bg-[#0c0c0e]/85 p-4 sm:p-7 md:p-8 backdrop-blur-xl shadow-2xl space-y-5 hover:border-[var(--theme-primary)]/40 transition-all duration-300"
+        className={cn(
+          "relative z-10 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-white/85 dark:bg-[#0c0c0e]/85 p-4 sm:p-7 md:p-8 backdrop-blur-xl shadow-2xl space-y-5 transition-all duration-300",
+          borderHoverColor
+        )}
       >
         {/* Step Header with Holographic Icon Pill */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 pb-4">
@@ -124,7 +131,10 @@ function ScrollStepCard({
             <motion.div
               whileHover={{ scale: 1.12, rotate: 6 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="relative flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-2xl bg-gradient-to-br from-[var(--theme-primary)] to-pink-600 text-white shadow-[0_0_25px_rgba(255,0,132,0.45)] border border-white/20 shrink-0"
+              className={cn(
+                "relative flex items-center justify-center w-11 h-11 sm:w-13 sm:h-13 rounded-2xl text-white border border-white/20 shrink-0",
+                iconGradient
+              )}
             >
               {icon}
             </motion.div>
@@ -346,14 +356,18 @@ export default function InstallationPage() {
                 glowColor="from-[var(--theme-primary)]/40 to-pink-500/20"
                 numberGradient="from-[var(--theme-primary)] via-pink-400 to-purple-400"
                 numberShadow="drop-shadow-[0_10px_35px_rgba(255,0,132,0.25)]"
+                iconGradient="bg-gradient-to-br from-[var(--theme-primary)] to-pink-600 shadow-[0_0_25px_rgba(255,0,132,0.45)]"
+                borderHoverColor="hover:border-[var(--theme-primary)]/40"
               >
                 <div>
-                  <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
-                    <span>Initialize shadcn in your project</span>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white">
+                      Initialize shadcn in your project
+                    </h3>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 whitespace-nowrap shrink-0">
                       One-Time Only
                     </span>
-                  </h3>
+                  </div>
                   <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
                     Generates <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components.json</code> and configures your <code className="font-mono">@/*</code> path alias in TypeScript.
                   </p>
@@ -371,7 +385,7 @@ export default function InstallationPage() {
                       </div>
                       <div className="h-4 w-px bg-white/10 mx-1" />
                       <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
-                        <Terminal className="w-3.5 h-3.5 text-amber-400" />
+                        <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
                         <span>shadcn-init</span>
                       </span>
                     </div>
@@ -385,7 +399,7 @@ export default function InstallationPage() {
                           className={cn(
                             "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
                             selectedPm === pm
-                              ? "bg-amber-500 text-black shadow-sm font-bold"
+                              ? "bg-[var(--theme-primary)] text-white shadow-sm font-bold"
                               : "text-zinc-400 hover:text-white"
                           )}
                         >
@@ -398,14 +412,14 @@ export default function InstallationPage() {
                   {/* Command Row */}
                   <div className="p-3 sm:p-5 font-mono text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
-                      <span className="text-amber-400 font-bold select-none">&gt;</span>
+                      <span className="text-[var(--theme-primary)] font-bold select-none">&gt;</span>
                       <span className="text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">
                         {getInitCommand(selectedPm)}
                       </span>
                     </div>
                     <button
                       onClick={() => copyToClipboard(getInitCommand(selectedPm))}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold transition-all shadow-md active:scale-95 shrink-0 self-end sm:self-auto"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-md active:scale-95 shrink-0 self-end sm:self-auto"
                     >
                       <Copy className="w-3.5 h-3.5" />
                       <span>Copy</span>
@@ -413,8 +427,8 @@ export default function InstallationPage() {
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3.5 text-xs text-zinc-600 dark:text-zinc-300 flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <div className="rounded-xl bg-[var(--theme-primary)]/5 border border-[var(--theme-primary)]/20 p-3.5 text-xs text-zinc-600 dark:text-zinc-300 flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-[var(--theme-primary)] shrink-0 mt-0.5" />
                   <div>
                     <strong>Why is this required?</strong> The shadcn CLI relies on <code className="font-mono">components.json</code> to discover your source directory and styling configuration. Without it, running <code className="font-mono">shadcn add</code> prompts a preset configuration error.
                   </div>
@@ -425,22 +439,27 @@ export default function InstallationPage() {
         </AnimatePresence>
 
         {/* STEP 2: Pull Component with Integrated Terminal Simulator */}
+        {/* STEP 2: Pull Component with Integrated Terminal Simulator */}
         <ScrollStepCard
           stepNumber={setupMode === "fresh" ? "02" : "01"}
           badgeText={setupMode === "fresh" ? "STEP 02 // PULL COMPONENT" : "STEP 01 // PULL COMPONENT"}
-          badgeColor="text-purple-500 bg-purple-500/10 border-purple-500/20"
+          badgeColor="text-purple-400 bg-purple-500/10 border-purple-500/20"
           icon={<Package className="w-6 h-6 text-white" />}
           glowColor="from-purple-500/40 to-indigo-500/20"
           numberGradient="from-purple-400 via-indigo-400 to-sky-400"
           numberShadow="drop-shadow-[0_10px_35px_rgba(168,85,247,0.25)]"
+          iconGradient="bg-gradient-to-br from-purple-500 to-indigo-600 shadow-[0_0_25px_rgba(168,85,247,0.45)]"
+          borderHoverColor="hover:border-purple-500/40"
         >
           <div>
-            <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
-              <span>Add any Intense UI component</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white">
+                Add any Intense UI component
+              </h3>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/20 whitespace-nowrap shrink-0">
                 Universal Command
               </span>
-            </h3>
+            </div>
             <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
               Install any component using its name. The CLI pulls pure source code into your <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">components/ui/</code> folder.
             </p>
@@ -458,7 +477,7 @@ export default function InstallationPage() {
                 </div>
                 <div className="h-4 w-px bg-white/10 mx-1" />
                 <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
-                  <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
+                  <Terminal className="w-3.5 h-3.5 text-purple-400" />
                   <span>intense-ui-cli</span>
                 </span>
               </div>
@@ -472,7 +491,7 @@ export default function InstallationPage() {
                     className={cn(
                       "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
                       selectedPm === pm
-                        ? "bg-[var(--theme-primary)] text-white shadow-sm font-bold"
+                        ? "bg-purple-600 text-white shadow-sm font-bold"
                         : "text-zinc-400 hover:text-white"
                     )}
                   >
@@ -496,7 +515,7 @@ export default function InstallationPage() {
                   className={cn(
                     "relative shrink-0 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-medium transition-all duration-200 border",
                     selectedComp === comp.slug
-                      ? "bg-[var(--theme-primary)]/20 border-[var(--theme-primary)] text-white shadow-[0_0_12px_rgba(255,0,132,0.3)]"
+                      ? "bg-purple-500/20 border-purple-500 text-white shadow-[0_0_12px_rgba(168,85,247,0.3)]"
                       : "bg-white/[0.03] border-white/5 text-zinc-400 hover:text-zinc-200 hover:border-white/20"
                   )}
                 >
@@ -510,7 +529,7 @@ export default function InstallationPage() {
             <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm space-y-4 min-w-0">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
-                  <span className="text-[var(--theme-primary)] font-bold select-none">&gt;</span>
+                  <span className="text-purple-400 font-bold select-none">&gt;</span>
                   <span className="text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">{currentAddCmd}</span>
                 </div>
 
@@ -522,12 +541,12 @@ export default function InstallationPage() {
                       "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border",
                       isSimulating
                         ? "bg-white/5 border-white/10 text-zinc-500 cursor-not-allowed"
-                        : "bg-white/10 hover:bg-white/15 border-white/10 text-white hover:border-[var(--theme-primary)]/40 active:scale-95"
+                        : "bg-white/10 hover:bg-white/15 border-white/10 text-white hover:border-purple-500/40 active:scale-95"
                     )}
                     title="Simulate the installation flow"
                   >
                     {isSimulating ? (
-                      <RotateCcw className="w-3.5 h-3.5 animate-spin text-[var(--theme-primary)]" />
+                      <RotateCcw className="w-3.5 h-3.5 animate-spin text-purple-400" />
                     ) : (
                       <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
                     )}
@@ -541,7 +560,7 @@ export default function InstallationPage() {
                         setTimeout(() => setHasCopiedTerminal(false), 2000);
                       })
                     }
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(255,0,132,0.3)] active:scale-95"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] active:scale-95"
                   >
                     {hasCopiedTerminal ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{hasCopiedTerminal ? "Copied!" : "Copy"}</span>
@@ -579,7 +598,7 @@ export default function InstallationPage() {
                     {simStep >= 4 && (
                       <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span>Injected to <span className="text-pink-300">src/components/ui/{selectedComp}.tsx</span></span>
+                        <span>Injected to <span className="text-purple-300 font-semibold">src/components/ui/{selectedComp}.tsx</span></span>
                       </motion.div>
                     )}
                     {simStep >= 5 && (
@@ -611,20 +630,24 @@ export default function InstallationPage() {
         <ScrollStepCard
           stepNumber={setupMode === "fresh" ? "03" : "02"}
           badgeText={setupMode === "fresh" ? "STEP 03 // LIVE DEMO LAB" : "STEP 02 // LIVE DEMO LAB"}
-          badgeColor="text-emerald-500 bg-emerald-500/10 border-emerald-500/20"
+          badgeColor="text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
           icon={<Code2 className="w-6 h-6 text-white" />}
           glowColor="from-indigo-500/40 to-emerald-500/20"
           numberGradient="from-indigo-400 via-teal-400 to-emerald-400"
           numberShadow="drop-shadow-[0_10px_35px_rgba(16,185,129,0.25)]"
+          iconGradient="bg-gradient-to-br from-emerald-500 to-teal-600 shadow-[0_0_25px_rgba(16,185,129,0.45)]"
+          borderHoverColor="hover:border-emerald-500/40"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
-                <span>Import &amp; use with universal syntax</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white">
+                  Import &amp; use with universal syntax
+                </h3>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap shrink-0">
                   Interactive Sandbox
                 </span>
-              </h3>
+              </div>
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1 leading-relaxed">
                 Import from your local <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-200/50 dark:bg-white/10 px-1 py-0.5 rounded">@/components/ui/</code> directory. Interact with the live component below:
               </p>
@@ -639,7 +662,7 @@ export default function InstallationPage() {
                   className={cn(
                     "px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all",
                     activeLabTab === tab
-                      ? "bg-[var(--theme-primary)] text-white shadow-sm"
+                      ? "bg-emerald-500 text-white shadow-sm font-bold"
                       : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
                   )}
                 >
@@ -652,8 +675,8 @@ export default function InstallationPage() {
           {/* Live Interactive Canvas + Code Split */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch w-full min-w-0">
             {/* Interactive Preview Canvas */}
-            <div className="lg:col-span-5 rounded-2xl border border-black/10 dark:border-white/10 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 p-5 sm:p-6 flex flex-col items-center justify-center gap-4 relative min-h-[200px] sm:min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
-              <div className="absolute top-3 left-3 text-[10px] font-mono tracking-wider uppercase text-zinc-400 dark:text-zinc-500">
+            <div className="lg:col-span-5 rounded-2xl border border-emerald-500/20 dark:border-emerald-500/25 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 p-5 sm:p-6 flex flex-col items-center justify-center gap-4 relative min-h-[200px] sm:min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
+              <div className="absolute top-3 left-3 text-[10px] font-mono tracking-wider uppercase text-emerald-600 dark:text-emerald-400 font-bold">
                 Interactive Preview
               </div>
 
@@ -672,7 +695,7 @@ export default function InstallationPage() {
                       size="lg"
                     />
                     <span className="text-xs font-mono text-zinc-500">
-                      State: <strong className="text-[var(--theme-primary)]">{liveSwitchChecked ? "ON (true)" : "OFF (false)"}</strong>
+                      State: <strong className="text-emerald-500">{liveSwitchChecked ? "ON (true)" : "OFF (false)"}</strong>
                     </span>
                   </motion.div>
                 )}
@@ -692,7 +715,7 @@ export default function InstallationPage() {
                       onChange={(val) => setLiveSliderValue(val)}
                     />
                     <span className="text-xs font-mono text-zinc-500">
-                      Value: <strong className="text-[var(--theme-primary)]">{liveSliderValue}%</strong>
+                      Value: <strong className="text-emerald-500">{liveSliderValue}%</strong>
                     </span>
                   </motion.div>
                 )}
