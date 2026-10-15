@@ -1,11 +1,5 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "../../../../packages/registry/src/components/accordion";
 
 export default function Home() {
   return (
