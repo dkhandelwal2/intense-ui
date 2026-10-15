@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider",
+  "type": "registry:ui",
+  "title": "Slider",
+  "description": "A highly customizable 3D slider.",
+  "dependencies": [
+    "framer-motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "name": "slider.tsx",
+      "content": "\"use client\";\n\nimport React from \"react\";\nimport { motion } from \"framer-motion\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface SliderProps {\n  value: number;\n  min: number;\n  max: number;\n  onChange: (val: number) => void;\n  disabled?: boolean;\n}\n\nexport const Slider = ({ value, min, max, onChange, disabled }: SliderProps) => {\n  const percentage = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));\n\n  return (\n    <div className={cn(\"relative flex w-full items-center h-5 touch-none select-none\", disabled && \"opacity-50 pointer-events-none\")}>\n      <input\n        type=\"range\"\n        min={min}\n        max={max}\n        value={value}\n        onChange={(e) => onChange(Number(e.target.value))}\n        disabled={disabled}\n        className=\"absolute w-full h-full opacity-0 cursor-pointer z-20\"\n      />\n      <div className=\"relative w-full h-1.5 bg-secondary rounded-full overflow-hidden\">\n        <motion.div\n          className=\"absolute top-0 left-0 h-full bg-[var(--theme-primary)]\"\n          initial={false}\n          animate={{ width: `calc(${percentage}% - ${percentage * 0.16}px + 8px)` }}\n          transition={{ type: \"spring\", stiffness: 300, damping: 25 }}\n        />\n      </div>\n      <motion.div\n        className=\"absolute h-4 w-4 bg-background border-2 border-[var(--theme-primary)] rounded-full shadow-md z-10 pointer-events-none\"\n        initial={false}\n        animate={{ left: `calc(${percentage}% - ${percentage * 0.16}px)` }}\n        transition={{ type: \"spring\", stiffness: 300, damping: 25 }}\n      />\n    </div>\n  );\n};\n"
+    }
+  ]
+}

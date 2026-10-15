@@ -2,11 +2,10 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "animated-button",
   "type": "registry:ui",
+  "title": "Animated Button",
+  "description": "A beautiful animated button with Framer Motion effects.",
   "dependencies": [
-    "framer-motion",
-    "lucide-react",
-    "clsx",
-    "tailwind-merge"
+    "framer-motion"
   ],
   "registryDependencies": [],
   "files": [

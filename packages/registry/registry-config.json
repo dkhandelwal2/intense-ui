@@ -1,0 +1,56 @@
+[
+  {
+    "name": "accordion",
+    "title": "Accordion",
+    "description": "A beautifully animated accordion component.",
+    "enabled": true
+  },
+  {
+    "name": "animated-button",
+    "title": "Animated Button",
+    "description": "A beautiful animated button with Framer Motion effects.",
+    "enabled": true
+  },
+  {
+    "name": "switch",
+    "title": "Switch",
+    "description": "A highly customizable 3D rocker switch.",
+    "enabled": true
+  },
+  {
+    "name": "slider",
+    "title": "Slider",
+    "description": "A highly customizable 3D slider.",
+    "enabled": true
+  },
+  {
+    "name": "tooltip",
+    "title": "Tooltip",
+    "description": "A highly customizable 3D tooltip.",
+    "enabled": true
+  },
+  {
+    "name": "glowing-button",
+    "title": "Glowing Button",
+    "description": "A button with a smooth glowing hover effect.",
+    "enabled": false
+  },
+  {
+    "name": "bento-grid",
+    "title": "Bento Grid",
+    "description": "A flexible and responsive grid for dashboard layouts.",
+    "enabled": false
+  },
+  {
+    "name": "magnetic-card",
+    "title": "Magnetic Card",
+    "description": "A card that magnetically interacts with the user's cursor.",
+    "enabled": false
+  },
+  {
+    "name": "color-palette",
+    "title": "Color Palette",
+    "description": "A color palette picker component.",
+    "enabled": false
+  }
+]

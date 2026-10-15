@@ -1,38 +1,86 @@
 {
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "intense-ui",
   "homepage": "https://intense-ui.com",
   "items": [
     {
-      "name": "animated-button",
-      "type": "registry:ui",
-      "dependencies": [
-        "framer-motion",
-        "lucide-react",
-        "clsx",
-        "tailwind-merge"
-      ],
-      "registryDependencies": [],
-      "files": [
-        {
-          "path": "packages/registry/src/components/animated-button.tsx",
-          "type": "registry:ui"
-        }
-      ]
-    },
-    {
       "name": "accordion",
       "type": "registry:ui",
+      "title": "Accordion",
+      "description": "A beautifully animated accordion component.",
       "dependencies": [
         "framer-motion",
-        "lucide-react",
-        "clsx",
-        "tailwind-merge"
+        "lucide-react"
       ],
       "registryDependencies": [],
       "files": [
         {
           "path": "packages/registry/src/components/accordion.tsx",
-          "type": "registry:ui"
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "animated-button",
+      "type": "registry:ui",
+      "title": "Animated Button",
+      "description": "A beautiful animated button with Framer Motion effects.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/animated-button.tsx",
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "A highly customizable 3D rocker switch.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/switch.tsx",
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "A highly customizable 3D slider.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/slider.tsx",
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "A highly customizable 3D tooltip.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/tooltip.tsx",
+          "type": "registry:file"
         }
       ]
     }

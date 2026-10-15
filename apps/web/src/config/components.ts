@@ -1,4 +1,8 @@
-import { tr } from "framer-motion/client";
+/**
+ * Single source of truth: packages/registry/registry-config.json
+ * This file imports from the shared config so web app and registry stay in sync.
+ */
+import registryConfig from "../../../../packages/registry/registry-config.json";
 
 export type ComponentConfig = {
   name: string;
@@ -7,47 +11,13 @@ export type ComponentConfig = {
   description: string;
 };
 
-export const componentsConfig: ComponentConfig[] = [
-  {
-    name: "Accordion",
-    href: "/docs/components/accordion",
-    enabled: true,
-    description: "A beautifully animated accordion component."
-  },
-  {
-    name: "Switch",
-    href: "/docs/components/switch",
-    enabled: true,
-    description: "A highly customizable 3D rocker switch."
-  },
-  {
-    name: "Slider",
-    href: "/docs/components/slider",
-    enabled: true,
-    description: "A highly customizable 3D slider."
-  },
-  {
-    name: "Tooltip",
-    href: "/docs/components/tooltip",
-    enabled: true,
-    description: "A highly customizable 3D tooltip."
-  },
-  {
-    name: "Glowing Button",
-    href: "/docs/components/glowing-button",
-    enabled: true,
-    description: "A button with a smooth glowing hover effect."
-  },
-  {
-    name: "Bento Grid",
-    href: "/docs/components/bento-grid",
-    enabled: true,
-    description: "A flexible and responsive grid for dashboard layouts."
-  },
-  {
-    name: "Magnetic Card",
-    href: "/docs/components/magnetic-card",
-    enabled: true,
-    description: "A card that magnetically interacts with the user's cursor."
-  }
-];
+function toSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}
+
+export const componentsConfig: ComponentConfig[] = registryConfig.map((c) => ({
+  name: c.title,
+  href: `/docs/components/${toSlug(c.name)}`,
+  enabled: c.enabled,
+  description: c.description,
+}));
