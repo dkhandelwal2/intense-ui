@@ -59,15 +59,17 @@ const COMPONENTS_LIST: { slug: ComponentSlug; label: string; icon: React.ReactNo
 ];
 
 /**
- * ScrollStepCard: Renders a massive atmospheric 3D numeral in the background.
- * As the user scrolls, the step content emerges and unfolds out from the numeral with spring physics.
+ * ScrollStepCard: Renders a massive atmospheric 3D numeral in the dedicated clearance above the card.
+ * As the user scrolls, the numeral reveals with spring physics and the card emerges gracefully right underneath it.
  */
 function ScrollStepCard({
   stepNumber,
   badgeText,
   badgeColor = "text-[var(--theme-primary)] bg-[var(--theme-primary)]/10 border-[var(--theme-primary)]/20",
   icon,
-  glowColor = "from-[var(--theme-primary)]/30 to-purple-500/10",
+  glowColor = "from-[var(--theme-primary)]/40 to-pink-500/20",
+  numberGradient = "from-[var(--theme-primary)] via-pink-400 to-purple-400",
+  numberShadow = "drop-shadow-[0_10px_35px_rgba(255,0,132,0.25)]",
   children
 }: {
   stepNumber: string;
@@ -75,40 +77,46 @@ function ScrollStepCard({
   badgeColor?: string;
   icon: React.ReactNode;
   glowColor?: string;
+  numberGradient?: string;
+  numberShadow?: string;
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative w-full min-w-0 py-4 sm:py-6">
-      {/* Huge 3D Cinematic Watermark Number that reacts to scroll */}
-      <motion.div
-        initial={{ opacity: 0.1, scale: 0.8, y: 40 }}
-        whileInView={{ opacity: 0.4, scale: 1.05, y: 0 }}
-        viewport={{ once: false, amount: 0.2 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="pointer-events-none select-none absolute -top-8 sm:-top-16 -right-2 sm:right-4 font-black tracking-tighter text-[130px] sm:text-[200px] md:text-[260px] leading-none bg-gradient-to-b from-[var(--theme-primary)]/40 via-purple-500/15 to-transparent bg-clip-text text-transparent z-0 overflow-hidden"
-      >
-        {stepNumber}
-      </motion.div>
-
+    <div className="relative w-full min-w-0 pt-20 sm:pt-28 md:pt-36 pb-2">
       {/* Atmospheric Radial Blur Glow Behind Number */}
       <motion.div
         initial={{ opacity: 0, scale: 0.7 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        whileInView={{ opacity: 0.7, scale: 1 }}
         viewport={{ once: false, amount: 0.2 }}
         transition={{ duration: 0.8 }}
         className={cn(
-          "pointer-events-none absolute -top-6 sm:-top-10 right-2 sm:right-8 w-[160px] sm:w-[260px] h-[160px] sm:h-[260px] rounded-full blur-3xl -z-10 bg-gradient-to-tr",
+          "pointer-events-none absolute top-2 sm:top-4 right-2 sm:right-8 w-[180px] sm:w-[280px] h-[140px] sm:h-[200px] rounded-full blur-3xl -z-10 bg-gradient-to-tr",
           glowColor
         )}
       />
 
+      {/* Huge 3D Cinematic Watermark Number that reacts to scroll */}
+      <motion.div
+        initial={{ opacity: 0.2, scale: 0.82, y: 30 }}
+        whileInView={{ opacity: 0.9, scale: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ type: "spring", stiffness: 110, damping: 20 }}
+        className={cn(
+          "pointer-events-none select-none absolute top-1 sm:top-2 md:top-3 right-3 sm:right-8 md:right-10 font-black tracking-tighter text-[96px] sm:text-[150px] md:text-[190px] lg:text-[210px] leading-none bg-gradient-to-br bg-clip-text text-transparent z-0",
+          numberGradient,
+          numberShadow
+        )}
+      >
+        {stepNumber}
+      </motion.div>
+
       {/* Content Card Emerging Out of the Number */}
       <motion.div
-        initial={{ opacity: 0, y: 50, scale: 0.93 }}
+        initial={{ opacity: 0, y: 50, scale: 0.95 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
-        transition={{ type: "spring", stiffness: 130, damping: 22 }}
-        className="relative z-10 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-[#0c0c0e]/80 p-4 sm:p-7 md:p-8 backdrop-blur-xl shadow-2xl space-y-5 hover:border-[var(--theme-primary)]/40 transition-all duration-300"
+        transition={{ type: "spring", stiffness: 130, damping: 22, delay: 0.05 }}
+        className="relative z-10 w-full min-w-0 rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-white/85 dark:bg-[#0c0c0e]/85 p-4 sm:p-7 md:p-8 backdrop-blur-xl shadow-2xl space-y-5 hover:border-[var(--theme-primary)]/40 transition-all duration-300"
       >
         {/* Step Header with Holographic Icon Pill */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 pb-4">
@@ -481,7 +489,9 @@ export default function InstallationPage() {
                 stepNumber="01"
                 badgeText="STEP 01 // INITIALIZE PROJECT"
                 icon={<Terminal className="w-6 h-6 text-white" />}
-                glowColor="from-[var(--theme-primary)]/30 to-pink-500/10"
+                glowColor="from-[var(--theme-primary)]/40 to-pink-500/20"
+                numberGradient="from-[var(--theme-primary)] via-pink-400 to-purple-400"
+                numberShadow="drop-shadow-[0_10px_35px_rgba(255,0,132,0.25)]"
               >
                 <div>
                   <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
@@ -516,7 +526,9 @@ export default function InstallationPage() {
           badgeText={setupMode === "fresh" ? "STEP 02 // PULL COMPONENT" : "STEP 01 // PULL COMPONENT"}
           badgeColor="text-purple-500 bg-purple-500/10 border-purple-500/20"
           icon={<Package className="w-6 h-6 text-white" />}
-          glowColor="from-purple-500/30 to-indigo-500/10"
+          glowColor="from-purple-500/40 to-indigo-500/20"
+          numberGradient="from-purple-400 via-indigo-400 to-sky-400"
+          numberShadow="drop-shadow-[0_10px_35px_rgba(168,85,247,0.25)]"
         >
           <div>
             <h3 className="text-lg sm:text-2xl font-bold text-zinc-950 dark:text-white flex items-center gap-2">
@@ -561,7 +573,9 @@ export default function InstallationPage() {
           badgeText={setupMode === "fresh" ? "STEP 03 // LIVE DEMO LAB" : "STEP 02 // LIVE DEMO LAB"}
           badgeColor="text-emerald-500 bg-emerald-500/10 border-emerald-500/20"
           icon={<Code2 className="w-6 h-6 text-white" />}
-          glowColor="from-indigo-500/30 to-emerald-500/10"
+          glowColor="from-indigo-500/40 to-emerald-500/20"
+          numberGradient="from-indigo-400 via-teal-400 to-emerald-400"
+          numberShadow="drop-shadow-[0_10px_35px_rgba(16,185,129,0.25)]"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
