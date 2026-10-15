@@ -90,11 +90,11 @@ export default function InstallationPage() {
             2
           </div>
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-            Add Intense UI components
+            Add any Intense UI component
           </h2>
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400 pl-11">
-          Add any component directly from our GitHub registry. The CLI will automatically download the code into your <code className="text-xs font-mono bg-zinc-100 dark:bg-white/10 px-1 py-0.5 rounded">components/ui/</code> folder and install all required animation dependencies (like <code className="text-xs font-mono bg-zinc-100 dark:bg-white/10 px-1 py-0.5 rounded">framer-motion</code> and <code className="text-xs font-mono bg-zinc-100 dark:bg-white/10 px-1 py-0.5 rounded">lucide-react</code>):
+          Install any component from our registry using its slug. The CLI automatically places the source code into your <code className="text-xs font-mono bg-zinc-100 dark:bg-white/10 px-1 py-0.5 rounded">components/ui/</code> directory and configures all required dependencies:
         </p>
 
         <div className="pl-11 space-y-4">
@@ -111,10 +111,10 @@ export default function InstallationPage() {
               ))}
             </TabsList>
             {[
-              { pm: "npm", cmd: "npx shadcn@latest add dkhandelwal2/intense-ui/accordion" },
-              { pm: "pnpm", cmd: "pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/accordion" },
-              { pm: "yarn", cmd: "npx shadcn@latest add dkhandelwal2/intense-ui/accordion" },
-              { pm: "bun", cmd: "bunx --bun shadcn@latest add dkhandelwal2/intense-ui/accordion" },
+              { pm: "npm", cmd: "npx shadcn@latest add dkhandelwal2/intense-ui/<component-name>" },
+              { pm: "pnpm", cmd: "pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/<component-name>" },
+              { pm: "yarn", cmd: "npx shadcn@latest add dkhandelwal2/intense-ui/<component-name>" },
+              { pm: "bun", cmd: "bunx --bun shadcn@latest add dkhandelwal2/intense-ui/<component-name>" },
             ].map(({ pm, cmd }) => (
               <TabsContent key={pm} value={pm}>
                 <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
@@ -124,13 +124,28 @@ export default function InstallationPage() {
             ))}
           </Tabs>
 
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Replace <code className="font-mono text-zinc-700 dark:text-zinc-300">accordion</code> with any available component: <code className="font-mono text-zinc-700 dark:text-zinc-300">switch</code>, <code className="font-mono text-zinc-700 dark:text-zinc-300">slider</code>, <code className="font-mono text-zinc-700 dark:text-zinc-300">tooltip</code>, or <code className="font-mono text-zinc-700 dark:text-zinc-300">animated-button</code>.
-          </p>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Available components:</span>
+            {[
+              { name: "switch", label: "Switch" },
+              { name: "slider", label: "Slider" },
+              { name: "accordion", label: "Accordion" },
+              { name: "tooltip", label: "Tooltip" },
+              { name: "animated-button", label: "Animated Button" },
+            ].map((comp) => (
+              <Link
+                key={comp.name}
+                href={`/docs/components/${comp.name}`}
+                className="px-2.5 py-1 rounded-lg border border-black/5 dark:border-white/10 bg-zinc-100 dark:bg-white/5 text-xs font-mono text-zinc-800 dark:text-zinc-200 hover:border-[var(--theme-primary)]/50 hover:text-[var(--theme-primary)] transition-colors"
+              >
+                {comp.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Step 3: Use the Component */}
+      {/* Step 3: Universal Import & Usage */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--theme-primary)] text-white font-bold text-sm">
@@ -141,35 +156,111 @@ export default function InstallationPage() {
           </h2>
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-400 pl-11">
-          Once installed, import the component anywhere in your React or Next.js app:
+          Every component follows the exact same universal pattern. Simply import the component from your local <code className="text-xs font-mono bg-zinc-100 dark:bg-white/10 px-1 py-0.5 rounded">@/components/ui/</code> folder and drop it into your JSX:
         </p>
 
-        <div className="pl-11">
-          <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
-            <CodeBlock
-              filename="src/app/page.tsx"
-              language="tsx"
-              code={`import {
+        <div className="pl-11 space-y-4">
+          <Tabs defaultValue="pattern" className="w-full">
+            <TabsList className="mb-3 bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/5">
+              <TabsTrigger value="pattern" className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">
+                Universal Pattern
+              </TabsTrigger>
+              <TabsTrigger value="switch" className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">
+                Switch
+              </TabsTrigger>
+              <TabsTrigger value="slider" className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">
+                Slider
+              </TabsTrigger>
+              <TabsTrigger value="accordion" className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">
+                Accordion
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="pattern">
+              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
+                <CodeBlock
+                  filename="src/app/page.tsx"
+                  language="tsx"
+                  code={`// 1. Universal Import from your local UI directory
+import { ComponentName } from "@/components/ui/<component-name>";
+
+// 2. Render anywhere in your React or Next.js app
+export default function MyPage() {
+  return (
+    <main className="p-8">
+      <ComponentName {...props} />
+    </main>
+  );
+}`}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="switch">
+              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
+                <CodeBlock
+                  filename="src/app/page.tsx"
+                  language="tsx"
+                  code={`import { Switch } from "@/components/ui/switch";
+
+export default function SwitchDemo() {
+  return (
+    <div className="flex items-center gap-3">
+      <Switch defaultChecked onCheckedChange={(checked) => console.log(checked)} />
+      <span>Enable notifications</span>
+    </div>
+  );
+}`}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="slider">
+              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
+                <CodeBlock
+                  filename="src/app/page.tsx"
+                  language="tsx"
+                  code={`import { Slider } from "@/components/ui/slider";
+
+export default function SliderDemo() {
+  return (
+    <div className="w-full max-w-sm">
+      <Slider defaultValue={[40]} max={100} step={1} />
+    </div>
+  );
+}`}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="accordion">
+              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5">
+                <CodeBlock
+                  filename="src/app/page.tsx"
+                  language="tsx"
+                  code={`import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-export default function MyPage() {
+export default function AccordionDemo() {
   return (
     <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
       <AccordionItem value="item-1">
-        <AccordionTrigger>Is it animated?</AccordionTrigger>
+        <AccordionTrigger>Is it interactive?</AccordionTrigger>
         <AccordionContent>
-          Yes! Crafted with smooth Framer Motion spring physics.
+          Yes! All Intense UI components feature smooth spring physics.
         </AccordionContent>
       </AccordionItem>
     </Accordion>
   );
 }`}
-            />
-          </div>
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
 
