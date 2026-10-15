@@ -308,173 +308,8 @@ export default function InstallationPage() {
         </motion.div>
       </div>
 
-      {/* Interactive Terminal Experience */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="w-full rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-950/95 dark:bg-[#09090b]/95 shadow-2xl backdrop-blur-xl overflow-hidden min-w-0"
-      >
-        {/* Terminal Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-3 sm:px-6 py-3 border-b border-white/10 bg-white/[0.02] gap-2.5">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-500/80 inline-block shadow-inner" />
-              <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-yellow-500/80 inline-block shadow-inner" />
-              <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-green-500/80 inline-block shadow-inner" />
-            </div>
-            <div className="h-4 w-px bg-white/10 mx-1" />
-            <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
-              <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
-              <span>intense-ui-cli</span>
-            </span>
-          </div>
-
-          {/* Package Manager Selector Tabs */}
-          <div className="flex items-center justify-start gap-1 bg-white/5 p-1 rounded-xl border border-white/10 self-start sm:self-auto overflow-x-auto">
-            {(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-              <button
-                key={pm}
-                onClick={() => setSelectedPm(pm)}
-                className={cn(
-                  "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
-                  selectedPm === pm
-                    ? "bg-[var(--theme-primary)] text-white shadow-sm font-bold"
-                    : "text-zinc-400 hover:text-white"
-                )}
-              >
-                {pm}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Component Selector Bar */}
-        <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 bg-white/[0.01] border-b border-white/5 overflow-x-auto hide-scrollbar min-w-0">
-          <span className="text-[11px] sm:text-xs font-medium text-zinc-400 shrink-0 mr-1">Component:</span>
-          {COMPONENTS_LIST.map((comp) => (
-            <button
-              key={comp.slug}
-              onClick={() => {
-                setSelectedComp(comp.slug);
-                setSimStep(0);
-                setIsSimulating(false);
-              }}
-              className={cn(
-                "relative shrink-0 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-medium transition-all duration-200 border",
-                selectedComp === comp.slug
-                  ? "bg-[var(--theme-primary)]/20 border-[var(--theme-primary)] text-white shadow-[0_0_12px_rgba(255,0,132,0.3)]"
-                  : "bg-white/[0.03] border-white/5 text-zinc-400 hover:text-zinc-200 hover:border-white/20"
-              )}
-            >
-              {comp.icon}
-              <span>{comp.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Terminal Content Area */}
-        <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm space-y-4 min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
-              <span className="text-[var(--theme-primary)] font-bold select-none">&gt;</span>
-              <span className="text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">{currentAddCmd}</span>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-              <button
-                onClick={handleSimulate}
-                disabled={isSimulating}
-                className={cn(
-                  "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border",
-                  isSimulating
-                    ? "bg-white/5 border-white/10 text-zinc-500 cursor-not-allowed"
-                    : "bg-white/10 hover:bg-white/15 border-white/10 text-white hover:border-[var(--theme-primary)]/40 active:scale-95"
-                )}
-                title="Simulate the installation flow"
-              >
-                {isSimulating ? (
-                  <RotateCcw className="w-3.5 h-3.5 animate-spin text-[var(--theme-primary)]" />
-                ) : (
-                  <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
-                )}
-                <span>{isSimulating ? "Running..." : "Test Run"}</span>
-              </button>
-
-              <button
-                onClick={() =>
-                  copyToClipboard(currentAddCmd, () => {
-                    setHasCopiedTerminal(true);
-                    setTimeout(() => setHasCopiedTerminal(false), 2000);
-                  })
-                }
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(255,0,132,0.3)] active:scale-95"
-              >
-                {hasCopiedTerminal ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{hasCopiedTerminal ? "Copied!" : "Copy"}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Live Simulated CLI Output Box */}
-          <AnimatePresence>
-            {simStep > 0 && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="pt-3 sm:pt-4 border-t border-white/10 space-y-2 text-xs"
-              >
-                {simStep >= 1 && (
-                  <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
-                    <span className="text-blue-400">ℹ</span>
-                    <span className="truncate">Connecting to registry: <span className="text-zinc-200">github.com/dkhandelwal2/intense-ui</span></span>
-                  </motion.div>
-                )}
-                {simStep >= 2 && (
-                  <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Matched item: <span className="text-emerald-300 font-semibold">{selectedComp}</span> (registry:ui)</span>
-                  </motion.div>
-                )}
-                {simStep >= 3 && (
-                  <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Resolved dependencies: <span className="text-purple-300">framer-motion</span>, <span className="text-purple-300">lucide-react</span></span>
-                  </motion.div>
-                )}
-                {simStep >= 4 && (
-                  <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Injected to <span className="text-pink-300">src/components/ui/{selectedComp}.tsx</span></span>
-                  </motion.div>
-                )}
-                {simStep >= 5 && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-semibold flex items-center justify-between text-xs"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-emerald-400" />
-                      Ready to import! Check Step 3 below.
-                    </span>
-                    <button
-                      onClick={() => setSimStep(0)}
-                      className="text-[10px] text-zinc-400 hover:text-white underline"
-                    >
-                      Clear
-                    </button>
-                  </motion.div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
       {/* 🚀 SCROLL-DRIVEN STEP REVEALS (Content emerges from huge numerals) */}
-      <div className="space-y-12 sm:space-y-16 w-full min-w-0">
+      <div className="space-y-8 sm:space-y-12 w-full min-w-0">
         {/* STEP 1: Initialize */}
         <AnimatePresence>
           {setupMode === "fresh" && (
@@ -505,8 +340,58 @@ export default function InstallationPage() {
                   </p>
                 </div>
 
-                <div className="w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
-                  <CodeBlock code={getInitCommand(selectedPm)} language="bash" />
+                {/* Sleek Terminal Window for Step 1 */}
+                <div className="w-full rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-950/95 dark:bg-[#09090b]/95 shadow-xl overflow-hidden min-w-0">
+                  {/* Terminal Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between px-3 sm:px-5 py-2.5 border-b border-white/10 bg-white/[0.02] gap-2">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block shadow-inner" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block shadow-inner" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block shadow-inner" />
+                      </div>
+                      <div className="h-4 w-px bg-white/10 mx-1" />
+                      <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
+                        <Terminal className="w-3.5 h-3.5 text-amber-400" />
+                        <span>shadcn-init</span>
+                      </span>
+                    </div>
+
+                    {/* Package Manager Selector Tabs */}
+                    <div className="flex items-center justify-start gap-1 bg-white/5 p-1 rounded-xl border border-white/10 self-start sm:self-auto overflow-x-auto">
+                      {(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((pm) => (
+                        <button
+                          key={pm}
+                          onClick={() => setSelectedPm(pm)}
+                          className={cn(
+                            "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
+                            selectedPm === pm
+                              ? "bg-amber-500 text-black shadow-sm font-bold"
+                              : "text-zinc-400 hover:text-white"
+                          )}
+                        >
+                          {pm}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Command Row */}
+                  <div className="p-3 sm:p-5 font-mono text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
+                      <span className="text-amber-400 font-bold select-none">&gt;</span>
+                      <span className="text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">
+                        {getInitCommand(selectedPm)}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(getInitCommand(selectedPm))}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold transition-all shadow-md active:scale-95 shrink-0 self-end sm:self-auto"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 p-3.5 text-xs text-zinc-600 dark:text-zinc-300 flex items-start gap-2.5">
@@ -520,7 +405,7 @@ export default function InstallationPage() {
           )}
         </AnimatePresence>
 
-        {/* STEP 2: Pull Component */}
+        {/* STEP 2: Pull Component with Integrated Terminal Simulator */}
         <ScrollStepCard
           stepNumber={setupMode === "fresh" ? "02" : "01"}
           badgeText={setupMode === "fresh" ? "STEP 02 // PULL COMPONENT" : "STEP 01 // PULL COMPONENT"}
@@ -542,28 +427,164 @@ export default function InstallationPage() {
             </p>
           </div>
 
-          <div className="w-full max-w-full overflow-hidden rounded-xl sm:rounded-2xl border border-black/5 dark:border-white/10">
-            <CodeBlock code={currentAddCmd} language="bash" />
-          </div>
+          {/* Interactive Terminal Experience inside Step 2 */}
+          <div className="w-full rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-950/95 dark:bg-[#09090b]/95 shadow-2xl backdrop-blur-xl overflow-hidden min-w-0">
+            {/* Terminal Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between px-3 sm:px-6 py-3 border-b border-white/10 bg-white/[0.02] gap-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-red-500/80 inline-block shadow-inner" />
+                  <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-yellow-500/80 inline-block shadow-inner" />
+                  <span className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-green-500/80 inline-block shadow-inner" />
+                </div>
+                <div className="h-4 w-px bg-white/10 mx-1" />
+                <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
+                  <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
+                  <span>intense-ui-cli</span>
+                </span>
+              </div>
 
-          {/* Interactive Component Badges */}
-          <div className="pt-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Click to select:</span>
-            {COMPONENTS_LIST.map((comp) => (
-              <button
-                key={comp.slug}
-                onClick={() => setSelectedComp(comp.slug)}
-                className={cn(
-                  "px-3 py-1 rounded-xl text-xs font-mono font-medium transition-all duration-200 flex items-center gap-1.5 border active:scale-95",
-                  selectedComp === comp.slug
-                    ? "bg-[var(--theme-primary)] text-white border-[var(--theme-primary)] shadow-sm"
-                    : "bg-zinc-100 dark:bg-white/5 border-black/5 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:border-[var(--theme-primary)]/40"
+              {/* Package Manager Selector Tabs */}
+              <div className="flex items-center justify-start gap-1 bg-white/5 p-1 rounded-xl border border-white/10 self-start sm:self-auto overflow-x-auto">
+                {(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((pm) => (
+                  <button
+                    key={pm}
+                    onClick={() => setSelectedPm(pm)}
+                    className={cn(
+                      "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
+                      selectedPm === pm
+                        ? "bg-[var(--theme-primary)] text-white shadow-sm font-bold"
+                        : "text-zinc-400 hover:text-white"
+                    )}
+                  >
+                    {pm}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Component Selector Bar */}
+            <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 bg-white/[0.01] border-b border-white/5 overflow-x-auto hide-scrollbar min-w-0">
+              <span className="text-[11px] sm:text-xs font-medium text-zinc-400 shrink-0 mr-1">Component:</span>
+              {COMPONENTS_LIST.map((comp) => (
+                <button
+                  key={comp.slug}
+                  onClick={() => {
+                    setSelectedComp(comp.slug);
+                    setSimStep(0);
+                    setIsSimulating(false);
+                  }}
+                  className={cn(
+                    "relative shrink-0 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-medium transition-all duration-200 border",
+                    selectedComp === comp.slug
+                      ? "bg-[var(--theme-primary)]/20 border-[var(--theme-primary)] text-white shadow-[0_0_12px_rgba(255,0,132,0.3)]"
+                      : "bg-white/[0.03] border-white/5 text-zinc-400 hover:text-zinc-200 hover:border-white/20"
+                  )}
+                >
+                  {comp.icon}
+                  <span>{comp.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Terminal Content Area */}
+            <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm space-y-4 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
+                  <span className="text-[var(--theme-primary)] font-bold select-none">&gt;</span>
+                  <span className="text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">{currentAddCmd}</span>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                  <button
+                    onClick={handleSimulate}
+                    disabled={isSimulating}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border",
+                      isSimulating
+                        ? "bg-white/5 border-white/10 text-zinc-500 cursor-not-allowed"
+                        : "bg-white/10 hover:bg-white/15 border-white/10 text-white hover:border-[var(--theme-primary)]/40 active:scale-95"
+                    )}
+                    title="Simulate the installation flow"
+                  >
+                    {isSimulating ? (
+                      <RotateCcw className="w-3.5 h-3.5 animate-spin text-[var(--theme-primary)]" />
+                    ) : (
+                      <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                    )}
+                    <span>{isSimulating ? "Running..." : "Test Run"}</span>
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      copyToClipboard(currentAddCmd, () => {
+                        setHasCopiedTerminal(true);
+                        setTimeout(() => setHasCopiedTerminal(false), 2000);
+                      })
+                    }
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(255,0,132,0.3)] active:scale-95"
+                  >
+                    {hasCopiedTerminal ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{hasCopiedTerminal ? "Copied!" : "Copy"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Live Simulated CLI Output Box */}
+              <AnimatePresence>
+                {simStep > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="pt-3 sm:pt-4 border-t border-white/10 space-y-2 text-xs"
+                  >
+                    {simStep >= 1 && (
+                      <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
+                        <span className="text-blue-400">ℹ</span>
+                        <span className="truncate">Connecting to registry: <span className="text-zinc-200">github.com/dkhandelwal2/intense-ui</span></span>
+                      </motion.div>
+                    )}
+                    {simStep >= 2 && (
+                      <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Matched item: <span className="text-emerald-300 font-semibold">{selectedComp}</span> (registry:ui)</span>
+                      </motion.div>
+                    )}
+                    {simStep >= 3 && (
+                      <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Resolved dependencies: <span className="text-purple-300">framer-motion</span>, <span className="text-purple-300">lucide-react</span></span>
+                      </motion.div>
+                    )}
+                    {simStep >= 4 && (
+                      <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-400">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>Injected to <span className="text-pink-300">src/components/ui/{selectedComp}.tsx</span></span>
+                      </motion.div>
+                    )}
+                    {simStep >= 5 && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-semibold flex items-center justify-between text-xs"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-emerald-400" />
+                          Ready to import! Check Step {setupMode === "fresh" ? "03" : "02"} below.
+                        </span>
+                        <button
+                          onClick={() => setSimStep(0)}
+                          className="text-[10px] text-zinc-400 hover:text-white underline"
+                        >
+                          Clear
+                        </button>
+                      </motion.div>
+                    )}
+                  </motion.div>
                 )}
-              >
-                {comp.icon}
-                <span>{comp.slug}</span>
-              </button>
-            ))}
+              </AnimatePresence>
+            </div>
           </div>
         </ScrollStepCard>
 
