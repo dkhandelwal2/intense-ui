@@ -17,8 +17,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import React, { Suspense } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
+import { AppLoader } from "@/components/ui/app-loader";
 
 export const metadata: Metadata = {
   title: {
@@ -49,6 +51,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Suspense fallback={null}>
+            <AppLoader />
+          </Suspense>
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <div className="flex-1">{children}</div>
