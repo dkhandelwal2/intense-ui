@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail, Gem, ShieldPlus } from "lucide-react";
+import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail, Gem, ShieldPlus, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -252,7 +253,21 @@ export function ComponentPageLayout({
             )}
             <div className="text-zinc-800 dark:text-zinc-300">
               {installContent || (slug ? (
-                <div className="flex flex-col gap-8 mt-2">
+                <div className="flex flex-col gap-6 mt-2">
+                  {/* First-Time User Helper Box */}
+                  <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      <span>First time installing in this project?</span>
+                    </div>
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                      Make sure your project has <code className="bg-amber-500/10 text-amber-700 dark:text-amber-300 px-1 py-0.5 rounded font-mono">components.json</code>. If not, run <code className="bg-amber-500/10 text-amber-700 dark:text-amber-300 px-1 py-0.5 rounded font-mono font-medium">npx shadcn@latest init</code> first.{" "}
+                      <Link href="/docs/installation" className="text-[var(--theme-primary)] hover:underline font-semibold inline-flex items-center gap-0.5">
+                        Setup guide &rarr;
+                      </Link>
+                    </p>
+                  </div>
+
                   <div className="flex flex-col gap-4">
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">Run the following command to securely add the component to your project:</p>
                     <Tabs defaultValue="npm" className="w-full">
