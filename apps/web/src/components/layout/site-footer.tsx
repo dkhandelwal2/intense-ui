@@ -27,10 +27,10 @@ export function SiteFooter() {
           .
         </p>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <Link href="/privacy" className="hover:underline underline-offset-4">
+          <Link href={siteConfig.routes.PRIVACY} className="hover:underline underline-offset-4">
             Privacy Policy
           </Link>
-          <Link href="/terms" className="hover:underline underline-offset-4">
+          <Link href={siteConfig.routes.TERMS} className="hover:underline underline-offset-4">
             Terms & Conditions
           </Link>
         </div>

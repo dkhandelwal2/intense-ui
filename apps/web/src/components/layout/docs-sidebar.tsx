@@ -34,13 +34,15 @@ const getIconForTitle = (title: string) => {
   }
 };
 
+import { siteConfig } from "@/config/site";
+
 export const docsConfig = {
   sidebarNav: [
     {
       title: "Getting Started",
       items: [
-        { title: "Introduction", href: "/docs" },
-        { title: "Installation", href: "/docs/installation" },
+        { title: "Introduction", href: siteConfig.routes.DOCS },
+        { title: "Installation", href: siteConfig.routes.INSTALLATION },
       ],
     },
     {

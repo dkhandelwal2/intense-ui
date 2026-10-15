@@ -9,24 +9,24 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full flex h-14 items-center px-4 sm:px-6 md:px-8">
-        <Link href="/" className="mr-6 flex items-center space-x-2 md:hidden">
+        <Link href={siteConfig.routes.HOME} className="mr-6 flex items-center space-x-2 md:hidden">
           <Image src="/logo-light.webp" alt={siteConfig.name} width={240} height={68} className="h-6 w-auto dark:hidden" unoptimized />
           <Image src="/logo-dark.webp" alt={siteConfig.name} width={240} height={68} className="h-6 w-auto hidden dark:block" unoptimized />
         </Link>
         <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Link href={siteConfig.routes.HOME} className="mr-6 flex items-center space-x-2">
             <Image src="/logo-light.webp" alt={siteConfig.name} width={280} height={80} className="h-7 w-auto hidden sm:block dark:hidden" unoptimized />
             <Image src="/logo-dark.webp" alt={siteConfig.name} width={280} height={80} className="h-7 w-auto hidden dark:sm:block" unoptimized />
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium">
             <Link
-              href="/docs"
+              href={siteConfig.routes.DOCS}
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
               Documentation
             </Link>
             <Link
-              href="/components"
+              href={siteConfig.routes.COMPONENTS}
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
               Components

@@ -3,11 +3,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail, Gem, ShieldPlus, AlertCircle } from "lucide-react";
+import { Code, Monitor, Moon, TerminalSquare, Info, X, Heart, Scale, Mail, Gem, ShieldPlus, Terminal, Bug, MessageSquare, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
 import { ScrollContainerProvider } from "./scroll-context";
+import { siteConfig } from "@/config/site";
+import { RuntimeDependencies, TroubleshootingSection, SupportSection } from "@/components/docs";
 
 interface TocItem {
   id: string;
@@ -48,15 +51,39 @@ export function ComponentPageLayout({
 }: ComponentPageLayoutProps) {
   const [activeTab, setActiveTab] = useState<'info' | 'code' | 'install'>('info');
   const [codeLang, setCodeLang] = useState<'tsx' | 'js'>('tsx');
+  const [packageManager, setPackageManager] = useState<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm');
   const [activeTocId, setActiveTocId] = useState(tocItems[0]?.id);
   const [isTocExpanded, setIsTocExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isCodeLoading, setIsCodeLoading] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMoreMenuOpen(false);
+      }
+    };
+    if (moreMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [moreMenuOpen]);
 
   // The scrollable center container
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -134,19 +161,112 @@ export function ComponentPageLayout({
             >
               <Code className="w-4 h-4" />
             </button>
-            <a
-              href="https://github.com/dkhandelwal2/intense-ui"
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-white/10 rounded-full transition-colors group"
-              title="GitHub"
-            >
-              <div className="flex gap-[3px] items-center justify-center w-4 h-4">
-                <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce"></div>
-              </div>
-            </a>
+            <div className="relative" ref={moreMenuRef}>
+              <button
+                type="button"
+                onClick={() => setMoreMenuOpen((prev) => !prev)}
+                className={cn(
+                  "flex items-center justify-center p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-white/10 rounded-full transition-colors group",
+                  moreMenuOpen && "bg-zinc-200 dark:bg-white/10 text-zinc-900 dark:text-white"
+                )}
+                title="More options"
+                aria-expanded={moreMenuOpen}
+                aria-haspopup="true"
+              >
+                <div className="flex gap-[3px] items-center justify-center w-4 h-4">
+                  <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce [animation-delay:-0.3s]"></div>
+                  <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce [animation-delay:-0.15s]"></div>
+                  <div className="w-1 h-1 rounded-full bg-current group-hover:animate-bounce"></div>
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {moreMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute right-0 bottom-full mb-2 xl:top-full xl:bottom-auto xl:mt-2 xl:mb-auto w-64 p-1.5 rounded-2xl bg-white dark:bg-[#141416] border border-black/10 dark:border-white/10 shadow-2xl shadow-black/15 dark:shadow-black/60 z-50 flex flex-col gap-1 backdrop-blur-xl"
+                  >
+                    <div className="px-2.5 py-1 text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                      Feedback & Support
+                    </div>
+
+                    {/* 1. Report Bug */}
+                    <a
+                      href={siteConfig.links.issues}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setMoreMenuOpen(false)}
+                      className="flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors group/item"
+                    >
+                      <div className="p-1.5 rounded-lg bg-red-500/10 text-red-500 border border-red-500/20 shrink-0 group-hover/item:scale-105 transition-transform">
+                        <Bug className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100 flex items-center justify-between">
+                          Report Bug
+                          <ExternalLink className="w-3 h-3 text-zinc-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                        </span>
+                        <span className="text-[10px] text-zinc-500 truncate">Open an issue on GitHub</span>
+                      </div>
+                    </a>
+
+                    {/* 2. GitHub Discussion / Community */}
+                    <a
+                      href={siteConfig.links.discussions}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setMoreMenuOpen(false)}
+                      className="flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors group/item"
+                    >
+                      <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20 shrink-0 group-hover/item:scale-105 transition-transform">
+                        <MessageSquare className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100 flex items-center justify-between">
+                          GitHub Community
+                          <ExternalLink className="w-3 h-3 text-zinc-400 opacity-0 group-hover/item:opacity-100 transition-opacity" />
+                        </span>
+                        <span className="text-[10px] text-zinc-500 truncate">Ask questions & discussions</span>
+                      </div>
+                    </a>
+
+                    {/* 3. Email */}
+                    <a
+                      href={siteConfig.links.email}
+                      onClick={() => setMoreMenuOpen(false)}
+                      className="flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors group/item"
+                    >
+                      <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 shrink-0 group-hover/item:scale-105 transition-transform">
+                        <Mail className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          Email
+                        </span>
+                        <span className="text-[10px] text-zinc-500 truncate">{siteConfig.author.email}</span>
+                      </div>
+                    </a>
+
+                    <div className="h-px bg-black/5 dark:bg-white/5 my-0.5" />
+
+                    {/* GitHub Repository */}
+                    <a
+                      href={siteConfig.links.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setMoreMenuOpen(false)}
+                      className="flex items-center justify-between px-2.5 py-1.5 rounded-xl text-[11px] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-white/5 transition-colors"
+                    >
+                      <span>GitHub Repository</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
@@ -236,69 +356,109 @@ export function ComponentPageLayout({
             transition={{ duration: 0.2 }}
             className="flex flex-col gap-6"
           >
-            <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-4 mt-2">
-              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">Installation</h3>
-            </div>
-            {dependencies && dependencies.length > 0 && (
-              <div className="flex flex-col gap-4">
-                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest">Dependencies</h3>
-                <div className="flex flex-wrap gap-2">
-                  {dependencies.map(dep => (
-                    <div key={dep.name} className="px-3 py-1.5 rounded-full border border-black/5 dark:border-white/5 bg-zinc-50 dark:bg-white/5 text-xs text-zinc-700 dark:text-zinc-300 font-mono">
-                      {dep.name}
-                    </div>
-                  ))}
+            <div className="flex flex-col gap-2.5 mt-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-200">Installation</h3>
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  CLI Recommended
+                </span>
+              </div>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                Choose your preferred installation method:
+              </p>
+              <div className="flex items-start gap-2.5 p-2.5 rounded-xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/15 text-xs text-zinc-600 dark:text-zinc-300">
+                <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                <div className="space-y-1.5 text-[11px] leading-relaxed">
+                  <p>
+                    <strong className="text-zinc-900 dark:text-white font-semibold">• Using CLI?</strong> Just run the <strong className="text-zinc-900 dark:text-white font-semibold">CLI Installation</strong> command below — it installs the component and its packages automatically.
+                  </p>
+                  <p className="text-zinc-500 dark:text-zinc-400">
+                    <strong className="text-zinc-700 dark:text-zinc-300 font-medium">• Copying code?</strong> Install the packages under <strong className="text-zinc-700 dark:text-zinc-300 font-medium">Core Dependencies</strong>, then copy the component from the <strong className="text-zinc-700 dark:text-zinc-300 font-medium">Code</strong> tab.
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
             <div className="text-zinc-800 dark:text-zinc-300">
               {installContent || (slug ? (
-                <div className="flex flex-col gap-6 mt-2">
-                  {/* First-Time User Helper Box */}
-                  <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-4 flex flex-col gap-2">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      <span>First time installing in this project?</span>
+                <div className="flex flex-col gap-6">
+
+                  {/* Component npx shadcn CLI Command */}
+                  <div className="flex flex-col gap-3 border-t border-black/5 dark:border-white/10 pt-6">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shrink-0">
+                          <Terminal className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 uppercase tracking-wider">CLI Installation</h4>
+                            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+                              Fastest
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Installs component files & auto-configures dependencies</p>
+                        </div>
+                      </div>
+
+                      {/* Package Manager Selector adjacent to command */}
+                      <PackageManagerSelector
+                        value={packageManager}
+                        onChange={setPackageManager}
+                        size="sm"
+                        activeClassName="bg-[var(--theme-primary)] text-white shadow-sm font-semibold"
+                        inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+                      />
                     </div>
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                      Make sure your project has <code className="bg-amber-500/10 text-amber-700 dark:text-amber-300 px-1 py-0.5 rounded font-mono">components.json</code>. If not, run <code className="bg-amber-500/10 text-amber-700 dark:text-amber-300 px-1 py-0.5 rounded font-mono font-medium">npx shadcn@latest init</code> first.{" "}
-                      <Link href="/docs/installation" className="text-[var(--theme-primary)] hover:underline font-semibold inline-flex items-center gap-0.5">
-                        Setup guide &rarr;
-                      </Link>
-                    </p>
+
+                    <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-[#0c0c0c]">
+                      <CodeBlock
+                        code={
+                          packageManager === 'npm'
+                            ? `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}`
+                            : packageManager === 'pnpm'
+                              ? `pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}`
+                              : packageManager === 'yarn'
+                                ? `yarn dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}`
+                                : `bunx --bun shadcn@latest add dkhandelwal2/intense-ui/${slug}`
+                        }
+                        language="bash"
+                      />
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-4">
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">Run the following command to securely add the component to your project:</p>
-                    <Tabs defaultValue="npm" className="w-full">
-                      <TabsList className="mb-4 bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                        {["npm", "pnpm", "yarn", "bun"].map(pm => (
-                          <TabsTrigger key={pm} value={pm} className="text-xs data-[state=active]:bg-[var(--theme-primary)] data-[state=active]:text-white">{pm}</TabsTrigger>
-                        ))}
-                      </TabsList>
-                      {[
-                        { pm: "npm", cmd: `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
-                        { pm: "pnpm", cmd: `pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
-                        { pm: "yarn", cmd: `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}` },
-                        { pm: "bun", cmd: `bunx --bun shadcn@latest add dkhandelwal2/intense-ui/${slug}` }
-                      ].map(({ pm, cmd }) => (
-                        <TabsContent key={pm} value={pm}>
-                          <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-[#0c0c0c]">
-                            <CodeBlock code={cmd} language="bash" />
-                          </div>
-                        </TabsContent>
-                      ))}
-                    </Tabs>
-                  </div>
+                  {/* Usage */}
                   {usageCode && (
-                    <div className="flex flex-col gap-4 border-t border-black/5 dark:border-white/5 pt-6">
-                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">Usage</h3>
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">Once installed, import and use the component:</p>
+                    <div className="flex flex-col gap-3 border-t border-black/5 dark:border-white/10 pt-6">
+                      <div className="flex items-center gap-2.5">
+                        <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 shrink-0">
+                          <Code className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 uppercase tracking-wider">Usage</h4>
+                          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Import and render the component in your layout</p>
+                        </div>
+                      </div>
                       <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/5 bg-zinc-950 dark:bg-[#0c0c0c]">
                         <CodeBlock code={usageCode} language="tsx" />
                       </div>
                     </div>
                   )}
+
+                  {/* Component Dependencies */}
+                  <RuntimeDependencies
+                    variant="compact"
+                    dependencies={dependencies}
+                    packageManager={packageManager}
+                    onPackageManagerChange={setPackageManager}
+                    subtitle="Installed automatically by CLI, or manually below"
+                    className="border-t border-black/5 dark:border-white/10 pt-6"
+                  />
+
+                  {/* 4. Troubleshooting Diagnostic Center */}
+                  <TroubleshootingSection variant="compact" />
+
+                  {/* 5. Need Help? Support & Community */}
+                  <SupportSection variant="compact" />
                 </div>
               ) : (
                 <div className="text-sm text-zinc-500">No installation steps provided.</div>

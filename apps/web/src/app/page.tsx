@@ -15,7 +15,7 @@ export default function Home() {
         </p>
         <div className="flex w-full items-center justify-center space-x-4 py-4 md:pb-10">
           <Link
-            href="/docs"
+            href={siteConfig.routes.DOCS}
             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8"
           >
             Get Started

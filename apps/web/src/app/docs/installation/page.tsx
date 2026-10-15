@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Terminal,
@@ -21,19 +20,9 @@ import {
   SlidersHorizontal,
   ToggleRight,
   LayoutList,
-  Wrench,
-  HelpCircle,
-  Rocket,
   Package,
   Code2,
-  Download,
-  FolderGit2,
-  Boxes,
-  ShieldCheck,
-  Bug,
-  MessageSquare,
-  Mail,
-  ExternalLink
+  FolderGit2
 } from "lucide-react";
 import { toast } from "sonner";
 import { CodeBlock } from "@/components/ui/code-block";
@@ -46,8 +35,13 @@ import {
   AccordionContent
 } from "../../../../../../packages/registry/src/components/accordion";
 import { cn } from "@/lib/utils";
-
-type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
+import {
+  RuntimeDependencies,
+  TroubleshootingSection,
+  SupportSection,
+  ExploreBanner,
+} from "@/components/docs";
+import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
 type ComponentSlug = "switch" | "slider" | "accordion" | "tooltip" | "animated-button";
 
 const COMPONENTS_LIST: { slug: ComponentSlug; label: string; icon: React.ReactNode; desc: string }[] = [
@@ -175,7 +169,7 @@ export default function InstallationPage() {
     switch (pm) {
       case "pnpm": return `pnpm dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}`;
       case "bun": return `bunx --bun shadcn@latest add dkhandelwal2/intense-ui/${slug}`;
-      case "yarn": return `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}`;
+      case "yarn": return `yarn dlx shadcn@latest add dkhandelwal2/intense-ui/${slug}`;
       default: return `npx shadcn@latest add dkhandelwal2/intense-ui/${slug}`;
     }
   };
@@ -184,7 +178,7 @@ export default function InstallationPage() {
     switch (pm) {
       case "pnpm": return "pnpm dlx shadcn@latest init";
       case "bun": return "bunx --bun shadcn@latest init";
-      case "yarn": return "npx shadcn@latest init";
+      case "yarn": return "yarn dlx shadcn@latest init";
       default: return "npx shadcn@latest init";
     }
   };
@@ -391,22 +385,12 @@ export default function InstallationPage() {
                     </div>
 
                     {/* Package Manager Selector Tabs */}
-                    <div className="flex items-center justify-start gap-1 bg-white/5 p-1 rounded-xl border border-white/10 self-start sm:self-auto overflow-x-auto">
-                      {(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                        <button
-                          key={pm}
-                          onClick={() => setSelectedPm(pm)}
-                          className={cn(
-                            "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
-                            selectedPm === pm
-                              ? "bg-[var(--theme-primary)] text-white shadow-sm font-bold"
-                              : "text-zinc-400 hover:text-white"
-                          )}
-                        >
-                          {pm}
-                        </button>
-                      ))}
-                    </div>
+                    <PackageManagerSelector
+                      value={selectedPm}
+                      onChange={setSelectedPm}
+                      activeClassName="bg-[var(--theme-primary)] text-white shadow-sm font-bold"
+                      inactiveClassName="text-zinc-400 hover:text-white"
+                    />
                   </div>
 
                   {/* Command Row */}
@@ -483,22 +467,12 @@ export default function InstallationPage() {
               </div>
 
               {/* Package Manager Selector Tabs */}
-              <div className="flex items-center justify-start gap-1 bg-white/5 p-1 rounded-xl border border-white/10 self-start sm:self-auto overflow-x-auto">
-                {(["npm", "pnpm", "yarn", "bun"] as PackageManager[]).map((pm) => (
-                  <button
-                    key={pm}
-                    onClick={() => setSelectedPm(pm)}
-                    className={cn(
-                      "px-2.5 py-1 text-xs font-mono rounded-lg transition-all",
-                      selectedPm === pm
-                        ? "bg-purple-600 text-white shadow-sm font-bold"
-                        : "text-zinc-400 hover:text-white"
-                    )}
-                  >
-                    {pm}
-                  </button>
-                ))}
-              </div>
+              <PackageManagerSelector
+                value={selectedPm}
+                onChange={setSelectedPm}
+                activeClassName="bg-purple-600 text-white shadow-sm font-bold"
+                inactiveClassName="text-zinc-400 hover:text-white"
+              />
             </div>
 
             {/* Component Selector Bar */}
@@ -837,238 +811,16 @@ export default function Demo() {
       </div>
 
       {/* 📦 DEPENDENCIES SECTION */}
-      <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 shadow-sm">
-            <Boxes className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Core Runtime Dependencies</h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">Ultra-lean, production-grade ecosystem that powers Intense UI</p>
-          </div>
-        </div>
-
-        {/* Dependency Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full min-w-0">
-          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">framer-motion</span>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-pink-500/10 text-pink-500 font-semibold border border-pink-500/20">v11 / v12</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Powers spring physics, gestures, fluid layout morphing, and GPU-accelerated enter/exit animations.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">lucide-react</span>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-purple-500/10 text-purple-500 font-semibold border border-purple-500/20">^0.400+</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Ultra-crisp, tree-shakeable SVG icon system matching official shadcn ecosystem standards.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">clsx &amp; tailwind-merge</span>
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-indigo-500/10 text-indigo-500 font-semibold border border-indigo-500/20">Utility</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Provides the <code className="font-mono text-zinc-700 dark:text-zinc-300">cn()</code> helper to resolve Tailwind CSS class conflicts safely and conditionally.
-            </p>
-          </div>
-        </div>
-
-        {/* Manual dependency install block */}
-        <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-900/50 p-4 space-y-2">
-          <span className="text-xs text-zinc-400 font-medium flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Installed automatically by the CLI. Manual install command:</span>
-          </span>
-          <div className="w-full max-w-full overflow-hidden rounded-xl border border-white/10">
-            <CodeBlock code="npm install framer-motion lucide-react clsx tailwind-merge" language="bash" />
-          </div>
-        </div>
-      </div>
+      <RuntimeDependencies />
 
       {/* 🛠️ TROUBLESHOOTING DIAGNOSTIC BENTO */}
-      <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
-            <Wrench className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Troubleshooting Diagnostic Center</h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">Quick fixes for common first-time installation errors</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full min-w-0">
-          {/* Card 1: Missing components.json */}
-          <div className="rounded-2xl sm:rounded-3xl border border-red-500/20 bg-red-500/[0.02] dark:bg-red-500/[0.03] p-5 sm:p-6 space-y-3 hover:border-red-500/40 transition-colors w-full min-w-0 overflow-hidden">
-            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 font-bold text-sm">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span className="truncate">&quot;You need to create a components.json file&quot;</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              <strong>Why it happens:</strong> You ran <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-black/5 dark:bg-white/10 px-1 py-0.5 rounded">shadcn add</code> before setting up shadcn in your project root.
-            </p>
-            <div className="pt-1 w-full max-w-full overflow-hidden">
-              <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1.5">Run this fix:</span>
-              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-                <CodeBlock code="npx shadcn@latest init" language="bash" />
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2: Path Alias Missing */}
-          <div className="rounded-2xl sm:rounded-3xl border border-amber-500/20 bg-amber-500/[0.02] dark:bg-amber-500/[0.03] p-5 sm:p-6 space-y-3 hover:border-amber-500/40 transition-colors w-full min-w-0 overflow-hidden">
-            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
-              <HelpCircle className="w-4 h-4 shrink-0" />
-              <span className="truncate">&quot;Cannot find module &apos;@/lib/utils&apos;&quot;</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              <strong>Why it happens:</strong> Your TypeScript config does not recognize the <code className="font-mono text-zinc-800 dark:text-zinc-200 bg-black/5 dark:bg-white/10 px-1 py-0.5 rounded">@/*</code> path alias mapping.
-            </p>
-            <div className="pt-1 w-full max-w-full overflow-hidden">
-              <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1.5">Add to tsconfig.json:</span>
-              <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-                <CodeBlock
-                  filename="tsconfig.json"
-                  language="json"
-                  code={`"compilerOptions": {
-  "paths": {
-    "@/*": ["./src/*"]
-  }
-}`}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <TroubleshootingSection />
 
       {/* 🤝 STILL FACING AN ISSUE? CONTACT & COMMUNITY SECTION */}
-      <div className="space-y-6 pt-4 border-t border-black/5 dark:border-white/10 w-full min-w-0">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2.5 rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/20">
-            <HelpCircle className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white">Still Running Into an Issue?</h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">We&apos;re here to help you get Intense UI running smoothly</p>
-          </div>
-        </div>
+      <SupportSection />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full min-w-0">
-          {/* GitHub Issues */}
-          <a
-            href="https://github.com/dkhandelwal2/intense-ui/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-[var(--theme-primary)]/40 hover:shadow-lg transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="p-2 rounded-xl bg-red-500/10 text-red-500 border border-red-500/20">
-                <Bug className="w-4 h-4" />
-              </div>
-              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-[var(--theme-primary)] transition-colors">
-              Report a Bug
-            </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Hit a build error or broken styling? Open an issue on GitHub with reproduction steps.
-            </p>
-            <span className="text-xs font-semibold text-[var(--theme-primary)] flex items-center gap-1">
-              <span>Open GitHub Issue</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </a>
-
-          {/* GitHub Discussions */}
-          <a
-            href="https://github.com/dkhandelwal2/intense-ui/discussions"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-purple-500/40 hover:shadow-lg transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="p-2 rounded-xl bg-purple-500/10 text-purple-500 border border-purple-500/20">
-                <MessageSquare className="w-4 h-4" />
-              </div>
-              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-purple-400 transition-colors" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-purple-400 transition-colors">
-              Community &amp; Ideas
-            </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Request new components, discuss animation physics, or show off what you built.
-            </p>
-            <span className="text-xs font-semibold text-purple-500 flex items-center gap-1">
-              <span>Join Discussion</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </a>
-
-          {/* Direct Email Support */}
-          <a
-            href="mailto:khandelwal.deepak2@gmail.com"
-            className="group rounded-2xl sm:rounded-3xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 sm:p-6 space-y-3 hover:border-emerald-500/40 hover:shadow-lg transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                <Mail className="w-4 h-4" />
-              </div>
-              <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-950 dark:text-white group-hover:text-emerald-400 transition-colors">
-              Direct Contact
-            </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Have questions regarding commercial integration or custom requests? Email the maintainers.
-            </p>
-            <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1">
-              <span>Send Email</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </a>
-        </div>
-      </div>
-
-      {/* Corrected Browse Components Link Banner */}
-      <motion.div
-        whileHover={{ scale: 1.01 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[var(--theme-primary)] via-pink-600 to-purple-700 p-6 sm:p-8 text-white shadow-2xl overflow-hidden w-full min-w-0"
-      >
-        <div className="absolute right-0 top-0 translate-x-10 -translate-y-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-6">
-          <div className="space-y-1.5 max-w-xl">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-extrabold bg-white/20 text-white backdrop-blur-sm">
-              Explore Library
-            </span>
-            <h3 className="text-xl sm:text-3xl font-extrabold tracking-tight">
-              Ready to craft intense web experiences?
-            </h3>
-            <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
-              Every component is interactive, accessible, and customizable. Browse live demos, properties, and variations.
-            </p>
-          </div>
-
-          {/* Corrected Link to /components */}
-          <Link
-            href="/components"
-            className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-white text-zinc-950 font-bold text-xs sm:text-sm shadow-xl hover:bg-zinc-100 hover:gap-3 transition-all shrink-0 active:scale-95"
-          >
-            <span>Browse Components</span>
-            <ArrowRight className="w-4 h-4 text-[var(--theme-primary)]" />
-          </Link>
-        </div>
-      </motion.div>
+      {/* 🚀 EXPLORE COMPONENTS CALLOUT BANNER */}
+      <ExploreBanner />
     </div>
   );
 }

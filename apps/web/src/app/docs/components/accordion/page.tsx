@@ -97,7 +97,12 @@ return (
           Perfect for FAQs, collapsible menus, and reducing vertical screen clutter in modern React and Next.js applications. Fully typed, keyboard navigable, and endlessly customizable.
         </>
       }
-      dependencies={[{ name: "framer-motion", command: "npm install framer-motion" }, { name: "lucide-react", command: "npm install lucide-react" }]}
+      dependencies={[
+        { name: "framer-motion", command: "npm install framer-motion" },
+        { name: "lucide-react", command: "npm install lucide-react" },
+        { name: "clsx", command: "npm install clsx" },
+        { name: "tailwind-merge", command: "npm install tailwind-merge" }
+      ]}
       propsTable={propsTable}
       tocItems={tocItems}
       codeContent={MANUAL_INSTALL_CODE}
