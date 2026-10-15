@@ -48,7 +48,7 @@ export default function BasicAccordion() {
 
 export default function MultipleAccordion() {
   return (
-    <Accordion type="multiple" className="w-full">
+    <Accordion type="multiple" defaultValue={["item-1", "item-2"]} className="w-full">
       <AccordionItem value="item-1">
         <AccordionTrigger>Is it accessible?</AccordionTrigger>
         <AccordionContent>
@@ -417,15 +417,27 @@ export const ACCORDION_API_REFERENCE = [
     description: "Determines whether one or multiple items can be opened at the same time.",
   },
   {
+    prop: "value",
+    type: "string | string[]",
+    defaultValue: "-",
+    description: "The controlled value of the item(s) to expand.",
+  },
+  {
     prop: "defaultValue",
     type: "string | string[]",
     defaultValue: "-",
-    description: "The value of the item(s) to expand by default.",
+    description: "The value of the item(s) to expand by default when uncontrolled.",
+  },
+  {
+    prop: "onValueChange",
+    type: "(value: string | string[]) => void",
+    defaultValue: "-",
+    description: "Event handler called when the expanded state changes.",
   },
   {
     prop: "collapsible",
     type: "boolean",
-    defaultValue: "false",
+    defaultValue: "true",
     description: "When type is single, allows closing content when clicking trigger for an open item.",
   },
   {

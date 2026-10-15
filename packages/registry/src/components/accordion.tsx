@@ -8,37 +8,84 @@ import { cn } from "@/lib/utils";
 type AccordionContextType = {
   activeValues: string[];
   toggleItem: (value: string) => void;
+  type: "single" | "multiple";
 };
 
 const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
 
+type AccordionItemContextType = {
+  value: string;
+  disabled?: boolean;
+};
+
+const AccordionItemContext = createContext<AccordionItemContextType | undefined>(undefined);
+
 export interface AccordionProps {
   children: React.ReactNode;
   type?: "single" | "multiple";
+  value?: string | string[];
   defaultValue?: string | string[];
+  onValueChange?: (value: any) => void;
   className?: string;
   collapsible?: boolean;
 }
 
-export function Accordion({ children, type = "single", defaultValue, className }: AccordionProps) {
-  const [activeValues, setActiveValues] = useState<string[]>(
-    Array.isArray(defaultValue) ? defaultValue : defaultValue ? [defaultValue] : []
+export function Accordion({
+  children,
+  type = "single",
+  defaultValue,
+  value: controlledValue,
+  onValueChange,
+  className,
+  collapsible = true,
+}: AccordionProps) {
+  const [uncontrolledValues, setUncontrolledValues] = useState<string[]>(
+    Array.isArray(defaultValue)
+      ? defaultValue
+      : defaultValue
+      ? [defaultValue]
+      : []
   );
 
-  const toggleItem = (value: string) => {
-    setActiveValues((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((v) => v !== value);
+  const isControlled = controlledValue !== undefined;
+  const activeValues = isControlled
+    ? Array.isArray(controlledValue)
+      ? controlledValue
+      : controlledValue
+      ? [controlledValue]
+      : []
+    : uncontrolledValues;
+
+  const toggleItem = (itemValue: string) => {
+    let nextValues: string[];
+    if (activeValues.includes(itemValue)) {
+      if (type === "single" && !collapsible) {
+        return;
       }
+      nextValues = activeValues.filter((v) => v !== itemValue);
+    } else {
       if (type === "single") {
-        return [value];
+        nextValues = [itemValue];
+      } else {
+        nextValues = [...activeValues, itemValue];
       }
-      return [...prev, value];
-    });
+    }
+
+    if (!isControlled) {
+      setUncontrolledValues(nextValues);
+    }
+
+    if (onValueChange) {
+      if (type === "single") {
+        onValueChange(nextValues[0] || "");
+      } else {
+        onValueChange(nextValues);
+      }
+    }
   };
 
   return (
-    <AccordionContext.Provider value={{ activeValues, toggleItem }}>
+    <AccordionContext.Provider value={{ activeValues, toggleItem, type }}>
       <div className={cn("w-full space-y-2", className)}>{children}</div>
     </AccordionContext.Provider>
   );
@@ -55,28 +102,41 @@ export interface AccordionItemProps {
   hideBorder?: boolean;
 }
 
-export function AccordionItem({ value, children, className, disabled, borderWidth, borderRadius, borderColor, hideBorder }: AccordionItemProps) {
-  const customStyles = hideBorder ? {
-    border: "none",
-    ...(borderRadius !== undefined && { borderRadius })
-  } : {
-    ...(borderWidth !== undefined && { borderWidth }),
-    ...(borderRadius !== undefined && { borderRadius }),
-    ...(borderColor !== undefined && { borderColor }),
-  };
+export function AccordionItem({
+  value,
+  children,
+  className,
+  disabled,
+  borderWidth,
+  borderRadius,
+  borderColor,
+  hideBorder,
+}: AccordionItemProps) {
+  const customStyles = hideBorder
+    ? {
+        border: "none",
+        ...(borderRadius !== undefined && { borderRadius }),
+      }
+    : {
+        ...(borderWidth !== undefined && { borderWidth }),
+        ...(borderRadius !== undefined && { borderRadius }),
+        ...(borderColor !== undefined && { borderColor }),
+      };
 
   return (
-    <div
-      className={cn("transition-all duration-300 ease-in-out", !hideBorder && "border-b", disabled && "opacity-50", className)}
-      style={Object.keys(customStyles).length > 0 ? customStyles : undefined}
-    >
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, { value, disabled });
-        }
-        return child;
-      })}
-    </div>
+    <AccordionItemContext.Provider value={{ value, disabled }}>
+      <div
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          !hideBorder && "border-b",
+          disabled && "opacity-50",
+          className
+        )}
+        style={Object.keys(customStyles).length > 0 ? customStyles : undefined}
+      >
+        {children}
+      </div>
+    </AccordionItemContext.Provider>
   );
 }
 
@@ -109,10 +169,10 @@ const weightClasses = {
 };
 
 export function AccordionTrigger({
-  value,
+  value: propValue,
   children,
   className,
-  disabled,
+  disabled: propDisabled,
   icon,
   iconPosition = "Right",
   hideIcon,
@@ -120,12 +180,19 @@ export function AccordionTrigger({
   weight = "Default",
   headingUnderline,
   headingColor,
-  onClick
+  onClick,
 }: AccordionTriggerProps) {
-  const context = useContext(AccordionContext);
-  if (!context) throw new Error("AccordionTrigger must be used within an Accordion");
+  const accordionContext = useContext(AccordionContext);
+  const itemContext = useContext(AccordionItemContext);
 
-  const { activeValues, toggleItem } = context;
+  if (!accordionContext) {
+    throw new Error("AccordionTrigger must be used within an Accordion");
+  }
+
+  const value = propValue ?? itemContext?.value;
+  const disabled = propDisabled ?? itemContext?.disabled;
+
+  const { activeValues, toggleItem } = accordionContext;
   const isOpen = value ? activeValues.includes(value) : false;
 
   const iconSizeClass = {
@@ -142,7 +209,16 @@ export function AccordionTrigger({
       transition={{ duration: 0.2, ease: "easeInOut" }}
       className={cn("transition-all duration-300 ease-in-out")}
     >
-      {icon ? icon : <ChevronDown className={cn(iconSizeClass, "transition-all duration-300 ease-in-out text-zinc-500 shrink-0")} />}
+      {icon ? (
+        icon
+      ) : (
+        <ChevronDown
+          className={cn(
+            iconSizeClass,
+            "transition-all duration-300 ease-in-out text-zinc-500 shrink-0"
+          )}
+        />
+      )}
     </motion.div>
   );
 
@@ -179,11 +255,22 @@ export interface AccordionContentProps {
   contentColor?: string;
 }
 
-export function AccordionContent({ value, children, className, disabled, contentColor }: AccordionContentProps) {
-  const context = useContext(AccordionContext);
-  if (!context) throw new Error("AccordionContent must be used within an Accordion");
+export function AccordionContent({
+  value: propValue,
+  children,
+  className,
+  disabled: _disabled,
+  contentColor,
+}: AccordionContentProps) {
+  const accordionContext = useContext(AccordionContext);
+  const itemContext = useContext(AccordionItemContext);
 
-  const { activeValues } = context;
+  if (!accordionContext) {
+    throw new Error("AccordionContent must be used within an Accordion");
+  }
+
+  const value = propValue ?? itemContext?.value;
+  const { activeValues } = accordionContext;
   const isOpen = value ? activeValues.includes(value) : false;
 
   return (
@@ -197,7 +284,11 @@ export function AccordionContent({ value, children, className, disabled, content
           className="overflow-hidden"
         >
           <div
-            className={cn("pb-4 pt-0 text-sm transition-all duration-300 ease-in-out", !contentColor && "text-zinc-600 dark:text-zinc-400", className)}
+            className={cn(
+              "pb-4 pt-0 text-sm transition-all duration-300 ease-in-out",
+              !contentColor && "text-zinc-600 dark:text-zinc-400",
+              className
+            )}
             style={contentColor ? { color: contentColor } : undefined}
           >
             {children}
