@@ -260,51 +260,70 @@ export default function InstallationPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.25 }}
-          className="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center p-1.5 rounded-2xl bg-zinc-100 dark:bg-white/[0.04] border border-black/5 dark:border-white/10 backdrop-blur-sm gap-1"
+          className="w-full sm:w-auto flex flex-col items-start gap-2.5"
         >
-          <button
-            onClick={() => setSetupMode("fresh")}
-            className={cn(
-              "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2",
-              setupMode === "fresh"
-                ? "text-white shadow-md"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-            )}
-          >
-            {setupMode === "fresh" && (
-              <motion.div
-                layoutId="setupModePill"
-                className="absolute inset-0 bg-[var(--theme-primary)] rounded-xl"
-                transition={{ type: "spring", stiffness: 450, damping: 35 }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5" />
-              <span>Fresh Project Setup</span>
-            </span>
-          </button>
+          {/* Futuristic Capsule Dock */}
+          <div className="relative p-1 rounded-full bg-zinc-200/70 dark:bg-black/60 border border-black/10 dark:border-white/10 backdrop-blur-xl shadow-xl flex items-center w-full max-w-sm sm:max-w-none">
+            <button
+              onClick={() => setSetupMode("fresh")}
+              className={cn(
+                "relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 z-10 active:scale-95",
+                setupMode === "fresh"
+                  ? "text-white"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+              )}
+            >
+              {setupMode === "fresh" && (
+                <motion.div
+                  layoutId="setupModePill"
+                  className="absolute inset-0 bg-gradient-to-r from-[var(--theme-primary)] via-pink-500 to-purple-600 rounded-full shadow-[0_0_22px_rgba(255,0,132,0.4)]"
+                  transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
+                <Zap className="w-3.5 h-3.5 shrink-0" />
+                <span>Fresh Project</span>
+              </span>
+            </button>
 
-          <button
-            onClick={() => setSetupMode("existing")}
-            className={cn(
-              "relative px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2",
-              setupMode === "existing"
-                ? "text-white shadow-md"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-            )}
+            <button
+              onClick={() => setSetupMode("existing")}
+              className={cn(
+                "relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 z-10 active:scale-95",
+                setupMode === "existing"
+                  ? "text-white"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
+              )}
+            >
+              {setupMode === "existing" && (
+                <motion.div
+                  layoutId="setupModePill"
+                  className="absolute inset-0 bg-gradient-to-r from-[var(--theme-primary)] via-pink-500 to-purple-600 rounded-full shadow-[0_0_22px_rgba(255,0,132,0.4)]"
+                  transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
+                <Cpu className="w-3.5 h-3.5 shrink-0" />
+                <span>Existing shadcn</span>
+              </span>
+            </button>
+          </div>
+
+          {/* Dynamic Helper Pill */}
+          <motion.div
+            key={setupMode}
+            initial={{ opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2 text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 px-2"
           >
-            {setupMode === "existing" && (
-              <motion.div
-                layoutId="setupModePill"
-                className="absolute inset-0 bg-[var(--theme-primary)] rounded-xl"
-                transition={{ type: "spring", stiffness: 450, damping: 35 }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Already using shadcn</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)] animate-pulse shrink-0" />
+            <span>
+              {setupMode === "fresh"
+                ? "Full 3-step guide: includes shadcn init & path config"
+                : "Fast-track 2-step: skip init and add components directly"}
             </span>
-          </button>
+          </motion.div>
         </motion.div>
       </div>
 
