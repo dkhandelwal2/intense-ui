@@ -2,7 +2,7 @@
 
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
 import { AccordionExamples } from "./accordion-examples";
-import { AccordionIcons } from "@/components/ui/accordion-icons";
+import { AccordionIcons } from "@/components/icons";
 import { PropsTable } from "@/components/docs";
 import {
   MANUAL_INSTALL_CODE,

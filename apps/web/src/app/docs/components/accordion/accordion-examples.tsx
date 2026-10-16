@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { CodeBlock } from "@/components/ui/code-block";
 import { motion, AnimatePresence, useAnimation, PanInfo } from "framer-motion";
 import { Code, ArrowDown, X, TerminalSquare, Copy } from "lucide-react";
-import { AccordionIcons } from "@/components/ui/accordion-icons";
+import { AccordionIcons } from "@/components/icons";
 import { StackedCardsContainer, StackedCard } from "@/components/ui/stacked-card";
 import {
   Accordion,
