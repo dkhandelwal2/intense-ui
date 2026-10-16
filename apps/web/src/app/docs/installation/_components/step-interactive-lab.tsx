@@ -5,14 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
-import { Switch } from "../../../../../../../packages/registry/src/components/switch";
-import { Slider } from "../../../../../../../packages/registry/src/components/slider";
+import { Switch } from "@registry/components/switch";
+import { Slider } from "@registry/components/slider";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../../../../../../packages/registry/src/components/accordion";
+} from "@registry/components/accordion";
 import { ScrollStepCard } from "./scroll-step-card";
 
 export interface StepInteractiveLabProps {

@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@registry/*": ["../../packages/registry/src/*"],
+      "@registry-config": ["../../packages/registry/registry-config.json"]
     }
   },
   "include": [

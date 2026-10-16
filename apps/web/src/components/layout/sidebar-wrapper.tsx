@@ -28,7 +28,7 @@ export function SidebarWrapper() {
   // Auto-collapse sidebar on tablet / small desktop (<1280px)
   React.useEffect(() => {
     const mql = window.matchMedia("(max-width: 1280px)");
-    const handleChange = (e: any) => {
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
       if (e.matches) {
         setIsOpen(false);
       } else {

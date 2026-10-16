@@ -8,15 +8,8 @@ import {
 } from "lucide-react";
 import { PackageManager } from "@/components/ui/package-manager";
 
-export type SetupMode = "fresh" | "existing";
-export type ComponentSlug = "switch" | "slider" | "accordion" | "tooltip" | "animated-button";
-
-export interface ComponentListItem {
-  slug: ComponentSlug;
-  label: string;
-  icon: React.ReactNode;
-  desc: string;
-}
+import { ComponentListItem } from "./types";
+export * from "./types";
 
 export const COMPONENTS_LIST: ComponentListItem[] = [
   { slug: "switch", label: "Switch", icon: <ToggleRight className="w-3.5 h-3.5" />, desc: "Tactile 3D rocker switch" },

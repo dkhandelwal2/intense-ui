@@ -2,7 +2,7 @@
  * Single source of truth: packages/registry/registry-config.json
  * This file imports from the shared config so web app and registry stay in sync.
  */
-import registryConfig from "../../../../packages/registry/registry-config.json";
+import registryConfig from "@registry-config";
 
 export type ComponentConfig = {
   name: string;

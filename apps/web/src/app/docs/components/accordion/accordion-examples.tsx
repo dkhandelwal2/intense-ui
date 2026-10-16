@@ -12,13 +12,13 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../../../../../../packages/registry/src/components/accordion";
+} from "@registry/components/accordion";
 import { ACCORDION_EXAMPLES, RTL_ITEMS, DEFAULT_ITEMS } from "./constants";
 import { PALETTE_COLORS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { Slider } from "../../../../../../../packages/registry/src/components/slider";
-import { ColorPalette } from "../../../../../../../packages/registry/src/components/color-palette";
-import { Switch } from "../../../../../../../packages/registry/src/components/switch";
+import { Slider } from "@registry/components/slider";
+import { ColorPalette } from "@registry/components/color-palette";
+import { Switch } from "@registry/components/switch";
 import { CustomProps } from "./types";
 
 const renderExample = (id: string, customProps: CustomProps = {}) => {

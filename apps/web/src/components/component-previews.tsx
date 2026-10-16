@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "../../../../packages/registry/src/components/accordion";
-import { Switch } from "../../../../packages/registry/src/components/switch";
+} from "@registry/components/accordion";
+import { Switch } from "@registry/components/switch";
 
 export const componentPreviews: Record<string, React.ReactNode> = {
   "Accordion": (
