@@ -149,3 +149,18 @@
     display: none; /* Chrome, Safari and Opera */
   }
 }
+
+/* View Transition Theme Reveal Animation */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-vt="active"]::view-transition-group(root) {
+  animation-duration: var(--theme-toggle-vt-duration, 450ms);
+}
+
+html[data-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--theme-vt-clip-from);
+}

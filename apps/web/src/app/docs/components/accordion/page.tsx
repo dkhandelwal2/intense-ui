@@ -3,11 +3,9 @@
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
 import { AccordionExamples } from "./accordion-examples";
 import { AccordionIcons } from "@/components/ui/accordion-icons";
-import { CodeBlock } from "@/components/ui/code-block";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PropsTable } from "@/components/docs";
 import {
   MANUAL_INSTALL_CODE,
-  PACKAGE_MANAGERS,
   ACCORDION_API_REFERENCE,
   ACCORDION_ITEM_API_REFERENCE,
   ACCORDION_TRIGGER_API_REFERENCE,
@@ -33,57 +31,14 @@ export default function AccordionPage() {
   }, {} as Record<string, string>);
 
   const propsTable = (
-    <div className="flex flex-col gap-8">
-      <div className="space-y-4">
-        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">Accordion</h4>
-        {ACCORDION_API_REFERENCE.map(api => (
-          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-primary">{api.prop}</span>
-              <span className="font-mono text-[10px] text-[var(--theme-primary)]">{api.type}</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
-          </div>
-        ))}
-      </div>
-      <div className="space-y-4">
-        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">AccordionItem</h4>
-        {ACCORDION_ITEM_API_REFERENCE.map(api => (
-          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-primary">{api.prop}</span>
-              <span className="font-mono text-[10px] text-[var(--theme-primary)]">{api.type}</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="space-y-4">
-        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">AccordionTrigger</h4>
-        {ACCORDION_TRIGGER_API_REFERENCE.map(api => (
-          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-primary">{api.prop}</span>
-              <span className="font-mono text-[10px] text-[var(--theme-primary)]">{api.type}</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
-          </div>
-        ))}
-      </div>
-      <div className="space-y-4">
-        <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">AccordionContent</h4>
-        {ACCORDION_CONTENT_API_REFERENCE.map(api => (
-          <div key={api.prop} className="flex flex-col gap-1 border-b border-black/5 dark:border-white/5 pb-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-primary">{api.prop}</span>
-              <span className="font-mono text-[10px] text-[var(--theme-primary)]">{api.type}</span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">{api.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+    <PropsTable
+      groups={[
+        { title: "Accordion", props: ACCORDION_API_REFERENCE },
+        { title: "AccordionItem", props: ACCORDION_ITEM_API_REFERENCE },
+        { title: "AccordionTrigger", props: ACCORDION_TRIGGER_API_REFERENCE },
+        { title: "AccordionContent", props: ACCORDION_CONTENT_API_REFERENCE },
+      ]}
+    />
   );
 
 

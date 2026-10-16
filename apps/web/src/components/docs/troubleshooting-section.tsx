@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Wrench, AlertCircle, HelpCircle, ChevronDown, ArrowUpRight } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { cn } from "@/lib/utils";
+import { SectionHeader } from "@/components/ui/section-header";
 import { siteConfig } from "@/config/site";
 
 interface TroubleshootingSectionProps {
@@ -26,26 +27,21 @@ export function TroubleshootingSection({
     return (
       <div className={cn("space-y-3 pt-5 border-t border-black/5 dark:border-white/10 w-full min-w-0", className)}>
         {/* Compact Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 shrink-0">
-              <Wrench className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 uppercase tracking-wider">
-                {title === "Troubleshooting Diagnostic Center" ? "Troubleshooting" : title}
-              </h4>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Quick fixes for common CLI errors</p>
-            </div>
-          </div>
-          <Link
-            href={siteConfig.routes.INSTALLATION}
-            className="text-[11px] text-[var(--theme-primary)] hover:underline font-medium inline-flex items-center gap-0.5"
-          >
-            <span>Guide</span>
-            <ArrowUpRight className="w-3 h-3" />
-          </Link>
-        </div>
+        <SectionHeader
+          icon={Wrench}
+          colorScheme="amber"
+          title={title === "Troubleshooting Diagnostic Center" ? "Troubleshooting" : title}
+          subtitle="Quick fixes for common CLI errors"
+          action={
+            <Link
+              href={siteConfig.routes.INSTALLATION}
+              className="text-[11px] text-[var(--theme-primary)] hover:underline font-medium inline-flex items-center gap-0.5"
+            >
+              <span>Guide</span>
+              <ArrowUpRight className="w-3 h-3" />
+            </Link>
+          }
+        />
 
         {/* Collapsible Issue 1: Missing components.json */}
         <div className="rounded-xl border border-red-500/20 bg-red-500/[0.02] dark:bg-red-500/[0.03] overflow-hidden">
@@ -65,9 +61,7 @@ export function TroubleshootingSection({
               <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
                 Run the initialization command before installing components:
               </p>
-              <div className="overflow-hidden rounded-lg border border-black/5 dark:border-white/10">
-                <CodeBlock code="npx shadcn@latest init" language="bash" />
-              </div>
+              <CodeBlock code="npx shadcn@latest init" language="bash" />
             </div>
           )}
         </div>
@@ -90,13 +84,11 @@ export function TroubleshootingSection({
               <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
                 Add the path alias to your <code className="font-mono text-zinc-800 dark:text-zinc-200">tsconfig.json</code>:
               </p>
-              <div className="overflow-hidden rounded-lg border border-black/5 dark:border-white/10">
-                <CodeBlock
-                  filename="tsconfig.json"
-                  language="json"
-                  code={`"paths": { "@/*": ["./src/*"] }`}
-                />
-              </div>
+              <CodeBlock
+                filename="tsconfig.json"
+                language="json"
+                code={`"paths": { "@/*": ["./src/*"] }`}
+              />
             </div>
           )}
         </div>
@@ -134,9 +126,7 @@ export function TroubleshootingSection({
             <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1.5">
               Run this fix:
             </span>
-            <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-              <CodeBlock code="npx shadcn@latest init" language="bash" />
-            </div>
+            <CodeBlock code="npx shadcn@latest init" language="bash" />
           </div>
         </div>
 
@@ -157,17 +147,15 @@ export function TroubleshootingSection({
             <span className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block mb-1.5">
               Add to tsconfig.json:
             </span>
-            <div className="overflow-hidden rounded-xl border border-black/5 dark:border-white/10">
-              <CodeBlock
-                filename="tsconfig.json"
-                language="json"
-                code={`"compilerOptions": {
+            <CodeBlock
+              filename="tsconfig.json"
+              language="json"
+              code={`"compilerOptions": {
   "paths": {
     "@/*": ["./src/*"]
   }
 }`}
-              />
-            </div>
+            />
           </div>
         </div>
       </div>

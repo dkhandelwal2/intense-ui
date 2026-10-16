@@ -402,13 +402,6 @@ export default function MyAccordion() {
   );
 }`;
 
-export const PACKAGE_MANAGERS = [
-  { name: "npm", command: "npm install framer-motion lucide-react" },
-  { name: "pnpm", command: "pnpm add framer-motion lucide-react" },
-  { name: "yarn", command: "yarn add framer-motion lucide-react" },
-  { name: "bun", command: "bun add framer-motion lucide-react" },
-];
-
 export const ACCORDION_API_REFERENCE = [
   {
     prop: "type",

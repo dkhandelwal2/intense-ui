@@ -202,7 +202,7 @@ function CodeViewer({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-zinc-950 dark:bg-[#0c0c0c] hide-scrollbar relative">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-zinc-100/60 dark:bg-[#0c0c0c] hide-scrollbar relative">
         <AnimatePresence mode="wait">
           <motion.div
             key={`${codeLang}-${codeTsx}`}

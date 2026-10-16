@@ -3,6 +3,7 @@
 import React from "react";
 import { HelpCircle, Bug, MessageSquare, Mail, ExternalLink, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SectionHeader } from "@/components/ui/section-header";
 import { siteConfig } from "@/config/site";
 
 interface SupportSectionProps {
@@ -28,17 +29,12 @@ export function SupportSection({
     return (
       <div className={cn("space-y-3 pt-5 border-t border-black/5 dark:border-white/10 w-full min-w-0", className)}>
         {/* Compact Header */}
-        <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20 shrink-0">
-            <HelpCircle className="w-4 h-4" />
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 uppercase tracking-wider">
-              {title === "Still Running Into an Issue?" ? "Need Help?" : title}
-            </h4>
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Community & direct maintainer support</p>
-          </div>
-        </div>
+        <SectionHeader
+          icon={HelpCircle}
+          colorScheme="purple"
+          title={title === "Still Running Into an Issue?" ? "Need Help?" : title}
+          subtitle="Community & direct maintainer support"
+        />
 
         {/* Compact 3-Button Action Grid */}
         <div className="grid grid-cols-3 gap-2">
