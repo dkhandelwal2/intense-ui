@@ -1,1 +1,1 @@
-export * from "@/components/icons/dependency-logos";
+export * from "@/icons/dependency-logos";

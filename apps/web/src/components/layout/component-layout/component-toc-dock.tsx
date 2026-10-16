@@ -2,8 +2,30 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TocItem } from "./types";
+
+function DockActiveIndicator() {
+  return (
+    <motion.div
+      layoutId="dock-active-bg"
+      className="absolute bottom-full left-1/2 -translate-x-1/2 w-[70px] sm:w-[100px] h-[16px] sm:h-[24px] z-0"
+    >
+      <svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 100 24"
+        preserveAspectRatio="none"
+        className="fill-[#f2f0ef] dark:fill-[#1a1a1a]"
+        aria-hidden="true"
+      >
+        <path d="M0 24 C 15 24, 25 0, 50 0 C 75 0, 85 24, 100 24 Z" />
+      </svg>
+      <div className="absolute top-[4px] sm:top-[7px] left-1/2 -translate-x-1/2 w-[28px] sm:w-[36px] h-[28px] sm:h-[36px] rounded-full border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 shadow-[0_0_15px_var(--theme-primary)]/20" />
+    </motion.div>
+  );
+}
 
 export interface ComponentTocDockProps {
   tocItems: TocItem[];
@@ -71,23 +93,7 @@ export function ComponentTocDock({
                     onClick={() => onSelectSection(item.id, item.idx)}
                     className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative group outline-none shrink-0 pointer-events-auto"
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="dock-active-bg"
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 w-[70px] sm:w-[100px] h-[16px] sm:h-[24px] z-0"
-                      >
-                        <svg
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 100 24"
-                          preserveAspectRatio="none"
-                          className="fill-[#f2f0ef] dark:fill-[#1a1a1a]"
-                        >
-                          <path d="M0 24 C 15 24, 25 0, 50 0 C 75 0, 85 24, 100 24 Z" />
-                        </svg>
-                        <div className="absolute top-[4px] sm:top-[7px] left-1/2 -translate-x-1/2 w-[28px] sm:w-[36px] h-[28px] sm:h-[36px] rounded-full border border-[var(--theme-primary)]/20 bg-[var(--theme-primary)]/10 shadow-[0_0_15px_var(--theme-primary)]/20" />
-                      </motion.div>
-                    )}
+                    {isActive && <DockActiveIndicator />}
 
                     <div
                       className={cn(
@@ -127,13 +133,9 @@ export function ComponentTocDock({
                 >
                   <div className="z-10 absolute top-[22px] -translate-y-1/2 left-1/2 -translate-x-1/2 w-4 h-4 text-zinc-500 transition-all duration-300 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 flex items-center justify-center">
                     {btn.type === "prev" ? (
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M15 18l-6-6 6-6" />
-                      </svg>
+                      <ChevronLeft className="w-4 h-4" />
                     ) : (
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M9 18l6-6-6-6" />
-                      </svg>
+                      <ChevronRight className="w-4 h-4" />
                     )}
                   </div>
                   <span className="absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300">

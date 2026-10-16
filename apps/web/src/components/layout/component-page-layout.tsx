@@ -51,12 +51,33 @@ export function ComponentPageLayout({
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const mobileRightColumnRef = useRef<HTMLDivElement>(null);
+  const rightSidebarRef = useRef<HTMLDivElement>(null);
 
   const total = tocItems.length;
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const resetRightSidebarScroll = () => {
+    if (rightSidebarRef.current) {
+      rightSidebarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // Ensure right sidebar resets to top whenever active tab changes
+  useEffect(() => {
+    resetRightSidebarScroll();
+
+    // Re-verify after tab transition completes to guarantee top alignment
+    const timer = setTimeout(() => {
+      if (rightSidebarRef.current && rightSidebarRef.current.scrollTop !== 0) {
+        rightSidebarRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 220);
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const triggerCodeLoad = () => {
     setIsCodeLoading(true);
@@ -79,9 +100,13 @@ export function ComponentPageLayout({
 
   const handleTabClick = (tab: ComponentActiveTab) => {
     setActiveTab(tab);
+
+    // On desktop, smoothly scroll right sidebar to the top
+    resetRightSidebarScroll();
+
     // On mobile, scroll to content area so user sees the active tab
     if (typeof window !== "undefined" && window.innerWidth < 1280 && mobileRightColumnRef.current) {
-      mobileRightColumnRef.current.scrollIntoView({ behavior: "smooth" });
+      mobileRightColumnRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -185,7 +210,10 @@ export function ComponentPageLayout({
         </div>
 
         {/* RIGHT COLUMN: Info, Install & Code Tabs */}
-        <div className="hidden xl:flex xl:w-[350px] 2xl:w-[480px] shrink-0 h-full overflow-y-auto scroll-smooth flex-col gap-0 pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div
+          ref={rightSidebarRef}
+          className="hidden xl:flex xl:w-[350px] 2xl:w-[480px] shrink-0 h-full overflow-y-auto scroll-smooth flex-col gap-0 pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
           {rightColumnContent}
         </div>
       </div>

@@ -1,8 +1,8 @@
 "use client";
 
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
-import { AccordionExamples } from "./accordion-examples";
-import { AccordionIcons } from "@/components/icons";
+import { AccordionShowcase } from "./accordion-showcase";
+import { AccordionIcons } from "./_components";
 import { PropsTable } from "@/components/docs";
 import {
   MANUAL_INSTALL_CODE,
@@ -67,7 +67,7 @@ return (
       slug="accordion"
       usageCode={USAGE_CODE}
     >
-      <AccordionExamples />
+      <AccordionShowcase />
     </ComponentPageLayout>
   );
 }

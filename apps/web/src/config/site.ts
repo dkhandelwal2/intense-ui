@@ -2,7 +2,7 @@ export const APP_ROUTES = {
   HOME: "/",
   DOCS: "/docs",
   INSTALLATION: "/docs/installation",
-  COMPONENTS: "/components",
+  COMPONENTS: "/docs/components",
   PRIVACY: "/privacy",
   TERMS: "/terms",
 } as const;

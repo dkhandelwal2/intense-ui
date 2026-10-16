@@ -1,11 +1,10 @@
 import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
-import { TableOfContents } from "@/components/layout/toc";
 
-interface DocsLayoutProps {
+interface DocsSidebarLayoutProps {
   children: React.ReactNode;
 }
 
-export default function DocsLayout({ children }: DocsLayoutProps) {
+export default function DocsSidebarLayout({ children }: DocsSidebarLayoutProps) {
   return (
     <div className="w-full flex-1 items-start md:flex md:gap-4 lg:gap-6 px-0 sm:px-2 md:px-4 lg:px-6">
       <SidebarWrapper />
