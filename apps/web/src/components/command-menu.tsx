@@ -57,7 +57,7 @@ export function CommandMenu() {
 
   // Define searchable items
   const docsItems = [
-    { name: "Introduction", href: "/docs", type: "doc" },
+    { name: "Documentation", href: "/docs", type: "doc" },
     { name: "Installation", href: "/docs/installation", type: "doc" },
   ];
 

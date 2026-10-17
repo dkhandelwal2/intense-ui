@@ -72,7 +72,7 @@ export interface HeaderNavItem {
 
 export const HEADER_NAV_ITEMS: readonly HeaderNavItem[] = [
   { label: "Home", href: "/", matchExact: true },
-  { label: "Docs", href: "/docs", matchExact: true },
+  { label: "Documentation", href: "/docs", matchExact: true },
   { label: "Components", href: "/docs/components", isFeatured: true },
   { label: "Installation", href: "/docs/installation" },
 ] as const;

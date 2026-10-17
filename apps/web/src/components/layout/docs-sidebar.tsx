@@ -11,6 +11,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import {
+  BookOpen,
   Compass,
   Terminal,
   LayoutList,
@@ -111,7 +112,7 @@ export function DocsSidebar({
 
   // Navigation Items matching the screenshot
   const gettingStartedItems = [
-    { title: "Introduction", href: siteConfig.routes.DOCS, icon: Compass },
+    { title: "Documentation", href: siteConfig.routes.DOCS, icon: BookOpen },
     { title: "Installation", href: siteConfig.routes.INSTALLATION, icon: Terminal },
   ];
 

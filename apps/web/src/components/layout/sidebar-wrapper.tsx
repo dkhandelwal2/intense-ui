@@ -4,6 +4,7 @@ import * as React from "react";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useMotionValue,
@@ -162,31 +163,80 @@ export function SidebarWrapper() {
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         aria-label="Toggle navigation drawer"
       >
-        {isMobileOpen ? (
-          <PanelLeftClose className="h-5 w-5" />
-        ) : (
-          <PanelLeftOpen className="h-5 w-5" />
-        )}
+        <AnimatePresence mode="wait" initial={false}>
+          {isMobileOpen ? (
+            <motion.span
+              key="close-icon"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.16 }}
+              className="flex items-center justify-center"
+            >
+              <PanelLeftClose className="h-5 w-5" />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="open-icon"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.16 }}
+              className="flex items-center justify-center"
+            >
+              <PanelLeftOpen className="h-5 w-5" />
+            </motion.span>
+          )}
+        </AnimatePresence>
       </button>
 
-      {/* ─── Mobile Slide-Over Glass Modal ─── */}
-      {isMobileOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden flex p-4 pt-20">
-          <div className="relative w-full max-w-[270px] h-[calc(100vh-6.5rem)] rounded-[32px] bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl py-3.5 px-0 flex flex-col overflow-visible">
-            {/* Right-side gradient hairline separator */}
-            <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
-            <DocsSidebar
+      {/* ─── Mobile Slide-Over Glass Modal with Smooth Enter & Exit ─── */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <div className="fixed inset-0 z-50 md:hidden flex p-4 pt-20">
+            {/* Fade Backdrop */}
+            <motion.div
+              key="mobile-sidebar-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm -z-10"
               onClick={() => setIsMobileOpen(false)}
-              isCollapsed={false}
+              aria-hidden="true"
+            />
+
+            {/* Slide-over Card with Spring Physics */}
+            <motion.div
+              key="mobile-sidebar-panel"
+              initial={{ x: -120, opacity: 0, scale: 0.94 }}
+              animate={{ x: 0, opacity: 1, scale: 1 }}
+              exit={{ x: -120, opacity: 0, scale: 0.94 }}
+              transition={{
+                type: "spring",
+                damping: 28,
+                stiffness: 320,
+                mass: 0.8,
+              }}
+              className="relative w-full max-w-[270px] h-[calc(100vh-6.5rem)] rounded-[32px] bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl py-3.5 px-0 flex flex-col overflow-visible will-change-[transform,opacity]"
+            >
+              {/* Right-side gradient hairline separator */}
+              <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
+              <DocsSidebar
+                onClick={() => setIsMobileOpen(false)}
+                isCollapsed={false}
+              />
+            </motion.div>
+
+            {/* Click-outside backdrop space */}
+            <div
+              className="flex-1"
+              onClick={() => setIsMobileOpen(false)}
+              aria-hidden="true"
             />
           </div>
-          <div
-            className="flex-1"
-            onClick={() => setIsMobileOpen(false)}
-            aria-hidden="true"
-          />
-        </div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* ─── Desktop Floating VisionOS Glass Sidebar Card (Scroll Scrubbed + Hover Expand) ─── */}
       <motion.aside
