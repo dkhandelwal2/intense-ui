@@ -30,13 +30,14 @@ function DockActiveIndicator() {
 export interface ComponentTocDockProps {
   tocItems: TocItem[];
   activeTocId?: string;
-  onSelectSection: (id: string, index: number) => void;
+  onSelectSection?: (id: string, index: number) => void;
+  className?: string;
 }
 
 export function ComponentTocDock({
   tocItems,
   activeTocId,
-  onSelectSection,
+  className,
 }: ComponentTocDockProps) {
   if (tocItems.length === 0) return null;
 
@@ -73,25 +74,24 @@ export function ComponentTocDock({
   }
 
   return (
-    <div className="hidden xl:block absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] pointer-events-none">
+    <div className={cn("hidden xl:block fixed bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none", className)}>
       <div className="relative">
         {/* Dock pill container */}
-        <div className="relative flex items-end px-12 sm:px-12 h-[60px] bg-[#f2f0ef] dark:bg-[#1a1a1a] dark:border-white/5 rounded-[36px] shadow-2xl">
+        <div className="relative flex items-end px-12 sm:px-12 h-[60px] bg-[#f2f0ef] dark:bg-[#1a1a1a] dark:border-white/5 rounded-full shadow-2xl">
           <AnimatePresence mode="popLayout">
             {visibleButtons.map((btn) => {
               if (btn.type === "item") {
                 const item = btn.item;
                 const isActive = activeTocId === item.id;
                 return (
-                  <motion.button
+                  <motion.div
                     layout
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                     key={item.id}
-                    onClick={() => onSelectSection(item.id, item.idx)}
-                    className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative group outline-none shrink-0 pointer-events-auto"
+                    className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative outline-none shrink-0 pointer-events-none select-none"
                   >
                     {isActive && <DockActiveIndicator />}
 
@@ -100,10 +100,10 @@ export function ComponentTocDock({
                         "z-10 absolute left-1/2 -translate-x-1/2 transition-all duration-300 flex items-center justify-center",
                         isActive
                           ? "top-[1px] -translate-y-1/2 w-5 h-5 text-[var(--theme-primary)]"
-                          : "top-[22px] -translate-y-1/2 w-4 h-4 text-zinc-500 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
+                          : "top-[22px] -translate-y-1/2 w-4 h-4 text-zinc-500"
                       )}
                     >
-                      {item.icon || <div className="w-4 h-4 bg-zinc-700 rounded-sm" />}
+                      {item.icon || <div className="w-4 h-4 bg-zinc-700 rounded-full" />}
                     </div>
 
                     <span
@@ -111,37 +111,36 @@ export function ComponentTocDock({
                         "absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300",
                         isActive
                           ? "text-zinc-900 dark:text-white font-bold"
-                          : "text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300"
+                          : "text-zinc-500 font-medium"
                       )}
                     >
                       {item.label}
                     </span>
-                  </motion.button>
+                  </motion.div>
                 );
               }
 
               return (
-                <motion.button
+                <motion.div
                   layout
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   key={`more-${btn.type}`}
-                  onClick={() => onSelectSection(allItems[btn.targetIdx].id, btn.targetIdx)}
-                  className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative group outline-none shrink-0 pointer-events-auto"
+                  className="flex flex-col items-center justify-center h-[50px] sm:h-[60px] w-[46px] sm:w-[72px] relative outline-none shrink-0 pointer-events-none select-none"
                 >
-                  <div className="z-10 absolute top-[22px] -translate-y-1/2 left-1/2 -translate-x-1/2 w-4 h-4 text-zinc-500 transition-all duration-300 group-hover:-translate-y-1 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 flex items-center justify-center">
+                  <div className="z-10 absolute top-[22px] -translate-y-1/2 left-1/2 -translate-x-1/2 w-4 h-4 text-zinc-500 flex items-center justify-center">
                     {btn.type === "prev" ? (
                       <ChevronLeft className="w-4 h-4" />
                     ) : (
                       <ChevronRight className="w-4 h-4" />
                     )}
                   </div>
-                  <span className="absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 font-medium group-hover:text-zinc-900 dark:group-hover:text-zinc-300">
+                  <span className="absolute bottom-[10px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 font-medium">
                     +{btn.count} {btn.type === "next" ? "more" : "prev"}
                   </span>
-                </motion.button>
+                </motion.div>
               );
             })}
           </AnimatePresence>

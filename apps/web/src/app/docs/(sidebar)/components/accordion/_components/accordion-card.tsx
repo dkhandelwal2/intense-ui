@@ -35,7 +35,7 @@ export function AccordionCard({
 
   return (
     <StackedCard index={index} total={total}>
-      <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-4 sm:p-6 md:p-8 pb-[4rem]">
+      <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-3.5 sm:p-6 md:p-8 pb-6 sm:pb-10 md:pb-[4rem]">
         {/* Section Header */}
         <div className="flex items-start gap-4 py-4">
           <div className="p-2.5 sm:p-3 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-xl shrink-0">
@@ -56,7 +56,7 @@ export function AccordionCard({
 
         {/* Preview Frame */}
         <div className="flex flex-col gap-6 border border-zinc-200 dark:border-zinc-800 shadow-2xl rounded-[1.5rem] relative overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
-          <div className="flex items-center justify-center p-10 relative overflow-hidden group">
+          <div className="flex items-center justify-center p-4 sm:p-6 md:p-10 relative overflow-hidden group">
             <div className="w-full relative z-10">
               <AccordionVariantRenderer
                 id={item.id}

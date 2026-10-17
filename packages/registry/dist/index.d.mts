@@ -3,11 +3,13 @@ import React from 'react';
 interface AccordionProps {
     children: React.ReactNode;
     type?: "single" | "multiple";
+    value?: string | string[];
     defaultValue?: string | string[];
+    onValueChange?: (value: any) => void;
     className?: string;
     collapsible?: boolean;
 }
-declare function Accordion({ children, type, defaultValue, className }: AccordionProps): React.JSX.Element;
+declare function Accordion({ children, type, defaultValue, value: controlledValue, onValueChange, className, collapsible, }: AccordionProps): React.JSX.Element;
 interface AccordionItemProps {
     value: string;
     children: React.ReactNode;
@@ -16,8 +18,9 @@ interface AccordionItemProps {
     borderWidth?: string | number;
     borderRadius?: string | number;
     borderColor?: string;
+    hideBorder?: boolean;
 }
-declare function AccordionItem({ value, children, className, disabled, borderWidth, borderRadius, borderColor }: AccordionItemProps): React.JSX.Element;
+declare function AccordionItem({ value, children, className, disabled, borderWidth, borderRadius, borderColor, hideBorder, }: AccordionItemProps): React.JSX.Element;
 interface AccordionTriggerProps {
     value?: string;
     children: React.ReactNode;
@@ -25,12 +28,14 @@ interface AccordionTriggerProps {
     disabled?: boolean;
     icon?: React.ReactNode;
     iconPosition?: "Left" | "Right";
+    hideIcon?: boolean;
     size?: "xs" | "sm" | "md" | "lg" | "xl";
     weight?: "Default" | "Bold";
     headingUnderline?: boolean;
     headingColor?: string;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-declare function AccordionTrigger({ value, children, className, disabled, icon, iconPosition, size, weight, headingUnderline, headingColor }: AccordionTriggerProps): React.JSX.Element;
+declare function AccordionTrigger({ value: propValue, children, className, disabled: propDisabled, icon, iconPosition, hideIcon, size, weight, headingUnderline, headingColor, onClick, }: AccordionTriggerProps): React.JSX.Element;
 interface AccordionContentProps {
     value?: string;
     children: React.ReactNode;
@@ -38,7 +43,7 @@ interface AccordionContentProps {
     disabled?: boolean;
     contentColor?: string;
 }
-declare function AccordionContent({ value, children, className, disabled, contentColor }: AccordionContentProps): React.JSX.Element;
+declare function AccordionContent({ value: propValue, children, className, disabled: _disabled, contentColor, }: AccordionContentProps): React.JSX.Element;
 
 interface ColorPaletteProps {
     colors: string[];

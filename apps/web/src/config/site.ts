@@ -63,6 +63,73 @@ export function getShadcnInitCommand(pm: SupportedPackageManager | string): stri
   }
 }
 
+export interface HeaderNavItem {
+  label: string;
+  href: string;
+  matchExact?: boolean;
+  isFeatured?: boolean;
+}
+
+export const HEADER_NAV_ITEMS: readonly HeaderNavItem[] = [
+  { label: "Home", href: "/", matchExact: true },
+  { label: "Docs", href: "/docs", matchExact: true },
+  { label: "Components", href: "/docs/components", isFeatured: true },
+  { label: "Installation", href: "/docs/installation" },
+] as const;
+
+export const HEADER_CONFIG = {
+  /**
+   * Navigation links displayed in the header pill and mobile menu overlay.
+   * Fully configurable: reorder, add, or customize links here.
+   */
+  navItems: HEADER_NAV_ITEMS,
+  /**
+   * Scroll distance (in pixels) over which the header dynamic island collapses.
+   * Header uses 80px for responsive compacting.
+   */
+  scrollDistance: 80,
+} as const;
+
+export const SIDEBAR_CONFIG = {
+  /**
+   * Whether manual open/close sidebar toggle button is enabled.
+   * Disabled as of now via config.
+   */
+  enableManualToggle: false,
+  /**
+   * Whether the sidebar collapses on scroll.
+   */
+  collapseOnScroll: true,
+  /**
+   * Whether scroll collapse is restricted to component documentation pages only.
+   * When true, pages like /docs and /docs/installation stay expanded on scroll.
+   */
+  collapseOnlyOnComponentPages: true,
+  /**
+   * Scroll distance (in pixels) over which the sidebar collapses smoothly.
+   * At 0px: fully expanded (250px). At scrollDistance: fully compact (68px).
+   * Direct 1:1 scrubbed tracking with scroll position.
+   * 180px provides a comfortable, smooth and gradual pacing.
+   */
+  scrollDistance: 250,
+  /**
+   * Whether the collapsed sidebar expands on hover.
+   */
+  expandOnHover: true,
+  /**
+   * Whether component status badges (e.g. "New", "Hot") are shown in the sidebar.
+   * Configurable: currently disabled (removed as of now). Set to true to re-enable.
+   */
+  showBadges: false,
+  /**
+   * Configurable component badges mapping (slug -> { badge, color }).
+   */
+  componentBadges: {
+    accordion: { badge: "Hot", color: "rose" },
+    "animated-button": { badge: "New", color: "emerald" },
+  } as Record<string, { badge: string; color?: "rose" | "emerald" | "blue" | "zinc" }>,
+} as const;
+
 export const siteConfig = {
   name: "intense-ui",
   url: "https://intense-ui.com",
@@ -82,6 +149,8 @@ export const siteConfig = {
   },
   routes: APP_ROUTES,
   registry: REGISTRY_CONFIG,
+  header: HEADER_CONFIG,
+  sidebar: SIDEBAR_CONFIG,
 };
 
 export type SiteConfig = typeof siteConfig;

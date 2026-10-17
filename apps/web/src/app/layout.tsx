@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { AppShell } from "@/components/layout/app-shell";
 import { siteConfig } from "@/config/site";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -42,7 +41,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-screen bg-background font-sans antialiased flex flex-col"
+        className="min-h-screen bg-background font-sans antialiased flex flex-col relative selection:bg-[var(--theme-primary)] selection:text-white"
         suppressHydrationWarning
       >
         <ThemeProvider
@@ -54,11 +53,7 @@ export default function RootLayout({
           <Suspense fallback={null}>
             <AppLoader />
           </Suspense>
-          <div className="relative flex min-h-screen flex-col">
-            <SiteHeader />
-            <div className="flex-1">{children}</div>
-            <SiteFooter />
-          </div>
+          <AppShell>{children}</AppShell>
           <Toaster />
           <Analytics />
           <SpeedInsights />

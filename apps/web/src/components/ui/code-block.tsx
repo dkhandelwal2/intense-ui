@@ -8,6 +8,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { cn } from "@/lib/utils";
 import { modernLightTheme } from "@/lib/code-theme";
+import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
 
 export interface CodeBlockProps {
   code: string;
@@ -17,6 +18,8 @@ export interface CodeBlockProps {
   headerAction?: React.ReactNode;
   className?: string;
   showLineNumbers?: boolean;
+  packageManager?: PackageManager;
+  onPackageManagerChange?: (pm: PackageManager) => void;
 }
 
 export function CodeBlock({
@@ -27,6 +30,8 @@ export function CodeBlock({
   headerAction,
   className,
   showLineNumbers = false,
+  packageManager,
+  onPackageManagerChange,
 }: CodeBlockProps) {
   const [hasCopied, setHasCopied] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
@@ -56,10 +61,20 @@ export function CodeBlock({
     return (
       <div
         className={cn(
-          "w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] px-3.5 sm:px-4 py-2.5 flex items-center justify-between gap-3 shadow-xs transition-colors",
+          "w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] px-2.5 sm:px-3 py-2 flex items-center justify-between gap-2.5 shadow-xs transition-colors relative",
           className
         )}
       >
+        {packageManager && onPackageManagerChange && (
+          <div className="flex items-center gap-2 shrink-0">
+            <PackageManagerDropdown
+              value={packageManager}
+              onChange={onPackageManagerChange}
+              size="sm"
+            />
+            <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 shrink-0" />
+          </div>
+        )}
         <div className="flex items-center gap-2.5 overflow-x-auto hide-scrollbar min-w-0 flex-1 font-mono text-xs sm:text-[13px]">
           <span className="text-[var(--theme-primary)] font-bold select-none shrink-0">&gt;</span>
           <span className="text-zinc-800 dark:text-zinc-200 whitespace-nowrap select-all font-medium">
@@ -69,7 +84,7 @@ export function CodeBlock({
         <button
           type="button"
           onClick={onCopy}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs transition-all shrink-0 active:scale-95"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs transition-all shrink-0 active:scale-95 cursor-pointer"
           title="Copy command"
         >
           {hasCopied ? (
@@ -113,11 +128,18 @@ export function CodeBlock({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {packageManager && onPackageManagerChange && (
+              <PackageManagerDropdown
+                value={packageManager}
+                onChange={onPackageManagerChange}
+                size="sm"
+              />
+            )}
             {headerAction}
             <button
               type="button"
               onClick={onCopy}
-              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-white/10 transition-colors"
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-white/10 transition-colors cursor-pointer"
               title="Copy code"
             >
               {hasCopied ? (
@@ -137,7 +159,7 @@ export function CodeBlock({
           <button
             type="button"
             onClick={onCopy}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs backdrop-blur-sm transition-all active:scale-95"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs backdrop-blur-sm transition-all active:scale-95"
             title="Copy code"
           >
             {hasCopied ? (

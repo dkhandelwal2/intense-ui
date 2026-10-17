@@ -2,140 +2,219 @@
 
 import * as React from "react";
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  animate,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 import { DocsSidebar } from "./docs-sidebar";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { siteConfig } from "@/config/site";
 
 export function SidebarWrapper() {
   const pathname = usePathname();
+  const { scrollY } = useScroll();
 
-  // Mobile functionality for ALL screen sizes (overlay style)
+  // Mobile drawer state
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
 
-  // Desktop fixed functionality
-  const [isOpen, setIsOpen] = React.useState(true);
-  const [width, setWidth] = React.useState(260); // Default width
-  const isResizing = React.useRef(false);
+  // Manual toggle state (only used if siteConfig.sidebar.enableManualToggle is true)
+  const [manualOpen, setManualOpen] = React.useState(true);
 
-  const COLLAPSED_WIDTH = 64; // width when minimized
+  // Responsive breakpoint (<1280px auto-collapses)
+  const [isSmallScreen, setIsSmallScreen] = React.useState(false);
 
-  // Close mobile overlay on route change
+  const COLLAPSED_WIDTH = 68;
+  const EXPANDED_WIDTH = 250;
+  const scrollDistance = siteConfig.sidebar.scrollDistance ?? 180;
+
+  // 1:1 Scroll progress (0 = top/expanded, 1 = scrolled/collapsed)
+  // Stops moving instantly when the user stops scrolling
+  const scrollProgress = useTransform(
+    scrollY,
+    [0, scrollDistance],
+    [0, 1],
+    { clamp: true }
+  );
+
+  // Hover expansion progress (0 = not hovered, 1 = hovered/expanded)
+  const hoverProgress = useMotionValue(0);
+  const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const activeAnimRef = React.useRef<{ stop: () => void } | null>(null);
+
+  // Close mobile drawer and reset hover on route navigation
   React.useEffect(() => {
     setIsMobileOpen(false);
-  }, [pathname]);
+    activeAnimRef.current?.stop();
+    hoverProgress.set(0);
+  }, [pathname, hoverProgress]);
 
-  // Auto-collapse sidebar on tablet / small desktop (<1280px)
+  // Lock body scroll when mobile drawer is open
+  React.useEffect(() => {
+    if (isMobileOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isMobileOpen]);
+
+  // Auto-collapse on tablet / small desktop (<1280px)
   React.useEffect(() => {
     const mql = window.matchMedia("(max-width: 1280px)");
     const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-      if (e.matches) {
-        setIsOpen(false);
-      } else {
-        setIsOpen(true);
-      }
+      setIsSmallScreen(e.matches);
     };
-    
-    // Initial check
+
     handleChange(mql);
-    
-    // Add listener for crossing the breakpoint
     mql.addEventListener("change", handleChange);
     return () => mql.removeEventListener("change", handleChange);
   }, []);
 
-  const startResizing = React.useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    isResizing.current = true;
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-  }, []);
-
-  const stopResizing = React.useCallback(() => {
-    if (isResizing.current) {
-      isResizing.current = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
+  // Smooth hover expansion & collapse with seamless direction reversals
+  const handleMouseEnter = React.useCallback(() => {
+    if (!siteConfig.sidebar.expandOnHover) return;
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
     }
-  }, []);
+    activeAnimRef.current?.stop();
+    activeAnimRef.current = animate(hoverProgress, 1, {
+      duration: 0.35,
+      ease: [0.16, 1, 0.3, 1],
+    });
+  }, [hoverProgress]);
 
-  const resize = React.useCallback(
-    (mouseMoveEvent: MouseEvent) => {
-      if (isResizing.current) {
-        const newWidth = mouseMoveEvent.clientX;
-        if (newWidth >= 200 && newWidth <= 450) {
-          setWidth(newWidth);
-        }
-      }
-    },
-    []
-  );
+  const handleMouseLeave = React.useCallback(() => {
+    if (!siteConfig.sidebar.expandOnHover) return;
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    // Crisp 50ms micro-debounce prevents edge cursor jitter
+    hoverTimeoutRef.current = setTimeout(() => {
+      activeAnimRef.current?.stop();
+      activeAnimRef.current = animate(hoverProgress, 0, {
+        duration: 0.3,
+        ease: [0.16, 1, 0.3, 1],
+      });
+    }, 50);
+  }, [hoverProgress]);
 
   React.useEffect(() => {
-    window.addEventListener("mousemove", resize);
-    window.addEventListener("mouseup", stopResizing);
     return () => {
-      window.removeEventListener("mousemove", resize);
-      window.removeEventListener("mouseup", stopResizing);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      activeAnimRef.current?.stop();
     };
-  }, [resize, stopResizing]);
+  }, []);
 
-  // Force strict pixel strings to guarantee CSS applies them!
-  const currentWidthStr = isOpen ? `${width}px` : `${COLLAPSED_WIDTH}px`;
+  // Check if current route is a component documentation page (/docs/components/*)
+  const isComponentPage = Boolean(
+    pathname && /^\/docs\/components\/.+/.test(pathname)
+  );
+
+  const canCollapseOnScroll =
+    siteConfig.sidebar.collapseOnScroll &&
+    (!siteConfig.sidebar.collapseOnlyOnComponentPages || isComponentPage);
+
+  // Synchronous MotionValue for collapse eligibility across client route transitions
+  const collapseEligibleMotion = useMotionValue(canCollapseOnScroll ? 1 : 0);
+
+  React.useEffect(() => {
+    collapseEligibleMotion.set(canCollapseOnScroll ? 1 : 0);
+  }, [canCollapseOnScroll, collapseEligibleMotion]);
+
+  // Calculate effective progress (0 = 250px expanded, 1 = 68px collapsed):
+  // Directly tied to page scroll position; stops moving when scroll stops.
+  const effectiveProgress = useTransform(
+    [scrollProgress, hoverProgress, collapseEligibleMotion],
+    ([s, h, c]) => {
+      if (siteConfig.sidebar.enableManualToggle) {
+        return manualOpen ? 0 : 1;
+      }
+      if (c === 0 && !isSmallScreen) {
+        return 0;
+      }
+      const base = isSmallScreen ? 1 : (s as number) * (c as number);
+      const hover = h as number;
+      return Math.max(0, Math.min(1, base * (1 - hover)));
+    }
+  );
+
+  // Direct 1:1 scroll-driven width
+  const width = useTransform(
+    effectiveProgress,
+    [0, 1],
+    [EXPANDED_WIDTH, COLLAPSED_WIDTH]
+  );
 
   return (
     <>
+      {/* ─── Mobile Floating Trigger Button ─── */}
       <button
-        className="md:hidden fixed bottom-20 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl hover:bg-primary/90 transition-all active:scale-95"
+        type="button"
+        className="md:hidden fixed bottom-20 left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-950/90 text-white border border-white/15 shadow-2xl backdrop-blur-xl hover:bg-zinc-900 transition-all active:scale-95 cursor-pointer"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
+        aria-label="Toggle navigation drawer"
       >
-        {isMobileOpen ? <PanelLeftClose className="h-6 w-6" /> : <PanelLeftOpen className="h-6 w-6" />}
+        {isMobileOpen ? (
+          <PanelLeftClose className="h-5 w-5" />
+        ) : (
+          <PanelLeftOpen className="h-5 w-5" />
+        )}
       </button>
 
+      {/* ─── Mobile Slide-Over Glass Modal ─── */}
       {isMobileOpen && (
-        <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden">
-          <div className="fixed inset-y-0 left-0 z-50 h-full w-4/5 max-w-sm border-r bg-background p-6 shadow-2xl overflow-y-auto pt-16">
-            <DocsSidebar onClick={() => setIsMobileOpen(false)} isCollapsed={false} />
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden flex p-4 pt-20">
+          <div className="relative w-full max-w-[270px] h-[calc(100vh-6.5rem)] rounded-[32px] bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl py-3.5 px-0 flex flex-col overflow-visible">
+            {/* Right-side gradient hairline separator */}
+            <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
+            <DocsSidebar
+              onClick={() => setIsMobileOpen(false)}
+              isCollapsed={false}
+            />
           </div>
+          <div
+            className="flex-1"
+            onClick={() => setIsMobileOpen(false)}
+            aria-hidden="true"
+          />
         </div>
       )}
 
-      {/* Desktop Resizable/Collapsible Sidebar */}
+      {/* ─── Desktop Floating VisionOS Glass Sidebar Card (Scroll Scrubbed + Hover Expand) ─── */}
       <motion.aside
-        initial={false}
-        animate={{
-          width: currentWidthStr,
-          minWidth: currentWidthStr,
-          maxWidth: currentWidthStr,
-          paddingLeft: isOpen ? "24px" : "8px",
-          paddingRight: isOpen ? "24px" : "8px"
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="sticky top-14 z-30 hidden h-[calc(100vh-3.5rem)] md:block border-r border-border/40 group/sidebar bg-background flex-shrink-0"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{ width }}
+        className="sticky top-20 z-30 hidden md:flex flex-col h-[calc(100vh-6rem)] shrink-0 py-1 select-none will-change-[width]"
       >
-        {/* Toggle Button: Positioned on the border for a premium feel */}
-        <div className="absolute right-[-14px] top-6 z-50 hidden md:flex transition-all">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex h-7 w-7 items-center justify-center rounded-sm bg-background text-muted-foreground shadow-sm hover:bg-accent hover:text-foreground hover:shadow-md transition-all"
-          >
-            {isOpen ? <PanelLeftClose className="h-6 w-6" /> : <PanelLeftOpen className="h-6 w-6" />}
-          </button>
-        </div>
+        <div
+          className={cn(
+            "w-full h-full flex flex-col transition-colors duration-300",
+            "bg-background/80 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl",
+            "shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/60",
+            "relative rounded-[32px] py-3.5 px-0 overflow-hidden"
+          )}
+        >
+          {/* Right-side gradient hairline separator */}
+          <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
 
-        {/* Prevent horizontal text from artificially expanding the flex-item width! */}
-        <div className="overflow-y-auto overflow-x-hidden pt-14 pb-10 h-full w-full hide-scrollbar">
-          <DocsSidebar isCollapsed={!isOpen} />
+          <DocsSidebar
+            progress={effectiveProgress}
+            onToggleCollapse={
+              siteConfig.sidebar.enableManualToggle
+                ? () => setManualOpen((prev) => !prev)
+                : undefined
+            }
+          />
         </div>
-
-        {isOpen && (
-          <div
-            className="absolute top-0 right-[-3px] w-[6px] h-full cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-40 group"
-            onMouseDown={startResizing}
-          >
-            <div className="absolute right-[3px] top-0 bottom-0 w-[2px] bg-primary/20 group-hover:bg-primary/50 group-active:bg-primary transition-colors" />
-          </div>
-        )}
       </motion.aside>
     </>
   );

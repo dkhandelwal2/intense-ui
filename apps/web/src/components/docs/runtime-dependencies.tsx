@@ -77,7 +77,7 @@ export function RuntimeDependencies({
     return (
       <div
         className={cn(
-          "relative space-y-3 pt-5 border-t border-black/5 dark:border-white/10 w-full min-w-0 overflow-hidden",
+          "relative space-y-3 pt-5 w-full min-w-0",
           className
         )}
       >
@@ -144,16 +144,13 @@ export function RuntimeDependencies({
               </button>
             </div>
             {showManualInstall && (
-              <div className="space-y-2 mt-2">
-                <div className="flex justify-start">
-                  <PackageManagerSelector
-                    value={activePm}
-                    onChange={setPm}
-                    size="sm"
-                    inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-                  />
-                </div>
-                <CodeBlock code={manualCommands[activePm]} language="bash" />
+              <div className="mt-2">
+                <CodeBlock
+                  code={manualCommands[activePm]}
+                  language="bash"
+                  packageManager={activePm}
+                  onPackageManagerChange={setPm}
+                />
               </div>
             )}
           </div>
@@ -212,19 +209,17 @@ export function RuntimeDependencies({
       </div>
 
       {/* Manual dependency install block */}
-      <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <span className="text-xs text-zinc-600 dark:text-zinc-400 font-medium flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span>Installed automatically by the CLI. Manual install command:</span>
-          </span>
-          <PackageManagerSelector
-            value={activePm}
-            onChange={setPm}
-            inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-          />
-        </div>
-        <CodeBlock code={manualCommands[activePm]} language="bash" />
+      <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02] p-5 space-y-3">
+        <span className="text-xs text-zinc-600 dark:text-zinc-400 font-medium flex items-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>Installed automatically by the CLI. Manual install command:</span>
+        </span>
+        <CodeBlock
+          code={manualCommands[activePm]}
+          language="bash"
+          packageManager={activePm}
+          onPackageManagerChange={setPm}
+        />
       </div>
     </div>
   );

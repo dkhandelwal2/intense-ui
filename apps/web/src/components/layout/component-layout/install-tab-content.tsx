@@ -66,44 +66,48 @@ export function InstallTabContent({
 
       <div className="text-zinc-800 dark:text-zinc-300">
         {installContent || (slug ? (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
+            {/* Separator */}
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+
             {/* Component npx shadcn CLI Command */}
-            <SidebarMotionSection delay={0.04} className="flex flex-col gap-3 border-t border-black/5 dark:border-white/10 pt-6">
+            <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
               <SectionHeader
                 icon={Terminal}
                 colorScheme="emerald"
                 title="CLI Installation"
                 badge="Fastest"
                 subtitle="Installs component files & auto-configures dependencies"
-                action={
-                  <PackageManagerSelector
-                    value={packageManager}
-                    onChange={onPackageManagerChange}
-                    size="sm"
-                    activeClassName="bg-[var(--theme-primary)] text-white shadow-sm font-semibold"
-                    inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-                  />
-                }
               />
 
               <CodeBlock
                 code={getComponentAddCommand(packageManager, slug)}
                 language="bash"
+                packageManager={packageManager}
+                onPackageManagerChange={onPackageManagerChange}
               />
             </SidebarMotionSection>
 
             {/* Usage */}
             {usageCode && (
-              <SidebarMotionSection delay={0.04} className="flex flex-col gap-3 border-t border-black/5 dark:border-white/10 pt-6">
-                <SectionHeader
-                  icon={Code}
-                  colorScheme="blue"
-                  title="Usage"
-                  subtitle="Import and render the component in your layout"
-                />
-                <CodeBlock code={usageCode} language="tsx" />
-              </SidebarMotionSection>
+              <>
+                {/* Separator */}
+                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+
+                <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
+                  <SectionHeader
+                    icon={Code}
+                    colorScheme="blue"
+                    title="Usage"
+                    subtitle="Import and render the component in your layout"
+                  />
+                  <CodeBlock code={usageCode} language="tsx" />
+                </SidebarMotionSection>
+              </>
             )}
+
+            {/* Separator */}
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
 
             {/* Component Dependencies */}
             <SidebarMotionSection delay={0.04}>
@@ -113,18 +117,23 @@ export function InstallTabContent({
                 packageManager={packageManager}
                 onPackageManagerChange={onPackageManagerChange}
                 subtitle="Installed automatically by CLI, or manually below"
-                className="border-t border-black/5 dark:border-white/10 pt-6"
               />
             </SidebarMotionSection>
 
+            {/* Separator */}
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+
             {/* 4. Troubleshooting Diagnostic Center */}
             <SidebarMotionSection delay={0.04}>
-              <TroubleshootingSection variant="compact" />
+              <TroubleshootingSection variant="compact" className="border-t-0 pt-0" />
             </SidebarMotionSection>
+
+            {/* Separator */}
+            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
 
             {/* 5. Need Help? Support & Community */}
             <SidebarMotionSection delay={0.04}>
-              <SupportSection variant="compact" />
+              <SupportSection variant="compact" className="border-t-0 pt-0" />
             </SidebarMotionSection>
           </div>
         ) : (

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Terminal, Copy, Check, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
+import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
 import { TerminalWindow } from "@/components/ui/terminal-window";
 import { ScrollStepCard } from "./scroll-step-card";
 import { getInitCommand } from "./constants";
@@ -53,28 +53,22 @@ export function StepInitProject({
       </div>
 
       {/* Terminal Window */}
-      <TerminalWindow
-        title="shadcn-init"
-        headerAction={
-          <PackageManagerSelector
-            value={selectedPm}
-            onChange={onSelectPm}
-            activeClassName="bg-[var(--theme-primary)] text-white shadow-sm font-bold"
-            inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-          />
-        }
-      >
+      <TerminalWindow title="shadcn-init">
         {/* Command Row */}
         <div className="p-3 sm:p-5 font-mono text-xs sm:text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
-            <span className="text-[var(--theme-primary)] font-bold select-none">&gt;</span>
-            <span className="text-zinc-900 dark:text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">
-              {getInitCommand(selectedPm)}
-            </span>
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <PackageManagerDropdown value={selectedPm} onChange={onSelectPm} size="sm" />
+            <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 shrink-0" />
+            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
+              <span className="text-[var(--theme-primary)] font-bold select-none shrink-0">&gt;</span>
+              <span className="text-zinc-900 dark:text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">
+                {getInitCommand(selectedPm)}
+              </span>
+            </div>
           </div>
           <button
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-md active:scale-95 shrink-0 self-end sm:self-auto"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:opacity-90 text-white text-xs font-semibold transition-all shadow-md active:scale-95 shrink-0 self-end sm:self-auto cursor-pointer"
           >
             {hasCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{hasCopied ? "Copied!" : "Copy"}</span>

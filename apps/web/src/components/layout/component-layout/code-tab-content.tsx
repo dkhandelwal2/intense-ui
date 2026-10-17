@@ -52,7 +52,7 @@ export function CodeTabContent({
     >
       {/* Header: Code Reference & TSX/JSX language toggle */}
       <SidebarMotionSection>
-        <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 pb-4">
+        <div className="flex items-center justify-between pb-1">
           <SectionHeader
             icon={Code}
             colorScheme="primary"
@@ -63,7 +63,7 @@ export function CodeTabContent({
                 <button
                   onClick={() => onCodeLangChange("tsx")}
                   className={cn(
-                    "text-xs px-2.5 py-1 rounded-md transition-colors",
+                    "text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer",
                     codeLang === "tsx"
                       ? "bg-[var(--theme-primary)] text-white"
                       : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -74,7 +74,7 @@ export function CodeTabContent({
                 <button
                   onClick={() => onCodeLangChange("js")}
                   className={cn(
-                    "text-xs px-2.5 py-1 rounded-md transition-colors",
+                    "text-xs px-2.5 py-1 rounded-md transition-colors cursor-pointer",
                     codeLang === "js"
                       ? "bg-[var(--theme-primary)] text-white"
                       : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -86,6 +86,7 @@ export function CodeTabContent({
             }
           />
         </div>
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent mt-3 mb-1 shrink-0" />
       </SidebarMotionSection>
 
       {/* Code Block Content with Skeleton Loading State */}

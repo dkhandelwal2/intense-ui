@@ -19,3 +19,53 @@ export function XTwitterIcon({ className, ...props }: React.SVGProps<SVGSVGEleme
     </svg>
   );
 }
+
+export function LinkedinIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true" {...props}>
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28m1.4 9.74v-8.37H5.06v8.37h2.8z" />
+    </svg>
+  );
+}
+
+export function InstagramIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true" {...props}>
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
+
+export function SparkleStarIcon({ className, ...props }: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+      {...props}
+    >
+      {/* Top-right sparkle star */}
+      <path
+        d="M18.8 2.2C18.8 3.5 19.8 4.5 21.1 4.5C19.8 4.5 18.8 5.5 18.8 6.8C18.8 5.5 17.8 4.5 16.5 4.5C17.8 4.5 18.8 3.5 18.8 2.2Z"
+        fill="#FEF08A"
+      />
+      {/* Bottom-left sparkle star */}
+      <path
+        d="M5.5 15.5C5.5 16.6 6.4 17.5 7.5 17.5C6.4 17.5 5.5 18.4 5.5 19.5C5.5 18.4 4.6 17.5 3.5 17.5C4.6 17.5 5.5 16.6 5.5 15.5Z"
+        fill="#FEF08A"
+      />
+      {/* Chubby golden star */}
+      <path
+        d="M12 5.2l2.25 4.8 5.2.75-3.8 3.7.9 5.2L12 17.2l-4.55 2.45.9-5.2-3.8-3.7 5.2-.75L12 5.2z"
+        fill="#FFC72C"
+        stroke="#FFC72C"
+        strokeWidth="2.4"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

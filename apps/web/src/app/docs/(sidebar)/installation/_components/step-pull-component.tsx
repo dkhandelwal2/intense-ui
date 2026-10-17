@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
+import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
 import { TerminalWindow } from "@/components/ui/terminal-window";
 import { ScrollStepCard } from "./scroll-step-card";
 import {
@@ -90,17 +90,7 @@ export function StepPullComponent({
       </div>
 
       {/* Interactive Terminal Experience */}
-      <TerminalWindow
-        title="intense-ui-cli"
-        headerAction={
-          <PackageManagerSelector
-            value={selectedPm}
-            onChange={onSelectPm}
-            activeClassName="bg-purple-600 text-white shadow-sm font-bold"
-            inactiveClassName="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-          />
-        }
-      >
+      <TerminalWindow title="intense-ui-cli">
         {/* Component Selector Bar */}
         <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 bg-black/[0.02] dark:bg-white/[0.01] border-b border-black/5 dark:border-white/5 overflow-x-auto hide-scrollbar min-w-0">
           <span className="text-[11px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400 shrink-0 mr-1">Component:</span>
@@ -128,9 +118,13 @@ export function StepPullComponent({
         {/* Terminal Content Area */}
         <div className="p-3 sm:p-6 font-mono text-xs sm:text-sm space-y-4 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
-              <span className="text-purple-500 dark:text-purple-400 font-bold select-none">&gt;</span>
-              <span className="text-zinc-900 dark:text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">{currentAddCmd}</span>
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <PackageManagerDropdown value={selectedPm} onChange={onSelectPm} size="sm" />
+              <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 shrink-0" />
+              <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar py-1 min-w-0 flex-1">
+                <span className="text-purple-500 dark:text-purple-400 font-bold select-none shrink-0">&gt;</span>
+                <span className="text-zinc-900 dark:text-white select-all font-mono whitespace-nowrap text-xs sm:text-sm">{currentAddCmd}</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">

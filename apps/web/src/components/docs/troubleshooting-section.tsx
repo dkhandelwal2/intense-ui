@@ -25,7 +25,7 @@ export function TroubleshootingSection({
 
   if (variant === "compact") {
     return (
-      <div className={cn("space-y-3 pt-5 border-t border-black/5 dark:border-white/10 w-full min-w-0", className)}>
+      <div className={cn("space-y-3 w-full min-w-0", className)}>
         {/* Compact Header */}
         <SectionHeader
           icon={Wrench}

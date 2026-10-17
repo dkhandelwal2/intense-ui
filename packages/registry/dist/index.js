@@ -1,10 +1,8 @@
 "use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -31,14 +29,6 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
@@ -55,7 +45,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 
 // src/components/accordion.tsx
-var import_react = __toESM(require("react"));
+var import_react = require("react");
 var import_framer_motion = require("framer-motion");
 var import_lucide_react = require("lucide-react");
 
@@ -69,38 +59,74 @@ function cn(...inputs) {
 // src/components/accordion.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
 var AccordionContext = (0, import_react.createContext)(void 0);
-function Accordion({ children, type = "single", defaultValue, className }) {
-  const [activeValues, setActiveValues] = (0, import_react.useState)(
+var AccordionItemContext = (0, import_react.createContext)(void 0);
+function Accordion({
+  children,
+  type = "single",
+  defaultValue,
+  value: controlledValue,
+  onValueChange,
+  className,
+  collapsible = true
+}) {
+  const [uncontrolledValues, setUncontrolledValues] = (0, import_react.useState)(
     Array.isArray(defaultValue) ? defaultValue : defaultValue ? [defaultValue] : []
   );
-  const toggleItem = (value) => {
-    setActiveValues((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((v) => v !== value);
+  const isControlled = controlledValue !== void 0;
+  const activeValues = isControlled ? Array.isArray(controlledValue) ? controlledValue : controlledValue ? [controlledValue] : [] : uncontrolledValues;
+  const toggleItem = (itemValue) => {
+    let nextValues;
+    if (activeValues.includes(itemValue)) {
+      if (type === "single" && !collapsible) {
+        return;
       }
+      nextValues = activeValues.filter((v) => v !== itemValue);
+    } else {
       if (type === "single") {
-        return [value];
+        nextValues = [itemValue];
+      } else {
+        nextValues = [...activeValues, itemValue];
       }
-      return [...prev, value];
-    });
+    }
+    if (!isControlled) {
+      setUncontrolledValues(nextValues);
+    }
+    if (onValueChange) {
+      if (type === "single") {
+        onValueChange(nextValues[0] || "");
+      } else {
+        onValueChange(nextValues);
+      }
+    }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccordionContext.Provider, { value: { activeValues, toggleItem }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: cn("w-full space-y-2", className), children }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccordionContext.Provider, { value: { activeValues, toggleItem, type }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: cn("w-full space-y-2", className), children }) });
 }
-function AccordionItem({ value, children, className, disabled, borderWidth, borderRadius, borderColor }) {
-  const customStyles = __spreadValues(__spreadValues(__spreadValues({}, borderWidth !== void 0 && { borderWidth }), borderRadius !== void 0 && { borderRadius }), borderColor !== void 0 && { borderColor });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+function AccordionItem({
+  value,
+  children,
+  className,
+  disabled,
+  borderWidth,
+  borderRadius,
+  borderColor,
+  hideBorder
+}) {
+  const customStyles = hideBorder ? __spreadValues({
+    border: "none"
+  }, borderRadius !== void 0 && { borderRadius }) : __spreadValues(__spreadValues(__spreadValues({}, borderWidth !== void 0 && { borderWidth }), borderRadius !== void 0 && { borderRadius }), borderColor !== void 0 && { borderColor });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AccordionItemContext.Provider, { value: { value, disabled }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     "div",
     {
-      className: cn("border-b transition-all duration-300 ease-in-out", disabled && "opacity-50", className),
+      className: cn(
+        "transition-all duration-300 ease-in-out",
+        !hideBorder && "border-b",
+        disabled && "opacity-50",
+        className
+      ),
       style: Object.keys(customStyles).length > 0 ? customStyles : void 0,
-      children: import_react.default.Children.map(children, (child) => {
-        if (import_react.default.isValidElement(child)) {
-          return import_react.default.cloneElement(child, { value, disabled });
-        }
-        return child;
-      })
+      children
     }
-  );
+  ) });
 }
 var sizeClasses = {
   xs: "py-2 text-xs gap-1.5",
@@ -114,20 +140,27 @@ var weightClasses = {
   Bold: "font-bold"
 };
 function AccordionTrigger({
-  value,
+  value: propValue,
   children,
   className,
-  disabled,
+  disabled: propDisabled,
   icon,
   iconPosition = "Right",
+  hideIcon,
   size = "md",
   weight = "Default",
   headingUnderline,
-  headingColor
+  headingColor,
+  onClick
 }) {
-  const context = (0, import_react.useContext)(AccordionContext);
-  if (!context) throw new Error("AccordionTrigger must be used within an Accordion");
-  const { activeValues, toggleItem } = context;
+  const accordionContext = (0, import_react.useContext)(AccordionContext);
+  const itemContext = (0, import_react.useContext)(AccordionItemContext);
+  if (!accordionContext) {
+    throw new Error("AccordionTrigger must be used within an Accordion");
+  }
+  const value = propValue != null ? propValue : itemContext == null ? void 0 : itemContext.value;
+  const disabled = propDisabled != null ? propDisabled : itemContext == null ? void 0 : itemContext.disabled;
+  const { activeValues, toggleItem } = accordionContext;
   const isOpen = value ? activeValues.includes(value) : false;
   const iconSizeClass = {
     xs: "h-3 w-3",
@@ -136,20 +169,31 @@ function AccordionTrigger({
     lg: "h-5 w-5",
     xl: "h-6 w-6"
   }[size];
-  const renderedIcon = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  const renderedIcon = !hideIcon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     import_framer_motion.motion.div,
     {
       animate: { rotate: isOpen ? 180 : 0 },
       transition: { duration: 0.2, ease: "easeInOut" },
       className: cn("transition-all duration-300 ease-in-out"),
-      children: icon ? icon : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.ChevronDown, { className: cn(iconSizeClass, "transition-all duration-300 ease-in-out text-zinc-500 shrink-0") })
+      children: icon ? icon : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        import_lucide_react.ChevronDown,
+        {
+          className: cn(
+            iconSizeClass,
+            "transition-all duration-300 ease-in-out text-zinc-500 shrink-0"
+          )
+        }
+      )
     }
   );
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     "button",
     {
       disabled,
-      onClick: () => value && toggleItem(value),
+      onClick: (e) => {
+        if (value) toggleItem(value);
+        if (onClick) onClick(e);
+      },
       style: headingColor ? { color: headingColor } : void 0,
       className: cn(
         "flex flex-1 w-full items-center transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950",
@@ -168,10 +212,20 @@ function AccordionTrigger({
     }
   );
 }
-function AccordionContent({ value, children, className, disabled, contentColor }) {
-  const context = (0, import_react.useContext)(AccordionContext);
-  if (!context) throw new Error("AccordionContent must be used within an Accordion");
-  const { activeValues } = context;
+function AccordionContent({
+  value: propValue,
+  children,
+  className,
+  disabled: _disabled,
+  contentColor
+}) {
+  const accordionContext = (0, import_react.useContext)(AccordionContext);
+  const itemContext = (0, import_react.useContext)(AccordionItemContext);
+  if (!accordionContext) {
+    throw new Error("AccordionContent must be used within an Accordion");
+  }
+  const value = propValue != null ? propValue : itemContext == null ? void 0 : itemContext.value;
+  const { activeValues } = accordionContext;
   const isOpen = value ? activeValues.includes(value) : false;
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_framer_motion.AnimatePresence, { initial: false, children: isOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     import_framer_motion.motion.div,
@@ -184,7 +238,11 @@ function AccordionContent({ value, children, className, disabled, contentColor }
       children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         "div",
         {
-          className: cn("pb-4 pt-0 text-sm transition-all duration-300 ease-in-out", !contentColor && "text-zinc-600 dark:text-zinc-400", className),
+          className: cn(
+            "pb-4 pt-0 text-sm transition-all duration-300 ease-in-out",
+            !contentColor && "text-zinc-600 dark:text-zinc-400",
+            className
+          ),
           style: contentColor ? { color: contentColor } : void 0,
           children
         }
@@ -503,7 +561,7 @@ function Switch({
                     className: "absolute inset-0 rounded-full",
                     style: {
                       backgroundColor: shadowColor,
-                      transform: `translateZ(${-i * 0.5}px) scale(${1 - i * 2e-3})`,
+                      transform: `translateZ(${-i * 0.5}px) scale(${1 - i * 1e-3})`,
                       filter: `brightness(${1 - i * 0.015})`
                     }
                   },
