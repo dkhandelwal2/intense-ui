@@ -88,6 +88,21 @@
           "target": "components/ui/tooltip.tsx"
         }
       ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "A hairline gradient separator with glowing and dashed variants.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/separator.tsx",
+          "type": "registry:file",
+          "target": "components/ui/separator.tsx"
+        }
+      ]
     }
   ]
 }

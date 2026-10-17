@@ -11,6 +11,7 @@ import {
   SupportSection,
   SectionHeader,
 } from "@/components/docs";
+import { Separator } from "@/components/ui/separator";
 import { getComponentAddCommand } from "@/config/site";
 import { SidebarMotionSection } from "./sidebar-motion-section";
 
@@ -68,7 +69,7 @@ export function InstallTabContent({
         {installContent || (slug ? (
           <div className="flex flex-col gap-5">
             {/* Separator */}
-            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+            <Separator className="my-1" />
 
             {/* Component npx shadcn CLI Command */}
             <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
@@ -92,7 +93,7 @@ export function InstallTabContent({
             {usageCode && (
               <>
                 {/* Separator */}
-                <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+                <Separator className="my-1" />
 
                 <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
                   <SectionHeader
@@ -107,7 +108,7 @@ export function InstallTabContent({
             )}
 
             {/* Separator */}
-            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+            <Separator className="my-1" />
 
             {/* Component Dependencies */}
             <SidebarMotionSection delay={0.04}>
@@ -121,7 +122,7 @@ export function InstallTabContent({
             </SidebarMotionSection>
 
             {/* Separator */}
-            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+            <Separator className="my-1" />
 
             {/* 4. Troubleshooting Diagnostic Center */}
             <SidebarMotionSection delay={0.04}>
@@ -129,7 +130,7 @@ export function InstallTabContent({
             </SidebarMotionSection>
 
             {/* Separator */}
-            <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+            <Separator className="my-1" />
 
             {/* 5. Need Help? Support & Community */}
             <SidebarMotionSection delay={0.04}>

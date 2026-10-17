@@ -19,13 +19,34 @@ import {
   SlidersHorizontal,
   MessageSquare,
   MousePointerClick,
+  Minus,
+  Layers,
+  Sparkles,
+  LayoutGrid,
+  CreditCard,
+  Palette,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { GithubIcon, SparkleStarIcon } from "@/icons";
 import { siteConfig } from "@/config/site";
+import { componentsConfig } from "@/config/components";
 import { useGitHubStars } from "@/hooks/use-github-stars";
+
+const COMPONENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  accordion: LayoutList,
+  "animated-button": MousePointerClick,
+  switch: ToggleRight,
+  slider: SlidersHorizontal,
+  tooltip: MessageSquare,
+  separator: Minus,
+  "glowing-button": Sparkles,
+  "bento-grid": LayoutGrid,
+  "magnetic-card": CreditCard,
+  "color-palette": Palette,
+};
 
 export interface DocsSidebarProps {
   onClick?: () => void;
@@ -116,25 +137,25 @@ export function DocsSidebar({
     { title: "Installation", href: siteConfig.routes.INSTALLATION, icon: Terminal },
   ];
 
-  const componentItems = [
-    {
-      title: "Accordion",
-      href: "/docs/components/accordion",
-      icon: LayoutList,
-      badge: siteConfig.sidebar.showBadges ? siteConfig.sidebar.componentBadges["accordion"]?.badge : undefined,
-      badgeColor: siteConfig.sidebar.componentBadges["accordion"]?.color,
-    },
-    {
-      title: "Animated Button",
-      href: "/docs/components/animated-button",
-      icon: MousePointerClick,
-      badge: siteConfig.sidebar.showBadges ? siteConfig.sidebar.componentBadges["animated-button"]?.badge : undefined,
-      badgeColor: siteConfig.sidebar.componentBadges["animated-button"]?.color,
-    },
-    { title: "Switch", href: "/docs/components/switch", icon: ToggleRight },
-    { title: "Slider", href: "/docs/components/slider", icon: SlidersHorizontal },
-    { title: "Tooltip", href: "/docs/components/tooltip", icon: MessageSquare },
-  ];
+  // Dynamic component items loaded from componentsConfig (single source of truth with enable/disable)
+  const componentItems = React.useMemo(() => {
+    return componentsConfig
+      .filter((c) => c.enabled)
+      .map((c) => {
+        const Icon = COMPONENT_ICONS[c.slug] || Layers;
+        const badgeInfo = siteConfig.sidebar.showBadges
+          ? siteConfig.sidebar.componentBadges[c.slug]
+          : undefined;
+
+        return {
+          title: c.name,
+          href: c.href,
+          icon: Icon,
+          badge: badgeInfo?.badge,
+          badgeColor: badgeInfo?.color,
+        };
+      });
+  }, []);
 
   const renderItem = (item: {
     title: string;
@@ -320,8 +341,10 @@ export function DocsSidebar({
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{ opacity: 1, scaleX: 1 }}
         transition={{ duration: 0.35, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-        className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-2.5 shrink-0 origin-left"
-      />
+        className="w-full my-2.5 origin-left"
+      >
+        <Separator />
+      </motion.div>
 
       {/* ─── Navigation Items List (Staggered One-By-One Entrance) ─── */}
       <motion.div
@@ -352,10 +375,9 @@ export function DocsSidebar({
         {gettingStartedItems.map(renderItem)}
 
         {/* ─── Separator 2: Below Getting Started ─── */}
-        <motion.div
-          variants={sidebarItemVariants}
-          className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-3 shrink-0"
-        />
+        <motion.div variants={sidebarItemVariants}>
+          <Separator className="my-3" />
+        </motion.div>
 
         {/* Section 2: COMPONENTS Header with Badge (5) (Fixed h-6 slot with vertical bottom-to-top scroll glide) */}
         <motion.div variants={sidebarItemVariants} className="group/sec2 h-6 shrink-0 relative flex items-center justify-between px-4">
@@ -386,10 +408,9 @@ export function DocsSidebar({
         {componentItems.map(renderItem)}
 
         {/* ─── Separator 3: Where Component Ends ─── */}
-        <motion.div
-          variants={sidebarItemVariants}
-          className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-3 shrink-0"
-        />
+        <motion.div variants={sidebarItemVariants}>
+          <Separator className="my-3" />
+        </motion.div>
 
         {/* Section 3: GitHub with animated morph & golden star badge matching header */}
         <motion.div variants={sidebarItemVariants}>

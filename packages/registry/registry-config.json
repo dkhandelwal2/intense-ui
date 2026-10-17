@@ -30,6 +30,12 @@
     "enabled": true
   },
   {
+    "name": "separator",
+    "title": "Separator",
+    "description": "A hairline gradient separator with glowing and dashed variants.",
+    "enabled": true
+  },
+  {
     "name": "glowing-button",
     "title": "Glowing Button",
     "description": "A button with a smooth glowing hover effect.",

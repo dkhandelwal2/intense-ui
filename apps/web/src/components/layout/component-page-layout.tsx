@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { Monitor, Code, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { PackageManager } from "@/components/ui/package-manager";
 import {
   ComponentPageLayoutProps,
@@ -385,7 +386,7 @@ export function ComponentPageLayout({
           )}
         >
           {/* Left-side gradient hairline separator */}
-          <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
+          <Separator orientation="vertical" className="absolute left-0 top-0 bottom-0 pointer-events-none" />
 
           {/* Pinned / Fixed Header on Top */}
           <ComponentSidebarHeader

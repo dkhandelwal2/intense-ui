@@ -11,6 +11,7 @@ import {
   animate,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { DocsSidebar } from "./docs-sidebar";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
@@ -159,7 +160,12 @@ export function SidebarWrapper() {
       {/* ─── Mobile Floating Trigger Button ─── */}
       <button
         type="button"
-        className="md:hidden fixed bottom-20 left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-zinc-950/90 text-white border border-white/15 shadow-2xl backdrop-blur-xl hover:bg-zinc-900 transition-all active:scale-95 cursor-pointer"
+        className={cn(
+          "md:hidden fixed bottom-20 left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-xl transition-all active:scale-95 cursor-pointer",
+          "bg-white/95 text-zinc-800 border border-black/10 shadow-lg shadow-black/10 hover:bg-white hover:text-zinc-950 hover:border-black/20",
+          "dark:bg-zinc-900/95 dark:text-zinc-100 dark:border-white/15 dark:shadow-2xl dark:shadow-black/70 dark:hover:bg-zinc-800 dark:hover:text-white dark:hover:border-white/25",
+          isMobileOpen && "border-[var(--theme-primary)]/40 text-[var(--theme-primary)] dark:border-[var(--theme-primary)]/50 dark:text-[var(--theme-primary)]"
+        )}
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         aria-label="Toggle navigation drawer"
       >
@@ -218,10 +224,10 @@ export function SidebarWrapper() {
                 stiffness: 320,
                 mass: 0.8,
               }}
-              className="relative w-full max-w-[270px] h-[calc(100vh-6.5rem)] rounded-[32px] bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl py-3.5 px-0 flex flex-col overflow-visible will-change-[transform,opacity]"
+              className="relative w-full max-w-[270px] h-[calc(100vh-6.5rem)] rounded-[32px] bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-2xl shadow-black/15 dark:shadow-black/70 py-3.5 px-0 flex flex-col overflow-visible will-change-[transform,opacity]"
             >
               {/* Right-side gradient hairline separator */}
-              <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
+              <Separator orientation="vertical" className="absolute right-0 top-0 bottom-0 pointer-events-none" />
               <DocsSidebar
                 onClick={() => setIsMobileOpen(false)}
                 isCollapsed={false}
@@ -254,7 +260,7 @@ export function SidebarWrapper() {
           )}
         >
           {/* Right-side gradient hairline separator */}
-          <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent pointer-events-none" />
+          <Separator orientation="vertical" className="absolute right-0 top-0 bottom-0 pointer-events-none" />
 
           <DocsSidebar
             progress={effectiveProgress}

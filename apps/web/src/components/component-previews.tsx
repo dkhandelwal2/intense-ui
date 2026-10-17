@@ -8,6 +8,7 @@ import {
   AccordionContent,
 } from "@registry/components/accordion";
 import { Switch } from "@registry/components/switch";
+import { Separator } from "@/components/ui/separator";
 
 export const componentPreviews: Record<string, React.ReactNode> = {
   "Accordion": (
@@ -42,6 +43,17 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "Magnetic Card": (
       <div className="w-full max-w-[150px] h-20 bg-card border shadow-sm rounded-lg flex items-center justify-center text-sm text-muted-foreground">
         Card
+      </div>
+  ),
+  "Separator": (
+      <div className="w-full max-w-[220px] flex flex-col gap-3 py-2 items-center justify-center">
+        <div className="w-full flex items-center justify-between text-[10px] font-mono text-zinc-500">
+          <span>gradient</span>
+          <span>glow</span>
+        </div>
+        <Separator />
+        <Separator glow />
+        <Separator variant="dashed" />
       </div>
   )
 };

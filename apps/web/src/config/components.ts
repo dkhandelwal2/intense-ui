@@ -6,6 +6,7 @@ import registryConfig from "@registry-config";
 
 export type ComponentConfig = {
   name: string;
+  slug: string;
   href: string;
   enabled: boolean;
   description: string;
@@ -15,9 +16,13 @@ function toSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
 
-export const componentsConfig: ComponentConfig[] = registryConfig.map((c) => ({
-  name: c.title,
-  href: `/docs/components/${toSlug(c.name)}`,
-  enabled: c.enabled,
-  description: c.description,
-}));
+export const componentsConfig: ComponentConfig[] = registryConfig.map((c) => {
+  const slug = toSlug(c.name);
+  return {
+    name: c.title,
+    slug,
+    href: `/docs/components/${slug}`,
+    enabled: c.enabled,
+    description: c.description,
+  };
+});

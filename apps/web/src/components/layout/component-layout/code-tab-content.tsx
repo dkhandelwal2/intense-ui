@@ -6,6 +6,7 @@ import { Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { SectionHeader } from "@/components/docs";
+import { Separator } from "@/components/ui/separator";
 import { ComponentCodeLang } from "./types";
 import { SidebarMotionSection } from "./sidebar-motion-section";
 
@@ -86,7 +87,7 @@ export function CodeTabContent({
             }
           />
         </div>
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent mt-3 mb-1 shrink-0" />
+        <Separator className="mt-3 mb-1" />
       </SidebarMotionSection>
 
       {/* Code Block Content with Skeleton Loading State */}

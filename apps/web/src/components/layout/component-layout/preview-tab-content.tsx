@@ -10,6 +10,7 @@ import {
   LicenseCard,
   ContactCard,
 } from "@/components/docs";
+import { Separator } from "@/components/ui/separator";
 import { SidebarMotionSection } from "./sidebar-motion-section";
 
 export interface PreviewTabContentProps {
@@ -40,7 +41,7 @@ export function PreviewTabContent({
       </SidebarMotionSection>
 
       {/* Separator */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+      <Separator className="my-1" />
 
       {/* Component Dependencies */}
       <SidebarMotionSection delay={0.04}>
@@ -55,7 +56,7 @@ export function PreviewTabContent({
       {/* Component Props */}
       {propsTable && (
         <>
-          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+          <Separator className="my-1" />
           <div className="flex flex-col gap-3">
             <SidebarMotionSection>
               <SectionHeader
@@ -73,7 +74,7 @@ export function PreviewTabContent({
       )}
 
       {/* Separator */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+      <Separator className="my-1" />
 
       {/* Open Source */}
       <SidebarMotionSection delay={0.04}>
@@ -81,7 +82,7 @@ export function PreviewTabContent({
       </SidebarMotionSection>
 
       {/* Separator */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+      <Separator className="my-1" />
 
       {/* License: MIT */}
       <SidebarMotionSection delay={0.04}>
@@ -89,7 +90,7 @@ export function PreviewTabContent({
       </SidebarMotionSection>
 
       {/* Separator */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent my-1 shrink-0" />
+      <Separator className="my-1" />
 
       {/* Contact Us */}
       <SidebarMotionSection delay={0.04}>

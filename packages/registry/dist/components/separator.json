@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "registry:ui",
+  "title": "Separator",
+  "description": "A hairline gradient separator with glowing and dashed variants.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "name": "separator.tsx",
+      "content": "import * as React from \"react\";\nimport { cn } from \"../lib/utils\";\n\nexport interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {\n  orientation?: \"horizontal\" | \"vertical\";\n  variant?: \"gradient\" | \"subtle\" | \"dashed\";\n  glow?: boolean;\n}\n\nexport function Separator({\n  orientation = \"horizontal\",\n  variant = \"gradient\",\n  glow = false,\n  className,\n  ...props\n}: SeparatorProps) {\n  const isHorizontal = orientation === \"horizontal\";\n\n  return (\n    <div\n      role=\"separator\"\n      aria-orientation={orientation}\n      className={cn(\n        \"shrink-0\",\n        isHorizontal ? \"h-[1px] w-full\" : \"w-[1px] h-full\",\n        variant === \"gradient\" && (\n          isHorizontal\n            ? \"bg-gradient-to-r from-transparent via-[var(--theme-primary)]/25 to-transparent\"\n            : \"bg-gradient-to-b from-transparent via-[var(--theme-primary)]/50 to-transparent\"\n        ),\n        variant === \"subtle\" && \"bg-black/10 dark:bg-white/10\",\n        variant === \"dashed\" && (\n          isHorizontal\n            ? \"border-b border-dashed border-black/15 dark:border-white/15 bg-transparent\"\n            : \"border-r border-dashed border-black/15 dark:border-white/15 bg-transparent\"\n        ),\n        glow && \"shadow-[0_0_8px_var(--theme-primary)]\",\n        className\n      )}\n      {...props}\n    />\n  );\n}\n",
+      "target": "components/ui/separator.tsx"
+    }
+  ]
+}

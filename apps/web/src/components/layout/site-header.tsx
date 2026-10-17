@@ -388,8 +388,8 @@ export function SiteHeader() {
                   className={cn(
                     "inline-flex items-center justify-center h-10 w-10 rounded-full border transition-all cursor-pointer shrink-0 relative overflow-hidden active:scale-95",
                     isMenuOpen
-                      ? "bg-zinc-800/90 dark:bg-zinc-800/90 text-white border-zinc-700/60 shadow-md ring-1 ring-white/10"
-                      : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-muted-foreground hover:border-[var(--theme-primary)]/40 hover:text-foreground"
+                      ? "bg-black/10 text-zinc-950 border-black/15 shadow-xs dark:bg-white/10 dark:text-white dark:border-white/15 dark:shadow-xs"
+                      : "bg-black/5 text-zinc-700 hover:text-zinc-950 border-black/10 hover:border-[var(--theme-primary)]/40 dark:bg-white/5 dark:text-zinc-300 dark:hover:text-white dark:border-white/10 dark:hover:border-[var(--theme-primary)]/40"
                   )}
                 >
                   <div className="w-5 h-5 relative flex items-center justify-center pointer-events-none">
@@ -433,10 +433,10 @@ export function SiteHeader() {
                   aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                   title={isMenuOpen ? "Close menu" : "Open menu"}
                   className={cn(
-                    "inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-full border transition-all cursor-pointer shrink-0 relative overflow-hidden",
+                    "inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-full border transition-all cursor-pointer shrink-0 relative overflow-hidden active:scale-95",
                     isMenuOpen
-                      ? "bg-zinc-800/90 dark:bg-zinc-800/90 text-white border-zinc-700/60 shadow-md ring-1 ring-white/10"
-                      : "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-muted-foreground hover:border-[var(--theme-primary)]/40 hover:text-foreground"
+                      ? "bg-black/10 text-zinc-950 border-black/15 shadow-xs dark:bg-white/10 dark:text-white dark:border-white/15 dark:shadow-xs"
+                      : "bg-black/5 text-zinc-700 hover:text-zinc-950 border-black/10 hover:border-[var(--theme-primary)]/40 dark:bg-white/5 dark:text-zinc-300 dark:hover:text-white dark:border-white/10 dark:hover:border-[var(--theme-primary)]/40"
                   )}
                 >
                   <div className="w-4 h-4 relative flex items-center justify-center pointer-events-none">
