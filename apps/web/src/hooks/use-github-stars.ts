@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { siteConfig, EXTERNAL_LINKS } from "@/config/site";
 
 export interface GitHubStarsState {
   stars: number | null;
@@ -26,7 +27,7 @@ export function formatStarCount(count: number): string {
   return `★ ${formatStarNumber(count)}`;
 }
 
-export function useGitHubStars(repo: string = "dkhandelwal2/intense-ui"): GitHubStarsState {
+export function useGitHubStars(repo: string = siteConfig.githubRepo): GitHubStarsState {
   const [stars, setStars] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -71,7 +72,7 @@ export function useGitHubStars(repo: string = "dkhandelwal2/intense-ui"): GitHub
         // 3. Direct GitHub fallback if internal route didn't return a number
         if (count === null) {
           try {
-            const ghRes = await fetch(`https://api.github.com/repos/${repo}`, {
+            const ghRes = await fetch(EXTERNAL_LINKS.getGitHubApiUrl(repo), {
               headers: { Accept: "application/vnd.github.v3+json" },
             });
             if (ghRes.ok) {

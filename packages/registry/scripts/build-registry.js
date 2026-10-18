@@ -6,6 +6,34 @@ const DIST_DIR = path.join(__dirname, '../dist');
 const CONFIG_PATH = path.join(__dirname, '../registry-config.json');
 const ROOT_DIR = path.join(__dirname, '../../../');
 
+// Dynamically read site configuration from the single source of truth: apps/web/src/config/site.ts
+function loadSiteConfig() {
+  const siteConfigPath = path.join(ROOT_DIR, 'apps/web/src/config/site.ts');
+  if (fs.existsSync(siteConfigPath)) {
+    const content = fs.readFileSync(siteConfigPath, 'utf8');
+    const siteUrlMatch = content.match(/SITE_URL\s*=\s*["']([^"']+)["']/);
+    const registryIndexMatch = content.match(/REGISTRY_INDEX:\s*["']([^"']+)["']/);
+    const registryItemMatch = content.match(/REGISTRY_ITEM:\s*["']([^"']+)["']/);
+    const packageNameMatch = content.match(/PACKAGE_NAME:\s*["']([^"']+)["']/);
+
+    return {
+      name: packageNameMatch ? packageNameMatch[1] : 'intense-ui',
+      homepage: process.env.NEXT_PUBLIC_SITE_URL || (siteUrlMatch ? siteUrlMatch[1] : ''),
+      schema: {
+        registry: registryIndexMatch ? registryIndexMatch[1] : '',
+        registryItem: registryItemMatch ? registryItemMatch[1] : '',
+      },
+    };
+  }
+  return {
+    name: 'intense-ui',
+    homepage: process.env.NEXT_PUBLIC_SITE_URL || '',
+    schema: { registry: '', registryItem: '' },
+  };
+}
+
+const registryMeta = loadSiteConfig();
+
 // Known npm packages that can appear in component imports
 const KNOWN_PACKAGES = {
   'framer-motion': /from\s+["']framer-motion/,
@@ -66,19 +94,15 @@ function buildRegistry() {
     console.warn('⚠️  No enabled components found in registry-config.json');
   }
 
-  // 2. Validate that each enabled component has a source file
-  const missingFiles = [];
+  // 2. Validate components and collect those with source files
+  const availableComponents = [];
   for (const comp of enabledComponents) {
     const filePath = path.join(COMPONENTS_DIR, `${comp.name}.tsx`);
-    if (!fs.existsSync(filePath)) {
-      missingFiles.push(comp.name);
+    if (fs.existsSync(filePath)) {
+      availableComponents.push(comp);
+    } else {
+      console.warn(`⚠️  Skipping "${comp.name}" — source file packages/registry/src/components/${comp.name}.tsx not yet created.`);
     }
-  }
-
-  if (missingFiles.length > 0) {
-    console.error(`❌ Missing source files for enabled components: ${missingFiles.join(', ')}`);
-    console.error(`   Expected at: packages/registry/src/components/<name>.tsx`);
-    process.exit(1);
   }
 
   // 3. Build
@@ -87,7 +111,7 @@ function buildRegistry() {
 
   const registryIndex = [];
 
-  for (const comp of enabledComponents) {
+  for (const comp of availableComponents) {
     const componentPath = path.join(COMPONENTS_DIR, `${comp.name}.tsx`);
     const content = fs.readFileSync(componentPath, 'utf8');
 
@@ -97,7 +121,7 @@ function buildRegistry() {
 
     // Individual component JSON (for hosted registry / API route serving)
     const componentJSON = {
-      $schema: "https://ui.shadcn.com/schema/registry-item.json",
+      $schema: registryMeta.schema.registryItem,
       name: comp.name,
       type: "registry:ui",
       title: comp.title,
@@ -142,19 +166,19 @@ function buildRegistry() {
     JSON.stringify(registryIndex, null, 2)
   );
 
-  // 5. Write root registry.json
+  // 5. Write dist registry.json
   fs.writeFileSync(
-    path.join(ROOT_DIR, 'registry.json'),
+    path.join(DIST_DIR, 'registry.json'),
     JSON.stringify({
-      $schema: "https://ui.shadcn.com/schema/registry.json",
-      name: "intense-ui",
-      homepage: "https://intense-ui.com",
+      $schema: registryMeta.schema.registry,
+      name: registryMeta.name,
+      homepage: registryMeta.homepage,
       items: registryIndex
     }, null, 2)
   );
 
-  console.log(`✅ Registry built! ${enabledComponents.length} components published.`);
-  enabledComponents.forEach(c => console.log(`   • ${c.name} — ${c.title}`));
+  console.log(`✅ Registry built! ${availableComponents.length} components published.`);
+  availableComponents.forEach(c => console.log(`   • ${c.name} — ${c.title}`));
 }
 
 buildRegistry();

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Slider } from "@registry/components/slider";
-import { ColorPalette } from "@registry/components/color-palette";
+import { ColorGrid } from "@/components/ui/color-grid";
 import { Switch } from "@registry/components/switch";
 import { PALETTE_COLORS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -104,7 +104,7 @@ export function AccordionCustomizer({
                 Border Color
               </label>
               <div className="flex justify-between items-center min-h-9">
-                <ColorPalette
+                <ColorGrid
                   colors={PALETTE_COLORS}
                   value={customProps.borderColor || ""}
                   onChange={(c) =>
@@ -188,7 +188,7 @@ export function AccordionCustomizer({
             <div className="space-y-1.5 flex flex-col justify-center">
               <label className="text-xs font-medium mb-1">Heading Color</label>
               <div className="flex justify-between items-center min-h-9">
-                <ColorPalette
+                <ColorGrid
                   colors={PALETTE_COLORS}
                   value={customProps.headingColor || ""}
                   onChange={(c) =>
@@ -317,7 +317,7 @@ export function AccordionCustomizer({
                 Content Text Color
               </label>
               <div className="flex justify-between items-center min-h-9">
-                <ColorPalette
+                <ColorGrid
                   colors={PALETTE_COLORS}
                   value={customProps.contentColor || ""}
                   onChange={(c) =>

@@ -21,15 +21,6 @@ export default function AccordionPage() {
     return acc;
   }, {} as Record<string, string>);
 
-  const codesJs = ACCORDION_EXAMPLES.reduce((acc, ex) => {
-    // Simple basic type stripping for JS representation
-    acc[ex.id] = ex.code
-      .replace(/: React\.ReactNode/g, "")
-      .replace(/interface [a-zA-Z]+ {[^}]+}/g, "")
-      .replace(/type [a-zA-Z]+ = [^;]+;/g, "");
-    return acc;
-  }, {} as Record<string, string>);
-
   const propsTable = (
     <PropsTable
       groups={[
@@ -41,9 +32,7 @@ export default function AccordionPage() {
     />
   );
 
-
-
-return (
+  return (
     <ComponentPageLayout
       title="Accordion"
       description={
@@ -61,9 +50,7 @@ return (
       propsTable={propsTable}
       tocItems={tocItems}
       codeContent={MANUAL_INSTALL_CODE}
-      codeContentJs={MANUAL_INSTALL_CODE.replace(/: React\.ReactNode/g, "").replace(/interface [a-zA-Z]+ {[^}]+}/g, "")}
       codes={codes}
-      codesJs={codesJs}
       slug="accordion"
       usageCode={USAGE_CODE}
     >

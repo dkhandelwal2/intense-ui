@@ -35,7 +35,7 @@ export function AccordionCard({
 
   return (
     <StackedCard index={index} total={total}>
-      <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-3.5 sm:p-6 md:p-8 pb-6 sm:pb-10 md:pb-[4rem]">
+      <section className="bg-card text-card-foreground max-w-4xl mx-auto rounded-[1.5rem] overflow-hidden p-3.5 sm:p-6 md:p-8 pb-6 sm:pb-10 md:pb-[4rem] border border-black/10 dark:border-white/10">
         {/* Section Header */}
         <div className="flex items-start gap-4 py-4">
           <div className="p-2.5 sm:p-3 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-xl shrink-0">

@@ -36,7 +36,7 @@ export function OpenSourceCard({ className }: { className?: string }) {
               Star &amp; Contribute
             </span>
             <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block truncate">
-              github.com/dkhandelwal2/intense-ui
+              github.com/{siteConfig.githubRepo}
             </span>
           </div>
         </div>

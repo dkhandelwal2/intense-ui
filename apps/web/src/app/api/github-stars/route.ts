@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
+import { siteConfig } from "@/config/site";
 
 export const revalidate = 3600; // Cache on server for 1 hour
 
 export async function GET() {
   try {
-    const res = await fetch("https://api.github.com/repos/dkhandelwal2/intense-ui", {
+    const res = await fetch(siteConfig.links.githubApi, {
       headers: {
         Accept: "application/vnd.github.v3+json",
         "User-Agent": "Intense-UI-Web",

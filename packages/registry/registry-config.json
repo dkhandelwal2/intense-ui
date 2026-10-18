@@ -6,9 +6,9 @@
     "enabled": true
   },
   {
-    "name": "animated-button",
-    "title": "Animated Button",
-    "description": "A beautiful animated button with Framer Motion effects.",
+    "name": "button",
+    "title": "Button",
+    "description": "An interactive button component with smooth animated spring physics and glowing hover effects.",
     "enabled": true
   },
   {
@@ -36,27 +36,33 @@
     "enabled": true
   },
   {
-    "name": "glowing-button",
-    "title": "Glowing Button",
-    "description": "A button with a smooth glowing hover effect.",
-    "enabled": false
+    "name": "breadcrumb",
+    "title": "Breadcrumb",
+    "description": "An accessible navigation trail that reveals the current page location in a hierarchy.",
+    "enabled": true
+  },
+  {
+    "name": "skeleton",
+    "title": "Skeleton",
+    "description": "A placeholder component used to visually indicate loading states and prevent layout shifts.",
+    "enabled": true
+  },
+  {
+    "name": "color-grid",
+    "title": "Color Grid",
+    "description": "An interactive color palette and swatch grid with custom picker and reset support.",
+    "enabled": true
   },
   {
     "name": "bento-grid",
     "title": "Bento Grid",
     "description": "A flexible and responsive grid for dashboard layouts.",
-    "enabled": false
+    "enabled": true
   },
   {
     "name": "magnetic-card",
     "title": "Magnetic Card",
     "description": "A card that magnetically interacts with the user's cursor.",
-    "enabled": false
-  },
-  {
-    "name": "color-palette",
-    "title": "Color Palette",
-    "description": "A color palette picker component.",
-    "enabled": false
+    "enabled": true
   }
 ]

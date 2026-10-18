@@ -77,7 +77,7 @@ export function RuntimeDependencies({
     return (
       <div
         className={cn(
-          "relative space-y-3 pt-5 w-full min-w-0",
+          "relative space-y-3 w-full min-w-0",
           className
         )}
       >

@@ -101,13 +101,13 @@ export function CodeBlock({
   return (
     <div
       className={cn(
-        "relative group rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] overflow-hidden shadow-xs transition-colors",
+        "relative group rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] overflow-hidden shadow-xs transition-colors flex flex-col",
         className
       )}
     >
       {/* Header bar (when filename, terminal title, or custom header action is passed) */}
       {hasHeader && (
-        <div className="flex items-center justify-between px-3.5 sm:px-4 py-2 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-100/50 dark:bg-white/[0.02] text-xs font-mono">
+        <div className="flex items-center justify-between px-3.5 sm:px-4 py-2 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-100/50 dark:bg-white/[0.02] text-xs font-mono shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {terminalTitle ? (
               <>
@@ -159,7 +159,7 @@ export function CodeBlock({
           <button
             type="button"
             onClick={onCopy}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs backdrop-blur-sm transition-all active:scale-95"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white/90 dark:bg-zinc-900/90 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs backdrop-blur-md transition-all active:scale-95 cursor-pointer"
             title="Copy code"
           >
             {hasCopied ? (
@@ -173,9 +173,9 @@ export function CodeBlock({
       )}
 
       {/* Code Area */}
-      <div className="overflow-auto text-xs sm:text-[13px]">
+      <div className="overflow-auto subtle-scrollbar text-xs sm:text-[13px] flex-1 min-h-0 w-full">
         {!mounted ? (
-          <pre className="p-3.5 sm:p-4 pr-12 text-xs sm:text-[13px] font-mono text-zinc-800 dark:text-zinc-200 m-0 overflow-auto">
+          <pre className="p-3.5 sm:p-4 pr-12 text-xs sm:text-[13px] font-mono text-zinc-800 dark:text-zinc-200 m-0">
             <code>{code}</code>
           </pre>
         ) : (
@@ -189,6 +189,7 @@ export function CodeBlock({
               background: "transparent",
               fontSize: "inherit",
               lineHeight: "1.65",
+              overflow: "visible",
             }}
             codeTagProps={{
               style: {

@@ -25,6 +25,8 @@ import {
   LayoutGrid,
   CreditCard,
   Palette,
+  Route,
+  SquareDashed,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -37,15 +39,17 @@ import { useGitHubStars } from "@/hooks/use-github-stars";
 
 const COMPONENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   accordion: LayoutList,
+  button: MousePointerClick,
   "animated-button": MousePointerClick,
   switch: ToggleRight,
   slider: SlidersHorizontal,
   tooltip: MessageSquare,
   separator: Minus,
-  "glowing-button": Sparkles,
+  breadcrumb: Route,
+  skeleton: SquareDashed,
+  "color-grid": Palette,
   "bento-grid": LayoutGrid,
   "magnetic-card": CreditCard,
-  "color-palette": Palette,
 };
 
 export interface DocsSidebarProps {

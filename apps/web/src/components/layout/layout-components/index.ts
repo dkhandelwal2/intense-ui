@@ -6,3 +6,7 @@ export { PreviewTabContent } from "./preview-tab-content";
 export { InstallTabContent } from "./install-tab-content";
 export { CodeTabContent } from "./code-tab-content";
 export { ComponentTocDock } from "./component-toc-dock";
+export { ComponentBottomSheet } from "./component-bottom-sheet";
+export { ComponentInspectorSidebar } from "./component-inspector-sidebar";
+export { ComponentTabPanel } from "./component-tab-panel";
+export { useComponentToc } from "./use-component-toc";

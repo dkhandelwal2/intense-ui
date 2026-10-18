@@ -165,6 +165,25 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
   }
+
+  .subtle-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+  }
+  .subtle-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .subtle-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .subtle-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(150, 150, 150, 0.25);
+    border-radius: 9999px;
+  }
+  .subtle-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(150, 150, 150, 0.5);
+  }
 }
 
 /* View Transition Theme Reveal Animation */

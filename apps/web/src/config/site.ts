@@ -7,6 +7,15 @@ export const APP_ROUTES = {
   TERMS: "/terms",
 } as const;
 
+export const SITE_URL = "https://intense-ui.com";
+export const GITHUB_REPO = "dkhandelwal2/intense-ui";
+export const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
+
+export const SHADCN_SCHEMAS = {
+  REGISTRY_INDEX: "https://ui.shadcn.com/schema/registry.json",
+  REGISTRY_ITEM: "https://ui.shadcn.com/schema/registry-item.json",
+} as const;
+
 export const NPM_LINKS = {
   BASE_URL: "https://www.npmjs.com/package",
   FRAMER_MOTION: "https://www.npmjs.com/package/framer-motion",
@@ -16,19 +25,27 @@ export const NPM_LINKS = {
 } as const;
 
 export const EXTERNAL_LINKS = {
-  GITHUB: "https://github.com/dkhandelwal2/intense-ui",
-  GITHUB_ISSUES: "https://github.com/dkhandelwal2/intense-ui/issues",
-  GITHUB_DISCUSSIONS: "https://github.com/dkhandelwal2/intense-ui/discussions",
-  TWITTER: "https://twitter.com/dkhandelwal",
+  GITHUB: GITHUB_URL,
+  GITHUB_API: `https://api.github.com/repos/${GITHUB_REPO}`,
+  GITHUB_ISSUES: `${GITHUB_URL}/issues`,
+  GITHUB_DISCUSSIONS: `${GITHUB_URL}/discussions`,
+  TWITTER: "https://twitter.com/",
+  X: "https://x.com/",
+  LINKEDIN: "https://linkedin.com",
+  INSTAGRAM: "https://instagram.com",
   EMAIL: "intenseui.official@gmail.com",
   MAILTO: "mailto:intenseui.official@gmail.com",
   NPM: NPM_LINKS,
+  getGitHubApiUrl: (repo: string = GITHUB_REPO) => `https://api.github.com/repos/${repo}`,
 } as const;
 
 export const REGISTRY_CONFIG = {
-  NAME: "dkhandelwal2/intense-ui",
-  BASE_URL: "https://intense-ui.com/r",
+  NAME: GITHUB_REPO,
+  PACKAGE_NAME: "intense-ui",
+  HOMEPAGE: SITE_URL,
+  BASE_URL: `${SITE_URL}/r`,
   DEFAULT_DEPENDENCIES_INSTALL: "npm install framer-motion lucide-react clsx tailwind-merge",
+  SCHEMA: SHADCN_SCHEMAS,
 } as const;
 
 export type SupportedPackageManager = "npm" | "pnpm" | "yarn" | "bun";
@@ -126,13 +143,15 @@ export const SIDEBAR_CONFIG = {
    */
   componentBadges: {
     accordion: { badge: "Hot", color: "rose" },
+    button: { badge: "New", color: "emerald" },
     "animated-button": { badge: "New", color: "emerald" },
   } as Record<string, { badge: string; color?: "rose" | "emerald" | "blue" | "zinc" }>,
 } as const;
 
 export const siteConfig = {
-  name: "intense-ui",
-  url: "https://intense-ui.com",
+  name: REGISTRY_CONFIG.PACKAGE_NAME,
+  url: SITE_URL,
+  githubRepo: GITHUB_REPO,
   description:
     "Beautifully designed animated components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
   author: {
@@ -142,7 +161,11 @@ export const siteConfig = {
   },
   links: {
     twitter: EXTERNAL_LINKS.TWITTER,
+    x: EXTERNAL_LINKS.X,
+    linkedin: EXTERNAL_LINKS.LINKEDIN,
+    instagram: EXTERNAL_LINKS.INSTAGRAM,
     github: EXTERNAL_LINKS.GITHUB,
+    githubApi: EXTERNAL_LINKS.GITHUB_API,
     issues: EXTERNAL_LINKS.GITHUB_ISSUES,
     discussions: EXTERNAL_LINKS.GITHUB_DISCUSSIONS,
     email: EXTERNAL_LINKS.MAILTO,

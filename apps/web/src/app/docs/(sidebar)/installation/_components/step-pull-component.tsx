@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
 import { TerminalWindow } from "@/components/ui/terminal-window";
 import { ScrollStepCard } from "./scroll-step-card";
+import { siteConfig } from "@/config/site";
 import {
   ComponentSlug,
   COMPONENTS_LIST,
@@ -169,7 +170,7 @@ export function StepPullComponent({
                 {simStep >= 1 && (
                   <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                     <span className="text-blue-500 dark:text-blue-400">ℹ</span>
-                    <span className="truncate">Connecting to registry: <span className="text-zinc-900 dark:text-zinc-200">github.com/dkhandelwal2/intense-ui</span></span>
+                    <span className="truncate">Connecting to registry: <span className="text-zinc-900 dark:text-zinc-200">github.com/{siteConfig.githubRepo}</span></span>
                   </motion.div>
                 )}
                 {simStep >= 2 && (

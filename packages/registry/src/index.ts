@@ -1,8 +1,10 @@
 export * from "./components/accordion";
+export * from "./components/button";
+export * from "./components/animated-button";
 export * from "./components/separator";
-// Future components will be exported here as well:
-// export * from "./components/animated-button";
-export * from "./components/color-palette";
+export * from "./components/breadcrumb";
+export * from "./components/skeleton";
+export * from "./components/color-grid";
 export * from "./components/tooltip";
 export * from "./components/switch";
-
+export * from "./components/slider";

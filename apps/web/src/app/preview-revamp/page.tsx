@@ -22,6 +22,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteConfig } from "@/config/site";
 import { GithubIcon, XTwitterIcon, LinkedinIcon, InstagramIcon } from "@/icons";
 
 export default function PreviewRevampPage() {
@@ -403,7 +404,7 @@ export default function PreviewRevampPage() {
                 </div>
                 <div className="flex items-center gap-2.5">
                   <a
-                    href="https://x.com"
+                    href={siteConfig.links.x}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
@@ -412,7 +413,7 @@ export default function PreviewRevampPage() {
                     <XTwitterIcon className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://linkedin.com"
+                    href={siteConfig.links.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
@@ -421,7 +422,7 @@ export default function PreviewRevampPage() {
                     <LinkedinIcon className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://instagram.com"
+                    href={siteConfig.links.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
@@ -430,7 +431,7 @@ export default function PreviewRevampPage() {
                     <InstagramIcon className="w-4 h-4" />
                   </a>
                   <a
-                    href="https://github.com/dkhandelwal2/intense-ui"
+                    href={siteConfig.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
