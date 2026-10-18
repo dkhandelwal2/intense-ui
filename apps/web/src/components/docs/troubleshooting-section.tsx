@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Wrench, AlertCircle, HelpCircle, ChevronDown, ArrowUpRight } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { cn } from "@/lib/utils";
@@ -48,22 +49,38 @@ export function TroubleshootingSection({
           <button
             type="button"
             onClick={() => setOpenCard(openCard === 1 ? null : 1)}
-            className="w-full flex items-center justify-between p-3 text-left transition-colors hover:bg-red-500/[0.04]"
+            className="w-full flex items-center justify-between p-3 text-left transition-colors hover:bg-red-500/[0.04] cursor-pointer select-none"
           >
             <div className="flex items-center gap-2 text-xs font-semibold text-red-600 dark:text-red-400 min-w-0 pr-2">
               <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span className="truncate">&quot;Missing components.json&quot;</span>
             </div>
-            <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-200", openCard === 1 && "rotate-180")} />
+            <ChevronDown
+              className={cn(
+                "w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-300 ease-out",
+                openCard === 1 && "rotate-180"
+              )}
+            />
           </button>
-          {openCard === 1 && (
-            <div className="px-3 pb-3 pt-1 space-y-2 border-t border-red-500/10 text-xs">
-              <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
-                Run the initialization command before installing components:
-              </p>
-              <CodeBlock code="npx shadcn@latest init" language="bash" />
-            </div>
-          )}
+          <AnimatePresence initial={false}>
+            {openCard === 1 && (
+              <motion.div
+                key="troubleshoot-issue-1"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="px-3 pb-3 pt-1 space-y-2 border-t border-red-500/10 text-xs">
+                  <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
+                    Run the initialization command before installing components:
+                  </p>
+                  <CodeBlock code="npx shadcn@latest init" language="bash" />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Collapsible Issue 2: Path Alias Missing */}
@@ -71,26 +88,42 @@ export function TroubleshootingSection({
           <button
             type="button"
             onClick={() => setOpenCard(openCard === 2 ? null : 2)}
-            className="w-full flex items-center justify-between p-3 text-left transition-colors hover:bg-amber-500/[0.04]"
+            className="w-full flex items-center justify-between p-3 text-left transition-colors hover:bg-amber-500/[0.04] cursor-pointer select-none"
           >
             <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400 min-w-0 pr-2">
               <HelpCircle className="w-3.5 h-3.5 shrink-0" />
               <span className="truncate">&quot;Cannot find module &apos;@/lib/utils&apos;&quot;</span>
             </div>
-            <ChevronDown className={cn("w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-200", openCard === 2 && "rotate-180")} />
+            <ChevronDown
+              className={cn(
+                "w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-300 ease-out",
+                openCard === 2 && "rotate-180"
+              )}
+            />
           </button>
-          {openCard === 2 && (
-            <div className="px-3 pb-3 pt-1 space-y-2 border-t border-amber-500/10 text-xs">
-              <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
-                Add the path alias to your <code className="font-mono text-zinc-800 dark:text-zinc-200">tsconfig.json</code>:
-              </p>
-              <CodeBlock
-                filename="tsconfig.json"
-                language="json"
-                code={`"paths": { "@/*": ["./src/*"] }`}
-              />
-            </div>
-          )}
+          <AnimatePresence initial={false}>
+            {openCard === 2 && (
+              <motion.div
+                key="troubleshoot-issue-2"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="px-3 pb-3 pt-1 space-y-2 border-t border-amber-500/10 text-xs">
+                  <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
+                    Add the path alias to your <code className="font-mono text-zinc-800 dark:text-zinc-200">tsconfig.json</code>:
+                  </p>
+                  <CodeBlock
+                    filename="tsconfig.json"
+                    language="json"
+                    code={`"paths": { "@/*": ["./src/*"] }`}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     );

@@ -115,8 +115,12 @@ export function ComponentTocDock({
       )}
     >
       <div
-        className="relative"
+        className="relative pointer-events-auto cursor-default"
         style={{ width: totalWidth, height: DOCK_HEIGHT }}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
       >
         {/* Seamless Scooped Dock Background with integrated single-path SVG */}
         <svg
@@ -136,12 +140,16 @@ export function ComponentTocDock({
 
         {/* Floating Active Circular Action Button (Elevated in Notch) */}
         <motion.div
-          className="absolute top-0 left-0 z-20 pointer-events-none flex items-center justify-center w-12 h-12 rounded-full border border-black/10 dark:border-white/15 bg-zinc-900 dark:bg-[#18181c] text-white shadow-[0_6px_16px_rgba(0,0,0,0.12),0_2px_6px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
+          className="absolute top-0 left-0 z-20 pointer-events-auto cursor-default flex items-center justify-center w-12 h-12 rounded-full border border-black/10 dark:border-white/15 bg-zinc-900 dark:bg-[#18181c] text-white shadow-[0_6px_16px_rgba(0,0,0,0.12),0_2px_6px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
           animate={{
             x: activeX - 24,
             y: -22,
           }}
           transition={springConfig}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -161,7 +169,7 @@ export function ComponentTocDock({
 
         {/* Dock Items Row */}
         <div
-          className="relative flex items-center h-full z-10 pointer-events-none"
+          className="relative flex items-center h-full z-10 pointer-events-auto cursor-default"
           style={{ paddingLeft: PADDING_X, paddingRight: PADDING_X }}
         >
           <AnimatePresence mode="popLayout">
@@ -177,7 +185,7 @@ export function ComponentTocDock({
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                     key={item.id}
-                    className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-none select-none"
+                    className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-default select-none"
                   >
                     {/* Inactive Icon (+50% size: 24px) */}
                     <div
@@ -214,7 +222,7 @@ export function ComponentTocDock({
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   key={`more-${btn.type}`}
-                  className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-none select-none"
+                  className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-default select-none"
                 >
                   <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-6 h-6 text-zinc-400 dark:text-zinc-500 flex items-center justify-center [&_svg]:w-5 [&_svg]:h-5">
                     {btn.type === "prev" ? (

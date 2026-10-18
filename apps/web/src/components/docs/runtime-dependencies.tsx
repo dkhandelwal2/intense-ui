@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Boxes, ShieldCheck, ChevronDown, ExternalLink } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
@@ -132,27 +133,38 @@ export function RuntimeDependencies({
               <button
                 type="button"
                 onClick={() => setShowManualInstall(!showManualInstall)}
-                className="text-[11px] text-[var(--theme-primary)] hover:underline font-medium inline-flex items-center gap-1"
+                className="text-[11px] text-[var(--theme-primary)] hover:underline font-medium inline-flex items-center gap-1 cursor-pointer select-none"
               >
                 <span>Manual install</span>
                 <ChevronDown
                   className={cn(
-                    "w-3 h-3 transition-transform duration-200",
+                    "w-3 h-3 transition-transform duration-300 ease-out",
                     showManualInstall && "rotate-180"
                   )}
                 />
               </button>
             </div>
-            {showManualInstall && (
-              <div className="mt-2">
-                <CodeBlock
-                  code={manualCommands[activePm]}
-                  language="bash"
-                  packageManager={activePm}
-                  onPackageManagerChange={setPm}
-                />
-              </div>
-            )}
+            <AnimatePresence initial={false}>
+              {showManualInstall && (
+                <motion.div
+                  key="manual-install-container"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-2">
+                    <CodeBlock
+                      code={manualCommands[activePm]}
+                      language="bash"
+                      packageManager={activePm}
+                      onPackageManagerChange={setPm}
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>

@@ -116,7 +116,7 @@ export const SIDEBAR_CONFIG = {
   /**
    * Whether the sidebar collapses on scroll.
    */
-  collapseOnScroll: true,
+  collapseOnScroll: false,
   /**
    * Whether scroll collapse is restricted to component documentation pages only.
    * When true, pages like /docs and /docs/installation stay expanded on scroll.
