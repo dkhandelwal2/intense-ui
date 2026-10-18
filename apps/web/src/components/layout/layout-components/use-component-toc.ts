@@ -47,20 +47,25 @@ export function useComponentToc({ tocItems = [], mounted }: UseComponentTocOptio
     const findActiveId = (): string | undefined => {
       if (typeof window === "undefined") return tocItems[0]?.id;
 
-      // Check if user is at the bottom of the page (activates last item e.g. customization)
-      const scrollY = window.scrollY || window.pageYOffset;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
-      if (windowHeight + scrollY >= docHeight - 80) {
+
+      // 1. If at or near top of the page, ALWAYS activate the first item
+      if (scrollY <= 60) {
+        return tocItems[0]?.id;
+      }
+
+      // 2. If scrolled significantly and near the bottom of the page, activate the last item
+      if (scrollY > 200 && windowHeight + scrollY >= docHeight - 80) {
         return tocItems[tocItems.length - 1]?.id;
       }
 
-      // Focal reading line at 50% viewport height
-      const focalLine = windowHeight * 0.5;
-
+      // 3. Focal reading line at 45% viewport height
       // In a stacked layout (where earlier cards stick at top: 10vh),
       // the card currently in the foreground is the LAST card in document order
       // whose top has entered the viewing band (top <= focalLine).
+      const focalLine = windowHeight * 0.45;
       let currentActive = tocItems[0]?.id;
       for (let i = 0; i < tocItems.length; i++) {
         const item = tocItems[i];

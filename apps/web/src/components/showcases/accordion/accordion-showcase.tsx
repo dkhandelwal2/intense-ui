@@ -21,8 +21,6 @@ export function AccordionShowcase() {
     contentColor: "",
   });
 
-  const isFirstRender = React.useRef(true);
-
   React.useEffect(() => {
     const code = generateAccordionCode(customProps);
     window.dispatchEvent(
@@ -30,15 +28,6 @@ export function AccordionShowcase() {
         detail: { id: "customization", code },
       })
     );
-    if (!isFirstRender.current) {
-      window.dispatchEvent(
-        new CustomEvent("intense-ui:focus-toc", {
-          detail: { id: "customization" },
-        })
-      );
-    } else {
-      isFirstRender.current = false;
-    }
   }, [customProps]);
 
   return (
