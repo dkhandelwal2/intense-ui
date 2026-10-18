@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import { PackageManager } from "@/components/ui/package-manager";
+import { ComponentPagination } from "@/components/ui/component-pagination";
 import {
   ComponentPageLayoutProps,
   ComponentActiveTab,
@@ -103,6 +104,12 @@ export function ComponentPageLayout({
         <ComponentActiveTocContext.Provider value={activeTocId}>
           <div className="relative z-10 w-full min-w-0">
             {mounted && children}
+
+            {slug && (
+              <div className="max-w-3xl mx-auto pt-10 sm:pt-16 pb-28 sm:pb-20">
+                <ComponentPagination currentSlug={slug} />
+              </div>
+            )}
           </div>
         </ComponentActiveTocContext.Provider>
       </div>

@@ -67,7 +67,7 @@ export function ComponentTocDock({
   if (N <= MAX) {
     visibleButtons = allItems.map((item) => ({ type: "item", item }));
   } else {
-    if (activeIdx < 4) {
+    if (activeIdx < 5) {
       visibleButtons = [
         ...allItems.slice(0, 6).map((item) => ({ type: "item" as const, item })),
         { type: "next", count: N - 6, targetIdx: 6 },
@@ -100,9 +100,9 @@ export function ComponentTocDock({
 
   const springConfig = {
     type: "spring" as const,
-    stiffness: 380,
-    damping: 30,
-    mass: 0.8,
+    stiffness: 240,
+    damping: 24,
+    mass: 0.75,
   };
 
   const dockPath = generateDockPath(activeX, totalWidth, DOCK_HEIGHT, CORNER_RADIUS);
@@ -127,6 +127,7 @@ export function ComponentTocDock({
           width={totalWidth}
           height={DOCK_HEIGHT}
           viewBox={`0 0 ${totalWidth} ${DOCK_HEIGHT}`}
+          style={{ willChange: "contents", transform: "translateZ(0)" }}
           className="absolute inset-0 overflow-visible pointer-events-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.08)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
         >
           <motion.path
@@ -141,6 +142,7 @@ export function ComponentTocDock({
         {/* Floating Active Circular Action Button (Elevated in Notch) */}
         <motion.div
           className="absolute top-0 left-0 z-20 pointer-events-auto cursor-default flex items-center justify-center w-12 h-12 rounded-full border border-black/10 dark:border-white/15 bg-zinc-900 dark:bg-[#18181c] text-white shadow-[0_6px_16px_rgba(0,0,0,0.12),0_2px_6px_rgba(0,0,0,0.06)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
+          style={{ willChange: "transform" }}
           animate={{
             x: activeX - 24,
             y: -22,
@@ -151,13 +153,13 @@ export function ComponentTocDock({
             e.preventDefault();
           }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false} mode="popLayout">
             <motion.div
               key={activeItem?.id || "default"}
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.6 }}
-              transition={{ duration: 0.15 }}
+              initial={{ opacity: 0, scale: 0.6, y: 4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.6, y: -4 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="w-8 h-8 flex items-center justify-center [&_svg]:w-7 [&_svg]:h-7 text-2xl sm:text-[28px] leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
             >
               {activeItem?.icon || (
@@ -190,7 +192,7 @@ export function ComponentTocDock({
                     {/* Inactive Icon (+50% size: 24px) */}
                     <div
                       className={cn(
-                        "absolute top-[9px] left-1/2 -translate-x-1/2 transition-all duration-300 flex items-center justify-center w-7 h-7 text-2xl leading-none text-zinc-400 dark:text-zinc-500 [&_svg]:w-6 [&_svg]:h-6",
+                        "absolute top-[9px] left-1/2 -translate-x-1/2 transition-all duration-300 ease-out flex items-center justify-center w-7 h-7 text-2xl leading-none text-zinc-400 dark:text-zinc-500 [&_svg]:w-6 [&_svg]:h-6",
                         isActive ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"
                       )}
                     >
@@ -202,9 +204,9 @@ export function ComponentTocDock({
                     {/* Section Label (hidden when active to maintain a pristine, uncluttered scoop cradle) */}
                     <span
                       className={cn(
-                        "absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-all duration-300 max-w-[74px] truncate text-center",
+                        "absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-all duration-300 ease-out max-w-[74px] truncate text-center",
                         isActive
-                          ? "opacity-0 scale-75 pointer-events-none"
+                          ? "pointer-events-none"
                           : "opacity-100 scale-100 text-zinc-500 dark:text-zinc-400 font-medium"
                       )}
                     >

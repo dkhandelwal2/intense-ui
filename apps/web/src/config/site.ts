@@ -43,7 +43,7 @@ export const REGISTRY_CONFIG = {
   NAME: GITHUB_REPO,
   PACKAGE_NAME: "intense-ui",
   HOMEPAGE: SITE_URL,
-  BASE_URL: `${SITE_URL}/r`,
+  BASE_URL: `${SITE_URL}/registry`,
   DEFAULT_DEPENDENCIES_INSTALL: "npm install framer-motion lucide-react clsx tailwind-merge",
   SCHEMA: SHADCN_SCHEMAS,
 } as const;

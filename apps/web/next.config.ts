@@ -119,6 +119,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/r/:path*",
+        destination: "/registry/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

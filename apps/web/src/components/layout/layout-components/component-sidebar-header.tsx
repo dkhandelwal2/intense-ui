@@ -32,8 +32,8 @@ export function ComponentSidebarHeader({
   };
 
   const headerContent = (
-    <div className="flex items-center justify-between gap-3 py-0.5 w-full min-w-0">
-      <h2 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider uppercase truncate min-w-0 flex-1">
+    <div className="flex items-center justify-between gap-2.5 sm:gap-3 py-0.5 w-full min-w-0">
+      <h2 className="text-xs font-semibold text-zinc-600 dark:text-zinc-300 tracking-wider uppercase truncate min-w-0 flex-1">
         {title}
       </h2>
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -41,7 +41,7 @@ export function ComponentSidebarHeader({
           type="button"
           onClick={handleInstallClick}
           className={cn(
-            "px-6 py-1.5 text-xs sm:text-sm font-medium rounded-full transition-colors cursor-pointer min-h-[38px]",
+            "px-4 sm:px-6 py-1.5 text-xs sm:text-sm font-medium rounded-full transition-colors cursor-pointer min-h-[36px] sm:min-h-[38px]",
             isTabActive("install")
               ? "bg-[var(--theme-primary)] text-white shadow-sm"
               : "bg-zinc-100 hover:bg-zinc-200 text-zinc-600 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white"
@@ -86,7 +86,7 @@ export function ComponentSidebarHeader({
     return (
       <div
         className={cn(
-          "fixed bottom-0 left-0 md:left-[68px] right-0 z-40 bg-background/90 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 pl-12 pr-4 sm:px-6 py-3.5 shadow-2xl flex items-center justify-between xl:hidden rounded-t-3xl",
+          "fixed bottom-0 left-0 md:left-[68px] right-0 z-40 bg-background/90 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 px-4 sm:px-6 py-3.5 shadow-2xl flex items-center justify-between xl:hidden rounded-t-3xl",
           className
         )}
       >

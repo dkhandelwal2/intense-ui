@@ -75,6 +75,16 @@ export function SiteHeader() {
 
   return (
     <>
+      {/* ─── 0. EDGE-TO-EDGE TRANSPARENT BLUR AREA BEHIND HEADER ─── */}
+      <div
+        className="fixed top-0 left-0 right-0 h-20 z-[60] pointer-events-none backdrop-blur-[2px] bg-transparent"
+        style={{
+          backdropFilter: "blur(2px)",
+          WebkitBackdropFilter: "blur(2px)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* ─── 1. FIXED FLOATING HEADER BAR ─── */}
       <header className="fixed top-0 left-0 right-0 z-[70] pointer-events-none pt-3 px-4 sm:px-6 md:px-8 flex justify-center">
         <div className="w-full max-w-7xl relative flex justify-center">
