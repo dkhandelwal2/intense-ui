@@ -2,67 +2,55 @@
   {
     "name": "accordion",
     "title": "Accordion",
-    "description": "A beautifully animated accordion component.",
-    "enabled": true
-  },
-  {
-    "name": "button",
-    "title": "Button",
-    "description": "An interactive button component with smooth animated spring physics and glowing hover effects.",
-    "enabled": true
-  },
-  {
-    "name": "switch",
-    "title": "Switch",
-    "description": "A highly customizable 3D rocker switch.",
-    "enabled": true
-  },
-  {
-    "name": "slider",
-    "title": "Slider",
-    "description": "A highly customizable 3D slider.",
-    "enabled": true
-  },
-  {
-    "name": "tooltip",
-    "title": "Tooltip",
-    "description": "A highly customizable 3D tooltip.",
-    "enabled": true
-  },
-  {
-    "name": "separator",
-    "title": "Separator",
-    "description": "A hairline gradient separator with glowing and dashed variants.",
+    "description": "A beautifully designed, accessible Accordion component.",
     "enabled": true
   },
   {
     "name": "breadcrumb",
     "title": "Breadcrumb",
-    "description": "An accessible navigation trail that reveals the current page location in a hierarchy.",
+    "description": "A beautifully designed, accessible Breadcrumb component.",
     "enabled": true
   },
   {
-    "name": "skeleton",
-    "title": "Skeleton",
-    "description": "A placeholder component used to visually indicate loading states and prevent layout shifts.",
+    "name": "button",
+    "title": "Button",
+    "description": "A beautifully designed, accessible Button component.",
     "enabled": true
   },
   {
     "name": "color-grid",
     "title": "Color Grid",
-    "description": "An interactive color palette and swatch grid with custom picker and reset support.",
+    "description": "A beautifully designed, accessible Color Grid component.",
     "enabled": true
   },
   {
-    "name": "bento-grid",
-    "title": "Bento Grid",
-    "description": "A flexible and responsive grid for dashboard layouts.",
+    "name": "separator",
+    "title": "Separator",
+    "description": "A beautifully designed, accessible Separator component.",
     "enabled": true
   },
   {
-    "name": "magnetic-card",
-    "title": "Magnetic Card",
-    "description": "A card that magnetically interacts with the user's cursor.",
+    "name": "skeleton",
+    "title": "Skeleton",
+    "description": "A beautifully designed, accessible Skeleton component.",
+    "enabled": true
+  },
+  {
+    "name": "slider",
+    "title": "Slider",
+    "description": "A beautifully designed, accessible Slider component.",
+    "enabled": true
+  },
+  {
+    "name": "switch",
+    "title": "Switch",
+    "description": "A beautifully designed, accessible Switch component.",
+    "enabled": true
+  },
+  {
+    "name": "tooltip",
+    "title": "Tooltip",
+    "description": "A beautifully designed, accessible Tooltip component.",
     "enabled": true
   }
 ]

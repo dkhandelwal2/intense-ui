@@ -49,25 +49,30 @@ export default function ComponentsPage() {
       {/* Full-width Responsive Showcase Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {enabledComponents.map((component) => (
-          <Link
+          <div
             key={component.name}
-            href={component.href}
             className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-[#0c0c0e]/80 text-card-foreground shadow-xs transition-all duration-200 hover:shadow-lg hover:border-[var(--theme-primary)]/40 hover:-translate-y-0.5"
           >
             {/* Interactive Preview Canvas */}
-            <div className="flex h-[220px] w-full items-center justify-center bg-white/80 dark:bg-zinc-900/40 p-6 border-b border-zinc-200/80 dark:border-zinc-800/60 backdrop-blur-xs group-hover:bg-zinc-50/50 dark:group-hover:bg-zinc-900/60 transition-colors">
-              {componentPreviews[component.name] || (
-                <div className="text-sm text-zinc-400 dark:text-zinc-500">
-                  Interactive preview coming soon
-                </div>
-              )}
+            <div className="relative z-10 flex h-[220px] w-full items-center justify-center bg-white/80 dark:bg-zinc-900/40 p-6 border-b border-zinc-200/80 dark:border-zinc-800/60 backdrop-blur-xs group-hover:bg-zinc-50/50 dark:group-hover:bg-zinc-900/60 transition-colors">
+              {componentPreviews[component.name] ||
+                componentPreviews[component.slug] || (
+                  <div className="text-sm text-zinc-400 dark:text-zinc-500">
+                    Interactive preview coming soon
+                  </div>
+                )}
             </div>
 
             {/* Component Metadata & Navigation CTA */}
             <div className="p-5 flex flex-col justify-between flex-1 gap-4">
               <div className="space-y-1.5">
                 <h3 className="font-semibold text-lg flex items-center justify-between group-hover:text-[var(--theme-primary)] transition-colors">
-                  <span>{component.name}</span>
+                  <Link
+                    href={component.href}
+                    className="focus:outline-hidden after:absolute after:inset-0 after:z-0"
+                  >
+                    {component.name}
+                  </Link>
                   <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[var(--theme-primary)]" />
                 </h3>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
@@ -80,7 +85,7 @@ export default function ComponentsPage() {
                 <span className="ml-1 text-[var(--theme-primary)] group-hover:translate-x-0.5 transition-transform">→</span>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

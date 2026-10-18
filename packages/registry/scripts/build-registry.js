@@ -4,7 +4,7 @@ const path = require('path');
 const COMPONENTS_DIR = path.join(__dirname, '../src/components');
 const DIST_DIR = path.join(__dirname, '../dist');
 const CONFIG_PATH = path.join(__dirname, '../registry-config.json');
-const ROOT_DIR = path.join(__dirname, '../../../');
+const ROOT_DIR = path.join(__dirname, '../../');
 
 // Dynamically read site configuration from the single source of truth: apps/web/src/config/site.ts
 function loadSiteConfig() {
@@ -80,30 +80,70 @@ function detectRegistryDependencies(content) {
   return [...new Set(deps)];
 }
 
-function buildRegistry() {
-  // 1. Load the shared config
-  if (!fs.existsSync(CONFIG_PATH)) {
-    console.error('❌ registry-config.json not found! Create it at packages/registry/registry-config.json');
-    process.exit(1);
-  }
+function discoverComponents() {
+  const files = fs
+    .readdirSync(COMPONENTS_DIR)
+    .filter(
+      (f) =>
+        f.endsWith('.tsx') &&
+        !f.startsWith('_') &&
+        !f.includes('.draft.') &&
+        !f.includes('.test.')
+    );
+  const components = [];
 
-  const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-  const enabledComponents = config.filter(c => c.enabled);
+  for (const file of files) {
+    const slug = file.replace(/\.tsx$/, '');
+    const content = fs.readFileSync(path.join(COMPONENTS_DIR, file), 'utf8');
 
-  if (enabledComponents.length === 0) {
-    console.warn('⚠️  No enabled components found in registry-config.json');
-  }
-
-  // 2. Validate components and collect those with source files
-  const availableComponents = [];
-  for (const comp of enabledComponents) {
-    const filePath = path.join(COMPONENTS_DIR, `${comp.name}.tsx`);
-    if (fs.existsSync(filePath)) {
-      availableComponents.push(comp);
-    } else {
-      console.warn(`⚠️  Skipping "${comp.name}" — source file packages/registry/src/components/${comp.name}.tsx not yet created.`);
+    // Skip pure re-exports / alias files (e.g. export * from "./...")
+    if (/^\s*export\s+\*\s+from\s+["']\.\//.test(content.trim())) {
+      continue;
     }
+
+    const title = slug
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+    // Extract description from JSDoc or use fallback
+    const jsdocMatch = content.match(/\/\*\*\s*([\s\S]*?)\*\//);
+    let description = '';
+    if (jsdocMatch) {
+      const cleaned = jsdocMatch[1]
+        .split('\n')
+        .map((l) => l.replace(/^\s*\*\s?/, '').trim())
+        .filter((l) => l && !l.startsWith('@'))
+        .join(' ');
+      if (cleaned) description = cleaned;
+    }
+    if (!description) {
+      description = `A beautifully designed, accessible ${title} component.`;
+    }
+
+    // Support drafting/hiding via '@draft' or '@disabled' annotations
+    const isDraftOrDisabled = /(@disabled|@draft)\b/i.test(content);
+
+    components.push({
+      name: slug,
+      title,
+      description,
+      enabled: !isDraftOrDisabled,
+    });
   }
+
+  // Sort components alphabetically for consistency
+  components.sort((a, b) => a.name.localeCompare(b.name));
+  return components;
+}
+
+function buildRegistry() {
+  // 1. Dynamically discover all components from the filesystem
+  const discoveredComponents = discoverComponents();
+  const availableComponents = discoveredComponents.filter(c => c.enabled);
+
+  // 2. Auto-sync registry-config.json so client bundles stay 100% in sync without manual editing
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(discoveredComponents, null, 2) + '\n');
 
   // 3. Build
   ensureDir(DIST_DIR);

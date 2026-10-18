@@ -9,12 +9,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isPreviewRevamp = pathname?.startsWith("/preview-revamp");
   const isComponentDocs = pathname?.startsWith("/docs/components/");
+  const isErrorPage = pathname === "/404" || pathname === "/500" || pathname === "/503";
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip">
-      <SiteHeader />
-      <div className="flex-1 pt-16 sm:pt-20">{children}</div>
-      {!isPreviewRevamp && !isComponentDocs && <SiteFooter />}
+      {!isErrorPage && <SiteHeader />}
+      <div className={`flex-1 ${!isErrorPage ? "pt-20 sm:pt-24" : ""}`}>{children}</div>
+      {!isPreviewRevamp && !isComponentDocs && !isErrorPage && <SiteFooter />}
     </div>
   );
 }

@@ -116,7 +116,9 @@ export const ACCORDION_DESCRIPTIONS: Record<string, React.ReactNode> = {
     </>
   ),
   customization: (
-    <>Playground to test all available interactive properties dynamically.</>
+    <>
+      Live interactive playground to test all accordion properties in real time. Customize styles, typography, icons, and behavior below to see instant visual changes on the canvas and live generated code in the right sidebar.
+    </>
   ),
 };
 

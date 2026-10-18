@@ -14,6 +14,7 @@ import {
   AccordionContent,
 } from "@registry/components/accordion";
 import { ScrollStepCard } from "./scroll-step-card";
+import { WindowHeader } from "@/components/ui/window-header";
 
 export interface StepInteractiveLabProps {
   stepNumber: string;
@@ -73,10 +74,20 @@ export function StepInteractiveLab({ stepNumber }: StepInteractiveLabProps) {
       {/* Live Interactive Canvas + Code Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch w-full min-w-0">
         {/* Interactive Preview Canvas */}
-        <div className="lg:col-span-5 rounded-2xl border border-emerald-500/20 dark:border-emerald-500/25 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 p-5 sm:p-6 flex flex-col items-center justify-center gap-4 relative min-h-[200px] sm:min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
-          <div className="absolute top-3 left-3 text-[10px] font-mono tracking-wider uppercase text-emerald-600 dark:text-emerald-400 font-bold">
-            Interactive Preview
-          </div>
+        <div className="lg:col-span-5 rounded-2xl border border-emerald-500/20 dark:border-emerald-500/25 bg-gradient-to-b from-white to-zinc-50 dark:from-zinc-900 dark:to-zinc-950 flex flex-col justify-between relative min-h-[220px] shadow-inner overflow-hidden w-full min-w-0">
+          <WindowHeader
+            title="preview"
+            prompt=">_"
+            action={
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                LIVE
+              </span>
+            }
+            className="w-full bg-zinc-100/50 dark:bg-white/[0.02] border-b-emerald-500/20 dark:border-b-emerald-500/25 rounded-none px-3.5 sm:px-4 py-2"
+          />
+
+          <div className="p-5 sm:p-6 flex flex-col items-center justify-center gap-4 flex-1">
 
           <AnimatePresence mode="wait">
             {activeLabTab === "switch" && (
@@ -139,6 +150,7 @@ export function StepInteractiveLab({ stepNumber }: StepInteractiveLabProps) {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </div>
 
         {/* Corresponding Source Code */}

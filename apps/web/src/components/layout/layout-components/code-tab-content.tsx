@@ -26,15 +26,50 @@ export function CodeTabContent({
   codeContent,
   codes,
 }: CodeTabContentProps) {
+  const [dynamicCodes, setDynamicCodes] = React.useState<Record<string, string>>({});
+  const [activeOverrideId, setActiveOverrideId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    setActiveOverrideId(null);
+  }, [activeTocId]);
+
+  React.useEffect(() => {
+    const handleCodeUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id: string; code: string }>;
+      if (customEvent.detail?.id && customEvent.detail?.code) {
+        setDynamicCodes((prev) => ({
+          ...prev,
+          [customEvent.detail.id]: customEvent.detail.code,
+        }));
+        setActiveOverrideId(customEvent.detail.id);
+      }
+    };
+
+    window.addEventListener("intense-ui:code-update", handleCodeUpdate);
+    return () => {
+      window.removeEventListener("intense-ui:code-update", handleCodeUpdate);
+    };
+  }, []);
+
   const getActiveCode = () => {
+    const targetId = activeOverrideId || activeTocId;
+    if (targetId && dynamicCodes[targetId]) {
+      return dynamicCodes[targetId];
+    }
+    if (codes && targetId && codes[targetId]) {
+      return codes[targetId];
+    }
+    if (activeTocId && dynamicCodes[activeTocId]) {
+      return dynamicCodes[activeTocId];
+    }
     if (codes && activeTocId && codes[activeTocId]) {
       return codes[activeTocId];
     }
     if (codes && Object.keys(codes).length > 0) {
       const firstKey = Object.keys(codes)[0];
-      return codes[firstKey];
+      return dynamicCodes[firstKey] || codes[firstKey];
     }
-    return codeContent || "";
+    return dynamicCodes["customization"] || codeContent || "";
   };
 
   const activeCode = getActiveCode();

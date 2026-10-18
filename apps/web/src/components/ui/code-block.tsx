@@ -9,6 +9,7 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { cn } from "@/lib/utils";
 import { modernLightTheme } from "@/lib/code-theme";
 import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
+import { WindowDots } from "./window-header";
 
 export interface CodeBlockProps {
   code: string;
@@ -111,11 +112,7 @@ export function CodeBlock({
           <div className="flex items-center gap-2 min-w-0">
             {terminalTitle ? (
               <>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block shadow-inner" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block shadow-inner" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block shadow-inner" />
-                </div>
+                <WindowDots size="sm" />
                 <div className="h-3.5 w-px bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
                 <span className="text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 truncate">
                   <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0" />

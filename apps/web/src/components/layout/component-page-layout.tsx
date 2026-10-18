@@ -13,6 +13,8 @@ import {
   ComponentInspectorSidebar,
   ComponentTabPanel,
   useComponentToc,
+  useComponentActiveToc,
+  ComponentActiveTocContext,
 } from "./layout-components";
 
 export type { ComponentPageLayoutProps, ComponentActiveTab, ComponentCodeLang };
@@ -27,6 +29,8 @@ export {
   ComponentBottomSheet,
   ComponentInspectorSidebar,
   ComponentTabPanel,
+  useComponentActiveToc,
+  ComponentActiveTocContext,
 } from "./layout-components";
 
 export function ComponentPageLayout({
@@ -96,9 +100,11 @@ export function ComponentPageLayout({
         </div>
 
         {/* Component Previews & Interactive Canvas */}
-        <div className="relative z-10 w-full min-w-0">
-          {mounted && children}
-        </div>
+        <ComponentActiveTocContext.Provider value={activeTocId}>
+          <div className="relative z-10 w-full min-w-0">
+            {mounted && children}
+          </div>
+        </ComponentActiveTocContext.Provider>
       </div>
 
       {/* Mobile & Tablet (< xl): Gesture-Friendly Bottom Sheet Drawer Modal */}
@@ -134,7 +140,6 @@ export function ComponentPageLayout({
       <ComponentTocDock
         tocItems={tocItems}
         activeTocId={activeTocId}
-        onSelectSection={scrollToSection}
       />
     </div>
   );

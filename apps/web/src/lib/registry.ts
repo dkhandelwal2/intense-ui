@@ -75,8 +75,72 @@ export function getComponentSource(name: string): string {
   return "";
 }
 
+export function discoverRegistryComponents(): { name: string; title: string; description: string; enabled: boolean }[] {
+  const dirCandidates = [
+    path.resolve(process.cwd(), "../../packages/registry/src/components"),
+    path.resolve(process.cwd(), "packages/registry/src/components"),
+    path.resolve(process.cwd(), "../packages/registry/src/components"),
+  ];
+  const compDir = dirCandidates.find((d) => fs.existsSync(d));
+  if (!compDir) return registryConfig;
+
+  const files = fs
+    .readdirSync(compDir)
+    .filter(
+      (f) =>
+        f.endsWith(".tsx") &&
+        !f.startsWith("_") &&
+        !f.includes(".draft.") &&
+        !f.includes(".test.")
+    );
+  const components = [];
+
+  for (const file of files) {
+    const slug = file.replace(/\.tsx$/, "");
+    const filePath = path.join(compDir, file);
+    const content = fs.readFileSync(filePath, "utf-8");
+
+    // Skip pure re-exports / alias files
+    if (/^\s*export\s+\*\s+from\s+["']\.\//.test(content.trim())) {
+      continue;
+    }
+
+    const title = slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+    const jsdocMatch = content.match(/\/\*\*\s*([\s\S]*?)\*\//);
+    let description = "";
+    if (jsdocMatch) {
+      const cleaned = jsdocMatch[1]
+        .split("\n")
+        .map((l) => l.replace(/^\s*\*\s?/, "").trim())
+        .filter((l) => l && !l.startsWith("@"))
+        .join(" ");
+      if (cleaned) description = cleaned;
+    }
+    if (!description) {
+      description = `A beautifully designed, accessible ${title} component.`;
+    }
+
+    // Support drafting/hiding via '@draft' or '@disabled' annotations
+    const isDraftOrDisabled = /(@disabled|@draft)\b/i.test(content);
+
+    components.push({
+      name: slug,
+      title,
+      description,
+      enabled: !isDraftOrDisabled,
+    });
+  }
+
+  components.sort((a, b) => a.name.localeCompare(b.name));
+  return components.length > 0 ? components : registryConfig;
+}
+
 export function getDynamicRegistry(): RegistryIndex {
-  const enabledComponents = registryConfig.filter((c) => c.enabled);
+  const enabledComponents = discoverRegistryComponents().filter((c) => c.enabled);
 
   const items: RegistryItem[] = enabledComponents.map((comp) => {
     const source = getComponentSource(comp.name);
@@ -110,7 +174,7 @@ export function getDynamicRegistry(): RegistryIndex {
 
 export function getDynamicComponentItem(name: string): (RegistryItem & { $schema: string }) | null {
   const cleanName = name.replace(/\.json$/, "");
-  const comp = registryConfig.find((c) => c.name === cleanName && c.enabled);
+  const comp = discoverRegistryComponents().find((c) => c.name === cleanName && c.enabled);
   if (!comp) return null;
 
   const content = getComponentSource(comp.name);

@@ -1,14 +1,16 @@
 import { notFound } from "next/navigation";
 import { componentsConfig } from "@/config/components";
-import { componentPreviews } from "@/components/component-previews";
+import { ComponentPreview } from "@/components/component-previews";
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
 import { getComponentDocData } from "@/config/component-docs";
 import { PropsTable } from "@/components/docs";
 
 export function generateStaticParams() {
-  return componentsConfig.map((component) => ({
-    slug: component.href.split("/").pop(),
-  }));
+  return componentsConfig
+    .filter((component) => component.enabled)
+    .map((component) => ({
+      slug: component.href.split("/").pop(),
+    }));
 }
 
 export default async function DynamicComponentPage(props: { params: Promise<{ slug: string }> | { slug: string } }) {
@@ -31,7 +33,7 @@ export default async function DynamicComponentPage(props: { params: Promise<{ sl
   return (
     <ComponentPageLayout
       title={component.name}
-      description={component.description}
+      description={docData.description || component.description}
       slug={slug}
       codeContent={docData.codeContent}
       usageCode={docData.usageCode}
@@ -40,11 +42,7 @@ export default async function DynamicComponentPage(props: { params: Promise<{ sl
       dependencies={docData.dependencies}
       propsTable={propsTable}
     >
-      <div className="flex items-center justify-center min-h-[50vh] w-full p-4 lg:p-10">
-        {componentPreviews[component.name] || (
-          <div className="text-muted-foreground text-center">Interactive preview coming soon</div>
-        )}
-      </div>
+      <ComponentPreview name={component.name} slug={slug} />
     </ComponentPageLayout>
   );
 }

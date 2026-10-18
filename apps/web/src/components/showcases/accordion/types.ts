@@ -8,6 +8,7 @@ export type CustomProps = {
   iconType?: "Default" | "Custom";
   iconPosition?: "Left" | "Right";
   hideIcon?: boolean;
+  iconColor?: string;
   headingUnderline?: boolean;
   headingColor?: string;
   contentColor?: string;

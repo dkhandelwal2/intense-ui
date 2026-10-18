@@ -43,8 +43,8 @@ export function Accordion({
     Array.isArray(defaultValue)
       ? defaultValue
       : defaultValue
-      ? [defaultValue]
-      : []
+        ? [defaultValue]
+        : []
   );
 
   const isControlled = controlledValue !== undefined;
@@ -52,8 +52,8 @@ export function Accordion({
     ? Array.isArray(controlledValue)
       ? controlledValue
       : controlledValue
-      ? [controlledValue]
-      : []
+        ? [controlledValue]
+        : []
     : uncontrolledValues;
 
   const toggleItem = (itemValue: string) => {
@@ -114,14 +114,14 @@ export function AccordionItem({
 }: AccordionItemProps) {
   const customStyles = hideBorder
     ? {
-        border: "none",
-        ...(borderRadius !== undefined && { borderRadius }),
-      }
+      border: "none",
+      ...(borderRadius !== undefined && { borderRadius }),
+    }
     : {
-        ...(borderWidth !== undefined && { borderWidth }),
-        ...(borderRadius !== undefined && { borderRadius }),
-        ...(borderColor !== undefined && { borderColor }),
-      };
+      ...(borderWidth !== undefined && { borderWidth }),
+      ...(borderRadius !== undefined && { borderRadius }),
+      ...(borderColor !== undefined && { borderColor }),
+    };
 
   return (
     <AccordionItemContext.Provider value={{ value, disabled }}>
@@ -148,6 +148,7 @@ export interface AccordionTriggerProps {
   icon?: React.ReactNode;
   iconPosition?: "Left" | "Right";
   hideIcon?: boolean;
+  iconColor?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   weight?: "Default" | "Bold";
   headingUnderline?: boolean;
@@ -176,6 +177,7 @@ export function AccordionTrigger({
   icon,
   iconPosition = "Right",
   hideIcon,
+  iconColor,
   size = "md",
   weight = "Default",
   headingUnderline,
@@ -207,7 +209,8 @@ export function AccordionTrigger({
     <motion.div
       animate={{ rotate: isOpen ? 180 : 0 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className={cn("transition-all duration-300 ease-in-out")}
+      className={cn("transition-all duration-300 ease-in-out shrink-0")}
+      style={iconColor ? { color: iconColor } : undefined}
     >
       {icon ? (
         icon
@@ -215,7 +218,8 @@ export function AccordionTrigger({
         <ChevronDown
           className={cn(
             iconSizeClass,
-            "transition-all duration-300 ease-in-out text-zinc-500 shrink-0"
+            "transition-all duration-300 ease-in-out shrink-0",
+            !iconColor && "text-zinc-500"
           )}
         />
       )}

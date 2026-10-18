@@ -122,9 +122,13 @@ export function AccordionVariantRenderer({
         iconPosition: customProps.iconPosition,
         icon:
           customProps.iconType === "Custom" ? (
-            <ArrowDown className={cn(iconSize, "text-[var(--theme-primary)]")} />
+            <ArrowDown
+              className={iconSize}
+              style={{ color: customProps.iconColor || "var(--theme-primary)" }}
+            />
           ) : undefined,
         hideIcon: customProps.hideIcon,
+        iconColor: customProps.iconColor,
         headingUnderline: customProps.headingUnderline,
         headingColor: customProps.headingColor,
         onClick: customProps.hasOnClick

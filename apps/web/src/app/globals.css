@@ -141,17 +141,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   ::selection {
     background-color: var(--theme-primary);
     color: #ffffff;
   }
+
   ::-moz-selection {
     background-color: var(--theme-primary);
     color: #ffffff;
   }
+
   html {
     @apply bg-background text-foreground;
   }
+
   body {
     @apply bg-background text-foreground min-h-screen;
   }
@@ -159,28 +163,36 @@
 
 @layer utilities {
   .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
+
   .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
+    /* Chrome, Safari and Opera */
   }
 
   .subtle-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
   }
+
   .subtle-scrollbar::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
+
   .subtle-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .subtle-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(150, 150, 150, 0.25);
     border-radius: 9999px;
   }
+
   .subtle-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(150, 150, 150, 0.5);
   }
@@ -200,6 +212,3 @@ html[data-theme-vt="active"]::view-transition-group(root) {
 html[data-theme-vt="active"]::view-transition-new(root) {
   clip-path: var(--theme-vt-clip-from);
 }
-
-
-

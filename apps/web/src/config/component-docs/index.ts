@@ -7,9 +7,11 @@ import { separatorDoc } from "./separator";
 import { breadcrumbDoc } from "./breadcrumb";
 import { skeletonDoc } from "./skeleton";
 import { colorGridDoc } from "./color-grid";
+import { accordionDoc } from "./accordion";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
+export * from "./accordion";
 export * from "./button";
 export * from "./switch";
 export * from "./slider";
@@ -20,6 +22,7 @@ export * from "./skeleton";
 export * from "./color-grid";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
+  "accordion": accordionDoc,
   "button": buttonDoc,
   "animated-button": buttonDoc,
   "glowing-button": buttonDoc,

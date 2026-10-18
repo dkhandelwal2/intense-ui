@@ -566,6 +566,12 @@ export const ACCORDION_TRIGGER_API_REFERENCE = [
     description: "Position of the icon relative to the trigger text.",
   },
   {
+    prop: "iconColor",
+    type: "string",
+    defaultValue: "-",
+    description: "Custom explicit color for the chevron or custom icon.",
+  },
+  {
     prop: "disabled",
     type: "boolean",
     defaultValue: "false",

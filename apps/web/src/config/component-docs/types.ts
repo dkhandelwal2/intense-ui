@@ -1,3 +1,4 @@
+import React from "react";
 import { PropGroup } from "@/components/ui/props-table";
 
 export interface ComponentExample {
@@ -10,8 +11,9 @@ export interface ComponentExample {
 export interface ComponentDocData {
   usageCode: string;
   codeContent: string;
+  description?: React.ReactNode;
   codes?: Record<string, string>;
-  tocItems?: { id: string; label: string }[];
+  tocItems?: { id: string; label: string; icon?: React.ReactNode }[];
   dependencies?: { name: string; command: string }[];
   propGroups?: PropGroup[];
 }

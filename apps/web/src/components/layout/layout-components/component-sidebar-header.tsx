@@ -86,7 +86,7 @@ export function ComponentSidebarHeader({
     return (
       <div
         className={cn(
-          "fixed bottom-0 left-0 md:left-[68px] right-0 z-40 bg-background/90 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 px-4 sm:px-6 py-3.5 shadow-2xl flex items-center justify-between xl:hidden rounded-t-3xl",
+          "fixed bottom-0 left-0 md:left-[68px] right-0 z-40 bg-background/90 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 pl-12 pr-4 sm:px-6 py-3.5 shadow-2xl flex items-center justify-between xl:hidden rounded-t-3xl",
           className
         )}
       >

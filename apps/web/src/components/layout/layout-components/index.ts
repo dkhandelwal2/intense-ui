@@ -9,4 +9,4 @@ export { ComponentTocDock } from "./component-toc-dock";
 export { ComponentBottomSheet } from "./component-bottom-sheet";
 export { ComponentInspectorSidebar } from "./component-inspector-sidebar";
 export { ComponentTabPanel } from "./component-tab-panel";
-export { useComponentToc } from "./use-component-toc";
+export { useComponentToc, useComponentActiveToc, ComponentActiveTocContext } from "./use-component-toc";
