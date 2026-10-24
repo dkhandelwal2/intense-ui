@@ -16,13 +16,17 @@ export const accordionDoc: ComponentDocData = {
   codeContent: MANUAL_INSTALL_CODE,
   description: (
     <>
-      A beautifully animated, accessible accordion component built with{" "}
-      <strong className="font-medium text-zinc-900 dark:text-zinc-100">
+      A vertically stacked set of interactive headings that expand and collapse
+      to reveal or hide associated content panels. Built with{" "}
+      <strong className="font-semibold text-zinc-900 dark:text-zinc-100">
         Framer Motion
-      </strong>
-      . Perfect for FAQs, collapsible menus, and reducing vertical screen
-      clutter in modern React and Next.js applications. Fully typed, keyboard
-      navigable, and endlessly customizable.
+      </strong>{" "}
+      spring physics and{" "}
+      <strong className="font-semibold text-zinc-900 dark:text-zinc-100">
+        WAI-ARIA
+      </strong>{" "}
+      accessibility guidelines, delivering fluid height transitions, full keyboard
+      navigation, and customizable layout modes.
     </>
   ),
   codes: ACCORDION_EXAMPLES.reduce((acc, ex) => {

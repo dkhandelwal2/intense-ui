@@ -121,13 +121,21 @@ export function StackedCard({
       }}
     >
       <motion.div
-        style={{
-          scale,
-          opacity,
-          y,
-          "--stack-tint": overlayOpacity
-        } as any}
-        className="w-full origin-top [&>*]:relative [&>*]:after:absolute [&>*]:after:inset-0 [&>*]:after:bg-[var(--theme-primary)] [&>*]:after:pointer-events-none [&>*]:after:rounded-[inherit] [&>*]:after:opacity-[var(--stack-tint)] dark:[&>*]:after:opacity-[calc(var(--stack-tint)*0.5)] [&>*]:after:transition-opacity [&>*]:after:duration-0"
+        style={
+          isLast
+            ? undefined
+            : ({
+                scale,
+                opacity,
+                y,
+                "--stack-tint": overlayOpacity,
+              } as any)
+        }
+        className={cn(
+          "w-full origin-top",
+          !isLast &&
+            "[&>*]:relative [&>*]:after:absolute [&>*]:after:inset-0 [&>*]:after:bg-[var(--theme-primary)] [&>*]:after:pointer-events-none [&>*]:after:rounded-[inherit] [&>*]:after:opacity-[var(--stack-tint)] dark:[&>*]:after:opacity-[calc(var(--stack-tint)*0.5)] [&>*]:after:transition-opacity [&>*]:after:duration-0"
+        )}
       >
         {children}
       </motion.div>

@@ -12,7 +12,7 @@ export type ComponentCodeLang = "tsx" | "js";
 
 export interface ComponentPageLayoutProps {
   title: string;
-  description: React.ReactNode;
+  description?: React.ReactNode;
   dependencies?: { name: string; command: string }[];
   propsTable?: React.ReactNode;
   tocItems?: TocItem[];

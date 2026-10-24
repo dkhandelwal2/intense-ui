@@ -13,8 +13,8 @@ export function WindowDots({ size = "md", className }: WindowDotsProps) {
     size === "sm"
       ? "w-2.5 h-2.5"
       : size === "lg"
-      ? "w-3.5 h-3.5"
-      : "w-2.5 h-2.5 sm:w-3 sm:h-3";
+        ? "w-3.5 h-3.5"
+        : "w-2.5 h-2.5 sm:w-3 sm:h-3";
 
   return (
     <div className={cn("flex items-center gap-1.5 sm:gap-2 shrink-0", className)}>
@@ -97,9 +97,8 @@ export function WindowHeader({
         {children}
       </div>
 
-      {/* Optional Right Action / Status */}
       {action && (
-        <div className="shrink-0 flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {action}
         </div>
       )}

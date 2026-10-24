@@ -76,7 +76,7 @@ export function ComponentSidebarHeader({
           >
             <Code className="w-4 h-4" />
           </button>
-          <ComponentMoreMenu />
+          <ComponentMoreMenu direction={isBottomBar ? "up" : "down"} />
         </div>
       </div>
     </div>

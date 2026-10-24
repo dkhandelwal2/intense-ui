@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarMotionSection } from "./sidebar-motion-section";
 
 export interface PreviewTabContentProps {
-  description: React.ReactNode;
+  description?: React.ReactNode;
   dependencies?: { name: string; command: string }[];
   propsTable?: React.ReactNode;
 }
@@ -34,11 +34,13 @@ export function PreviewTabContent({
       className="flex flex-col gap-5"
     >
       {/* Description */}
-      <SidebarMotionSection className="flex flex-col gap-4">
-        <div className="text-md leading-relaxed text-zinc-600 dark:text-zinc-300 font-light mt-1">
-          {description}
-        </div>
-      </SidebarMotionSection>
+      {description && (
+        <SidebarMotionSection className="flex flex-col gap-4">
+          <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-normal mt-1">
+            {description}
+          </div>
+        </SidebarMotionSection>
+      )}
 
       {/* Separator */}
       <Separator className="my-1" />

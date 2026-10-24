@@ -10,7 +10,7 @@ import { CodeTabContent } from "./code-tab-content";
 
 export interface ComponentTabPanelProps {
   activeTab: ComponentActiveTab;
-  description: React.ReactNode;
+  description?: React.ReactNode;
   dependencies?: { name: string; command: string }[];
   propsTable?: React.ReactNode;
   slug?: string;

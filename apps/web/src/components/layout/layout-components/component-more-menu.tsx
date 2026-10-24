@@ -6,9 +6,41 @@ import { Bug, MessageSquare, Mail, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 
-export function ComponentMoreMenu() {
+export interface ComponentMoreMenuProps {
+  direction?: "up" | "down" | "auto";
+  className?: string;
+}
+
+export function ComponentMoreMenu({
+  direction = "auto",
+  className,
+}: ComponentMoreMenuProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [placement, setPlacement] = useState<"up" | "down">(
+    direction === "up" ? "up" : "down"
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (direction === "up" || direction === "down") {
+      setPlacement(direction);
+      return;
+    }
+
+    // Auto-detect based on screen position
+    if (menuRef.current) {
+      const rect = menuRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      if (spaceBelow < 260 && spaceAbove > spaceBelow) {
+        setPlacement("up");
+      } else {
+        setPlacement("down");
+      }
+    }
+  }, [isOpen, direction]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -54,11 +86,15 @@ export function ComponentMoreMenu() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.95, y: placement === "up" ? 6 : -6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: placement === "up" ? 6 : -6 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute right-0 bottom-full mb-2 xl:top-full xl:bottom-auto xl:mt-2 xl:mb-auto w-64 p-1.5 rounded-2xl bg-white dark:bg-[#141416] border border-black/10 dark:border-white/10 shadow-2xl shadow-black/15 dark:shadow-black/60 z-50 flex flex-col gap-1 backdrop-blur-xl"
+            className={cn(
+              "absolute right-0 w-64 max-w-[calc(100vw-32px)] p-1.5 rounded-2xl bg-white dark:bg-[#141416] border border-black/10 dark:border-white/10 shadow-2xl shadow-black/15 dark:shadow-black/60 z-50 flex flex-col gap-1 backdrop-blur-xl",
+              placement === "up" ? "bottom-full mb-2" : "top-full mt-2",
+              className
+            )}
           >
             <div className="px-2.5 py-1 text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
               Feedback &amp; Support

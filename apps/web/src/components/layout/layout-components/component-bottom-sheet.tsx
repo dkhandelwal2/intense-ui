@@ -118,7 +118,7 @@ export function ComponentBottomSheet({
                   dragControls.start(e);
                 }
               }}
-              className="px-4 sm:px-6 pb-3 pt-1 flex items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 shrink-0 select-none cursor-grab active:cursor-grabbing touch-none"
+              className="px-4 sm:px-6 pb-3 pt-1 flex items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 shrink-0 select-none cursor-grab active:cursor-grabbing touch-none relative z-20"
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <h2 className="text-xs sm:text-sm font-bold tracking-tight text-foreground uppercase truncate">
@@ -166,7 +166,7 @@ export function ComponentBottomSheet({
                   >
                     <Code className="w-3.5 h-3.5" />
                   </button>
-                  <ComponentMoreMenu />
+                  <ComponentMoreMenu direction="down" />
                 </div>
                 <button
                   type="button"

@@ -92,12 +92,18 @@ export function ComponentPageLayout({
     <div className="relative flex w-full min-w-0 items-start gap-4 xl:gap-8 pb-32">
       {/* CENTER COLUMN: Component Previews & Interactive Canvas in natural page flow */}
       <div className="relative flex-1 min-w-0 flex flex-col px-0 sm:px-2 md:px-4 lg:px-6">
-        {/* Component Header / Breadcrumbs */}
-        <div className="relative z-10 pt-2 pb-6 max-w-4xl">
-          <Breadcrumbs currentLabel={title} className="mb-3" />
+        {/* Component Header / Breadcrumbs & Intro */}
+        <div className="relative z-10 pt-2 pb-6 max-w-4xl space-y-3">
+          <Breadcrumbs currentLabel={title} className="mb-2" />
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase tracking-wide">
             {title}
           </h1>
+
+          {description && (
+            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
+              {description}
+            </p>
+          )}
         </div>
 
         {/* Component Previews & Interactive Canvas */}

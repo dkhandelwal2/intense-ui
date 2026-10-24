@@ -30,7 +30,7 @@ export const DEFAULT_COLORS = [
   "var(--palette-5)",
 ];
 
-const getDisplayColor = (val: string) => {
+export const getDisplayColor = (val: string) => {
   if (val === "var(--theme-primary)") return "Primary";
   if (!val) return "Default";
 
@@ -67,6 +67,18 @@ const SIZE_MAP = {
   lg: "w-8 h-8",
 };
 
+const PADDING_MAP = {
+  sm: "p-1",
+  md: "p-1.5",
+  lg: "p-2",
+};
+
+const GAP_MAP = {
+  sm: "gap-1.5",
+  md: "gap-2",
+  lg: "gap-2.5",
+};
+
 export function ColorGrid({
   colors = DEFAULT_COLORS,
   value = "",
@@ -89,11 +101,13 @@ export function ColorGrid({
     <motion.div
       layout
       className={cn(
-        "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-1.5 shadow-lg",
+        "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-lg",
+        PADDING_MAP[size] || PADDING_MAP.md,
         isGrid
-          ? "grid gap-2 rounded-2xl"
+          ? cn("grid rounded-2xl", GAP_MAP[size] || GAP_MAP.md)
           : cn(
-              "flex items-center gap-2 rounded-full",
+              "flex items-center rounded-full",
+              GAP_MAP[size] || GAP_MAP.md,
               isVertical ? "flex-col" : "flex-row"
             ),
         className
@@ -162,7 +176,7 @@ export function ColorGrid({
               }}
             >
               {(!value || colors.includes(value)) && (
-                <Plus className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
+                <Plus className={cn("text-zinc-400 dark:text-zinc-500", size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5")} />
               )}
               <input
                 type="color"
@@ -186,7 +200,8 @@ export function ColorGrid({
             exit={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
             transition={{ type: "spring", bounce: 0, duration: 0.3 }}
             className={cn(
-              "flex items-center gap-2 shrink-0",
+              "flex items-center shrink-0",
+              GAP_MAP[size] || GAP_MAP.md,
               isVertical ? "flex-col" : "flex-row"
             )}
           >
@@ -194,7 +209,9 @@ export function ColorGrid({
               <div
                 className={cn(
                   "bg-zinc-200 dark:bg-zinc-800",
-                  isVertical ? "h-px w-6 my-0.5" : "w-px h-6 mx-0.5"
+                  isVertical
+                    ? size === "sm" ? "h-px w-4 my-0.5" : "h-px w-6 my-0.5"
+                    : size === "sm" ? "w-px h-4 mx-0.5" : "w-px h-6 mx-0.5"
                 )}
               />
             )}
@@ -210,7 +227,7 @@ export function ColorGrid({
                 )}
                 aria-label="Reset color"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <RotateCcw className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"} />
               </motion.button>
             </Tooltip>
           </motion.div>

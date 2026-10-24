@@ -16,7 +16,8 @@ export function TypographyTab({ customProps, onChange }: TabProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.15 }}
-      className="flex sm:grid sm:grid-cols-2 overflow-x-auto sm:overflow-visible gap-3 sm:gap-3.5 pb-2 sm:pb-0 no-scrollbar snap-x snap-mandatory -mr-4 sm:mr-0 pr-4 sm:pr-0"
+      className="flex sm:grid sm:grid-cols-2 overflow-x-auto sm:overflow-visible gap-3 sm:gap-3.5 pb-2 sm:pb-0 no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory -mr-4 sm:mr-0 pr-4 sm:pr-0"
+      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       {/* Card 1: Button Size */}
       <div className="min-w-[260px] sm:min-w-0 shrink-0 sm:shrink snap-start p-3.5 sm:p-4 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.04] dark:hover:bg-white/[0.035] transition-all flex flex-col justify-between gap-2.5 min-h-[88px]">
@@ -94,6 +95,7 @@ export function TypographyTab({ customProps, onChange }: TabProps) {
           </div>
         </div>
         <ColorGrid
+          size="sm"
           colors={PALETTE_COLORS}
           value={customProps.headingColor || ""}
           onChange={(c) => onChange((prev) => ({ ...prev, headingColor: c }))}
@@ -117,6 +119,7 @@ export function TypographyTab({ customProps, onChange }: TabProps) {
           </div>
         </div>
         <ColorGrid
+          size="sm"
           colors={PALETTE_COLORS}
           value={customProps.contentColor || ""}
           onChange={(c) => onChange((prev) => ({ ...prev, contentColor: c }))}

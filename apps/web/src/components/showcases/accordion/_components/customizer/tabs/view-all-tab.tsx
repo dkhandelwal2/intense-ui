@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Slider } from "@registry/components/slider";
 import { Switch } from "@registry/components/switch";
-import { ColorGrid } from "@/components/ui/color-grid";
+import { ColorGrid, getDisplayColor } from "@/components/ui/color-grid";
 import { PALETTE_COLORS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import {
@@ -105,7 +105,8 @@ export function ViewAllTab({ customProps, onChange }: TabProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.15 }}
-          className="flex flex-nowrap items-stretch overflow-x-auto no-scrollbar gap-3.5 sm:gap-4 px-4 sm:px-5 pb-3.5 pt-3 sm:pt-3.5 snap-x snap-mandatory scroll-smooth scroll-px-4 sm:scroll-px-5"
+          className="flex flex-nowrap items-stretch overflow-x-auto no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-3.5 sm:gap-4 px-4 sm:px-5 pb-3.5 pt-3 sm:pt-3.5 snap-x snap-mandatory scroll-smooth scroll-px-4 sm:scroll-px-5"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {/* Category 1: Border */}
           <motion.div
@@ -169,28 +170,38 @@ export function ViewAllTab({ customProps, onChange }: TabProps) {
               </div>
               <div
                 className={cn(
-                  "flex items-center justify-between pt-1",
+                  "space-y-1.5 pt-1",
                   (customProps.hideBorder || isBorderZero) && "opacity-40 pointer-events-none"
                 )}
               >
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                  Color
-                </span>
-                <ColorGrid
-                  colors={PALETTE_COLORS}
-                  value={customProps.borderColor || "var(--theme-primary)"}
-                  onChange={(c) => onChange((prev) => ({ ...prev, borderColor: c }))}
-                  onClear={
-                    customProps.borderColor !== "var(--theme-primary)"
-                      ? () =>
-                          onChange((prev) => ({
-                            ...prev,
-                            borderColor: "var(--theme-primary)",
-                          }))
-                      : undefined
-                  }
-                  draggable={false}
-                />
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    Border Color
+                  </span>
+                  {customProps.borderColor && (
+                    <span className="text-[10px] font-mono text-[var(--theme-primary)] font-semibold">
+                      {getDisplayColor(customProps.borderColor)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center">
+                  <ColorGrid
+                    size="sm"
+                    colors={PALETTE_COLORS}
+                    value={customProps.borderColor || "var(--theme-primary)"}
+                    onChange={(c) => onChange((prev) => ({ ...prev, borderColor: c }))}
+                    onClear={
+                      customProps.borderColor !== "var(--theme-primary)"
+                        ? () =>
+                            onChange((prev) => ({
+                              ...prev,
+                              borderColor: "var(--theme-primary)",
+                            }))
+                        : undefined
+                    }
+                    draggable={false}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
@@ -245,37 +256,57 @@ export function ViewAllTab({ customProps, onChange }: TabProps) {
                   size="sm"
                 />
               </div>
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                  Title Color
-                </span>
-                <ColorGrid
-                  colors={PALETTE_COLORS}
-                  value={customProps.headingColor || ""}
-                  onChange={(c) => onChange((prev) => ({ ...prev, headingColor: c }))}
-                  onClear={
-                    customProps.headingColor
-                      ? () => onChange((prev) => ({ ...prev, headingColor: "" }))
-                      : undefined
-                  }
-                  draggable={false}
-                />
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    Title Color
+                  </span>
+                  {customProps.headingColor && (
+                    <span className="text-[10px] font-mono text-[var(--theme-primary)] font-semibold">
+                      {getDisplayColor(customProps.headingColor)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center">
+                  <ColorGrid
+                    size="sm"
+                    colors={PALETTE_COLORS}
+                    value={customProps.headingColor || ""}
+                    onChange={(c) => onChange((prev) => ({ ...prev, headingColor: c }))}
+                    onClear={
+                      customProps.headingColor
+                        ? () => onChange((prev) => ({ ...prev, headingColor: "" }))
+                        : undefined
+                    }
+                    draggable={false}
+                  />
+                </div>
               </div>
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                  Content Color
-                </span>
-                <ColorGrid
-                  colors={PALETTE_COLORS}
-                  value={customProps.contentColor || ""}
-                  onChange={(c) => onChange((prev) => ({ ...prev, contentColor: c }))}
-                  onClear={
-                    customProps.contentColor
-                      ? () => onChange((prev) => ({ ...prev, contentColor: "" }))
-                      : undefined
-                  }
-                  draggable={false}
-                />
+              <div className="space-y-1.5 pt-1">
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    Content Color
+                  </span>
+                  {customProps.contentColor && (
+                    <span className="text-[10px] font-mono text-[var(--theme-primary)] font-semibold">
+                      {getDisplayColor(customProps.contentColor)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center">
+                  <ColorGrid
+                    size="sm"
+                    colors={PALETTE_COLORS}
+                    value={customProps.contentColor || ""}
+                    onChange={(c) => onChange((prev) => ({ ...prev, contentColor: c }))}
+                    onClear={
+                      customProps.contentColor
+                        ? () => onChange((prev) => ({ ...prev, contentColor: "" }))
+                        : undefined
+                    }
+                    draggable={false}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
@@ -344,24 +375,34 @@ export function ViewAllTab({ customProps, onChange }: TabProps) {
               </div>
               <div
                 className={cn(
-                  "flex items-center justify-between pt-1",
+                  "space-y-1.5 pt-1",
                   customProps.hideIcon && "opacity-40 pointer-events-none"
                 )}
               >
-                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                  Icon Color
-                </span>
-                <ColorGrid
-                  colors={PALETTE_COLORS}
-                  value={customProps.iconColor || ""}
-                  onChange={(c) => onChange((prev) => ({ ...prev, iconColor: c }))}
-                  onClear={
-                    customProps.iconColor
-                      ? () => onChange((prev) => ({ ...prev, iconColor: "" }))
-                      : undefined
-                  }
-                  draggable={false}
-                />
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    Icon Color
+                  </span>
+                  {customProps.iconColor && (
+                    <span className="text-[10px] font-mono text-[var(--theme-primary)] font-semibold">
+                      {getDisplayColor(customProps.iconColor)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center">
+                  <ColorGrid
+                    size="sm"
+                    colors={PALETTE_COLORS}
+                    value={customProps.iconColor || ""}
+                    onChange={(c) => onChange((prev) => ({ ...prev, iconColor: c }))}
+                    onClear={
+                      customProps.iconColor
+                        ? () => onChange((prev) => ({ ...prev, iconColor: "" }))
+                        : undefined
+                    }
+                    draggable={false}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>

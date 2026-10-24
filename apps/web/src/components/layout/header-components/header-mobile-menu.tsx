@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
@@ -18,7 +19,14 @@ export interface HeaderMobileMenuProps {
  * Full-screen centered navigation overlay for mobile and compact viewports
  */
 export function HeaderMobileMenu({ isOpen, onClose }: HeaderMobileMenuProps) {
+  const pathname = usePathname();
   const { starCountText } = useGitHubStars();
+
+  const isItemActive = (href: string, matchExact?: boolean) => {
+    if (href === "/") return pathname === "/";
+    if (matchExact) return pathname === href;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   return (
     <AnimatePresence>
@@ -60,46 +68,50 @@ export function HeaderMobileMenu({ isOpen, onClose }: HeaderMobileMenuProps) {
             }}
             className="flex flex-col items-center gap-7 sm:gap-9 text-center max-w-md w-full"
           >
-            {siteConfig.header.navItems.map((item) => (
-              <motion.div
-                key={item.label}
-                variants={{
-                  hidden: { opacity: 0, y: 24, scale: 0.95 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 340,
-                      damping: 26,
+            {siteConfig.header.navItems.map((item) => {
+              const isActive = isItemActive(item.href, item.matchExact);
+              return (
+                <motion.div
+                  key={item.label}
+                  variants={{
+                    hidden: { opacity: 0, y: 24, scale: 0.95 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      transition: {
+                        type: "spring",
+                        stiffness: 340,
+                        damping: 26,
+                      },
                     },
-                  },
-                  exit: {
-                    opacity: 0,
-                    y: -16,
-                    scale: 0.95,
-                    transition: {
-                      duration: 0.24,
-                      ease: [0.16, 1, 0.3, 1],
+                    exit: {
+                      opacity: 0,
+                      y: -16,
+                      scale: 0.95,
+                      transition: {
+                        duration: 0.24,
+                        ease: [0.16, 1, 0.3, 1],
+                      },
                     },
-                  },
-                }}
-              >
-                <Link
-                  href={item.href}
-                  onClick={onClose}
-                  className={cn(
-                    "inline-block transition-all duration-200 tracking-tight hover:scale-105 cursor-pointer",
-                    item.isFeatured
-                      ? "text-3xl sm:text-4xl font-bold text-foreground hover:text-primary"
-                      : "text-2xl sm:text-3xl font-medium text-muted-foreground hover:text-foreground"
-                  )}
+                  }}
                 >
-                  {item.label}
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    href={item.href}
+                    onClick={onClose}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "inline-block transition-all duration-200 tracking-tight hover:scale-105 cursor-pointer",
+                      isActive
+                        ? "text-3xl sm:text-4xl font-bold text-foreground hover:text-primary"
+                        : "text-2xl sm:text-3xl font-medium text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              );
+            })}
 
             {/* Mobile-only Quick Action Buttons (GitHub, Theme Mode) */}
             <motion.div
