@@ -216,7 +216,7 @@ export function AccordionCard({
                   </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden p-4 max-h-[460px]">
+                <div className="flex-1 overflow-y-auto no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden p-4 max-h-[480px]">
                   <ViewAllTab
                     customProps={customProps}
                     onChange={onCustomPropsChange}
