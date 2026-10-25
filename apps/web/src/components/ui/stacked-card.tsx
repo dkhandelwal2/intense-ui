@@ -101,7 +101,7 @@ export function StackedCard({
   return (
     <div
       className={cn(
-        "sticky w-full mb-[5vh]",
+        "sticky w-full my-[8vh]",
         className
       )}
       style={{
@@ -114,10 +114,10 @@ export function StackedCard({
           isLast
             ? undefined
             : ({
-                scale,
-                opacity,
-                y,
-              } as any)
+              scale,
+              opacity,
+              y,
+            } as any)
         }
         className="w-full origin-top"
       >

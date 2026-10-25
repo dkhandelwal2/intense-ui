@@ -141,9 +141,10 @@ export function AppLoader({
       <AnimatePresence>
         {isNavigating && (
           <motion.div
+            key="route-change-loader"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
+            exit={{ opacity: 0, scale: 0.96, filter: "blur(6px)", pointerEvents: "none" }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-background/60 backdrop-blur-md pointer-events-auto"
           >
@@ -164,6 +165,7 @@ export function AppLoader({
               opacity: 0,
               scale: 1.04,
               filter: "blur(12px)",
+              pointerEvents: "none",
               transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
             }}
             className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-background/98 backdrop-blur-3xl w-screen h-screen overflow-hidden p-6 cursor-pointer"

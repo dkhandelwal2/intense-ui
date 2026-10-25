@@ -218,7 +218,7 @@ export function PlaygroundStudio({
       <div className={cn("flex-1 min-h-0", effectivePreview ? "grid grid-rows-2 gap-3" : "flex flex-col")}>
         {/* Preview Block: Directly Below Header Bar (No Live Component Preview Header) */}
         {effectivePreview && (
-          <div className="relative h-full min-h-[220px] overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg flex items-center justify-center">
+          <div className="relative h-full overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg flex items-center justify-center">
             {/* Ambient Soft Dot Grid Pattern */}
             <div
               aria-hidden="true"
@@ -232,188 +232,182 @@ export function PlaygroundStudio({
 
         {/* Main Studio Card Container: Borderless, Left-Aligned Shape, 3D Perspective */}
         <div
-          className="relative h-full min-h-[240px] overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg p-0"
+          className="relative h-full overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg p-0"
           style={{ perspective: 1200 }}
         >
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={currentStep.id}
-            custom={direction}
-            variants={ringVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            style={{ transformStyle: "preserve-3d" }}
-            className="w-full h-full grid grid-cols-[140px_1fr] 2xl:grid-cols-[165px_1fr] gap-0"
-          >
-            {/* Left Hero Card: Angled Shield Pod Shape touching left-most corner */}
-            <div
-              style={{
-                WebkitClipPath: "url(#playground-hero-shape)",
-                clipPath: "url(#playground-hero-shape)",
-              }}
-              className={cn(
-                "relative text-white p-3.5 sm:p-4 flex flex-col justify-between overflow-hidden select-none h-full transition-colors duration-500",
-                activeGradient
-              )}
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={currentStep.id}
+              custom={direction}
+              variants={ringVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              style={{ transformStyle: "preserve-3d" }}
+              className="w-full h-full grid grid-cols-[140px_1fr] 2xl:grid-cols-[165px_1fr] gap-0"
             >
-              {/* Playful Ambient Blobs in Background */}
+              {/* Left Hero Card: Angled Shield Pod Shape touching left-most corner */}
               <div
-                aria-hidden="true"
-                className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-white/20 blur-md pointer-events-none"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-black/15 blur-md pointer-events-none"
-              />
+                style={{
+                  WebkitClipPath: "url(#playground-hero-shape)",
+                  clipPath: "url(#playground-hero-shape)",
+                }}
+                className={cn(
+                  "relative text-white p-3.5 sm:p-4 flex flex-col justify-between overflow-hidden select-none h-full transition-colors duration-500",
+                  activeGradient
+                )}
+              >
+                {/* Playful Ambient Blobs in Background */}
+                <div
+                  aria-hidden="true"
+                  className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-white/20 blur-md pointer-events-none"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-black/15 blur-md pointer-events-none"
+                />
 
-              {/* Card Top Row: Section Specific Icon (or Glyph) */}
-              <div className="relative z-10 flex items-center justify-between">
-                <div className="w-6 h-6 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white/95 shadow-xs">
-                  {currentStep.icon ? (
-                    currentStep.icon
+                {/* Card Top Row: Section Specific Icon (or Glyph) */}
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="w-6 h-6 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white/95 shadow-xs">
+                    {currentStep.icon ? (
+                      currentStep.icon
+                    ) : (
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+
+                {/* Stacked Big Typography & Cute Organic Pill Shape */}
+                <div className="relative z-10 my-auto py-1">
+                  <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white drop-shadow-xs">
+                    {currentStep.titleLine1}
+                  </div>
+                  <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white/90 drop-shadow-xs mt-1">
+                    {currentStep.titleLine2}
+                  </div>
+                </div>
+
+                {/* Card Footer Tag */}
+                <div className="relative z-10 pt-1">
+                  <span className="text-[9.5px] font-mono font-semibold tracking-wider text-white/85 uppercase">
+                    {currentStep.categoryTag || `0${activeIndex + 1} / 0${steps.length}`}
+                  </span>
+                </div>
+              </div>
+
+              {/* Right Side Options Panel ("My storehouse" Table Style - Props shifted upwards) */}
+              <div className="relative flex flex-col justify-start pt-2.5 pb-5 sm:pb-6 pr-3 pl-2.5 overflow-y-auto no-scrollbar h-full min-h-0">
+                <div>
+                  {/* Header: Title + Dynamic Emoji Badge in Top-Right */}
+                  <div className="flex items-start justify-between gap-1.5 pb-1">
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">
+                        {currentStep.headerTitle}
+                      </h3>
+                      <h4 className="text-sm sm:text-base font-light tracking-tight text-zinc-500 dark:text-zinc-400 leading-tight truncate">
+                        {currentStep.headerSubtitle}
+                      </h4>
+                    </div>
+                    {/* Dynamic Emoji Avatar Badge (Uses the same gradient background as the hero shape) */}
+                    <div
+                      aria-hidden="true"
+                      className={cn(
+                        "w-7 h-7 rounded-full text-white flex items-center justify-center text-xs shadow-xs font-bold select-none shrink-0 border border-white/20 transition-colors duration-500",
+                        activeGradient
+                      )}
+                    >
+                      {currentStep.headerEmoji || "😋"}
+                    </div>
+                  </div>
+
+                  {/* Table Column Headers (Matching Reference: PRODUCT and NO) */}
+                  <div className="flex items-center justify-between text-[9px] font-mono font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pt-1.5 pb-1 border-b border-zinc-100 dark:border-zinc-800">
+                    <span>PRODUCT</span>
+                    <span>NO</span>
+                  </div>
+
+                  {/* Rows List (Matching "Worktop", "Couch capsule", "Couch cake") */}
+                  {currentStep.rows ? (
+                    <div className="divide-y divide-zinc-100/90 dark:divide-zinc-800/60">
+                      {currentStep.rows.map((row) => (
+                        <div
+                          key={row.id}
+                          onClick={row.actionType === "toggle" ? () => row.onToggleChange?.(!row.toggleChecked) : row.onSelect}
+                          className={cn(
+                            "w-full py-2 px-1.5 flex items-center justify-between transition-colors text-left cursor-pointer group rounded-lg my-0.5",
+                            row.isSelected
+                              ? "bg-[var(--theme-primary)]/10 text-zinc-900 dark:text-zinc-100"
+                              : "hover:bg-zinc-100/70 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300"
+                          )}
+                        >
+                          <div className="min-w-0 pr-1.5">
+                            <div
+                              className={cn(
+                                "text-xs font-bold truncate leading-tight",
+                                row.isSelected
+                                  ? "text-[var(--theme-primary)]"
+                                  : "text-zinc-900 dark:text-zinc-100"
+                              )}
+                            >
+                              {row.label}
+                            </div>
+                            <div className="text-[9.5px] text-zinc-400 dark:text-zinc-500 font-mono truncate">
+                              {row.spec}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0 ml-auto">
+                            <div className="text-sm leading-none">{row.thumbnail}</div>
+                            {row.actionType === "toggle" ? (
+                              <div
+                                role="switch"
+                                aria-checked={row.toggleChecked}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  row.onToggleChange?.(!row.toggleChecked);
+                                }}
+                                className={cn(
+                                  "w-7 h-4 rounded-full transition-colors relative cursor-pointer p-0.5 flex items-center shrink-0",
+                                  row.toggleChecked
+                                    ? "bg-[var(--theme-primary)]"
+                                    : "bg-zinc-200 dark:bg-zinc-700"
+                                )}
+                              >
+                                <div
+                                  className={cn(
+                                    "w-3 h-3 rounded-full bg-white transition-transform shadow-xs",
+                                    row.toggleChecked ? "translate-x-3" : "translate-x-0"
+                                  )}
+                                />
+                              </div>
+                            ) : (
+                              <span
+                                className={cn(
+                                  "w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-all shadow-2xs",
+                                  row.isSelected
+                                    ? "bg-[var(--theme-primary)] text-white scale-105"
+                                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-100"
+                                )}
+                              >
+                                {row.isSelected ? "✓" : "+"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                    </svg>
+                    currentStep.customRightContent
                   )}
                 </div>
               </div>
-
-              {/* Stacked Big Typography & Cute Organic Pill Shape */}
-              <div className="relative z-10 my-auto py-1">
-                <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white drop-shadow-xs">
-                  {currentStep.titleLine1}
-                </div>
-                <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white/90 drop-shadow-xs mt-1">
-                  {currentStep.titleLine2}
-                </div>
-
-                {/* Floating Soft Organic Bean Blob (Matching Reference Screenshot) */}
-                <div
-                  aria-hidden="true"
-                  className="mt-3.5 w-10 h-5 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] -rotate-12 bg-white/35 backdrop-blur-md border border-white/30 shadow-xs"
-                />
-              </div>
-
-              {/* Card Footer Tag */}
-              <div className="relative z-10 pt-1">
-                <span className="text-[9.5px] font-mono font-semibold tracking-wider text-white/85 uppercase">
-                  {currentStep.categoryTag || `0${activeIndex + 1} / 0${steps.length}`}
-                </span>
-              </div>
-            </div>
-
-            {/* Right Side Options Panel ("My storehouse" Table Style - Props shifted upwards) */}
-            <div className="relative flex flex-col justify-start pt-2.5 pb-5 sm:pb-6 pr-3 pl-2.5 overflow-y-auto no-scrollbar h-full min-h-0">
-              <div>
-                {/* Header: Title + Dynamic Emoji Badge in Top-Right */}
-                <div className="flex items-start justify-between gap-1.5 pb-1">
-                  <div className="min-w-0">
-                    <h3 className="text-sm sm:text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">
-                      {currentStep.headerTitle}
-                    </h3>
-                    <h4 className="text-sm sm:text-base font-light tracking-tight text-zinc-500 dark:text-zinc-400 leading-tight truncate">
-                      {currentStep.headerSubtitle}
-                    </h4>
-                  </div>
-                  {/* Dynamic Emoji Avatar Badge (Uses the same gradient background as the hero shape) */}
-                  <div
-                    aria-hidden="true"
-                    className={cn(
-                      "w-7 h-7 rounded-full text-white flex items-center justify-center text-xs shadow-xs font-bold select-none shrink-0 border border-white/20 transition-colors duration-500",
-                      activeGradient
-                    )}
-                  >
-                    {currentStep.headerEmoji || "😋"}
-                  </div>
-                </div>
-
-                {/* Table Column Headers (Matching Reference: PRODUCT and NO) */}
-                <div className="flex items-center justify-between text-[9px] font-mono font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pt-1.5 pb-1 border-b border-zinc-100 dark:border-zinc-800">
-                  <span>PRODUCT</span>
-                  <span>NO</span>
-                </div>
-
-                {/* Rows List (Matching "Worktop", "Couch capsule", "Couch cake") */}
-                {currentStep.rows ? (
-                  <div className="divide-y divide-zinc-100/90 dark:divide-zinc-800/60">
-                    {currentStep.rows.map((row) => (
-                      <div
-                        key={row.id}
-                        onClick={row.actionType === "toggle" ? () => row.onToggleChange?.(!row.toggleChecked) : row.onSelect}
-                        className={cn(
-                          "w-full py-2 px-1.5 flex items-center justify-between transition-colors text-left cursor-pointer group rounded-lg my-0.5",
-                          row.isSelected
-                            ? "bg-[var(--theme-primary)]/10 text-zinc-900 dark:text-zinc-100"
-                            : "hover:bg-zinc-100/70 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300"
-                        )}
-                      >
-                        <div className="min-w-0 pr-1.5">
-                          <div
-                            className={cn(
-                              "text-xs font-bold truncate leading-tight",
-                              row.isSelected
-                                ? "text-[var(--theme-primary)]"
-                                : "text-zinc-900 dark:text-zinc-100"
-                            )}
-                          >
-                            {row.label}
-                          </div>
-                          <div className="text-[9.5px] text-zinc-400 dark:text-zinc-500 font-mono truncate">
-                            {row.spec}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 shrink-0 ml-auto">
-                          <div className="text-sm leading-none">{row.thumbnail}</div>
-                          {row.actionType === "toggle" ? (
-                            <div
-                              role="switch"
-                              aria-checked={row.toggleChecked}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                row.onToggleChange?.(!row.toggleChecked);
-                              }}
-                              className={cn(
-                                "w-7 h-4 rounded-full transition-colors relative cursor-pointer p-0.5 flex items-center shrink-0",
-                                row.toggleChecked
-                                  ? "bg-[var(--theme-primary)]"
-                                  : "bg-zinc-200 dark:bg-zinc-700"
-                              )}
-                            >
-                              <div
-                                className={cn(
-                                  "w-3 h-3 rounded-full bg-white transition-transform shadow-xs",
-                                  row.toggleChecked ? "translate-x-3" : "translate-x-0"
-                                )}
-                              />
-                            </div>
-                          ) : (
-                            <span
-                              className={cn(
-                                "w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold transition-all shadow-2xs",
-                                row.isSelected
-                                  ? "bg-[var(--theme-primary)] text-white scale-105"
-                                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-700 group-hover:text-zinc-900 dark:group-hover:text-zinc-100"
-                              )}
-                            >
-                              {row.isSelected ? "✓" : "+"}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  currentStep.customRightContent
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
 
       {/* Tactile 3D Buttons: Left and Right buttons are paired near each other with Chevrons only */}
       <div className="pt-3.5 sm:pt-4 pb-0.5 flex items-center justify-between px-1 shrink-0">

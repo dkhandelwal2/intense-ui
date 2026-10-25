@@ -73,10 +73,10 @@ export function ShowcaseCard({
     };
   }, []);
 
-  // Close info tooltip when clicking outside
+  // Close info tooltip when clicking outside (using 'click' to avoid dropping taps in mobile Safari)
   useEffect(() => {
     if (!isCardInfoOpen) return;
-    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
         (cardInfoRef.current && cardInfoRef.current.contains(target)) ||
@@ -86,11 +86,9 @@ export function ShowcaseCard({
       }
       setIsCardInfoOpen(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [isCardInfoOpen, id]);
 
@@ -143,8 +141,7 @@ export function ShowcaseCard({
         id={id}
         onClick={handleCardClick}
         className={cn(
-          "bg-card text-card-foreground mx-auto rounded-[1.5rem] overflow-visible p-3.5 sm:p-6 md:p-8 border scroll-mt-28 transition-[border-color,box-shadow,opacity,filter,transform] duration-300 ease-out",
-          isCustomization ? "max-w-4xl" : "max-w-3xl",
+          "bg-card text-card-foreground mx-auto rounded-[1.5rem] overflow-visible p-3.5 sm:p-6 md:p-6 border scroll-mt-28 transition-[border-color,box-shadow,opacity,filter,transform] duration-300 ease-out max-w-2xl",
           isActive
             ? "border-[var(--theme-primary)]/40 dark:border-[var(--theme-primary)]/50 shadow-[0_8px_30px_rgb(0,0,0,0.06),0_0_25px_var(--theme-primary)]/15 dark:shadow-[0_8px_30px_rgb(0,0,0,0.4),0_0_25px_var(--theme-primary)]/20 scale-100 blur-none opacity-100"
             : "border-zinc-200/80 dark:border-zinc-800/80 shadow-xs blur-[2.5px] opacity-60 hover:blur-none hover:opacity-100 scale-[0.99] cursor-pointer"
@@ -227,16 +224,18 @@ export function ShowcaseCard({
                       setIsCardInfoOpen((prev) => !prev);
                     }}
                     onMouseEnter={() => {
+                      if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
                       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
                       setIsCardInfoOpen(true);
                     }}
                     onMouseLeave={() => {
+                      if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
                       hoverTimeoutRef.current = setTimeout(() => {
                         setIsCardInfoOpen(false);
                       }, 250);
                     }}
                     className={cn(
-                      "p-1.5 sm:p-2 rounded-lg transition-colors cursor-pointer",
+                      "p-1.5 sm:p-2 rounded-lg transition-colors cursor-pointer touch-manipulation",
                       isCardInfoOpen
                         ? "text-[var(--theme-primary)] bg-[var(--theme-primary)]/15"
                         : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -253,17 +252,19 @@ export function ShowcaseCard({
                         ref={cardInfoRef}
                         initial={{ opacity: 0, y: 6, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.96, pointerEvents: "none" }}
                         transition={{ duration: 0.16, ease: "easeOut" }}
                         onMouseEnter={() => {
+                          if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
                           if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
                         }}
                         onMouseLeave={() => {
+                          if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
                           hoverTimeoutRef.current = setTimeout(() => {
                             setIsCardInfoOpen(false);
                           }, 250);
                         }}
-                        className="absolute right-0 top-full mt-2.5 z-50 w-[300px] sm:w-[380px] max-w-[calc(100vw-3rem)] rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/95 dark:bg-[#131317]/95 backdrop-blur-2xl shadow-2xl p-4 sm:p-5 text-left origin-top-right cursor-default"
+                        className="absolute right-0 top-full mt-2.5 z-50 w-[290px] sm:w-[380px] max-w-[calc(100vw-2.5rem)] rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/95 dark:bg-[#131317]/95 backdrop-blur-2xl shadow-2xl p-4 sm:p-5 text-left origin-top-right cursor-default touch-manipulation max-h-[75vh] overflow-y-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
                         {/* Caret pointing to Info Icon */}

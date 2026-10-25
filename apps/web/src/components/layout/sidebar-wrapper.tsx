@@ -54,13 +54,12 @@ export function SidebarWrapper() {
     hoverProgress.set(0);
   }, [pathname, hoverProgress]);
 
-  // Lock body scroll when mobile drawer is open
+  // Lock body scroll safely when mobile drawer is open
   React.useEffect(() => {
     if (isMobileOpen) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      document.body.classList.add("overflow-hidden");
       return () => {
-        document.body.style.overflow = originalOverflow;
+        document.body.classList.remove("overflow-hidden");
       };
     }
   }, [isMobileOpen]);
@@ -160,8 +159,11 @@ export function SidebarWrapper() {
       {/* ─── Mobile Floating Trigger Button ─── */}
       <button
         type="button"
+        style={{
+          bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+        }}
         className={cn(
-          "md:hidden fixed bottom-20 left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-xl transition-all active:scale-95 cursor-pointer",
+          "md:hidden fixed left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full backdrop-blur-xl transition-all active:scale-95 cursor-pointer touch-manipulation",
           "bg-white/95 text-zinc-800 border border-black/10 shadow-lg shadow-black/10 hover:bg-white hover:text-zinc-950 hover:border-black/20",
           "dark:bg-zinc-900/95 dark:text-zinc-100 dark:border-white/15 dark:shadow-2xl dark:shadow-black/70 dark:hover:bg-zinc-800 dark:hover:text-white dark:hover:border-white/25",
           isMobileOpen && "border-[var(--theme-primary)]/40 text-[var(--theme-primary)] dark:border-[var(--theme-primary)]/50 dark:text-[var(--theme-primary)]"
@@ -199,7 +201,14 @@ export function SidebarWrapper() {
       {/* ─── Mobile Slide-Over Glass Modal with Smooth Enter & Exit ─── */}
       <AnimatePresence>
         {isMobileOpen && (
-          <div className="fixed inset-0 z-50 md:hidden flex p-4 pt-20">
+          <motion.div
+            key="mobile-sidebar-modal-root"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, pointerEvents: "none" }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 md:hidden flex p-4 pt-20"
+          >
             {/* Fade Backdrop */}
             <motion.div
               key="mobile-sidebar-backdrop"
@@ -240,7 +249,7 @@ export function SidebarWrapper() {
               onClick={() => setIsMobileOpen(false)}
               aria-hidden="true"
             />
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

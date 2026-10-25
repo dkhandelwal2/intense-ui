@@ -32,7 +32,14 @@ export function HeaderSearchDialog({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[150] flex items-start justify-center pt-16 sm:pt-24 px-4">
+        <motion.div
+          key="header-search-dialog-root"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, pointerEvents: "none" }}
+          transition={{ duration: 0.18 }}
+          className="fixed inset-0 z-[150] flex items-start justify-center pt-16 sm:pt-24 px-4"
+        >
           {/* Modal Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -174,7 +181,7 @@ export function HeaderSearchDialog({
               <span>{filteredSearchItems.length} results</span>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

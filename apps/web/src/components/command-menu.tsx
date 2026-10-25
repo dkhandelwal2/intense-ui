@@ -93,7 +93,14 @@ export function CommandMenu() {
       {isMounted && createPortal(
         <AnimatePresence>
           {open && (
-            <div className="fixed inset-0 z-[100]">
+            <motion.div
+              key="command-menu-root"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, pointerEvents: "none" }}
+              transition={{ duration: 0.15 }}
+              className="fixed inset-0 z-[100]"
+            >
               {/* Overlay */}
               <motion.div
                 initial={{ opacity: 0 }}
@@ -152,7 +159,7 @@ export function CommandMenu() {
                   )}
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           )}
         </AnimatePresence>,
         document.body

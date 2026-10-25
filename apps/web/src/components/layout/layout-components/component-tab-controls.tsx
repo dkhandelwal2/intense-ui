@@ -33,11 +33,12 @@ export function ComponentTabControls({
   const isTabActive = (tab: ComponentActiveTab) =>
     isBottomBar ? isOpen && activeTab === tab : activeTab === tab;
 
-  const handleInstallClick = () => {
-    onTabChange(!isBottomBar && activeTab === "install" ? "info" : "install");
-  };
-
   const tabs = [
+    {
+      id: "install" as const,
+      title: "CLI Installation",
+      icon: Terminal,
+    },
     ...(hasPlayground
       ? [
           {
@@ -61,28 +62,8 @@ export function ComponentTabControls({
 
   return (
     <div className={cn("flex items-center gap-1.5 sm:gap-2 shrink-0 select-none", className)}>
-      {/* Cyber Terminal Install Pill Button */}
-      <button
-        type="button"
-        onClick={handleInstallClick}
-        className={cn(
-          "relative inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer select-none min-h-[34px] sm:min-h-[36px]",
-          isTabActive("install")
-            ? "bg-[var(--theme-primary)] text-white shadow-[0_0_16px_var(--theme-primary)]/45 border border-white/30"
-            : "bg-zinc-100/90 dark:bg-white/[0.06] hover:bg-zinc-200/90 dark:hover:bg-white/[0.12] text-zinc-700 dark:text-zinc-200 border border-black/[0.08] dark:border-white/[0.1] backdrop-blur-xl shadow-xs active:scale-95"
-        )}
-      >
-        <Terminal
-          className={cn(
-            "w-3.5 h-3.5 transition-transform duration-200",
-            isTabActive("install") ? "text-white" : "text-zinc-500 dark:text-zinc-400"
-          )}
-        />
-        <span>Install</span>
-      </button>
-
       {/* Floating Glassmorphic Capsule with Fluid Framer-Motion Spring Indicator */}
-      <div className="relative flex items-center p-1 bg-zinc-100/90 dark:bg-black/50 border border-black/[0.08] dark:border-white/[0.12] rounded-full backdrop-blur-2xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_2px_rgba(255,255,255,0.06)]">
+      <div className="relative flex items-center p-0.5 sm:p-1 bg-zinc-100/90 dark:bg-black/50 border border-black/[0.08] dark:border-white/[0.12] rounded-full backdrop-blur-2xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_2px_rgba(255,255,255,0.06)] shrink-0">
         {tabs.map((tab) => {
           const active = isTabActive(tab.id);
           const Icon = tab.icon;
@@ -92,7 +73,7 @@ export function ComponentTabControls({
               type="button"
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "relative p-1.5 sm:p-2 rounded-full transition-colors duration-200 cursor-pointer flex items-center justify-center text-xs focus:outline-none select-none",
+                "relative p-1.5 sm:p-2 rounded-full transition-colors duration-200 cursor-pointer flex items-center justify-center text-xs focus:outline-none select-none touch-manipulation",
                 active
                   ? "text-[var(--theme-primary)]"
                   : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
