@@ -207,12 +207,12 @@ export default function DropdownBreadcrumb() {
     label: "Gooey Breadcrumb",
     code: `import { BreadcrumbGooey } from "@/components/ui/breadcrumb";
 
-export default function GooeyBreadcrumbDemo() {
+export default function GooeyBreadcrumb() {
   const items = [
-    { id: "home", label: "", icon: "🏠" },
-    { id: "changelog", label: "Dashboard", icon: "📖" },
-    { id: "career", label: "Business", icon: "💼" },
-    { id: "about", label: "User", icon: "👤" },
+    { id: "home", label: "Home", icon: "🏠" },
+    { id: "docs", label: "Docs", icon: "📖" },
+    { id: "business", label: "Business", icon: "💼" },
+    { id: "user", label: "User", icon: "👤" },
   ];
 
   return (
@@ -286,44 +286,6 @@ export default function ChipsBreadcrumb() {
         </BreadcrumbList>
       </Breadcrumb>
     </div>
-  );
-}`,
-  },
-  {
-    id: "customization",
-    label: "Customization",
-    code: `import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-
-export default function CustomBreadcrumbPlayground() {
-  return (
-    <Breadcrumb variant="chips" size="md">
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/" icon="🏠">
-            Home
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/docs" icon="📁">
-            Docs
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage icon="🍞">
-            Breadcrumb
-          </BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
   );
 }`,
   },

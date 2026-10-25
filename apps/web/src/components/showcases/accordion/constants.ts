@@ -341,45 +341,6 @@ export default function ExpandedDefaultAccordion() {
   );
 }`,
   },
-  {
-    id: "customization",
-    label: "Customization",
-    code: `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Star } from "lucide-react";
-
-export default function CustomizationAccordion() {
-  return (
-    <Accordion type="single" collapsible className="w-full space-y-4">
-      <AccordionItem 
-        value="item-1" 
-        borderWidth="2px" 
-        borderColor="var(--theme-primary)" 
-        borderRadius="12px"
-        className="px-4 bg-background"
-      >
-        <AccordionTrigger 
-          size="lg" 
-          weight="bold" 
-          icon={<Star className="h-5 w-5 text-[var(--theme-primary)]" />} 
-          iconPosition="left"
-          headingUnderline={true}
-          headingColor="var(--theme-primary)"
-        >
-          Custom Styled Item
-        </AccordionTrigger>
-        <AccordionContent contentColor="var(--theme-primary)">
-          This item uses custom props for borders, large text, bold weight, a custom left-aligned icon, heading color, and content color.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-}`,
-  }
 ];
 
 export const MANUAL_INSTALL_CODE = `import {

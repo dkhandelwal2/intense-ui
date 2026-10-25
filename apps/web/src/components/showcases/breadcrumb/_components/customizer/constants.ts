@@ -28,7 +28,7 @@ export const DEFAULT_CUSTOM_PROPS: CustomProps = {
   variant: "chips",
   separator: "chevron",
   separatorColor: "",
-  activeColor: "var(--theme-primary)",
+  activeColor: "",
   size: "md",
   showIcons: true,
   hasDropdown: false,
@@ -39,7 +39,7 @@ export function getModifiedCount(props: CustomProps): number {
   if (props.variant !== "chips") count++;
   if (props.separator !== "chevron") count++;
   if (props.separatorColor && props.separatorColor.trim() !== "") count++;
-  if (props.activeColor && props.activeColor !== "var(--theme-primary)") count++;
+  if (props.activeColor && props.activeColor.trim() !== "") count++;
   if (props.size !== "md") count++;
   if (!props.showIcons) count++;
   if (props.hasDropdown) count++;

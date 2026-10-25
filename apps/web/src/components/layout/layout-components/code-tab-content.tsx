@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Code2, Sparkles } from "lucide-react";
+import { Code, Code2, Sparkles, SlidersHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
 import { SectionHeader } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +19,7 @@ export interface CodeTabContentProps {
   codeContentJs?: string;
   codes?: Record<string, string>;
   codesJs?: Record<string, string>;
+  customizedCode?: string | null;
 }
 
 export function CodeTabContent({
@@ -25,11 +27,16 @@ export function CodeTabContent({
   activeTocId,
   codeContent,
   codes,
+  customizedCode,
 }: CodeTabContentProps) {
   const [dynamicCodes, setDynamicCodes] = React.useState<Record<string, string>>({});
   const [activeOverrideId, setActiveOverrideId] = React.useState<string | null>(null);
 
+  // Effective customized code from props or dynamic events
+  const effectiveCustomCode = customizedCode || dynamicCodes["customization"] || null;
+
   React.useEffect(() => {
+    // When activeTocId changes, reset any override so active card option takes precedence
     setActiveOverrideId(null);
   }, [activeTocId]);
 
@@ -41,60 +48,89 @@ export function CodeTabContent({
           ...prev,
           [customEvent.detail.id]: customEvent.detail.code,
         }));
+      }
+    };
+
+    const handleOpenCode = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id?: string }>;
+      if (customEvent.detail?.id) {
         setActiveOverrideId(customEvent.detail.id);
+      } else {
+        setActiveOverrideId("customization");
       }
     };
 
     window.addEventListener("intense-ui:code-update", handleCodeUpdate);
+    window.addEventListener("intense-ui:open-code", handleOpenCode);
+
     return () => {
       window.removeEventListener("intense-ui:code-update", handleCodeUpdate);
+      window.removeEventListener("intense-ui:open-code", handleOpenCode);
     };
   }, []);
 
+  const isCustomizing =
+    (activeOverrideId === "customization" || activeTocId === "customization") &&
+    Boolean(effectiveCustomCode);
+
   const getActiveCode = () => {
-    const targetId = activeOverrideId || activeTocId;
-    if (targetId && dynamicCodes[targetId]) {
-      return dynamicCodes[targetId];
+    // 1. Explicit override from "View Code" event or action
+    if (activeOverrideId === "customization" && effectiveCustomCode) {
+      return effectiveCustomCode;
     }
-    if (codes && targetId && codes[targetId]) {
-      return codes[targetId];
+    if (activeOverrideId && dynamicCodes[activeOverrideId]) {
+      return dynamicCodes[activeOverrideId];
     }
+    if (activeOverrideId && codes && codes[activeOverrideId]) {
+      return codes[activeOverrideId];
+    }
+
+    // 2. Active card's dynamic code (if registered via event)
     if (activeTocId && dynamicCodes[activeTocId]) {
       return dynamicCodes[activeTocId];
     }
-    if (codes && activeTocId && codes[activeTocId]) {
+
+    // 3. Active card's example code from dictionary (e.g. dropdown, gooey, chips, basic)
+    if (activeTocId && codes && codes[activeTocId]) {
       return codes[activeTocId];
     }
+
+    // 4. Customization card active (if TOC section is customization)
+    if (activeTocId === "customization" && effectiveCustomCode) {
+      return effectiveCustomCode;
+    }
+
+    // 5. Fallback to first available example in codes
     if (codes && Object.keys(codes).length > 0) {
       const firstKey = Object.keys(codes)[0];
       return dynamicCodes[firstKey] || codes[firstKey];
     }
-    return dynamicCodes["customization"] || codeContent || "";
+
+    // 6. Fallback to customized code or default content
+    return effectiveCustomCode || codeContent || "";
   };
 
   const activeCode = getActiveCode();
 
   return (
-    <motion.div
-      key="code"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col flex-1 min-h-0 h-full gap-3"
-    >
+    <div className="flex flex-col flex-1 min-h-0 h-full gap-3">
       {/* Header: Code Reference with TSX badge */}
-      <div className="shrink-0">
+      <div className="shrink-0 space-y-2">
         <div className="flex items-center justify-between pb-1">
           <SectionHeader
             icon={Code}
             colorScheme="primary"
             title="Code Reference"
             badge="TSX"
-            subtitle="Usage example for your project"
+            subtitle={
+              isCustomizing
+                ? "Live code updated with your custom props"
+                : "Ready-to-use snippet for this variant"
+            }
           />
         </div>
-        <Separator className="mt-3 mb-1" />
+
+        <Separator className="mt-1 mb-1" />
       </div>
 
       {/* Code Block Content with Skeleton Loading State */}
@@ -154,6 +190,6 @@ export function CodeTabContent({
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   );
 }

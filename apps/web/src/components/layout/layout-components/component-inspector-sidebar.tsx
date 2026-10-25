@@ -8,15 +8,19 @@ import { ComponentSidebarHeader } from "./component-sidebar-header";
 
 export interface ComponentInspectorSidebarProps {
   title: string;
+  slug?: string;
   activeTab: ComponentActiveTab;
   onTabChange: (tab: ComponentActiveTab) => void;
+  hasPlayground?: boolean;
   children: React.ReactNode;
 }
 
 export function ComponentInspectorSidebar({
   title,
+  slug,
   activeTab,
   onTabChange,
+  hasPlayground = true,
   children,
 }: ComponentInspectorSidebarProps) {
   const rightSidebarRef = useRef<HTMLDivElement>(null);
@@ -44,13 +48,16 @@ export function ComponentInspectorSidebar({
   };
 
   return (
-    <aside className="sticky top-20 z-30 hidden xl:flex flex-col xl:w-[360px] 2xl:w-[460px] h-[calc(100vh-6rem)] shrink-0 py-1">
+    <aside
+      className="sticky top-20 z-30 hidden xl:flex flex-col xl:w-[360px] 2xl:w-[500px] h-[calc(100vh-5rem)] shrink-0"
+    >
       <div
         className={cn(
           "w-full h-full flex flex-col transition-colors duration-300",
           "bg-background/80 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl",
-          "shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/60",
-          "relative rounded-[32px] p-5 overflow-hidden"
+          "shadow-2xl shadow-black/5 dark:shadow-black/60",
+          "border-l border-black/[0.08] dark:border-white/[0.08]",
+          "relative rounded-l-[32px] rounded-r-none overflow-hidden"
         )}
       >
         {/* Left-side gradient hairline separator */}
@@ -62,14 +69,16 @@ export function ComponentInspectorSidebar({
         {/* Pinned / Fixed Header on Top */}
         <ComponentSidebarHeader
           title={title}
+          slug={slug}
           activeTab={activeTab}
           onTabChange={handleTabChange}
+          hasPlayground={hasPlayground}
         />
 
-        {/* Scrollable inner content */}
+        {/* Scrollable inner content with its own dedicated padding */}
         <div
           ref={rightSidebarRef}
-          className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col w-full"
+          className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col w-full p-4 sm:p-5"
         >
           {children}
         </div>

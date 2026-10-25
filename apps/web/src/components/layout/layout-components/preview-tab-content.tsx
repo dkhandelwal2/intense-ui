@@ -25,14 +25,7 @@ export function PreviewTabContent({
   propsTable,
 }: PreviewTabContentProps) {
   return (
-    <motion.div
-      key="info"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col gap-5"
-    >
+    <div className="flex flex-col gap-5">
       {/* Description */}
       {description && (
         <SidebarMotionSection className="flex flex-col gap-4">
@@ -98,6 +91,6 @@ export function PreviewTabContent({
       <SidebarMotionSection delay={0.04}>
         <ContactCard />
       </SidebarMotionSection>
-    </motion.div>
+    </div>
   );
 }

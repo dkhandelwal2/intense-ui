@@ -1,34 +1,42 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StackedCardsContainer } from "@/components/ui/stacked-card";
+import { useShowcaseCodeUpdate } from "@/components/showcases/common";
+import { useComponentPlayground } from "@/components/layout/component-page-layout";
 import { ACCORDION_EXAMPLES } from "./constants";
 import { CustomProps } from "./types";
-import { AccordionCard } from "./_components";
+import {
+  AccordionCard,
+  AccordionPlaygroundStudio,
+  AccordionLivePreview,
+  DEFAULT_CUSTOM_PROPS,
+} from "./_components";
 import { generateAccordionCode } from "./code-generator";
 
 export function AccordionShowcase() {
-  const [customProps, setCustomProps] = useState<CustomProps>({
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "var(--theme-primary)",
-    size: "md",
-    weight: "Default",
-    iconType: "Default",
-    iconPosition: "Right",
-    headingUnderline: false,
-    headingColor: "",
-    contentColor: "",
-  });
+  const [customProps, setCustomProps] = useState<CustomProps>(DEFAULT_CUSTOM_PROPS);
+  const { registerPlayground, unregisterPlayground, setCustomizedCode } = useComponentPlayground();
 
-  React.useEffect(() => {
-    const code = generateAccordionCode(customProps);
-    window.dispatchEvent(
-      new CustomEvent("intense-ui:code-update", {
-        detail: { id: "customization", code },
-      })
+  const code = generateAccordionCode(customProps);
+  useShowcaseCodeUpdate(code);
+
+  useEffect(() => {
+    setCustomizedCode(code);
+  }, [code, setCustomizedCode]);
+
+  useEffect(() => {
+    registerPlayground(
+      <AccordionPlaygroundStudio
+        customProps={customProps}
+        onChange={setCustomProps}
+      />,
+      <AccordionLivePreview customProps={customProps} />
     );
-  }, [customProps]);
+    return () => {
+      unregisterPlayground();
+    };
+  }, [customProps, registerPlayground, unregisterPlayground]);
 
   return (
     <StackedCardsContainer>
@@ -39,7 +47,6 @@ export function AccordionShowcase() {
           index={index}
           total={ACCORDION_EXAMPLES.length}
           customProps={customProps}
-          onCustomPropsChange={setCustomProps}
         />
       ))}
     </StackedCardsContainer>

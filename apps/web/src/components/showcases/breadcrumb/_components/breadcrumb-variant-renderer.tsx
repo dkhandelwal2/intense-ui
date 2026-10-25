@@ -20,10 +20,10 @@ import { cn } from "@/lib/utils";
 
 // ── Shared Data Constants ──
 const GOOEY_ITEMS = [
-  { id: "home", label: "", icon: "🏠" },
-  { id: "changelog", label: "Changelog", icon: "📖" },
-  { id: "career", label: "Career", icon: "💼" },
-  { id: "about", label: "About", icon: "👤" },
+  { id: "home", label: "home", icon: "🏠" },
+  { id: "docs", label: "Docs", icon: "📖" },
+  { id: "business", label: "Business", icon: "💼" },
+  { id: "user", label: "User", icon: "👤" },
 ];
 
 const DROPDOWN_ITEMS = [
@@ -67,7 +67,7 @@ function PreviewCanvas({
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-center py-6 px-4",
+        "w-full flex items-center justify-center p-1",
         className
       )}
     >

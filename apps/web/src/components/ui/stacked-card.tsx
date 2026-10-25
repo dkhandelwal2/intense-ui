@@ -52,62 +52,52 @@ export function StackedCard({
   const { scrollYProgress } = context;
   const isLast = index === total - 1;
 
-  // Build a progressive array map for perfect cascading physics
-  const points = [];
-  const scales = [];
-  const overlayOpacities = [];
-  const opacities = [];
-  const yOffsets = [];
+  // Build a progressive array map for cascading physics without altering card backgrounds
+  const { points, scales, opacities, yOffsets } = React.useMemo(() => {
+    const pts = [];
+    const scs = [];
+    const ops = [];
+    const yOffs = [];
 
-  for (let i = 0; i <= total; i++) {
-    points.push(i / total);
+    for (let i = 0; i <= total; i++) {
+      pts.push(i / total);
 
-    if (i <= index) {
-      // The card hasn't been covered yet
-      scales.push(1);
-      overlayOpacities.push(0);
-      opacities.push(1);
-      yOffsets.push(0);
-    } else {
-      // The card is being covered by (i - index) subsequent cards
-      if (isLast) {
-        // The last card should NEVER shrink or dim, because there is no card below it to cover it.
-        // This ensures the interactive props remain fully visible and usable.
-        scales.push(1);
-        overlayOpacities.push(0);
-        opacities.push(1);
-        yOffsets.push(0);
+      if (i <= index) {
+        scs.push(1);
+        ops.push(1);
+        yOffs.push(0);
       } else {
-        const distance = i - index;
-        // Progressively shrink and dim the background cards to create a true depth pyramid
-        scales.push(1 - distance * 0.04);
-        overlayOpacities.push(Math.min(0.5, distance * 0.15));
-        yOffsets.push(-(distance * 32)); // Stagger UPWARDS behind the active card
-
-        // Hide cards that are more than 3 positions away to prevent a giant vertical staircase when many variants exist
-        if (distance > 3) {
-          opacities.push(0);
+        if (isLast) {
+          scs.push(1);
+          ops.push(1);
+          yOffs.push(0);
         } else {
-          opacities.push(Math.max(0, 1 - distance * 0.25));
+          const distance = i - index;
+          scs.push(1 - distance * 0.04);
+          yOffs.push(-(distance * 32));
+
+          if (distance > 3) {
+            ops.push(0);
+          } else {
+            ops.push(1);
+          }
         }
       }
     }
-  }
+
+    return { points: pts, scales: scs, opacities: ops, yOffsets: yOffs };
+  }, [index, total, isLast]);
 
   // Map progress to raw target values
   const scaleTarget = useTransform(scrollYProgress, points, scales);
-  const overlayOpacityTarget = useTransform(scrollYProgress, points, overlayOpacities);
   const opacityTarget = useTransform(scrollYProgress, points, opacities);
   const yTarget = useTransform(scrollYProgress, points, yOffsets);
 
   // Apply ultra-smooth spring physics to the mapped values
   const scale = useSpring(scaleTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
-  const overlayOpacity = useSpring(overlayOpacityTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
   const opacity = useSpring(opacityTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
   const y = useSpring(yTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
 
-
-  // We set transform origin to top so the scaling doesn't pull the top edge down.
   return (
     <div
       className={cn(
@@ -115,7 +105,6 @@ export function StackedCard({
         className
       )}
       style={{
-        // ALL cards stick to the exact same top position. The stagger is handled by the dynamic 'y' offset!
         top: `10vh`,
         zIndex: index,
       }}
@@ -128,14 +117,9 @@ export function StackedCard({
                 scale,
                 opacity,
                 y,
-                "--stack-tint": overlayOpacity,
               } as any)
         }
-        className={cn(
-          "w-full origin-top",
-          !isLast &&
-            "[&>*]:relative [&>*]:after:absolute [&>*]:after:inset-0 [&>*]:after:bg-[var(--theme-primary)] [&>*]:after:pointer-events-none [&>*]:after:rounded-[inherit] [&>*]:after:opacity-[var(--stack-tint)] dark:[&>*]:after:opacity-[calc(var(--stack-tint)*0.5)] [&>*]:after:transition-opacity [&>*]:after:duration-0"
-        )}
+        className="w-full origin-top"
       >
         {children}
       </motion.div>

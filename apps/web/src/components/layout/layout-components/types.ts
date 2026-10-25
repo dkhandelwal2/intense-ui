@@ -7,7 +7,7 @@ export interface TocItem {
   icon?: React.ReactNode;
 }
 
-export type ComponentActiveTab = "info" | "code" | "install";
+export type ComponentActiveTab = "info" | "code" | "install" | "playground";
 export type ComponentCodeLang = "tsx" | "js";
 
 export interface ComponentPageLayoutProps {
@@ -23,5 +23,6 @@ export interface ComponentPageLayoutProps {
   installContent?: React.ReactNode;
   slug?: string;
   usageCode?: string;
+  playgroundContent?: React.ReactNode;
   children: React.ReactNode;
 }

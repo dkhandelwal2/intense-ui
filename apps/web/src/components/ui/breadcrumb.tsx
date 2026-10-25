@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, MoreHorizontal, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -226,25 +226,39 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
     const isGhostStyle = variant === "ghost";
 
     const customActiveStyle: React.CSSProperties = activeColor
-      ? { color: activeColor, ...style }
+      ? {
+          color: activeColor,
+          borderColor: isChipStyle || isOutlineStyle ? activeColor : undefined,
+          backgroundColor: isChipStyle
+            ? `color-mix(in srgb, ${activeColor} 12%, transparent)`
+            : undefined,
+          ...style,
+        }
       : style || {};
 
     const variantStyles = isChipStyle
       ? cn(
-          "border border-[var(--theme-primary)]/40 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] font-semibold shadow-xs",
+          "border font-semibold shadow-xs",
+          activeColor
+            ? "border-current/40 bg-current/10 text-current"
+            : "border-[var(--theme-primary)]/40 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)]",
           linkSizeStyles[size]
         )
       : isOutlineStyle
         ? cn(
-            "border border-[var(--theme-primary)] bg-transparent text-[var(--theme-primary)] font-semibold",
+            "border bg-transparent font-semibold",
+            activeColor
+              ? "border-current text-current"
+              : "border-[var(--theme-primary)] text-[var(--theme-primary)]",
             linkSizeStyles[size]
           )
         : isGhostStyle
           ? cn(
-              "bg-zinc-100 dark:bg-zinc-800/80 text-foreground font-semibold",
+              "bg-zinc-100 dark:bg-zinc-800/80 font-semibold",
+              !activeColor && "text-foreground",
               linkSizeStyles[size]
             )
-          : "font-semibold text-foreground";
+          : cn("font-semibold", !activeColor && "text-foreground");
 
     return (
       <span
@@ -285,7 +299,12 @@ const BreadcrumbSeparator = ({
   ...props
 }: BreadcrumbSeparatorProps) => {
   const { separator: contextSeparator, separatorColor } = useBreadcrumbContext();
-  const activeSeparator = propSeparator ?? children ?? contextSeparator;
+  const activeSeparator = propSeparator !== undefined ? propSeparator : children !== undefined ? children : contextSeparator;
+
+  // If separator is explicitly null or empty, don't render a separator
+  if (activeSeparator === null) {
+    return null;
+  }
 
   const customStyle: React.CSSProperties = separatorColor
     ? { color: separatorColor, ...style }
@@ -302,7 +321,7 @@ const BreadcrumbSeparator = ({
       )}
       {...props}
     >
-      {activeSeparator ?? <ChevronRight className="w-3.5 h-3.5" />}
+      {activeSeparator !== undefined ? activeSeparator : <ChevronRight className="w-3.5 h-3.5" />}
     </li>
   );
 };
@@ -527,7 +546,9 @@ export function BreadcrumbGooey({
   const activeId = controlledActiveId ?? internalActiveId;
   const currentSize = gooeySizes[size];
 
-  const handleItemClick = (id: string) => {
+  const handleItemClick = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (id === activeId) return;
     setInternalActiveId(id);
     onSelect?.(id);
   };
@@ -536,13 +557,6 @@ export function BreadcrumbGooey({
     0,
     items.findIndex((item) => item.id === activeId)
   );
-
-  const springTransition = {
-    type: "spring" as const,
-    stiffness: 400,
-    damping: 30,
-    mass: 0.8,
-  };
 
   return (
     <nav
@@ -576,9 +590,9 @@ export function BreadcrumbGooey({
           ? "rounded-r-2xl rounded-l-none"
           : "rounded-none";
 
-        // Clean border outlines for unified islands
+        // Clean border outlines for unified islands (1px constant to avoid layout shifts)
         const borderClass = isItemActive
-          ? "border-0"
+          ? "border border-transparent"
           : isFirstOfGroup && isLastOfGroup
           ? "border border-zinc-200/90 dark:border-white/5"
           : isFirstOfGroup
@@ -594,36 +608,35 @@ export function BreadcrumbGooey({
           : {};
 
         return (
-          <motion.button
-            layout
+          <button
             key={item.id}
             type="button"
-            onClick={() => handleItemClick(item.id)}
-            transition={springTransition}
+            onClick={(e) => handleItemClick(e, item.id)}
             style={customActiveStyle}
             className={cn(
-              "relative inline-flex items-center justify-center gap-1.5 cursor-pointer transition-[background-color,border-radius,box-shadow,color] duration-200",
+              "relative inline-flex items-center justify-center gap-1.5 cursor-pointer select-none font-medium leading-none",
+              "transition-[background-color,border-radius,border-color,box-shadow,color,margin,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.97]",
               currentSize.button,
               radiusClass,
               borderClass,
               hasGapAfter && currentSize.gap,
               isItemActive
-                ? "bg-[var(--theme-primary)] text-white font-semibold shadow-md shadow-[var(--theme-primary)]/25 active:scale-95"
-                : "bg-zinc-100/90 dark:bg-[#1a1a1c] text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white font-medium"
+                ? "bg-[var(--theme-primary)] text-white shadow-md shadow-[var(--theme-primary)]/25"
+                : "bg-zinc-100/90 dark:bg-[#1a1a1c] text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
             )}
           >
             {item.icon && (
               <span
                 className={cn(
-                  "shrink-0 inline-flex items-center justify-center leading-none text-sm select-none [&>svg]:w-3.5 [&>svg]:h-3.5",
+                  "shrink-0 inline-flex items-center justify-center leading-none text-sm select-none [&>svg]:w-3.5 [&>svg]:h-3.5 transition-colors duration-200",
                   isItemActive ? "text-white" : "text-zinc-500 dark:text-zinc-400"
                 )}
               >
                 {item.icon}
               </span>
             )}
-            <span>{item.label}</span>
-          </motion.button>
+            {item.label ? <span>{item.label}</span> : null}
+          </button>
         );
       })}
     </nav>

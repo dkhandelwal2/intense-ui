@@ -1,6 +1,10 @@
 export * from "./types";
 export { SidebarMotionSection } from "./sidebar-motion-section";
 export { ComponentMoreMenu } from "./component-more-menu";
+export { ComponentTabControls } from "./component-tab-controls";
+export type { ComponentTabControlsProps } from "./component-tab-controls";
+export { ComponentTitleBadge } from "./component-title-badge";
+export type { ComponentTitleBadgeProps } from "./component-title-badge";
 export { ComponentSidebarHeader } from "./component-sidebar-header";
 export { PreviewTabContent } from "./preview-tab-content";
 export { InstallTabContent } from "./install-tab-content";

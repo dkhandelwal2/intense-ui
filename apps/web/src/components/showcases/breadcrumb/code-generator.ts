@@ -1,6 +1,19 @@
 import { CustomProps } from "./types";
 
+function getBreadcrumbOptionName(customProps: CustomProps): string {
+  if (customProps.variant === "gooey") return "GooeyBreadcrumb";
+  if (customProps.hasDropdown) return "DropdownBreadcrumb";
+  if (customProps.variant === "chips") return "ChipsBreadcrumb";
+  if (customProps.variant === "outline") return "OutlineBreadcrumb";
+  if (customProps.variant === "ghost") return "GhostBreadcrumb";
+  if (customProps.separator && customProps.separator !== "chevron") return "CustomSeparatorBreadcrumb";
+  if (customProps.showIcons) return "WithIconsBreadcrumb";
+  return "BasicBreadcrumb";
+}
+
 export function generateBreadcrumbCode(customProps: CustomProps): string {
+  const optionFunctionName = getBreadcrumbOptionName(customProps);
+
   if (customProps.variant === "gooey") {
     const homeIcon = customProps.showIcons ? ', icon: "🏠"' : "";
     const changeIcon = customProps.showIcons ? ', icon: "📖"' : "";
@@ -19,12 +32,12 @@ export function generateBreadcrumbCode(customProps: CustomProps): string {
 
     return `import { BreadcrumbGooey } from "@/components/ui/breadcrumb";
 
-export default function CustomBreadcrumb() {
+export default function ${optionFunctionName}() {
   const items = [
     { id: "home", label: "Home"${homeIcon} },
-    { id: "changelog", label: "Changelog"${changeIcon} },
-    { id: "career", label: "Career"${careerIcon} },
-    { id: "about", label: "About"${aboutIcon} },
+    { id: "docs", label: "Docs"${changeIcon} },
+    { id: "business", label: "Business"${careerIcon} },
+    { id: "user", label: "User"${aboutIcon} },
   ];
 
   return (
@@ -145,7 +158,7 @@ export default function CustomBreadcrumb() {
 
   return `${importSection.join("\n")}
 
-export default function CustomBreadcrumb() {
+export default function ${optionFunctionName}() {
   return (
     <Breadcrumb${rootPropsString}>
       <BreadcrumbList>

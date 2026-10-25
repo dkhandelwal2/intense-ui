@@ -44,15 +44,54 @@ function generateDockPath(X: number, W: number, H = 66, R = 28) {
 export interface ComponentTocDockProps {
   tocItems: TocItem[];
   activeTocId?: string;
+  centerColumnRef?: React.RefObject<HTMLElement | null>;
+  onItemClick?: (id: string) => void;
   className?: string;
 }
 
 export function ComponentTocDock({
   tocItems,
   activeTocId,
+  centerColumnRef,
+  onItemClick,
   className,
 }: ComponentTocDockProps) {
   if (tocItems.length === 0) return null;
+
+  const [centerX, setCenterX] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const updatePosition = () => {
+      const target =
+        (centerColumnRef && centerColumnRef.current) ||
+        document.getElementById("center-content-column");
+
+      if (target) {
+        const rect = target.getBoundingClientRect();
+        setCenterX(rect.left + rect.width / 2);
+      }
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, { passive: true });
+
+    const target =
+      (centerColumnRef && centerColumnRef.current) ||
+      document.getElementById("center-content-column");
+
+    let observer: ResizeObserver | null = null;
+    if (target && typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(updatePosition);
+      observer.observe(target);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+      observer?.disconnect();
+    };
+  }, [centerColumnRef]);
 
   const allItems = tocItems.map((item, idx) => ({ ...item, idx }));
   const N = allItems.length;
@@ -109,8 +148,12 @@ export function ComponentTocDock({
 
   return (
     <div
+      style={{
+        left: centerX !== null ? `${centerX}px` : undefined,
+      }}
       className={cn(
-        "hidden xl:block fixed bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none select-none",
+        "hidden xl:block fixed bottom-6 z-20 pointer-events-none select-none transition-[left] duration-300 ease-out",
+        centerX !== null ? "-translate-x-1/2" : "left-1/2 -translate-x-1/2",
         className
       )}
     >
@@ -187,7 +230,20 @@ export function ComponentTocDock({
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                     key={item.id}
-                    className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-default select-none"
+                    onClick={() => {
+                      if (onItemClick) {
+                        onItemClick(item.id);
+                      } else {
+                        const el = document.getElementById(item.id);
+                        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        window.dispatchEvent(
+                          new CustomEvent("intense-ui:focus-toc", {
+                            detail: { id: item.id },
+                          })
+                        );
+                      }
+                    }}
+                    className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-pointer select-none"
                   >
                     {/* Inactive Icon (+50% size: 24px) */}
                     <div

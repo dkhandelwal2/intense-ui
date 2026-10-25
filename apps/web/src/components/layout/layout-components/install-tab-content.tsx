@@ -33,14 +33,7 @@ export function InstallTabContent({
   onPackageManagerChange,
 }: InstallTabContentProps) {
   return (
-    <motion.div
-      key="install"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col gap-6"
-    >
+    <div className="flex flex-col gap-6">
       {/* Installation Overview / Guidance Box */}
       <SidebarMotionSection className="flex flex-col gap-2.5 mt-2">
         <div className="flex items-center justify-between">
@@ -141,6 +134,6 @@ export function InstallTabContent({
           <div className="text-sm text-zinc-500">No installation steps provided.</div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

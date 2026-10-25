@@ -2,27 +2,34 @@
 
 import React, { useRef, useEffect } from "react";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
-import { Monitor, Code, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ComponentActiveTab } from "./types";
-import { ComponentMoreMenu } from "./component-more-menu";
+import { ComponentTabControls } from "./component-tab-controls";
+import { ComponentTitleBadge } from "./component-title-badge";
 
 export interface ComponentBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  slug?: string;
+  icon?: React.ComponentType<{ className?: string }>;
   activeTab: ComponentActiveTab;
   onTabChange: (tab: ComponentActiveTab) => void;
   children: React.ReactNode;
+  hasPlayground?: boolean;
 }
 
 export function ComponentBottomSheet({
   isOpen,
   onClose,
   title,
+  slug,
+  icon,
   activeTab,
   onTabChange,
   children,
+  hasPlayground = true,
 }: ComponentBottomSheetProps) {
   const dragControls = useDragControls();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -34,14 +41,16 @@ export function ComponentBottomSheet({
     }
   }, [activeTab, isOpen]);
 
-  // Lock body scroll when open
+  // Lock body scroll only when actually open on mobile/tablet (< 1280px)
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && typeof window !== "undefined" && window.innerWidth < 1280) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
         document.body.style.overflow = originalOverflow;
       };
+    } else if (typeof document !== "undefined" && document.body.style.overflow === "hidden") {
+      document.body.style.overflow = "";
     }
   }, [isOpen]);
 
@@ -121,53 +130,16 @@ export function ComponentBottomSheet({
               className="px-4 sm:px-6 pb-3 pt-1 flex items-center justify-between gap-3 border-b border-black/5 dark:border-white/10 shrink-0 select-none cursor-grab active:cursor-grabbing touch-none relative z-20"
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                <h2 className="text-xs sm:text-sm font-bold tracking-tight text-foreground uppercase truncate">
-                  {title}
-                </h2>
+                <ComponentTitleBadge title={title} slug={slug} icon={icon} />
               </div>
 
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => onTabChange("install")}
-                  className={cn(
-                    "px-6 py-1 text-xs font-medium rounded-full transition-colors cursor-pointer min-h-[34px]",
-                    activeTab === "install"
-                      ? "bg-[var(--theme-primary)] text-white shadow-sm"
-                      : "bg-zinc-100 hover:bg-zinc-200 text-zinc-600 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white"
-                  )}
-                >
-                  Install
-                </button>
-                <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full">
-                  <button
-                    type="button"
-                    onClick={() => onTabChange("info")}
-                    className={cn(
-                      "p-1.5 rounded-full transition-colors cursor-pointer",
-                      activeTab === "info"
-                        ? "bg-[var(--theme-primary)]/20 text-[var(--theme-primary)]"
-                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/10"
-                    )}
-                    title="Preview"
-                  >
-                    <Monitor className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onTabChange("code")}
-                    className={cn(
-                      "p-1.5 rounded-full transition-colors cursor-pointer",
-                      activeTab === "code"
-                        ? "bg-[var(--theme-primary)]/20 text-[var(--theme-primary)]"
-                        : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/10"
-                    )}
-                    title="Code"
-                  >
-                    <Code className="w-3.5 h-3.5" />
-                  </button>
-                  <ComponentMoreMenu direction="down" />
-                </div>
+                <ComponentTabControls
+                  activeTab={activeTab}
+                  onTabChange={onTabChange}
+                  hasPlayground={hasPlayground}
+                  layoutIdPrefix="bottom-sheet"
+                />
                 <button
                   type="button"
                   onClick={onClose}

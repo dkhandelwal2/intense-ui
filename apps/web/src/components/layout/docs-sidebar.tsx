@@ -14,19 +14,8 @@ import {
   BookOpen,
   Compass,
   Terminal,
-  LayoutList,
-  ToggleRight,
-  SlidersHorizontal,
-  MessageSquare,
-  MousePointerClick,
-  Minus,
   Layers,
   Sparkles,
-  LayoutGrid,
-  CreditCard,
-  Palette,
-  Route,
-  SquareDashed,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -35,22 +24,8 @@ import { Separator } from "@/components/ui/separator";
 import { GithubIcon, SparkleStarIcon } from "@/icons";
 import { siteConfig } from "@/config/site";
 import { componentsConfig } from "@/config/components";
+import { getComponentIcon } from "@/config/component-icons";
 import { useGitHubStars } from "@/hooks/use-github-stars";
-
-const COMPONENT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  accordion: LayoutList,
-  button: MousePointerClick,
-  "animated-button": MousePointerClick,
-  switch: ToggleRight,
-  slider: SlidersHorizontal,
-  tooltip: MessageSquare,
-  separator: Minus,
-  breadcrumb: Route,
-  skeleton: SquareDashed,
-  "color-grid": Palette,
-  "bento-grid": LayoutGrid,
-  "magnetic-card": CreditCard,
-};
 
 export interface DocsSidebarProps {
   onClick?: () => void;
@@ -146,7 +121,7 @@ export function DocsSidebar({
     return componentsConfig
       .filter((c) => c.enabled)
       .map((c) => {
-        const Icon = COMPONENT_ICONS[c.slug] || Layers;
+        const Icon = getComponentIcon(c.slug);
         const badgeInfo = siteConfig.sidebar.showBadges
           ? siteConfig.sidebar.componentBadges[c.slug]
           : undefined;

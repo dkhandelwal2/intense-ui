@@ -9,6 +9,7 @@ import { Tooltip } from "@registry/components/tooltip";
 export interface ColorGridProps {
   colors?: string[];
   value?: string;
+  defaultValue?: string;
   onChange?: (color: string) => void;
   onClear?: () => void;
   draggable?: boolean;
@@ -82,6 +83,7 @@ const GAP_MAP = {
 export function ColorGrid({
   colors = DEFAULT_COLORS,
   value = "",
+  defaultValue,
   onChange,
   onClear,
   draggable = false,
@@ -96,6 +98,8 @@ export function ColorGrid({
   const swatchSize = SIZE_MAP[size] || SIZE_MAP.md;
 
   const isGrid = typeof columns === "number" && columns > 0;
+  const hasSelectedValue = Boolean(value) && value !== (defaultValue ?? "");
+  const showReset = Boolean(onClear) && hasSelectedValue;
 
   const Content = (
     <motion.div
@@ -192,7 +196,7 @@ export function ColorGrid({
 
       {/* Reset button */}
       <AnimatePresence>
-        {onClear && (
+        {showReset && (
           <motion.div
             layout
             initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
