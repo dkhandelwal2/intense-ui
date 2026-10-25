@@ -37,7 +37,6 @@ export default function ${optionFunctionName}() {
     { id: "home", label: "Home"${homeIcon} },
     { id: "docs", label: "Docs"${changeIcon} },
     { id: "business", label: "Business"${careerIcon} },
-    { id: "user", label: "User"${aboutIcon} },
   ];
 
   return (

@@ -88,19 +88,10 @@ function ComponentPageLayoutInner({
       }
     };
 
-    const handleOpenCode = () => {
-      setActiveTab("code");
-      if (typeof window !== "undefined" && window.innerWidth < 1280) {
-        setIsBottomSheetOpen(true);
-      }
-    };
-
     window.addEventListener("intense-ui:open-playground", handleOpenPlayground);
-    window.addEventListener("intense-ui:open-code", handleOpenCode);
 
     return () => {
       window.removeEventListener("intense-ui:open-playground", handleOpenPlayground);
-      window.removeEventListener("intense-ui:open-code", handleOpenCode);
     };
   }, []);
 

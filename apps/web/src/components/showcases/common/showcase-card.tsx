@@ -2,10 +2,20 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, X, SlidersHorizontal, RotateCcw, ArrowRight, GripVertical, Code } from "lucide-react";
+import {
+  Eye,
+  Code,
+  Info,
+  X,
+  SlidersHorizontal,
+  RotateCcw,
+  ArrowRight,
+  GripVertical,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StackedCard } from "@/components/ui/stacked-card";
 import { WindowHeader } from "@/components/ui/window-header";
+import { CodeBlock } from "@/components/ui/code-block";
 import { useComponentActiveToc } from "@/components/layout/component-page-layout";
 import { ShowcaseCardProps } from "./types";
 
@@ -27,11 +37,10 @@ export function ShowcaseCard({
   onReset,
   liveOutputSummary,
 }: ShowcaseCardProps) {
+  const [cardView, setCardView] = useState<"preview" | "code">("preview");
   const [isCardInfoOpen, setIsCardInfoOpen] = useState(false);
-  const [isCodeTooltipVisible, setIsCodeTooltipVisible] = useState(false);
   const [mobileTab, setMobileTab] = useState<"preview" | "playground">("preview");
   const cardInfoRef = useRef<HTMLDivElement>(null);
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Split-pane resizing state for Desktop Bento Split
   const splitContainerRef = useRef<HTMLDivElement>(null);
@@ -69,11 +78,10 @@ export function ShowcaseCard({
     return () => {
       document.body.style.cursor = "";
       document.body.style.userSelect = "";
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
     };
   }, []);
 
-  // Close info tooltip when clicking outside (using 'click' to avoid dropping taps in mobile Safari)
+  // Close info tooltip when clicking outside
   useEffect(() => {
     if (!isCardInfoOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
@@ -92,20 +100,6 @@ export function ShowcaseCard({
     };
   }, [isCardInfoOpen, id]);
 
-  const handleCodeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    window.dispatchEvent(
-      new CustomEvent("intense-ui:focus-toc", {
-        detail: { id },
-      })
-    );
-    window.dispatchEvent(
-      new CustomEvent("intense-ui:open-code", {
-        detail: { id },
-      })
-    );
-  };
-
   // Active TOC focus tracking
   const activeTocId = useComponentActiveToc();
   const isActive = activeTocId ? activeTocId === id : index === 0;
@@ -122,18 +116,14 @@ export function ShowcaseCard({
           detail: { id },
         })
       );
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   };
 
-  // Render Icon (component or node)
-  const renderIcon = () => {
-    if (!icon) return null;
-    if (typeof icon === "function" || (typeof icon === "object" && "render" in (icon as any))) {
-      const IconComp = icon as React.ComponentType<{ className?: string }>;
-      return <IconComp className="w-5 h-5 text-xl sm:text-2xl leading-none" />;
-    }
-    return icon;
-  };
+  const formattedIndex = String(index + 1).padStart(2, "0");
 
   return (
     <StackedCard index={index} total={total}>
@@ -141,185 +131,171 @@ export function ShowcaseCard({
         id={id}
         onClick={handleCardClick}
         className={cn(
-          "bg-card text-card-foreground mx-auto rounded-[1.5rem] overflow-visible p-3.5 sm:p-6 md:p-6 border scroll-mt-28 transition-[border-color,box-shadow,opacity,filter,transform] duration-300 ease-out max-w-2xl",
+          "group relative mx-auto max-w-3xl scroll-mt-28 transition-[filter,opacity,transform,border-color,box-shadow] duration-300 ease-out select-none",
+          "rounded-2xl sm:rounded-3xl border bg-card text-card-foreground overflow-hidden",
           isActive
-            ? "border-[var(--theme-primary)]/40 dark:border-[var(--theme-primary)]/50 shadow-[0_8px_30px_rgb(0,0,0,0.06),0_0_25px_var(--theme-primary)]/15 dark:shadow-[0_8px_30px_rgb(0,0,0,0.4),0_0_25px_var(--theme-primary)]/20 scale-100 blur-none opacity-100"
-            : "border-zinc-200/80 dark:border-zinc-800/80 shadow-xs blur-[2.5px] opacity-60 hover:blur-none hover:opacity-100 scale-[0.99] cursor-pointer"
+            ? "border-[var(--theme-primary)]/50 dark:border-[var(--theme-primary)]/60 shadow-xl shadow-[var(--theme-primary)]/10 ring-2 ring-[var(--theme-primary)]/30 scale-100 blur-none opacity-100"
+            : "border-zinc-200/80 dark:border-zinc-800/80 shadow-xs blur-[2.5px] opacity-60 scale-[0.985] cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md hover:blur-none hover:opacity-100 hover:scale-[0.995]"
         )}
       >
-        {/* Section Header */}
-        <div className="relative flex items-start gap-4 py-3.5 sm:py-4">
-          {icon && (
-            <div className="p-2 sm:p-2.5 bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] rounded-xl shrink-0 flex items-center justify-center min-w-[38px] min-h-[38px] sm:min-w-[44px] sm:min-h-[44px] text-xl sm:text-2xl leading-none">
-              {renderIcon()}
-            </div>
-          )}
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2.5 flex-wrap mb-1">
-              <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                {label}
-              </h2>
-              {isCustomization && (
-                <>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 animate-pulse">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)]" />
-                    Interactive Playground
-                  </span>
-                  {modifiedCount > 0 && (
-                    <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                      {modifiedCount} {modifiedCount === 1 ? "prop" : "props"} modified
-                    </span>
-                  )}
-                </>
-              )}
-            </div>
-
-            {description && (
-              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-light leading-relaxed">
-                {description}
-              </p>
+        {/* Stage Header Toolbar */}
+        <div className="px-4 sm:px-6 py-3 sm:py-3.5 bg-zinc-50/80 dark:bg-zinc-900/40 border-b border-zinc-200/70 dark:border-zinc-800/70 flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="px-2 py-0.5 rounded-md font-mono text-[11px] font-bold bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80 shadow-2xs">
+              {formattedIndex}
+            </span>
+            <h3 className="text-sm sm:text-base font-bold tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
+              {label}
+            </h3>
+            {isCustomization && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--theme-primary)]" />
+                Playground Studio
+              </span>
+            )}
+            {isCustomization && modifiedCount > 0 && (
+              <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                {modifiedCount} mod
+              </span>
             )}
           </div>
 
-          {/* Action Buttons: Code & Info Tooltip */}
-          {(code || infoContent || description) && (
-            <div className="relative shrink-0 flex items-center gap-1 z-30">
-              {code && (
-                <div className="relative flex items-center justify-center">
-                  <button
-                    type="button"
-                    onClick={handleCodeClick}
-                    onMouseEnter={() => setIsCodeTooltipVisible(true)}
-                    onMouseLeave={() => setIsCodeTooltipVisible(false)}
-                    className="p-1.5 sm:p-2 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
-                    aria-label={`View code for ${label}`}
-                  >
-                    <Code className="w-4 h-4" />
-                  </button>
+          {/* Stage Controls: Preview/Code Switcher, Copy, Info */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {code && !isCustomization && (
+              <div className="flex items-center p-0.5 rounded-lg bg-zinc-200/60 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/60">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCardView("preview");
+                  }}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer",
+                    cardView === "preview"
+                      ? "bg-white dark:bg-zinc-900 text-[var(--theme-primary)] font-semibold shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                  )}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span className="hidden md:block">Preview</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCardView("code");
+                  }}
+                  className={cn(
+                    "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer",
+                    cardView === "code"
+                      ? "bg-white dark:bg-zinc-900 text-[var(--theme-primary)] font-semibold shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                  )}
+                >
+                  <Code className="w-3.5 h-3.5" />
+                  <span className="hidden md:block">Code</span>
+                </button>
+              </div>
+            )}
 
-                  <AnimatePresence>
-                    {isCodeTooltipVisible && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 4, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 4, scale: 0.95 }}
-                        transition={{ duration: 0.12 }}
-                        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-md bg-zinc-900 text-white dark:bg-zinc-800 text-[11px] font-medium shadow-md whitespace-nowrap pointer-events-none z-50"
-                      >
-                        View code
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-zinc-900 dark:border-t-zinc-800" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
+            {(infoContent || description) && (
+              <div className="relative flex items-center justify-center">
+                <button
+                  type="button"
+                  data-info-trigger={id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCardInfoOpen((prev) => !prev);
+                  }}
+                  className={cn(
+                    "inline-flex items-center justify-center h-7.5 w-7.5 sm:h-8 sm:w-8 rounded-lg transition-colors cursor-pointer",
+                    isCardInfoOpen
+                      ? "text-[var(--theme-primary)] bg-[var(--theme-primary)]/15 border border-[var(--theme-primary)]/30"
+                      : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-200/50 dark:hover:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-800"
+                  )}
+                  title="Specifications"
+                  aria-label="Specifications"
+                >
+                  <Info className="w-3.5 h-3.5" />
+                </button>
 
-              {(infoContent || description) && (
-                <div className="relative flex items-center justify-center">
-                  <button
-                    type="button"
-                    data-info-trigger={id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsCardInfoOpen((prev) => !prev);
-                    }}
-                    onMouseEnter={() => {
-                      if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
-                      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-                      setIsCardInfoOpen(true);
-                    }}
-                    onMouseLeave={() => {
-                      if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
-                      hoverTimeoutRef.current = setTimeout(() => {
-                        setIsCardInfoOpen(false);
-                      }, 250);
-                    }}
-                    className={cn(
-                      "p-1.5 sm:p-2 rounded-lg transition-colors cursor-pointer touch-manipulation",
-                      isCardInfoOpen
-                        ? "text-[var(--theme-primary)] bg-[var(--theme-primary)]/15"
-                        : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                    )}
-                    aria-label={`Specifications for ${label}`}
-                  >
-                    <Info className="w-4 h-4" />
-                  </button>
-
-                  {/* Rich Floating Tooltip for Specifications */}
-                  <AnimatePresence>
-                    {isCardInfoOpen && (
-                      <motion.div
-                        ref={cardInfoRef}
-                        initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 6, scale: 0.96, pointerEvents: "none" }}
-                        transition={{ duration: 0.16, ease: "easeOut" }}
-                        onMouseEnter={() => {
-                          if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
-                          if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-                        }}
-                        onMouseLeave={() => {
-                          if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
-                          hoverTimeoutRef.current = setTimeout(() => {
-                            setIsCardInfoOpen(false);
-                          }, 250);
-                        }}
-                        className="absolute right-0 top-full mt-2.5 z-50 w-[290px] sm:w-[380px] max-w-[calc(100vw-2.5rem)] rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/95 dark:bg-[#131317]/95 backdrop-blur-2xl shadow-2xl p-4 sm:p-5 text-left origin-top-right cursor-default touch-manipulation max-h-[75vh] overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {/* Caret pointing to Info Icon */}
-                        <div className="absolute -top-1.5 right-3.5 w-3 h-3 rotate-45 border-t border-l border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#131317]" />
-
-                        {/* Close button */}
+                {/* Info Popover */}
+                <AnimatePresence>
+                  {isCardInfoOpen && (
+                    <motion.div
+                      ref={cardInfoRef}
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96, pointerEvents: "none" }}
+                      transition={{ duration: 0.16, ease: "easeOut" }}
+                      className="absolute right-0 top-full mt-2.5 z-50 w-[290px] sm:w-[360px] max-w-[calc(100vw-2.5rem)] rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-[#121318]/95 backdrop-blur-2xl shadow-2xl p-4 text-left origin-top-right cursor-default max-h-[25vh] overflow-y-auto"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-center gap-1.5 font-bold text-xs text-zinc-900 dark:text-zinc-100">
+                          <Info className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
+                          <span>Specifications</span>
+                        </div>
                         <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             setIsCardInfoOpen(false);
                           }}
-                          className="absolute top-3.5 right-3.5 p-1 rounded-full text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer z-10"
-                          aria-label="Close specifications"
+                          className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 cursor-pointer"
                         >
-                          <X className="w-3.5 h-3.5" />
+                          <X className="w-3 h-3" />
                         </button>
-
-                        <div className="relative z-10 pr-5">
-                          {infoContent ? (
-                            infoContent
-                          ) : (
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-1.5 font-bold text-zinc-900 dark:text-zinc-100 text-xs">
-                                <Info className="w-3.5 h-3.5 text-[var(--theme-primary)]" />
-                                <span>Pattern Specifications</span>
-                              </div>
-                              <div className="text-zinc-600 dark:text-zinc-300 leading-relaxed text-[11.5px]">
-                                {description}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-            </div>
-          )}
+                      </div>
+                      <div className="text-zinc-600 dark:text-zinc-300 text-xs leading-relaxed">
+                        {infoContent || description}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Regular Showcase Preview Frame */}
-        {!isCustomization && (
-          <div className="flex flex-col relative overflow-visible">
+        {/* Description Strip (Preview Mode Only) */}
+        {description && cardView === "preview" && !isCustomization && (
+          <div className="px-4 sm:px-6 py-2 bg-zinc-50/40 dark:bg-black/20 border-b border-zinc-100 dark:border-zinc-800/40 text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-light">
+            {description}
+          </div>
+        )}
+
+        {/* Regular Showcase: Live Preview Stage */}
+        {!isCustomization && cardView === "preview" && (
+          <div
+            className={cn(
+              "relative flex items-center justify-center p-6 sm:p-10 md:p-12 min-h-[190px] sm:min-h-[230px] overflow-visible",
+              previewClassName
+            )}
+          >
+            {/* Subtle Studio Canvas Dot Grid */}
             <div
-              className={cn(
-                "flex items-center justify-center p-4 sm:p-6 md:p-8 relative group min-h-[160px] sm:min-h-[200px]",
-                previewClassName
-              )}
-            >
-              <div className="w-full relative z-20 flex items-center justify-center">
-                {children}
-              </div>
+              className="absolute inset-0 bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] dark:bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-40 dark:opacity-30"
+              aria-hidden="true"
+            />
+
+            {/* Live Component */}
+            <div className="relative z-10 w-full flex items-center justify-center overflow-x-auto no-scrollbar">
+              {children}
             </div>
+          </div>
+        )}
+
+        {/* Regular Showcase: Syntax-Highlighted Code View */}
+        {!isCustomization && cardView === "code" && code && (
+          <div className="relative bg-zinc-950 max-h-[420px] overflow-y-auto subtle-scrollbar">
+            <CodeBlock
+              code={code}
+              language="tsx"
+              showLineNumbers
+              className="rounded-none border-0 text-xs"
+            />
           </div>
         )}
 

@@ -212,7 +212,6 @@ export default function GooeyBreadcrumb() {
     { id: "home", label: "Home", icon: "🏠" },
     { id: "docs", label: "Docs", icon: "📖" },
     { id: "business", label: "Business", icon: "💼" },
-    { id: "user", label: "User", icon: "👤" },
   ];
 
   return (

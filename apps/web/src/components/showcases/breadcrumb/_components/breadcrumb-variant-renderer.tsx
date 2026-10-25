@@ -23,7 +23,6 @@ const GOOEY_ITEMS = [
   { id: "home", label: "home", icon: "🏠" },
   { id: "docs", label: "Docs", icon: "📖" },
   { id: "business", label: "Business", icon: "💼" },
-  { id: "user", label: "User", icon: "👤" },
 ];
 
 const DROPDOWN_ITEMS = [
