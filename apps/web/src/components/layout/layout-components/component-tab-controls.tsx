@@ -41,12 +41,12 @@ export function ComponentTabControls({
     },
     ...(hasPlayground
       ? [
-          {
-            id: "playground" as const,
-            title: "Playground Studio",
-            icon: SlidersHorizontal,
-          },
-        ]
+        {
+          id: "playground" as const,
+          title: "Playground Studio",
+          icon: SlidersHorizontal,
+        },
+      ]
       : []),
     {
       id: "info" as const,
@@ -73,7 +73,7 @@ export function ComponentTabControls({
               type="button"
               onClick={() => onTabChange(tab.id)}
               className={cn(
-                "relative p-1.5 sm:p-2 rounded-full transition-colors duration-200 cursor-pointer flex items-center justify-center text-xs focus:outline-none select-none touch-manipulation",
+                "relative p-1.5 sm:p-2 rounded-full transition-colors duration-200 cursor-pointer flex items-center justify-center text-sm focus:outline-none select-none touch-manipulation mx-1",
                 active
                   ? "text-[var(--theme-primary)]"
                   : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"

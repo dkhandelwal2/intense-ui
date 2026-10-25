@@ -168,7 +168,7 @@ export function PlaygroundStudio({
   };
 
   return (
-    <div className={cn("h-full w-full flex-1 min-h-0 flex flex-col select-none gap-3", className)}>
+    <div className={cn("h-full w-full flex-1 min-h-0 flex flex-col select-none gap-2.5 sm:gap-3", className)}>
       {/* Universal SVG ClipPath Definition for the Angled Pod Hero Card Shape (Desktop & Mobile) */}
       <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
         <defs>
@@ -215,7 +215,7 @@ export function PlaygroundStudio({
       </div>
 
       {/* Dynamic 2-Block Equal Height Grid / Flex Container */}
-      <div className={cn("flex-1 min-h-0", effectivePreview ? "grid grid-rows-2 gap-3" : "flex flex-col")}>
+      <div className={cn("flex-1 min-h-0", effectivePreview ? "grid grid-rows-2 gap-2.5 sm:gap-3" : "flex flex-col")}>
         {/* Preview Block: Directly Below Header Bar (No Live Component Preview Header) */}
         {effectivePreview && (
           <div className="relative h-full overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg flex items-center justify-center">
@@ -224,7 +224,7 @@ export function PlaygroundStudio({
               aria-hidden="true"
               className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none [background-image:radial-gradient(currentColor_1px,transparent_1px)] [background-size:16px_16px]"
             />
-            <div className="relative z-10 w-full h-full flex items-center justify-center overflow-y-auto no-scrollbar p-4">
+            <div className="relative z-10 w-full h-full flex items-center justify-center overflow-y-auto no-scrollbar p-3 sm:p-4">
               {effectivePreview}
             </div>
           </div>
@@ -244,7 +244,7 @@ export function PlaygroundStudio({
               animate="center"
               exit="exit"
               style={{ transformStyle: "preserve-3d" }}
-              className="w-full h-full grid grid-cols-[140px_1fr] 2xl:grid-cols-[165px_1fr] gap-0"
+              className="w-full h-full grid grid-cols-[125px_1fr] sm:grid-cols-[140px_1fr] 2xl:grid-cols-[165px_1fr] gap-0"
             >
               {/* Left Hero Card: Angled Shield Pod Shape touching left-most corner */}
               <div
@@ -253,7 +253,7 @@ export function PlaygroundStudio({
                   clipPath: "url(#playground-hero-shape)",
                 }}
                 className={cn(
-                  "relative text-white p-3.5 sm:p-4 flex flex-col justify-between overflow-hidden select-none h-full transition-colors duration-500",
+                  "relative text-white p-3 sm:p-4 flex flex-col justify-between overflow-hidden select-none h-full transition-colors duration-500",
                   activeGradient
                 )}
               >
@@ -281,11 +281,11 @@ export function PlaygroundStudio({
                 </div>
 
                 {/* Stacked Big Typography & Cute Organic Pill Shape */}
-                <div className="relative z-10 my-auto py-1">
-                  <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white drop-shadow-xs">
+                <div className="relative z-10 my-auto py-0.5 sm:py-1">
+                  <div className="text-lg sm:text-2xl font-black tracking-tight leading-none text-white drop-shadow-xs">
                     {currentStep.titleLine1}
                   </div>
-                  <div className="text-xl sm:text-2xl font-black tracking-tight leading-none text-white/90 drop-shadow-xs mt-1">
+                  <div className="text-lg sm:text-2xl font-black tracking-tight leading-none text-white/90 drop-shadow-xs mt-0.5 sm:mt-1">
                     {currentStep.titleLine2}
                   </div>
                 </div>
@@ -299,15 +299,15 @@ export function PlaygroundStudio({
               </div>
 
               {/* Right Side Options Panel ("My storehouse" Table Style - Props shifted upwards) */}
-              <div className="relative flex flex-col justify-start pt-2.5 pb-5 sm:pb-6 pr-3 pl-2.5 overflow-y-auto no-scrollbar h-full min-h-0">
+              <div className="relative flex flex-col justify-start pt-1.5 sm:pt-2 pb-2 sm:pb-3 pr-2.5 pl-2 sm:pr-3 sm:pl-2.5 overflow-y-auto no-scrollbar h-full min-h-0">
                 <div>
                   {/* Header: Title + Dynamic Emoji Badge in Top-Right */}
-                  <div className="flex items-start justify-between gap-1.5 pb-1">
+                  <div className="flex items-start justify-between gap-1.5 pb-0.5 sm:pb-1">
                     <div className="min-w-0">
-                      <h3 className="text-sm sm:text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">
+                      <h3 className="text-xs sm:text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">
                         {currentStep.headerTitle}
                       </h3>
-                      <h4 className="text-sm sm:text-base font-light tracking-tight text-zinc-500 dark:text-zinc-400 leading-tight truncate">
+                      <h4 className="text-[11px] sm:text-base font-light tracking-tight text-zinc-500 dark:text-zinc-400 leading-tight truncate">
                         {currentStep.headerSubtitle}
                       </h4>
                     </div>
@@ -315,7 +315,7 @@ export function PlaygroundStudio({
                     <div
                       aria-hidden="true"
                       className={cn(
-                        "w-7 h-7 rounded-full text-white flex items-center justify-center text-xs shadow-xs font-bold select-none shrink-0 border border-white/20 transition-colors duration-500",
+                        "w-6 h-6 sm:w-7 sm:h-7 rounded-full text-white flex items-center justify-center text-[11px] sm:text-xs shadow-xs font-bold select-none shrink-0 border border-white/20 transition-colors duration-500",
                         activeGradient
                       )}
                     >
@@ -324,7 +324,7 @@ export function PlaygroundStudio({
                   </div>
 
                   {/* Table Column Headers (Matching Reference: PRODUCT and NO) */}
-                  <div className="flex items-center justify-between text-[9px] font-mono font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pt-1.5 pb-1 border-b border-zinc-100 dark:border-zinc-800">
+                  <div className="flex items-center justify-between text-[8.5px] sm:text-[9px] font-mono font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pt-1 pb-0.5 border-b border-zinc-100 dark:border-zinc-800">
                     <span>PRODUCT</span>
                     <span>NO</span>
                   </div>
@@ -337,7 +337,7 @@ export function PlaygroundStudio({
                           key={row.id}
                           onClick={row.actionType === "toggle" ? () => row.onToggleChange?.(!row.toggleChecked) : row.onSelect}
                           className={cn(
-                            "w-full py-2 px-1.5 flex items-center justify-between transition-colors text-left cursor-pointer group rounded-lg my-0.5",
+                            "w-full py-1 sm:py-1.5 px-1.5 flex items-center justify-between transition-colors text-left cursor-pointer group rounded-lg my-0.5",
                             row.isSelected
                               ? "bg-[var(--theme-primary)]/10 text-zinc-900 dark:text-zinc-100"
                               : "hover:bg-zinc-100/70 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300"
@@ -346,7 +346,7 @@ export function PlaygroundStudio({
                           <div className="min-w-0 pr-1.5">
                             <div
                               className={cn(
-                                "text-xs font-bold truncate leading-tight",
+                                "text-[11px] sm:text-xs font-bold truncate leading-tight",
                                 row.isSelected
                                   ? "text-[var(--theme-primary)]"
                                   : "text-zinc-900 dark:text-zinc-100"
@@ -354,7 +354,7 @@ export function PlaygroundStudio({
                             >
                               {row.label}
                             </div>
-                            <div className="text-[9.5px] text-zinc-400 dark:text-zinc-500 font-mono truncate">
+                            <div className="text-[9px] sm:text-[9.5px] text-zinc-400 dark:text-zinc-500 font-mono truncate">
                               {row.spec}
                             </div>
                           </div>
@@ -410,7 +410,7 @@ export function PlaygroundStudio({
       </div>
 
       {/* Tactile 3D Buttons: Left and Right buttons are paired near each other with Chevrons only */}
-      <div className="pt-3.5 sm:pt-4 pb-0.5 flex items-center justify-between px-1 shrink-0">
+      <div className="pt-2 sm:pt-3.5 pb-0.5 flex items-center justify-between px-1 shrink-0">
         {/* Step Dots Indicator on Left */}
         <div className="flex items-center gap-1.5">
           {steps.map((step, idx) => {
