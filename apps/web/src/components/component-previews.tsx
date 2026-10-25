@@ -8,6 +8,7 @@ import {
   AccordionContent,
 } from "@registry/components/accordion";
 import { AccordionShowcase } from "@/components/showcases/accordion/accordion-showcase";
+import { BreadcrumbShowcase } from "@/components/showcases/breadcrumb/breadcrumb-showcase";
 import { Switch } from "@registry/components/switch";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -173,9 +174,13 @@ export function ComponentPreview({
   const cleanSlug = (slug || "").toLowerCase().trim();
   const cleanName = (name || "").toLowerCase().trim();
 
-  // On full documentation page, Accordion renders its rich multi-card interactive showcase with live customizer
+  // On full documentation page, components render their rich multi-card interactive showcase
   if (cleanSlug === "accordion" || cleanName === "accordion") {
     return <AccordionShowcase />;
+  }
+
+  if (cleanSlug === "breadcrumb" || cleanName === "breadcrumb") {
+    return <BreadcrumbShowcase />;
   }
 
   const preview =
