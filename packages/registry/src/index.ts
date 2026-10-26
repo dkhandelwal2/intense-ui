@@ -8,3 +8,4 @@ export * from "./components/color-grid";
 export * from "./components/tooltip";
 export * from "./components/switch";
 export * from "./components/slider";
+export * from "./components/nav-bar";

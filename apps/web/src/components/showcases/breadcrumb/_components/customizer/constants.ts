@@ -4,7 +4,6 @@ import { CustomProps } from "../../types";
 export const BREADCRUMB_VARIANTS = [
   { id: "default", label: "Default" },
   { id: "chips", label: "Chips / Pills" },
-  { id: "gooey", label: "Gooey" },
   { id: "outline", label: "Outline" },
   { id: "ghost", label: "Ghost" },
 ] as const;

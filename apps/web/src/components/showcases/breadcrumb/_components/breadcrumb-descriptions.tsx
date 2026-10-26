@@ -6,7 +6,6 @@ export const BREADCRUMB_DESCRIPTIONS: Record<string, React.ReactNode> = {
   "custom-separator": "Visual delimiters customized with arrows, slashes, or icons between trail items.",
   dropdown: "Progressive disclosure dropdown menu to collapse intermediate steps and prevent trail overflow.",
   collapsed: "Inline collapsible trail that expands intermediate items directly into the breadcrumb row on click.",
-  gooey: "Fluid molten spring pill background that smoothly glides across segments.",
   chips: "Encapsulated pill and badge segments with distinct interactive card surfaces.",
   customization: "Interactive studio with real-time props customizer and generated code sync.",
 };
@@ -160,24 +159,6 @@ export const BREADCRUMB_INFO_DETAILS: Record<string, React.ReactNode> = {
         { label: "Configurable Props", value: "itemsBeforeCollapse, itemsAfterCollapse" },
       ]}
       tip="Ideal for deep folder navigation where you want users to see the complete path on demand without leaving the row."
-    />
-  ),
-  gooey: (
-    <BreadcrumbSpecDetail
-      title="Fluid Island Morphing Specs"
-      badge="Fluid Physics"
-      summary={
-        <>
-          Powered by smooth cubic-bezier interpolation and dynamic island grouping. Inactive segments unite into contiguous rounded islands while the active segment detaches into an elevated molten pill.
-        </>
-      }
-      specs={[
-        { label: "Morphing Engine", value: "Fluid Island Decoupling" },
-        { label: "Physics Config", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
-        { label: "Vertical Stability", value: "Locked 0px Y-axis baseline" },
-        { label: "Theme Integration", value: "activeColor with ambient tint" },
-      ]}
-      tip="Best suited for step wizards, multi-stage workflows, and interactive web apps."
     />
   ),
   chips: (

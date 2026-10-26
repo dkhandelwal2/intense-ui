@@ -10,7 +10,6 @@ import {
   BREADCRUMB_SEPARATOR_API_REFERENCE,
   BREADCRUMB_DROPDOWN_API_REFERENCE,
   BREADCRUMB_COLLAPSED_API_REFERENCE,
-  BREADCRUMB_GOOEY_API_REFERENCE,
   USAGE_CODE,
 } from "@/components/showcases/breadcrumb/constants";
 import { BreadcrumbIcons } from "@/components/showcases/breadcrumb/_components/breadcrumb-icons";
@@ -30,7 +29,7 @@ export const breadcrumbDoc: ComponentDocData = {
         Framer Motion
       </strong>{" "}
       spring physics, supporting prefix icons, custom delimiters, collapsible
-      dropdown menus, fluid gooey indicators, and modern pill styling.
+      dropdown menus, expandable rows, and modern pill styling.
     </>
   ),
   codes: BREADCRUMB_EXAMPLES.reduce((acc, ex) => {
@@ -81,10 +80,6 @@ export const breadcrumbDoc: ComponentDocData = {
     {
       title: "BreadcrumbCollapsed",
       props: BREADCRUMB_COLLAPSED_API_REFERENCE,
-    },
-    {
-      title: "BreadcrumbGooey",
-      props: BREADCRUMB_GOOEY_API_REFERENCE,
     },
   ],
 };

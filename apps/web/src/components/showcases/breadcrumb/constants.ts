@@ -227,28 +227,6 @@ export default function CollapsedBreadcrumbDemo() {
 }`,
   },
   {
-    id: "gooey",
-    label: "Gooey Breadcrumb",
-    code: `import { BreadcrumbGooey } from "@/components/ui/breadcrumb";
-
-export default function GooeyBreadcrumb() {
-  const items = [
-    { id: "home", label: "Home", icon: "🏠" },
-    { id: "docs", label: "Docs", icon: "📖" },
-    { id: "business", label: "Business", icon: "💼" },
-  ];
-
-  return (
-    <div className="flex items-center justify-center p-4">
-      <BreadcrumbGooey
-        items={items}
-        onSelect={(id) => console.log("Selected:", id)}
-      />
-    </div>
-  );
-}`,
-  },
-  {
     id: "chips",
     label: "Chips / Pills Breadcrumb",
     code: `import {
@@ -321,7 +299,7 @@ export default function ChipsBreadcrumb() {
 export const BREADCRUMB_API_REFERENCE = [
   {
     prop: "variant",
-    type: '"default" | "chips" | "gooey" | "outline" | "ghost"',
+    type: '"default" | "chips" | "outline" | "ghost"',
     defaultValue: '"default"',
     description:
       "Visual style mode applied across all nested breadcrumb links, pages, and containers.",
@@ -365,7 +343,7 @@ export const BREADCRUMB_API_REFERENCE = [
 export const BREADCRUMB_LIST_API_REFERENCE = [
   {
     prop: "variant",
-    type: '"default" | "chips" | "gooey" | "outline" | "ghost"',
+    type: '"default" | "chips" | "outline" | "ghost"',
     defaultValue: "Inherits from Breadcrumb",
     description: "Overrides the parent breadcrumb visual variant for this list.",
   },
@@ -542,7 +520,7 @@ export const BREADCRUMB_COLLAPSED_API_REFERENCE = [
   },
   {
     prop: "variant",
-    type: '"default" | "chips" | "gooey" | "outline" | "ghost"',
+    type: '"default" | "chips" | "outline" | "ghost"',
     defaultValue: '"default"',
     description: "Visual style variant applied across all trail items.",
   },
@@ -575,40 +553,6 @@ export const BREADCRUMB_COLLAPSED_API_REFERENCE = [
     type: "string",
     defaultValue: "-",
     description: "Additional CSS classes for the root `<nav>` element.",
-  },
-];
-
-export const BREADCRUMB_GOOEY_API_REFERENCE = [
-  {
-    prop: "items",
-    type: "GooeyBreadcrumbItem[]",
-    defaultValue: "[]",
-    description:
-      "Array of navigation items ({ id, label, href?, icon? }) rendered with fluid motion.",
-  },
-  {
-    prop: "activeId",
-    type: "string",
-    defaultValue: "First item id",
-    description: "Controlled id of the active/selected breadcrumb segment.",
-  },
-  {
-    prop: "onSelect",
-    type: "(id: string) => void",
-    defaultValue: "-",
-    description: "Callback invoked when a breadcrumb segment is clicked.",
-  },
-  {
-    prop: "size",
-    type: '"sm" | "md" | "lg"',
-    defaultValue: '"md"',
-    description: "Pill dimensions and font size scaling.",
-  },
-  {
-    prop: "activeColor",
-    type: "string",
-    defaultValue: '"var(--theme-primary)"',
-    description: "Custom background color for the detached active pill.",
   },
 ];
 

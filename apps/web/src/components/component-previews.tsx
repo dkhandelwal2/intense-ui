@@ -9,6 +9,8 @@ import {
 } from "@registry/components/accordion";
 import { AccordionShowcase } from "@/components/showcases/accordion/accordion-showcase";
 import { BreadcrumbShowcase } from "@/components/showcases/breadcrumb/breadcrumb-showcase";
+import { NavbarShowcase } from "@/components/showcases/nav-bar/navbar-showcase";
+import { NavbarGooey } from "@/components/ui/nav-bar";
 import { Switch } from "@registry/components/switch";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -132,6 +134,17 @@ const ColorGridCardPreview = (
   </div>
 );
 
+const NavBarCardPreview = (
+  <NavbarGooey
+    items={[
+      { id: "home", label: "Home", icon: "🏠" },
+      { id: "explore", label: "Explore", icon: "🧭" },
+      { id: "profile", label: "Profile", icon: "👤" },
+    ]}
+    size="sm"
+  />
+);
+
 // Dictionary of compact preview widgets for index cards and preview grids
 export const componentPreviews: Record<string, React.ReactNode> = {
   // Title-cased keys
@@ -147,6 +160,8 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "Skeleton": SkeletonCardPreview,
   "Color Grid": ColorGridCardPreview,
   "Color Palette": ColorGridCardPreview,
+  "Nav Bar": NavBarCardPreview,
+  "Navbar": NavBarCardPreview,
 
   // Slugified lowercase keys for fallback matching
   "accordion": AccordionMiniCardPreview,
@@ -161,6 +176,8 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "skeleton": SkeletonCardPreview,
   "color-grid": ColorGridCardPreview,
   "color-palette": ColorGridCardPreview,
+  "nav-bar": NavBarCardPreview,
+  "navbar": NavBarCardPreview,
 };
 
 // Component for dynamic documentation pages ([slug]/page.tsx)
@@ -181,6 +198,15 @@ export function ComponentPreview({
 
   if (cleanSlug === "breadcrumb" || cleanName === "breadcrumb") {
     return <BreadcrumbShowcase />;
+  }
+
+  if (
+    cleanSlug === "nav-bar" ||
+    cleanSlug === "navbar" ||
+    cleanName === "nav bar" ||
+    cleanName === "navbar"
+  ) {
+    return <NavbarShowcase />;
   }
 
   const preview =

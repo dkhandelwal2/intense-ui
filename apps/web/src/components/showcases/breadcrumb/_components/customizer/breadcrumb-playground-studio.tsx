@@ -31,7 +31,6 @@ const VARIANT_INFO: Record<
 > = {
   default: { label: "Default", desc: "clean standard link", emoji: "📄" },
   chips: { label: "Chips / Pills", desc: "rounded badge capsule", emoji: "💊" },
-  gooey: { label: "Gooey", desc: "molten spring blob", emoji: "✨" },
   outline: { label: "Outline", desc: "subtle border badge", emoji: "🔲" },
   ghost: { label: "Ghost", desc: "minimal hover link", emoji: "👻" },
 };

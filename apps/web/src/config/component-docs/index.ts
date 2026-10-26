@@ -8,6 +8,7 @@ import { breadcrumbDoc } from "./breadcrumb";
 import { skeletonDoc } from "./skeleton";
 import { colorGridDoc } from "./color-grid";
 import { accordionDoc } from "./accordion";
+import { navBarDoc } from "./nav-bar";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
@@ -20,9 +21,12 @@ export * from "./separator";
 export * from "./breadcrumb";
 export * from "./skeleton";
 export * from "./color-grid";
+export * from "./nav-bar";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
   "accordion": accordionDoc,
+  "nav-bar": navBarDoc,
+  "navbar": navBarDoc,
   "button": buttonDoc,
   "animated-button": buttonDoc,
   "glowing-button": buttonDoc,

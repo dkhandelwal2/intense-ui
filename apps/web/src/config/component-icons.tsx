@@ -12,6 +12,7 @@ import {
   LayoutGrid,
   CreditCard,
   Layers,
+  Navigation,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -33,6 +34,8 @@ export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   breadcrumb: Route,
   skeleton: SquareDashed,
   "color-grid": Palette,
+  "nav-bar": Navigation,
+  navbar: Navigation,
   "bento-grid": LayoutGrid,
   "magnetic-card": CreditCard,
 };

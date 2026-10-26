@@ -24,6 +24,12 @@
     "enabled": true
   },
   {
+    "name": "nav-bar",
+    "title": "Nav Bar",
+    "description": "A beautifully designed, accessible Nav Bar component.",
+    "enabled": true
+  },
+  {
     "name": "separator",
     "title": "Separator",
     "description": "A beautifully designed, accessible Separator component.",

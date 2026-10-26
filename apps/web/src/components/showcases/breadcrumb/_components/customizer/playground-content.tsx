@@ -34,11 +34,6 @@ const VARIANT_INFO: Record<
     desc: "Interactive rounded pill badges with distinct surfaces",
     icon: "💊",
   },
-  gooey: {
-    label: "Gooey",
-    desc: "Fluid spring blob active indicator",
-    icon: "✨",
-  },
   outline: {
     label: "Outline",
     desc: "Modern subtle border badge segments",

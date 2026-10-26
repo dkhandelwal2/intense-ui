@@ -11,7 +11,6 @@ import {
   BreadcrumbDropdown,
   BreadcrumbDropdownItem,
   BreadcrumbCollapsed,
-  BreadcrumbGooey,
   BreadcrumbVariant,
   BreadcrumbSize,
 } from "@/components/ui/breadcrumb";
@@ -20,12 +19,6 @@ import { CustomProps } from "../types";
 import { cn } from "@/lib/utils";
 
 // ── Shared Data Constants ──
-const GOOEY_ITEMS = [
-  { id: "home", label: "home", icon: "🏠" },
-  { id: "docs", label: "Docs", icon: "📖" },
-  { id: "business", label: "Business", icon: "💼" },
-];
-
 const DROPDOWN_ITEMS = [
   { label: "Documentation", icon: "📁" },
   { label: "Guides & Tutorials", icon: "📖" },
@@ -305,16 +298,6 @@ export function BreadcrumbVariantRenderer({
     case "collapsed":
       return <CollapsedBreadcrumbShowcase />;
 
-    case "gooey":
-      return (
-        <PreviewCanvas className="flex-col gap-3">
-          <BreadcrumbGooey items={GOOEY_ITEMS} />
-          <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono text-center">
-            Click any segment to detach it into the fluid active pill
-          </span>
-        </PreviewCanvas>
-      );
-
     case "chips":
       return (
         <div className="flex flex-col gap-6 items-center justify-center py-6 px-4 w-full">
@@ -350,21 +333,6 @@ export function BreadcrumbVariantRenderer({
 
     case "customization": {
       if (!customProps) return null;
-
-      if (customProps.variant === "gooey") {
-        return (
-          <PreviewCanvas>
-            <BreadcrumbGooey
-              size={customProps.size}
-              activeColor={customProps.activeColor || "var(--theme-primary)"}
-              items={GOOEY_ITEMS.map((it) => ({
-                ...it,
-                icon: customProps.showIcons ? it.icon : undefined,
-              }))}
-            />
-          </PreviewCanvas>
-        );
-      }
 
       const showIcons = customProps.showIcons;
 

@@ -1,7 +1,6 @@
 import { CustomProps } from "./types";
 
 function getBreadcrumbOptionName(customProps: CustomProps): string {
-  if (customProps.variant === "gooey") return "GooeyBreadcrumb";
   if (customProps.hasCollapsed) return "CollapsedBreadcrumb";
   if (customProps.hasDropdown) return "DropdownBreadcrumb";
   if (customProps.variant === "chips") return "ChipsBreadcrumb";
@@ -14,39 +13,6 @@ function getBreadcrumbOptionName(customProps: CustomProps): string {
 
 export function generateBreadcrumbCode(customProps: CustomProps): string {
   const optionFunctionName = getBreadcrumbOptionName(customProps);
-
-  if (customProps.variant === "gooey") {
-    const homeIcon = customProps.showIcons ? ', icon: "🏠"' : "";
-    const changeIcon = customProps.showIcons ? ', icon: "📖"' : "";
-    const careerIcon = customProps.showIcons ? ', icon: "💼"' : "";
-    const aboutIcon = customProps.showIcons ? ', icon: "ℹ️"' : "";
-
-    const sizeProp =
-      customProps.size && customProps.size !== "md"
-        ? ` size="${customProps.size}"`
-        : "";
-
-    const colorProp =
-      customProps.activeColor && customProps.activeColor !== ""
-        ? ` activeColor="${customProps.activeColor}"`
-        : "";
-
-    return `import { BreadcrumbGooey } from "@/components/ui/breadcrumb";
-
-export default function ${optionFunctionName}() {
-  const items = [
-    { id: "home", label: "Home"${homeIcon} },
-    { id: "docs", label: "Docs"${changeIcon} },
-    { id: "business", label: "Business"${careerIcon} },
-  ];
-
-  return (
-    <div className="flex items-center justify-center p-4">
-      <BreadcrumbGooey${sizeProp}${colorProp} items={items} />
-    </div>
-  );
-}`;
-  }
 
   if (customProps.hasCollapsed) {
     const iconImports: string[] = [];
