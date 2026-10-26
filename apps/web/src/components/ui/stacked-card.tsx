@@ -26,7 +26,11 @@ export function StackedCardsContainer({
 
   return (
     <StackedCardsContext.Provider value={{ scrollYProgress }}>
-      <div ref={containerRef} className={cn("relative block", className)}>
+      <div
+        ref={containerRef}
+        data-stacked-container="true"
+        className={cn("relative block", className)}
+      >
         {children}
       </div>
     </StackedCardsContext.Provider>
@@ -34,11 +38,13 @@ export function StackedCardsContainer({
 }
 
 export function StackedCard({
+  id,
   children,
   index,
   total,
   className,
 }: {
+  id?: string;
   children: React.ReactNode;
   index: number;
   total: number;
@@ -99,30 +105,42 @@ export function StackedCard({
   const y = useSpring(yTarget, { stiffness: 150, damping: 25, restDelta: 0.001 });
 
   return (
-    <div
-      className={cn(
-        "sticky w-full my-[8vh]",
-        className
+    <>
+      {id && (
+        <div
+          id={`anchor-${id}`}
+          data-card-anchor={id}
+          className="relative w-full h-0 pointer-events-none invisible"
+          aria-hidden="true"
+        />
       )}
-      style={{
-        top: `10vh`,
-        zIndex: index,
-      }}
-    >
-      <motion.div
-        style={
-          isLast
-            ? undefined
-            : ({
-              scale,
-              opacity,
-              y,
-            } as any)
-        }
-        className="w-full origin-top"
+      <div
+        data-card-id={id}
+        data-card-index={index}
+        className={cn(
+          "sticky w-full my-[8vh]",
+          className
+        )}
+        style={{
+          top: `10vh`,
+          zIndex: index,
+        }}
       >
-        {children}
-      </motion.div>
-    </div>
+        <motion.div
+          style={
+            isLast
+              ? undefined
+              : ({
+                scale,
+                opacity,
+                y,
+              } as any)
+          }
+          className="w-full origin-top"
+        >
+          {children}
+        </motion.div>
+      </div>
+    </>
   );
 }

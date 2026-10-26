@@ -116,17 +116,13 @@ export function ShowcaseCard({
           detail: { id },
         })
       );
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
     }
   };
 
   const formattedIndex = String(index + 1).padStart(2, "0");
 
   return (
-    <StackedCard index={index} total={total}>
+    <StackedCard id={id} index={index} total={total}>
       <section
         id={id}
         onClick={handleCardClick}

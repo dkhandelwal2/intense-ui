@@ -234,8 +234,6 @@ export function ComponentTocDock({
                       if (onItemClick) {
                         onItemClick(item.id);
                       } else {
-                        const el = document.getElementById(item.id);
-                        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
                         window.dispatchEvent(
                           new CustomEvent("intense-ui:focus-toc", {
                             detail: { id: item.id },
@@ -280,16 +278,30 @@ export function ComponentTocDock({
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   key={`more-${btn.type}`}
-                  className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-default select-none"
+                  onClick={() => {
+                    const targetItem = allItems[btn.targetIdx];
+                    if (targetItem) {
+                      if (onItemClick) {
+                        onItemClick(targetItem.id);
+                      } else {
+                        window.dispatchEvent(
+                          new CustomEvent("intense-ui:focus-toc", {
+                            detail: { id: targetItem.id },
+                          })
+                        );
+                      }
+                    }
+                  }}
+                  className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-pointer group select-none hover:opacity-90 active:scale-95 transition-all"
                 >
-                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-6 h-6 text-zinc-400 dark:text-zinc-500 flex items-center justify-center [&_svg]:w-5 [&_svg]:h-5">
+                  <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-6 h-6 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors flex items-center justify-center [&_svg]:w-5 [&_svg]:h-5">
                     {btn.type === "prev" ? (
-                      <ChevronLeft className="w-5 h-5" />
+                      <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
                     ) : (
-                      <ChevronRight className="w-5 h-5" />
+                      <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
                     )}
                   </div>
-                  <span className="absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 dark:text-zinc-400 font-medium">
+                  <span className="absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-zinc-200 font-medium">
                     +{btn.count} {btn.type === "next" ? "more" : "prev"}
                   </span>
                 </motion.div>
