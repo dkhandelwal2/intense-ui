@@ -18,6 +18,7 @@ import { WindowHeader } from "@/components/ui/window-header";
 import { CodeBlock } from "@/components/ui/code-block";
 import { useComponentActiveToc } from "@/components/layout/component-page-layout";
 import { ShowcaseCardProps } from "./types";
+import { ComponentSpecDetail } from "./spec-detail";
 
 export function ShowcaseCard({
   id,
@@ -25,6 +26,7 @@ export function ShowcaseCard({
   icon,
   description,
   infoContent,
+  spec,
   code,
   index,
   total,
@@ -121,6 +123,9 @@ export function ShowcaseCard({
 
   const formattedIndex = String(index + 1).padStart(2, "0");
 
+  const resolvedInfo =
+    infoContent ?? (spec ? <ComponentSpecDetail {...spec} /> : description);
+
   return (
     <StackedCard id={id} index={index} total={total}>
       <section
@@ -195,7 +200,7 @@ export function ShowcaseCard({
               </div>
             )}
 
-            {(infoContent || description) && (
+            {(resolvedInfo || description) && (
               <div className="relative flex items-center justify-center">
                 <button
                   type="button"
@@ -245,7 +250,7 @@ export function ShowcaseCard({
                         </button>
                       </div>
                       <div className="text-zinc-600 dark:text-zinc-300 text-xs leading-relaxed">
-                        {infoContent || description}
+                        {resolvedInfo}
                       </div>
                     </motion.div>
                   )}

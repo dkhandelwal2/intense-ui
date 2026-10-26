@@ -3,9 +3,8 @@
 import React from "react";
 import { ShowcaseCard } from "@/components/showcases/common";
 import { BreadcrumbIcons } from "./breadcrumb-icons";
-import { CustomProps, BreadcrumbExampleItem } from "../types";
+import { BreadcrumbExampleItem } from "../types";
 import { BreadcrumbVariantRenderer } from "./breadcrumb-variant-renderer";
-import { getBreadcrumbDescription, getBreadcrumbInfoContent } from "./breadcrumb-descriptions";
 
 interface BreadcrumbCardProps {
   item: BreadcrumbExampleItem;
@@ -27,8 +26,9 @@ export const BreadcrumbCard = React.memo(function BreadcrumbCard({
       id={item.id}
       label={item.label}
       icon={IconComponent}
-      description={getBreadcrumbDescription(item.id)}
-      infoContent={getBreadcrumbInfoContent(item.id)}
+      description={item.description}
+      spec={item.spec}
+      infoContent={item.infoContent}
       code={item.code}
       index={index}
       total={total}

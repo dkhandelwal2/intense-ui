@@ -3,15 +3,10 @@
 import React from "react";
 import { ShowcaseCard } from "@/components/showcases/common";
 import { AccordionIcons } from "./accordion-icons";
-import { CustomProps } from "../types";
+import { CustomProps, AccordionExampleItem } from "../types";
 import { AccordionVariantRenderer } from "./accordion-variant-renderer";
-import { getAccordionDescription, getAccordionInfoContent } from "./accordion-descriptions";
 
-export interface AccordionExampleItem {
-  id: string;
-  label: string;
-  code: string;
-}
+export type { AccordionExampleItem };
 
 interface AccordionCardProps {
   item: AccordionExampleItem;
@@ -36,8 +31,9 @@ export function AccordionCard({
       id={item.id}
       label={item.label}
       icon={IconComponent}
-      description={getAccordionDescription(item.id)}
-      infoContent={getAccordionInfoContent(item.id)}
+      description={item.description}
+      spec={item.spec}
+      infoContent={item.infoContent}
       code={item.code}
       index={index}
       total={total}

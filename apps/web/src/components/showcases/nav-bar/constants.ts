@@ -4,6 +4,21 @@ export const NAVBAR_EXAMPLES: NavbarExampleItem[] = [
   {
     id: "gooey",
     label: "Gooey Nav Bar",
+    description:
+      "Fluid molten spring pill background that dynamically morphs and detaches across navigation segments.",
+    spec: {
+      title: "Fluid Island Morphing Specs",
+      badge: "Fluid Physics",
+      summary:
+        "Powered by smooth cubic-bezier interpolation and dynamic island grouping. Inactive segments unite into contiguous rounded islands while the active segment detaches into an elevated molten pill.",
+      specs: [
+        { label: "Morphing Engine", value: "Fluid Island Decoupling" },
+        { label: "Physics Config", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
+        { label: "Vertical Stability", value: "Locked 0px Y-axis baseline" },
+        { label: "Theme Integration", value: "activeColor with ambient tint" },
+      ],
+      tip: "Best suited for top navigation bars, step wizards, and interactive web application headers.",
+    },
     code: `import { NavbarGooey } from "@/components/ui/nav-bar";
 
 export default function GooeyNavbarDemo() {
@@ -27,6 +42,20 @@ export default function GooeyNavbarDemo() {
   {
     id: "with-icon",
     label: "With Icons & Badges",
+    description:
+      "Enhanced navigation tabs with prefix emoji icons and contextual status badge markers.",
+    spec: {
+      title: "Icon & Badge Specs",
+      badge: "Visual Scannability",
+      summary:
+        'Pairs segment labels with Lucide vector icons or emojis, and adds optional status badges (e.g. "PRO", "LIVE") for rich data hierarchy.',
+      specs: [
+        { label: "Icon Alignment", value: "Left prefix, shrink-0" },
+        { label: "Badge Support", value: "badge prop (ReactNode)" },
+        { label: "Interactive Feedback", value: "Smooth color crossfade" },
+      ],
+      tip: "Use badges sparingly for attention-worthy states like live events or unread notifications.",
+    },
     code: `import { NavbarGooey } from "@/components/ui/nav-bar";
 
 export default function WithIconsNavbarDemo() {
@@ -51,6 +80,20 @@ export default function WithIconsNavbarDemo() {
   {
     id: "floating",
     label: "Floating Capsule Nav Bar",
+    description:
+      "Glassmorphic floating capsule container with spring indicator physics.",
+    spec: {
+      title: "Capsule Dock Specs",
+      badge: "Glassmorphism",
+      summary:
+        "An ultra-modern floating capsule bar with backdrop blur filters and a sliding spring layout indicator moving between active items.",
+      specs: [
+        { label: "Container Style", value: "rounded-full backdrop-blur-xl" },
+        { label: "Spring Engine", value: "Framer Motion layoutId indicator" },
+        { label: "Shadow Elevation", value: "Multi-layered depth shadow" },
+      ],
+      tip: "Place as a floating bottom bar on mobile or a centered floating header on desktop.",
+    },
     code: `import { NavbarFloating } from "@/components/ui/nav-bar";
 
 export default function FloatingNavbarDemo() {
@@ -75,6 +118,20 @@ export default function FloatingNavbarDemo() {
   {
     id: "sizes",
     label: "Scale & Sizing",
+    description:
+      "Three proportional scaling tiers (sm, md, lg) tailored for compact sidebars to expansive headers.",
+    spec: {
+      title: "Scaling Specs",
+      badge: "Responsive Tiers",
+      summary:
+        "Available in 3 calibrated scale tiers: Small (h-8), Medium (h-10 to h-11), and Large (h-12).",
+      specs: [
+        { label: "Small (sm)", value: "32px height, 12px text" },
+        { label: "Medium (md)", value: "40-44px height, 13-14px text" },
+        { label: "Large (lg)", value: "48px height, 15-16px text" },
+      ],
+      tip: "Default to medium for web headers; use small for compact panel controllers.",
+    },
     code: `import { NavbarGooey } from "@/components/ui/nav-bar";
 
 export default function NavbarSizesDemo() {

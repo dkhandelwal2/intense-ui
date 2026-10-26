@@ -5,7 +5,6 @@ import { ShowcaseCard } from "@/components/showcases/common";
 import { NavbarIcons } from "./navbar-icons";
 import { NavbarExampleItem } from "../types";
 import { NavbarVariantRenderer } from "./navbar-variant-renderer";
-import { getNavbarDescription, getNavbarInfoContent } from "./navbar-descriptions";
 
 interface NavbarCardProps {
   item: NavbarExampleItem;
@@ -27,8 +26,9 @@ export const NavbarCard = React.memo(function NavbarCard({
       id={item.id}
       label={item.label}
       icon={IconComponent}
-      description={getNavbarDescription(item.id)}
-      infoContent={getNavbarInfoContent(item.id)}
+      description={item.description}
+      spec={item.spec}
+      infoContent={item.infoContent}
       code={item.code}
       index={index}
       total={total}

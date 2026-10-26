@@ -1,3 +1,11 @@
+import { ShowcaseExampleItem } from "@/components/showcases/common";
+
+export interface AccordionExampleItem extends ShowcaseExampleItem {
+  id: string;
+  label: string;
+  code: string;
+}
+
 export type CustomProps = {
   borderWidth?: number;
   borderRadius?: number;

@@ -3,6 +3,7 @@ import {
   BreadcrumbVariant,
   BreadcrumbSize,
 } from "@/components/ui/breadcrumb";
+import { ShowcaseExampleItem } from "@/components/showcases/common";
 
 export type BreadcrumbSeparatorType =
   | "chevron"
@@ -23,9 +24,8 @@ export interface CustomProps {
   hasCollapsed?: boolean;
 }
 
-export interface BreadcrumbExampleItem {
+export interface BreadcrumbExampleItem extends ShowcaseExampleItem {
   id: string;
   label: string;
   code: string;
-  description?: string;
 }

@@ -4,6 +4,21 @@ export const BREADCRUMB_EXAMPLES: BreadcrumbExampleItem[] = [
   {
     id: "basic",
     label: "Basic",
+    description:
+      "Standard semantic trail adhering to WAI-ARIA breadcrumb navigation patterns.",
+    spec: {
+      title: "Semantic Trail Specs",
+      badge: "WAI-ARIA Pattern",
+      summary:
+        "Constructed with semantic HTML5 elements using an ordered list hierarchy (<ol> and <li>) to announce structured parent-child navigation to screen readers.",
+      specs: [
+        { label: "Active Route", value: 'aria-current="page"' },
+        { label: "Landmark", value: 'nav[aria-label="breadcrumb"]' },
+        { label: "Delimiters", value: 'aria-hidden="true"' },
+        { label: "Components", value: "<BreadcrumbLink>, <BreadcrumbPage>" },
+      ],
+      tip: "Place directly below the global navbar at the top of the main content column.",
+    },
     code: `import {
   Breadcrumb,
   BreadcrumbList,
@@ -40,6 +55,21 @@ export default function BasicBreadcrumb() {
   {
     id: "with-icon",
     label: "With Icons",
+    description:
+      "Navigation items paired with prefix icons to improve directory scannability.",
+    spec: {
+      title: "Icon Navigation Specs",
+      badge: "Visual Anchoring",
+      summary:
+        "Augments text labels with inline Lucide vector glyphs or emoji markers. Decorative icons improve route recognition speeds by over 40% in multi-tiered nested directories.",
+      specs: [
+        { label: "Icon Placement", value: "inline prefix before label" },
+        { label: "Accessibility", value: "Decorative icon aria-hidden" },
+        { label: "Recommended Size", value: "14px - 16px (w-3.5 to w-4)" },
+        { label: "Component Support", value: "<BreadcrumbLink icon={...}>" },
+      ],
+      tip: "Use standardized line icons that match your application's icon library.",
+    },
     code: `import {
   Breadcrumb,
   BreadcrumbList,
@@ -84,6 +114,21 @@ export default function WithIconsBreadcrumb() {
   {
     id: "custom-separator",
     label: "Custom Separator",
+    description:
+      "Visual delimiters customized with arrows, slashes, or icons between trail items.",
+    spec: {
+      title: "Delimiter Theming Specs",
+      badge: "Custom Dividers",
+      summary:
+        "Enables custom visual dividers between route segments. Render any custom React node, SVG icon, or typographic glyph inside the separator slot with automatic accessibility wrapping.",
+      specs: [
+        { label: "Slot Component", value: "<BreadcrumbSeparator>" },
+        { label: "Presentation", value: 'role="presentation"' },
+        { label: "Supported Delimiters", value: "Slash /, Arrow →, Dot •, Chevron ›" },
+        { label: "Dynamic Color", value: "separatorColor prop / CSS custom prop" },
+      ],
+      tip: "Always keep separators non-interactive and aria-hidden to avoid interrupting screen reader flow.",
+    },
     code: `import {
   Breadcrumb,
   BreadcrumbList,
@@ -150,6 +195,21 @@ export default function CustomSeparatorBreadcrumb() {
   {
     id: "dropdown",
     label: "Dropdown Breadcrumb",
+    description:
+      "Progressive disclosure dropdown menu to collapse intermediate steps and prevent trail overflow.",
+    spec: {
+      title: "Progressive Disclosure Specs",
+      badge: "Overflow Menu",
+      summary:
+        "Replaces intermediate trail segments with an interactive <BreadcrumbEllipsis> popover menu to prevent multi-line wrapping in deep navigation trees and on mobile screens.",
+      specs: [
+        { label: "Trigger Element", value: "<BreadcrumbEllipsis />" },
+        { label: "Keyboard Nav", value: "ArrowUp/Down, Enter, Escape" },
+        { label: "Recommended At", value: "Trail depth > 4 items" },
+        { label: "Menu Dismiss", value: "Outside click & focus loss" },
+      ],
+      tip: "Keeps the root item and current leaf visible while collapsing intermediate hierarchy.",
+    },
     code: `import {
   Breadcrumb,
   BreadcrumbList,
@@ -205,6 +265,21 @@ export default function DropdownBreadcrumb() {
   {
     id: "collapsed",
     label: "Collapsed Breadcrumb",
+    description:
+      "Inline collapsible trail that expands intermediate items directly into the breadcrumb row on click.",
+    spec: {
+      title: "Inline Expansion Specs",
+      badge: "Spring Layout",
+      summary:
+        "Initially condenses intermediate items behind a discrete 3-dots button. Clicking the button expands all hidden items inline into the active row with smooth spring layout animation.",
+      specs: [
+        { label: "Trigger Element", value: "<button> with aria-expanded" },
+        { label: "Expansion Mode", value: "Inline row reveal (no popover)" },
+        { label: "Physics Config", value: "Spring (stiffness 400, damping 28)" },
+        { label: "Configurable Props", value: "itemsBeforeCollapse, itemsAfterCollapse" },
+      ],
+      tip: "Ideal for deep folder navigation where you want users to see the complete path on demand without leaving the row.",
+    },
     code: `import { BreadcrumbCollapsed } from "@/components/ui/breadcrumb";
 
 export default function CollapsedBreadcrumbDemo() {
@@ -229,6 +304,21 @@ export default function CollapsedBreadcrumbDemo() {
   {
     id: "chips",
     label: "Chips / Pills Breadcrumb",
+    description:
+      "Encapsulated pill and badge segments with distinct interactive card surfaces.",
+    spec: {
+      title: "Encapsulated Pill Specs",
+      badge: "Capsule Badges",
+      summary:
+        "Treats every trail segment as a discrete, tactile badge item with independent surface elevation, borders, and interactive hover feedback.",
+      specs: [
+        { label: "Variant Style", value: 'variant="chips"' },
+        { label: "Active Highlight", value: "Dynamic activeColor border + soft tint" },
+        { label: "Surface Elevation", value: "Subtle inset hairline & shadow" },
+        { label: "Touch Targets", value: "min-h-[32px] mobile accessible" },
+      ],
+      tip: "Great for filter breadcrumbs, tag trails, and hierarchical file browsers.",
+    },
     code: `import {
   Breadcrumb,
   BreadcrumbList,

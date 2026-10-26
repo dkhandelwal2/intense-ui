@@ -1,10 +1,13 @@
 import React from "react";
+import type { ComponentSpecDetailProps } from "./spec-detail";
 
 export interface ShowcaseExampleItem {
   id: string;
   label: string;
   code?: string;
-  description?: string;
+  description?: React.ReactNode;
+  spec?: ComponentSpecDetailProps;
+  infoContent?: React.ReactNode;
 }
 
 export interface ShowcaseCardProps {
@@ -13,6 +16,7 @@ export interface ShowcaseCardProps {
   icon?: React.ReactNode | React.ComponentType<{ className?: string }>;
   description?: React.ReactNode;
   infoContent?: React.ReactNode;
+  spec?: ComponentSpecDetailProps;
   code?: string;
   index: number;
   total: number;

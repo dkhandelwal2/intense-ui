@@ -1,5 +1,6 @@
 import React from "react";
 import { NavbarVariant, NavbarSize } from "@/components/ui/nav-bar";
+import { ShowcaseExampleItem } from "@/components/showcases/common";
 
 export interface CustomNavbarProps {
   variant: NavbarVariant;
@@ -9,9 +10,8 @@ export interface CustomNavbarProps {
   showBadges: boolean;
 }
 
-export interface NavbarExampleItem {
+export interface NavbarExampleItem extends ShowcaseExampleItem {
   id: string;
   label: string;
   code: string;
-  description?: string;
 }
