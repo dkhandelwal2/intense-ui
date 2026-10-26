@@ -203,6 +203,30 @@ export default function DropdownBreadcrumb() {
 }`,
   },
   {
+    id: "collapsed",
+    label: "Collapsed Breadcrumb",
+    code: `import { BreadcrumbCollapsed } from "@/components/ui/breadcrumb";
+
+export default function CollapsedBreadcrumbDemo() {
+  const items = [
+    { label: "Home", href: "/" },
+    { label: "Docs", href: "/docs" },
+    { label: "Guides", href: "/docs/guides" },
+    { label: "Components", href: "/docs/components" },
+    { label: "Breadcrumb" },
+  ];
+
+  return (
+    <BreadcrumbCollapsed
+      items={items}
+      maxItems={4}
+      itemsBeforeCollapse={1}
+      itemsAfterCollapse={2}
+    />
+  );
+}`,
+  },
+  {
     id: "gooey",
     label: "Gooey Breadcrumb",
     code: `import { BreadcrumbGooey } from "@/components/ui/breadcrumb";
@@ -456,6 +480,101 @@ export const BREADCRUMB_DROPDOWN_API_REFERENCE = [
     type: "ReactNode",
     defaultValue: "-",
     description: "Collection of `<BreadcrumbDropdownItem />` elements.",
+  },
+];
+
+export const BREADCRUMB_COLLAPSED_API_REFERENCE = [
+  {
+    prop: "items",
+    type: "BreadcrumbCollapsedItem[]",
+    defaultValue: "[]",
+    description:
+      "Array of navigation items ({ label, href?, icon?, isCurrentPage?, onClick? }) in the breadcrumb trail.",
+  },
+  {
+    prop: "maxItems",
+    type: "number",
+    defaultValue: "4",
+    description:
+      "Maximum total items to display before collapsing intermediate segments into an ellipsis button.",
+  },
+  {
+    prop: "itemsBeforeCollapse",
+    type: "number",
+    defaultValue: "1",
+    description:
+      "Number of leading items to keep visible at the start of the trail before the ellipsis.",
+  },
+  {
+    prop: "itemsAfterCollapse",
+    type: "number",
+    defaultValue: "2",
+    description:
+      "Number of trailing items to keep visible at the end of the trail after the ellipsis.",
+  },
+  {
+    prop: "isCollapsed",
+    type: "boolean",
+    defaultValue: "-",
+    description:
+      "Controlled collapse state. When true, intermediate items are collapsed behind the ellipsis button.",
+  },
+  {
+    prop: "defaultCollapsed",
+    type: "boolean",
+    defaultValue: "true",
+    description:
+      "Initial collapse state when uncontrolled.",
+  },
+  {
+    prop: "onCollapsedChange",
+    type: "(collapsed: boolean) => void",
+    defaultValue: "-",
+    description:
+      "Callback invoked when the user expands or collapses the breadcrumb trail.",
+  },
+  {
+    prop: "allowCollapse",
+    type: "boolean",
+    defaultValue: "false",
+    description:
+      "Whether to render an interactive collapse toggle button when items are expanded.",
+  },
+  {
+    prop: "variant",
+    type: '"default" | "chips" | "gooey" | "outline" | "ghost"',
+    defaultValue: '"default"',
+    description: "Visual style variant applied across all trail items.",
+  },
+  {
+    prop: "size",
+    type: '"sm" | "md" | "lg"',
+    defaultValue: '"md"',
+    description: "Size scale controlling font size and spacing.",
+  },
+  {
+    prop: "separator",
+    type: "ReactNode",
+    defaultValue: "<ChevronRight />",
+    description: "Custom delimiter element between items.",
+  },
+  {
+    prop: "separatorColor",
+    type: "string",
+    defaultValue: "-",
+    description: "Custom CSS color or theme variable for all separators.",
+  },
+  {
+    prop: "activeColor",
+    type: "string",
+    defaultValue: "-",
+    description: "Custom CSS color or theme variable for the active/current page item.",
+  },
+  {
+    prop: "className",
+    type: "string",
+    defaultValue: "-",
+    description: "Additional CSS classes for the root `<nav>` element.",
   },
 ];
 

@@ -34,7 +34,7 @@ export const BreadcrumbCard = React.memo(function BreadcrumbCard({
       total={total}
       previewClassName={
         item.id === "dropdown"
-          ? "min-h-[260px] sm:min-h-[300px] pt-8 pb-20 sm:pb-24"
+          ? "min-h-[300px] sm:min-h-[340px] pt-8 pb-28 sm:pb-36"
           : undefined
       }
     >

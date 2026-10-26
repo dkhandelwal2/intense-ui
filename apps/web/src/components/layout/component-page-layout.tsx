@@ -132,12 +132,12 @@ function ComponentPageLayoutInner({
   );
 
   return (
-    <div className="relative flex w-full min-w-0 items-start gap-4 xl:gap-8 pb-32">
+    <div className="relative flex w-full min-w-0 items-start gap-4 xl:gap-8">
       {/* CENTER COLUMN: Component Previews & Interactive Canvas in natural page flow */}
       <div
         id="center-content-column"
         ref={centerColumnRef}
-        className="relative flex-1 min-w-0 flex flex-col px-0 sm:px-2 md:px-4 lg:px-6"
+        className="relative flex-1 min-w-0 flex flex-col px-0 sm:px-2 md:px-4 lg:px-6 md:pb-32"
       >
         {/* Component Header / Breadcrumbs & Intro */}
         <div className="relative z-10 pt-2 pb-6 max-w-4xl space-y-3">

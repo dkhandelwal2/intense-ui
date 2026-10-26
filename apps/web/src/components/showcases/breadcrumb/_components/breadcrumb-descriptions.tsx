@@ -5,6 +5,7 @@ export const BREADCRUMB_DESCRIPTIONS: Record<string, React.ReactNode> = {
   "with-icon": "Navigation items paired with prefix icons to improve directory scannability.",
   "custom-separator": "Visual delimiters customized with arrows, slashes, or icons between trail items.",
   dropdown: "Progressive disclosure dropdown menu to collapse intermediate steps and prevent trail overflow.",
+  collapsed: "Inline collapsible trail that expands intermediate items directly into the breadcrumb row on click.",
   gooey: "Fluid molten spring pill background that smoothly glides across segments.",
   chips: "Encapsulated pill and badge segments with distinct interactive card surfaces.",
   customization: "Interactive studio with real-time props customizer and generated code sync.",
@@ -141,6 +142,24 @@ export const BREADCRUMB_INFO_DETAILS: Record<string, React.ReactNode> = {
         { label: "Menu Dismiss", value: "Outside click & focus loss" },
       ]}
       tip="Keeps the root item and current leaf visible while collapsing intermediate hierarchy."
+    />
+  ),
+  collapsed: (
+    <BreadcrumbSpecDetail
+      title="Inline Expansion Specs"
+      badge="Spring Layout"
+      summary={
+        <>
+          Initially condenses intermediate items behind a discrete 3-dots button. Clicking the button expands all hidden items inline into the active row with smooth spring layout animation.
+        </>
+      }
+      specs={[
+        { label: "Trigger Element", value: "<button> with aria-expanded" },
+        { label: "Expansion Mode", value: "Inline row reveal (no popover)" },
+        { label: "Physics Config", value: "Spring (stiffness 400, damping 28)" },
+        { label: "Configurable Props", value: "itemsBeforeCollapse, itemsAfterCollapse" },
+      ]}
+      tip="Ideal for deep folder navigation where you want users to see the complete path on demand without leaving the row."
     />
   ),
   gooey: (

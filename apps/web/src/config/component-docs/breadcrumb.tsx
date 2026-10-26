@@ -9,6 +9,7 @@ import {
   BREADCRUMB_PAGE_API_REFERENCE,
   BREADCRUMB_SEPARATOR_API_REFERENCE,
   BREADCRUMB_DROPDOWN_API_REFERENCE,
+  BREADCRUMB_COLLAPSED_API_REFERENCE,
   BREADCRUMB_GOOEY_API_REFERENCE,
   USAGE_CODE,
 } from "@/components/showcases/breadcrumb/constants";
@@ -76,6 +77,10 @@ export const breadcrumbDoc: ComponentDocData = {
     {
       title: "BreadcrumbDropdown",
       props: BREADCRUMB_DROPDOWN_API_REFERENCE,
+    },
+    {
+      title: "BreadcrumbCollapsed",
+      props: BREADCRUMB_COLLAPSED_API_REFERENCE,
     },
     {
       title: "BreadcrumbGooey",

@@ -20,6 +20,7 @@ export interface CustomProps {
   size: BreadcrumbSize;
   showIcons: boolean;
   hasDropdown: boolean;
+  hasCollapsed?: boolean;
 }
 
 export interface BreadcrumbExampleItem {

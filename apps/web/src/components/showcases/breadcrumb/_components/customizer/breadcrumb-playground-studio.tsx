@@ -203,14 +203,42 @@ export function BreadcrumbPlaygroundStudio({
         {
           id: "dropdown",
           label: "Dropdown Popover",
-          spec: "Collapse intermediate items",
-          thumbnail: <span className="text-sm">⋯</span>,
+          spec: "Collapse items into dropdown",
+          thumbnail: <span className="text-sm">📂</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.hasDropdown,
           onToggleChange: (checked) =>
-            onChange((prev) => ({ ...prev, hasDropdown: checked })),
+            onChange((prev) => ({
+              ...prev,
+              hasDropdown: checked,
+              hasCollapsed: checked ? false : prev.hasCollapsed,
+            })),
           onSelect: () =>
-            onChange((prev) => ({ ...prev, hasDropdown: !prev.hasDropdown })),
+            onChange((prev) => ({
+              ...prev,
+              hasDropdown: !prev.hasDropdown,
+              hasCollapsed: !prev.hasDropdown ? false : prev.hasCollapsed,
+            })),
+        },
+        {
+          id: "collapsed",
+          label: "Collapsed Row",
+          spec: "Expand hidden items inline",
+          thumbnail: <span className="text-sm">⋯</span>,
+          actionType: "toggle",
+          toggleChecked: !!customProps.hasCollapsed,
+          onToggleChange: (checked) =>
+            onChange((prev) => ({
+              ...prev,
+              hasCollapsed: checked,
+              hasDropdown: checked ? false : prev.hasDropdown,
+            })),
+          onSelect: () =>
+            onChange((prev) => ({
+              ...prev,
+              hasCollapsed: !prev.hasCollapsed,
+              hasDropdown: !prev.hasCollapsed ? false : prev.hasDropdown,
+            })),
         },
       ],
     },

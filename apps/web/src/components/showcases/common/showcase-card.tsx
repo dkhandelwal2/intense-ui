@@ -277,7 +277,7 @@ export function ShowcaseCard({
             />
 
             {/* Live Component */}
-            <div className="relative z-10 w-full flex items-center justify-center overflow-x-auto no-scrollbar">
+            <div className="relative z-10 w-full flex items-center justify-center">
               {children}
             </div>
           </div>

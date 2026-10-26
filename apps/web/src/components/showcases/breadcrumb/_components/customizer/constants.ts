@@ -32,6 +32,7 @@ export const DEFAULT_CUSTOM_PROPS: CustomProps = {
   size: "md",
   showIcons: true,
   hasDropdown: false,
+  hasCollapsed: false,
 };
 
 export function getModifiedCount(props: CustomProps): number {
@@ -43,6 +44,7 @@ export function getModifiedCount(props: CustomProps): number {
   if (props.size !== "md") count++;
   if (!props.showIcons) count++;
   if (props.hasDropdown) count++;
+  if (props.hasCollapsed) count++;
   return count;
 }
 

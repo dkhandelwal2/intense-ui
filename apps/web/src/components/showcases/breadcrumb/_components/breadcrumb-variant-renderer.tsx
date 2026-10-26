@@ -10,6 +10,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbDropdown,
   BreadcrumbDropdownItem,
+  BreadcrumbCollapsed,
   BreadcrumbGooey,
   BreadcrumbVariant,
   BreadcrumbSize,
@@ -79,11 +80,57 @@ function DemoDropdown() {
   return (
     <BreadcrumbDropdown>
       {DROPDOWN_ITEMS.map((item) => (
-        <BreadcrumbDropdownItem key={item.label} href="#" icon={item.icon}>
+        <BreadcrumbDropdownItem
+          key={item.label}
+          onClick={(e) => e?.preventDefault?.()}
+          icon={item.icon}
+        >
           {item.label}
         </BreadcrumbDropdownItem>
       ))}
     </BreadcrumbDropdown>
+  );
+}
+
+function CollapsedBreadcrumbShowcase() {
+  const [isCollapsed, setIsCollapsed] = React.useState(true);
+
+  const items = [
+    { label: "Home", href: "#", onClick: (e: React.MouseEvent) => e.preventDefault() },
+    { label: "Docs", href: "#", onClick: (e: React.MouseEvent) => e.preventDefault() },
+    { label: "Guides", href: "#", onClick: (e: React.MouseEvent) => e.preventDefault() },
+    { label: "Components", href: "#", onClick: (e: React.MouseEvent) => e.preventDefault() },
+    { label: "Breadcrumb" },
+  ];
+
+  return (
+    <PreviewCanvas className="flex-col gap-3 py-4">
+      <div className="flex items-center gap-2">
+        <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono text-center">
+          {isCollapsed
+            ? 'Click the "..." button to expand all items into row'
+            : "All items expanded inline in breadcrumb row"}
+        </span>
+        {!isCollapsed && (
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(true)}
+            className="px-2 py-0.5 text-[10px] font-mono font-medium rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition-colors cursor-pointer"
+          >
+            Re-collapse
+          </button>
+        )}
+      </div>
+
+      <BreadcrumbCollapsed
+        items={items}
+        maxItems={4}
+        itemsBeforeCollapse={1}
+        itemsAfterCollapse={2}
+        isCollapsed={isCollapsed}
+        onCollapsedChange={setIsCollapsed}
+      />
+    </PreviewCanvas>
   );
 }
 
@@ -255,6 +302,9 @@ export function BreadcrumbVariantRenderer({
         </PreviewCanvas>
       );
 
+    case "collapsed":
+      return <CollapsedBreadcrumbShowcase />;
+
     case "gooey":
       return (
         <PreviewCanvas className="flex-col gap-3">
@@ -317,6 +367,60 @@ export function BreadcrumbVariantRenderer({
       }
 
       const showIcons = customProps.showIcons;
+
+      if (customProps.hasCollapsed) {
+        const collapsedItems = [
+          {
+            label: "Home",
+            href: "#",
+            icon: showIcons ? "🏠" : undefined,
+            onClick: (e: React.MouseEvent) => e.preventDefault(),
+          },
+          {
+            label: "Docs",
+            href: "#",
+            icon: showIcons ? "📁" : undefined,
+            onClick: (e: React.MouseEvent) => e.preventDefault(),
+          },
+          {
+            label: "Guides",
+            href: "#",
+            icon: showIcons ? "📖" : undefined,
+            onClick: (e: React.MouseEvent) => e.preventDefault(),
+          },
+          {
+            label: "Components",
+            href: "#",
+            icon: showIcons ? "🧩" : undefined,
+            onClick: (e: React.MouseEvent) => e.preventDefault(),
+          },
+          {
+            label: "Breadcrumb",
+            icon: showIcons ? "🍞" : undefined,
+          },
+        ];
+
+        return (
+          <PreviewCanvas className="flex-col gap-3 py-4">
+            <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono text-center">
+              Click &quot;...&quot; to expand all items into row
+            </span>
+            <BreadcrumbCollapsed
+              variant={customProps.variant}
+              size={customProps.size}
+              separator={getSeparatorIcon(customProps.separator)}
+              separatorColor={customProps.separatorColor}
+              activeColor={customProps.activeColor}
+              items={collapsedItems}
+              maxItems={4}
+              itemsBeforeCollapse={1}
+              itemsAfterCollapse={2}
+              allowCollapse={true}
+            />
+          </PreviewCanvas>
+        );
+      }
+
       const baseItems = customProps.hasDropdown
         ? [{ label: "Home", icon: showIcons ? "🏠" : undefined }]
         : [

@@ -6,6 +6,7 @@ export const BreadcrumbEmojis = {
   "with-icon": "🏷️",
   "custom-separator": "✂️",
   dropdown: "📂",
+  collapsed: "🗂️",
   gooey: "🫧",
   chips: "💊",
   customization: "🎨",
@@ -49,6 +50,9 @@ export const BreadcrumbIcons = {
   ),
   dropdown: (props?: { className?: string }) => (
     <EmojiIcon emoji={BreadcrumbEmojis.dropdown} {...props} />
+  ),
+  collapsed: (props?: { className?: string }) => (
+    <EmojiIcon emoji={BreadcrumbEmojis.collapsed} {...props} />
   ),
   gooey: (props?: { className?: string }) => (
     <EmojiIcon emoji={BreadcrumbEmojis.gooey} {...props} />
