@@ -47,6 +47,7 @@ export interface ComponentTocDockProps {
   centerColumnRef?: React.RefObject<HTMLElement | null>;
   onItemClick?: (id: string) => void;
   className?: string;
+  isInline?: boolean;
 }
 
 export function ComponentTocDock({
@@ -55,6 +56,7 @@ export function ComponentTocDock({
   centerColumnRef,
   onItemClick,
   className,
+  isInline,
 }: ComponentTocDockProps) {
   if (tocItems.length === 0) return null;
 
@@ -133,6 +135,7 @@ export function ComponentTocDock({
     visibleButtons[safeActiveIndex]?.type === "item"
       ? (visibleButtons[safeActiveIndex] as { type: "item"; item: (typeof allItems)[0] }).item
       : allItems[0];
+  const safeActiveId = activeItem?.id;
 
   const totalWidth = PADDING_X * 2 + visibleButtons.length * BUTTON_WIDTH;
   const activeX = PADDING_X + safeActiveIndex * BUTTON_WIDTH + BUTTON_WIDTH / 2;
@@ -242,11 +245,13 @@ export function ComponentTocDock({
   return (
     <div
       style={{
-        left: centerX !== null ? `${centerX}px` : undefined,
+        left: !isInline && centerX !== null ? `${centerX}px` : undefined,
       }}
       className={cn(
-        "hidden xl:block fixed bottom-6 z-20 pointer-events-none select-none transition-[left] duration-300 ease-out",
-        centerX !== null ? "-translate-x-1/2" : "left-1/2 -translate-x-1/2",
+        isInline
+          ? "relative z-20 pointer-events-auto select-none flex items-center justify-center"
+          : "hidden xl:block fixed bottom-6 z-20 pointer-events-none select-none transition-[left] duration-300 ease-out",
+        !isInline && (centerX !== null ? "-translate-x-1/2" : "left-1/2 -translate-x-1/2"),
         className
       )}
     >
@@ -320,7 +325,7 @@ export function ComponentTocDock({
             {visibleButtons.map((btn) => {
               if (btn.type === "item") {
                 const item = btn.item;
-                const isActive = activeTocId === item.id;
+                const isItemActive = activeTocId ? activeTocId === item.id : item.id === safeActiveId;
                 return (
                   <motion.div
                     layout
@@ -342,11 +347,13 @@ export function ComponentTocDock({
                     }}
                     className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-pointer select-none"
                   >
-                    {/* Inactive Icon (+50% size: 24px) */}
+                    {/* Inactive Icon (+50% size: 24px) - Completely hidden & invisible when active to eliminate double-render */}
                     <div
                       className={cn(
-                        "absolute top-[9px] left-1/2 -translate-x-1/2 transition-all duration-300 ease-out flex items-center justify-center w-7 h-7 text-2xl leading-none text-zinc-400 dark:text-zinc-500 [&_svg]:w-6 [&_svg]:h-6",
-                        isActive ? "opacity-0 scale-75 pointer-events-none" : "opacity-100 scale-100"
+                        "absolute top-[9px] left-1/2 -translate-x-1/2 transition-all duration-200 ease-out flex items-center justify-center w-7 h-7 text-2xl leading-none text-zinc-400 dark:text-zinc-500 [&_svg]:w-6 [&_svg]:h-6",
+                        isItemActive
+                          ? "opacity-0 scale-50 pointer-events-none invisible"
+                          : "opacity-100 scale-100"
                       )}
                     >
                       {item.icon || (
@@ -354,12 +361,12 @@ export function ComponentTocDock({
                       )}
                     </div>
 
-                    {/* Section Label (hidden when active to maintain a pristine, uncluttered scoop cradle) */}
+                    {/* Section Label */}
                     <span
                       className={cn(
                         "absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-all duration-300 ease-out max-w-[74px] truncate text-center",
-                        isActive
-                          ? "pointer-events-none"
+                        isItemActive
+                          ? "pointer-events-none text-foreground font-semibold"
                           : "opacity-100 scale-100 text-zinc-500 dark:text-zinc-400 font-medium"
                       )}
                     >

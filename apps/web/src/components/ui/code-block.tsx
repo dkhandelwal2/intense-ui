@@ -172,7 +172,15 @@ export function CodeBlock({
       {/* Code Area */}
       <div className="overflow-auto subtle-scrollbar text-xs sm:text-[13px] flex-1 min-h-0 w-full">
         {!mounted ? (
-          <pre className="p-3.5 sm:p-4 pr-12 text-xs sm:text-[13px] font-mono text-zinc-800 dark:text-zinc-200 m-0">
+          <pre
+            className="text-xs sm:text-[13px] text-zinc-800 dark:text-zinc-200 overflow-visible"
+            style={{
+              margin: 0,
+              padding: hasHeader ? "0.875rem 1rem" : "0.875rem 3.5rem 0.875rem 1rem",
+              lineHeight: "1.65",
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+            }}
+          >
             <code>{code}</code>
           </pre>
         ) : (

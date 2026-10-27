@@ -232,7 +232,7 @@ export function PlaygroundStudio({
 
         {/* Main Studio Card Container: Borderless, Left-Aligned Shape, 3D Perspective */}
         <div
-          className="relative h-full overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg p-0"
+          className="relative flex-1 min-h-0 w-full overflow-hidden rounded-[28px] bg-white dark:bg-[#111115] shadow-lg p-0"
           style={{ perspective: 1200 }}
         >
           <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -410,7 +410,7 @@ export function PlaygroundStudio({
       </div>
 
       {/* Tactile 3D Buttons: Left and Right buttons are paired near each other with Chevrons only */}
-      <div className="pt-2 sm:pt-3.5 pb-0.5 flex items-center justify-between px-1 shrink-0">
+      <div className="pt-2 sm:pt-3 pb-0.5 flex items-center justify-between px-1 shrink-0 mt-auto">
         {/* Step Dots Indicator on Left */}
         <div className="flex items-center gap-1.5">
           {steps.map((step, idx) => {

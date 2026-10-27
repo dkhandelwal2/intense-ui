@@ -11,6 +11,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isComponentDocs = pathname?.startsWith("/docs/components/");
   const isErrorPage = pathname === "/404" || pathname === "/500" || pathname === "/503";
 
+  if (isPreviewRevamp) {
+    return (
+      <div className="relative min-h-screen w-full flex flex-col bg-background">
+        <SiteHeader />
+        <div className="flex-1 min-h-0 pt-20 flex flex-col">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip">
       {!isErrorPage && <SiteHeader />}

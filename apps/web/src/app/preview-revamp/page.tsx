@@ -1,541 +1,1739 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
+  Terminal,
+  Sliders,
+  Code2,
   Copy,
   Check,
-  Terminal,
-  ExternalLink,
-  ChevronRight,
-  Star,
-  Sparkles,
-  ArrowUp,
-  LayoutList,
-  Layers,
-  SlidersHorizontal,
-  ToggleRight,
+  Sun,
+  Moon,
+  ArrowUpRight,
+  ShieldAlert,
+  MessageCircle,
+  X,
+  Package,
   Activity,
-  MessageSquare,
-  ArrowRight
+  ExternalLink,
+  Layers,
+  Clock,
+  Sparkles,
+  MapPin,
+  CloudSun,
+  CloudRain,
+  Snowflake,
+  CloudLightning,
+  Cloud,
+  Compass,
+  Loader2,
+  Command,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteConfig } from "@/config/site";
-import { GithubIcon, XTwitterIcon, LinkedinIcon, InstagramIcon } from "@/icons";
+import { GithubIcon } from "@/icons";
+import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
+import { KoraExpandingFooter } from "@/components/layout/kora-expanding-footer";
+import { useTheme } from "next-themes";
+import { PackageManager } from "@/components/ui/package-manager";
+import { CodeBlock } from "@/components/ui/code-block";
+import { PropsTable } from "@/components/docs";
+
+// Real existing components and documentation data
+import { navBarDoc } from "@/config/component-docs/nav-bar";
+import { NAVBAR_EXAMPLES } from "@/components/showcases/nav-bar/constants";
+import {
+  NavbarVariantRenderer,
+} from "@/components/showcases/nav-bar/_components/navbar-variant-renderer";
+import {
+  NavbarPlaygroundStudio,
+  DEFAULT_CUSTOM_PROPS,
+} from "@/components/showcases/nav-bar/_components";
+import { generateNavbarCode } from "@/components/showcases/nav-bar/code-generator";
+import { CustomNavbarProps } from "@/components/showcases/nav-bar/types";
+import { ComponentTocDock } from "@/components/layout/layout-components/component-toc-dock";
+import { InstallTabContent } from "@/components/layout/layout-components/install-tab-content";
+import {
+  getDependencyLogo,
+  getNpmPackageUrl,
+  FramerMotionLogo,
+  LucideLogo,
+  TailwindMergeLogo,
+  ClsxLogo,
+  RadixLogo,
+} from "@/components/docs";
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
+type DeckCardId = 4 | 5 | 6;
+
+// Real dependencies matching Intense UI and navbar component ecosystem
+interface DependencyItem {
+  name: string;
+  version: string;
+}
+
+const DEP_ROW_1: DependencyItem[] = [
+  { name: "framer-motion", version: "^11.18.2" },
+  { name: "lucide-react", version: "^1.52.0" },
+  { name: "clsx", version: "^2.1.1" },
+  { name: "tailwind-merge", version: "^2.6.1" },
+  { name: "tailwindcss", version: "^4.0.0" },
+  { name: "@radix-ui/react-slot", version: "^1.1.0" },
+];
+
+const DEP_ROW_2: DependencyItem[] = [
+  { name: "react", version: "19.2.8" },
+  { name: "react-dom", version: "19.2.8" },
+  { name: "next", version: "16.3.8" },
+  { name: "typescript", version: "^5.0.0" },
+  { name: "next-themes", version: "^0.4.6" },
+  { name: "cmdk", version: "^1.0.4" },
+];
+
+function renderDependencyLogo(name: string) {
+  const n = name.toLowerCase().trim();
+  if (n === "react" || n === "react-dom") {
+    return (
+      <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-3.5 h-3.5 text-[#00d8ff] shrink-0 drop-shadow-[0_0_6px_rgba(0,216,255,0.4)]" fill="currentColor">
+        <circle cx="0" cy="0" r="2.05" />
+        <g stroke="currentColor" strokeWidth="1" fill="none">
+          <ellipse rx="11" ry="4.2" />
+          <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+          <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+        </g>
+      </svg>
+    );
+  }
+  if (n === "typescript") {
+    return (
+      <span className="font-mono font-bold text-[8.5px] px-1.5 py-0.5 rounded bg-[#3178c6] text-white leading-none shrink-0 shadow-xs">
+        TS
+      </span>
+    );
+  }
+  if (n === "next") {
+    return (
+      <span className="font-mono font-bold text-[8.5px] px-1.5 py-0.5 rounded-md bg-black text-white dark:bg-white dark:text-black leading-none shrink-0 shadow-xs">
+        N
+      </span>
+    );
+  }
+  if (n === "next-themes") {
+    return <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" />;
+  }
+  if (n === "framer-motion") {
+    return <FramerMotionLogo className="h-2.5 w-auto text-pink-500 dark:text-pink-400 shrink-0 drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]" />;
+  }
+  if (n === "lucide-react") {
+    return <LucideLogo className="w-3.5 h-3.5 shrink-0" />;
+  }
+  if (n === "tailwind-merge" || n === "tailwindcss") {
+    return <TailwindMergeLogo className="w-3.5 h-3.5 text-sky-400 shrink-0 drop-shadow-[0_0_6px_rgba(56,189,248,0.3)]" />;
+  }
+  if (n === "clsx") {
+    return <ClsxLogo className="w-3.5 h-3.5 text-violet-500 shrink-0" />;
+  }
+  if (n.includes("radix")) {
+    return <RadixLogo className="w-3.5 h-3.5 text-purple-400 shrink-0" />;
+  }
+  if (n === "cmdk") {
+    return <Command className="w-3.5 h-3.5 text-zinc-400 shrink-0" />;
+  }
+  return getDependencyLogo(name);
+}
+
+// Eye-catching text scramble animation (cyberpunk / matrix decode effect)
+const SCRAMBLE_GLYPHS = "0123456789ABCDEF!@#$%&*<>[]{}~_+=";
+
+function ScrambleText({
+  text,
+  className,
+  scrambleSpeed = 32,
+}: {
+  text: string;
+  className?: string;
+  scrambleSpeed?: number;
+}) {
+  const [displayText, setDisplayText] = useState(text);
+  const animRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startScramble = useCallback(() => {
+    if (animRef.current) clearInterval(animRef.current);
+    let iteration = 0;
+    const target = text;
+
+    animRef.current = setInterval(() => {
+      setDisplayText(() =>
+        target
+          .split("")
+          .map((char, index) => {
+            if (char === " " || char === "/" || char === "-") return char;
+            if (index < Math.floor(iteration)) {
+              return target[index];
+            }
+            return SCRAMBLE_GLYPHS[Math.floor(Math.random() * SCRAMBLE_GLYPHS.length)];
+          })
+          .join("")
+      );
+
+      if (iteration >= target.length) {
+        if (animRef.current) clearInterval(animRef.current);
+        setDisplayText(target);
+      }
+      iteration += 0.55;
+    }, scrambleSpeed);
+  }, [text, scrambleSpeed]);
+
+  useEffect(() => {
+    startScramble();
+    return () => {
+      if (animRef.current) clearInterval(animRef.current);
+    };
+  }, [startScramble]);
+
+  return (
+    <span
+      className={className}
+      onMouseEnter={startScramble}
+    >
+      {displayText}
+    </span>
+  );
+}
+
+/* =========================================================================
+   REGION 3: DYNAMIC WIDGET CAPSULE
+   - Initial time-based greeting message (Good morning / afternoon / evening / night)
+   - Clock with Analog & Digital switcher along with full date
+   - Location-permission live weather & temperature widget
+   ========================================================================= */
+
+interface WeatherState {
+  temp: number | null;
+  condition: string | null;
+  city: string | null;
+  code: number | null;
+  status: "idle" | "requesting" | "success" | "denied" | "error";
+}
+
+function getWeatherIcon(code: number | null, isDay = true) {
+  if (code === null) return CloudSun;
+  if (code === 0) return isDay ? Sun : Moon;
+  if (code >= 1 && code <= 3) return isDay ? CloudSun : Cloud;
+  if (code >= 51 && code <= 65) return CloudRain;
+  if (code >= 71 && code <= 77) return Snowflake;
+  if (code >= 95) return CloudLightning;
+  return Cloud;
+}
+
+function getWeatherDescription(code: number | null) {
+  if (code === null) return "Mild";
+  if (code === 0) return "Clear";
+  if (code >= 1 && code <= 3) return "Partly Cloudy";
+  if (code === 45 || code === 48) return "Foggy";
+  if (code >= 51 && code <= 65) return "Rain";
+  if (code >= 71 && code <= 77) return "Snow";
+  if (code >= 95) return "Thunderstorm";
+  return "Cloudy";
+}
+
+function getGreeting(date: Date) {
+  const hour = date.getHours();
+  if (hour >= 5 && hour < 12) {
+    return {
+      title: "Good morning",
+      subtitle: "Ready to build components?",
+      icon: Sun,
+      color: "text-amber-500",
+    };
+  }
+  if (hour >= 12 && hour < 17) {
+    return {
+      title: "Good afternoon",
+      subtitle: "Designing fluid physics?",
+      icon: CloudSun,
+      color: "text-orange-500",
+    };
+  }
+  if (hour >= 17 && hour < 22) {
+    return {
+      title: "Good evening",
+      subtitle: "Wrapping up today's work?",
+      icon: Moon,
+      color: "text-indigo-400",
+    };
+  }
+  return {
+    title: "Good night",
+    subtitle: "Night owl mode activated",
+    icon: Moon,
+    color: "text-purple-400",
+  };
+}
+
+function AnalogClockMini({ date }: { date: Date }) {
+  const seconds = date.getSeconds();
+  const minutes = date.getMinutes() + seconds / 60;
+  const hours = (date.getHours() % 12) + minutes / 60;
+
+  const secondDeg = seconds * 6;
+  const minuteDeg = minutes * 6;
+  const hourDeg = hours * 30;
+
+  return (
+    <div className="relative w-7 h-7 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner flex items-center justify-center shrink-0">
+      {/* 12, 3, 6, 9 markers */}
+      <span className="absolute top-0.5 w-[1.5px] h-1 bg-zinc-400 dark:bg-zinc-500 rounded-full" />
+      <span className="absolute bottom-0.5 w-[1.5px] h-1 bg-zinc-400 dark:bg-zinc-500 rounded-full" />
+      <span className="absolute left-0.5 w-1 h-[1.5px] bg-zinc-400 dark:bg-zinc-500 rounded-full" />
+      <span className="absolute right-0.5 w-1 h-[1.5px] bg-zinc-400 dark:bg-zinc-500 rounded-full" />
+
+      {/* Hour Hand */}
+      <div
+        className="absolute w-[1.5px] h-2 rounded-full bg-zinc-800 dark:bg-zinc-200 origin-bottom"
+        style={{
+          bottom: "50%",
+          transform: `rotate(${hourDeg}deg)`,
+        }}
+      />
+
+      {/* Minute Hand */}
+      <div
+        className="absolute w-[1px] h-2.5 rounded-full bg-zinc-700 dark:bg-zinc-300 origin-bottom"
+        style={{
+          bottom: "50%",
+          transform: `rotate(${minuteDeg}deg)`,
+        }}
+      />
+
+      {/* Second Hand */}
+      <div
+        className="absolute w-[1px] h-3 rounded-full bg-emerald-500 origin-bottom"
+        style={{
+          bottom: "50%",
+          transform: `rotate(${secondDeg}deg)`,
+        }}
+      />
+
+      {/* Center Pin */}
+      <div className="relative w-1.5 h-1.5 rounded-full bg-zinc-900 dark:bg-zinc-100 z-10 border border-white dark:border-zinc-900" />
+    </div>
+  );
+}
+
+function WidgetCapsule() {
+  const [mounted, setMounted] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [clockMode, setClockMode] = useState<"digital" | "analog">("digital");
+  const [showGreeting, setShowGreeting] = useState(true);
+  const [weather, setWeather] = useState<WeatherState>({
+    temp: null,
+    condition: null,
+    city: null,
+    code: null,
+    status: "idle",
+  });
+
+  useEffect(() => {
+    setMounted(true);
+    setCurrentTime(new Date());
+
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    // Initial greeting shows for 4 seconds then gracefully morphs to clock
+    const greetingTimer = setTimeout(() => {
+      setShowGreeting(false);
+    }, 4000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(greetingTimer);
+    };
+  }, []);
+
+  // Check geolocation permission if already granted
+  useEffect(() => {
+    if (typeof window === "undefined" || !navigator.geolocation) return;
+
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((permissionStatus) => {
+          if (permissionStatus.state === "granted") {
+            fetchLiveWeather();
+          }
+          permissionStatus.onchange = () => {
+            if (permissionStatus.state === "granted") {
+              fetchLiveWeather();
+            } else if (permissionStatus.state === "denied") {
+              setWeather((prev) => ({ ...prev, status: "denied" }));
+            }
+          };
+        })
+        .catch(() => { });
+    }
+  }, []);
+
+  const fetchLiveWeather = () => {
+    if (typeof window === "undefined" || !navigator.geolocation) return;
+
+    setWeather((prev) => ({ ...prev, status: "requesting" }));
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const res = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,is_day,weather_code`
+          );
+          const data = await res.json();
+
+          // Resolve city name
+          let resolvedCity = "";
+          try {
+            const geoRes = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+            );
+            const geoData = await geoRes.json();
+            resolvedCity =
+              geoData.city || geoData.locality || geoData.principalSubdivision || "";
+          } catch { }
+
+          if (!resolvedCity) {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            resolvedCity = tz.split("/")[1]?.replace(/_/g, " ") || "Local";
+          }
+
+          const current = data.current;
+          const temp = Math.round(current.temperature_2m);
+          const code = current.weather_code;
+
+          setWeather({
+            temp,
+            code,
+            condition: getWeatherDescription(code),
+            city: resolvedCity,
+            status: "success",
+          });
+        } catch {
+          setWeather((prev) => ({ ...prev, status: "error" }));
+        }
+      },
+      (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setWeather((prev) => ({ ...prev, status: "denied" }));
+        } else {
+          setWeather((prev) => ({ ...prev, status: "error" }));
+        }
+      },
+      { timeout: 8000, maximumAge: 600000 }
+    );
+  };
+
+  if (!mounted) {
+    return (
+      <div className="h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-3.5 shadow-sm flex items-center justify-between overflow-hidden">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-full bg-muted animate-pulse" />
+          <div className="h-4 w-24 bg-muted rounded-full animate-pulse" />
+        </div>
+        <div className="h-6 w-16 bg-muted rounded-full animate-pulse" />
+      </div>
+    );
+  }
+
+  const greeting = getGreeting(currentTime);
+  const GreetingIcon = greeting.icon;
+
+  const hoursStr = String(currentTime.getHours() % 12 || 12).padStart(2, "0");
+  const minutesStr = String(currentTime.getMinutes()).padStart(2, "0");
+  const secondsStr = String(currentTime.getSeconds()).padStart(2, "0");
+  const ampm = currentTime.getHours() >= 12 ? "PM" : "AM";
+
+  const fullDateStr = currentTime.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const WeatherIcon = getWeatherIcon(
+    weather.code,
+    currentTime.getHours() >= 6 && currentTime.getHours() < 19
+  );
+
+  return (
+    <div className="h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-3.5 shadow-sm flex items-center justify-between overflow-hidden relative select-none">
+      <AnimatePresence mode="wait">
+        {showGreeting ? (
+          /* =========================================================================
+             STAGE 1: INITIAL TIME-BASED GREETING VIEW
+             ========================================================================= */
+          <motion.div
+            key="greeting"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="w-full flex items-center justify-between gap-2"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-muted/80 border border-border flex items-center justify-center shrink-0 shadow-xs">
+                <GreetingIcon className={cn("w-4 h-4 animate-pulse", greeting.color)} />
+              </div>
+              <div className="flex flex-col min-w-0 leading-tight">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-foreground tracking-tight truncate">
+                    {greeting.title}
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                </div>
+                <span className="text-[10px] font-mono text-muted-foreground truncate">
+                  {fullDateStr}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          /* =========================================================================
+             STAGE 2: CLOCK (ANALOG/DIGITAL) + FULL DATE + LIVE WEATHER
+             ========================================================================= */
+          <motion.div
+            key="clock-weather"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="w-full flex items-center justify-between gap-2"
+          >
+            {/* LEFT: CLOCK & FULL DATE */}
+            <div className="flex items-center gap-2 min-w-0">
+              {clockMode === "analog" ? (
+                <div
+                  onClick={() => setClockMode("digital")}
+                  className="cursor-pointer"
+                  title="Click to switch to digital clock"
+                >
+                  <AnalogClockMini date={currentTime} />
+                </div>
+              ) : null}
+
+              <div className="flex flex-col min-w-0 leading-tight">
+                {clockMode === "digital" ? (
+                  <div className="flex items-baseline gap-1 text-xs font-mono font-bold text-foreground tracking-tight">
+                    <span>
+                      {hoursStr}:{minutesStr}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground font-normal">
+                      :{secondsStr}
+                    </span>
+                    <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 ml-0.5">
+                      {ampm}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1 text-xs font-mono font-bold text-foreground tracking-tight">
+                    <span>
+                      {hoursStr}:{minutesStr} {ampm}
+                    </span>
+                  </div>
+                )}
+                <span className="text-[9.5px] font-mono text-muted-foreground truncate">
+                  {fullDateStr}
+                </span>
+              </div>
+            </div>
+
+            {/* RIGHT: WEATHER & CONTROLS */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Weather Widget */}
+              {weather.status === "success" && weather.temp !== null ? (
+                <div
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-xs shadow-xs"
+                  title={`${weather.condition} • ${weather.city}`}
+                >
+                  <WeatherIcon className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+                  <span className="font-mono font-bold text-foreground text-[11px]">
+                    {weather.temp}°C
+                  </span>
+                  <span className="font-mono text-[9.5px] text-muted-foreground hidden sm:inline max-w-[65px] truncate">
+                    {weather.city}
+                  </span>
+                </div>
+              ) : weather.status === "requesting" ? (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 border border-border text-[10px] font-mono text-muted-foreground">
+                  <Loader2 className="w-3 h-3 animate-spin text-sky-500" />
+                  <span>Locating...</span>
+                </div>
+              ) : weather.status === "denied" ? (
+                <button
+                  type="button"
+                  onClick={fetchLiveWeather}
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted/40 border border-border text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  title="Location permission denied. Click to retry."
+                >
+                  <MapPin className="w-3 h-3 text-rose-400" />
+                  <span>No location</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={fetchLiveWeather}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted/60 hover:bg-muted border border-border text-[10.5px] font-mono text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-xs group"
+                  title="Click to allow location for live weather"
+                >
+                  <MapPin className="w-3 h-3 text-sky-500 group-hover:scale-110 transition-transform" />
+                  <span>Weather</span>
+                </button>
+              )}
+
+              {/* Analog ↔ Digital Clock Switcher */}
+              <button
+                type="button"
+                onClick={() => setClockMode(clockMode === "digital" ? "analog" : "digital")}
+                className="w-7 h-7 rounded-full bg-muted/60 hover:bg-muted border border-border flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                title={clockMode === "digital" ? "Switch to Analog clock" : "Switch to Digital clock"}
+              >
+                {clockMode === "digital" ? (
+                  <Compass className="w-3.5 h-3.5 text-indigo-400" />
+                ) : (
+                  <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function PreviewRevampPage() {
-  const footerRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const { scrollYProgress: footerProgress } = useScroll({
-    target: footerRef,
-    offset: ["start end", "end end"],
-  });
-  // Lenis-style silky smooth scroll spring (eliminates discrete wheel/scroll jerkiness)
-  const smoothProgress = useSpring(footerProgress, {
-    stiffness: 100,
-    damping: 24,
-    mass: 0.2,
-    restDelta: 0.001,
-  });
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // Background expanding circle transforms (Dome emerges first covering top, left, right)
-  const circleScale = useTransform(smoothProgress, [0, 0.25, 0.65, 1], [0.8, 1.8, 3.0, 4.4]);
-  const circleY = useTransform(smoothProgress, [0, 0.25, 0.65, 1], [40, 0, 0, 0]);
-  const circleOpacity = useTransform(smoothProgress, [0, 0.08, 0.2], [0.65, 0.9, 1]);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  // Footer content container width spreading from compact to edge-to-edge
-  const footerWidth = useTransform(
-    smoothProgress,
-    [0, 0.35, 0.75, 1],
-    ["70%", "82%", "92%", "98%"]
-  );
-  const footerScale = useTransform(smoothProgress, [0, 0.3, 0.75, 1], [0.94, 0.97, 0.99, 1]);
-  const footerY = useTransform(smoothProgress, [0, 0.45, 1], [60, 15, 0]);
+  // Region 1 & 2: Active TOC Item & Custom Playground Props from existing flow
+  const [activeTocId, setActiveTocId] = useState<string>("gooey");
+  const [customProps, setCustomProps] = useState<CustomNavbarProps>(DEFAULT_CUSTOM_PROPS);
+  const [isCustomizing, setIsCustomizing] = useState(false);
 
-  // Giant fit-text SVG scaling and rising from bottom
-  const giantTextScale = useTransform(smoothProgress, [0.35, 0.75, 1], [0.45, 0.82, 1]);
-  const giantTextY = useTransform(smoothProgress, [0.35, 0.75, 1], [60, 15, 0]);
-  const giantTextOpacity = useTransform(smoothProgress, [0.25, 0.5, 1], [0.2, 0.85, 1]);
-  const [emailCopied, setEmailCopied] = useState(false);
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [activeComponent, setActiveComponent] = useState("Accordion");
-  const [selectedPm, setSelectedPm] = useState<"npx" | "pnpm" | "bun">("npx");
+  // Region 4, 5, 6: Interactive Bouncy Card Deck (default 5: Playground Studio open)
+  const [activeDeckCard, setActiveDeckCard] = useState<DeckCardId>(5);
 
+  // Region 4: Installation State from existing flow
+  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
 
-  const getCliCommand = useCallback(() => {
-    const comp = activeComponent.toLowerCase();
-    if (selectedPm === "pnpm") return `pnpm dlx intense-ui@latest add ${comp}`;
-    if (selectedPm === "bun") return `bunx --bun intense-ui@latest add ${comp}`;
-    return `npx intense-ui@latest add ${comp}`;
-  }, [selectedPm, activeComponent]);
+  // Region 6: Code Preview State from existing flow
+  const [activeCodeTab, setActiveCodeTab] = useState<"example" | "custom" | "props">("example");
+  const [copiedCode, setCopiedCode] = useState(false);
 
-  const copyCliCommand = () => {
-    navigator.clipboard.writeText(getCliCommand());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  // Region 8: Dependencies Copied State
+  const [copiedDeps, setCopiedDeps] = useState(false);
+  const [copiedChip, setCopiedChip] = useState<string | null>(null);
+
+  // Dynamic dimension tracker for pixel-perfect seamless Region 1 Molded SVG
+  const leftStageRef = useRef<HTMLDivElement>(null);
+  const [stageDims, setStageDims] = useState({ width: 1140, height: 700 });
+  const [hasMeasured, setHasMeasured] = useState(false);
+
+  // Synchronous pre-paint measurement eliminates layout shift and flicker on hard refresh
+  useIsomorphicLayoutEffect(() => {
+    if (!leftStageRef.current) return;
+    const rect = leftStageRef.current.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      setStageDims({ width: Math.round(rect.width), height: Math.round(rect.height) });
+      setHasMeasured(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!leftStageRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        if (width > 0 && height > 0) {
+          setStageDims({ width: Math.round(width), height: Math.round(height) });
+          setHasMeasured(true);
+        }
+      }
+    });
+    observer.observe(leftStageRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Compute exact geometry for the molded L-shaped Region 1
+  const w = stageDims.width;
+  const h = stageDims.height;
+  const r = 36; // outer corner radius
+  const rConcave = 36; // inner fillet radius
+  // Dependencies block matches Developer Support width (380px) exactly
+  const dependenciesWidth = 380;
+  const bottomBarHeight = 185; // matching Region 7 and Region 8 height
+  const gap = 12; // gap between bento regions
+  // Dock gets all the remaining width on the left so it has ample space!
+  const dockWidth = Math.max(480, w - dependenciesWidth - gap);
+  const cutoutY = Math.max(260, h - bottomBarHeight - gap);
+
+  // Exact continuous SVG path for Region 1
+  const region1Path = `
+    M ${r} 0
+    L ${w - r} 0
+    A ${r} ${r} 0 0 1 ${w} ${r}
+    L ${w} ${cutoutY - r}
+    A ${r} ${r} 0 0 1 ${w - r} ${cutoutY}
+    L ${dockWidth + rConcave} ${cutoutY}
+    A ${rConcave} ${rConcave} 0 0 0 ${dockWidth} ${cutoutY + rConcave}
+    L ${dockWidth} ${h - r}
+    A ${r} ${r} 0 0 1 ${dockWidth - r} ${h}
+    L ${r} ${h}
+    A ${r} ${r} 0 0 1 0 ${h - r}
+    L 0 ${r}
+    A ${r} ${r} 0 0 1 ${r} 0
+    Z
+  `.trim().replace(/\s+/g, " ");
+
+  // Real customized code generated from existing flow
+  const customizedCode = generateNavbarCode(customProps);
+
+  // Active example metadata from existing flow
+  const activeExample = NAVBAR_EXAMPLES.find((ex) => ex.id === activeTocId) || NAVBAR_EXAMPLES[0];
+
+  // Active code depending on tab selection
+  const currentDisplayedCode =
+    activeCodeTab === "custom"
+      ? customizedCode
+      : navBarDoc.codes?.[activeTocId] || navBarDoc.codeContent || customizedCode;
+
+  const handleTocItemClick = (id: string) => {
+    setActiveTocId(id);
+    setIsCustomizing(false);
   };
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("hello@intense-ui.com");
-    setEmailCopied(true);
-    setTimeout(() => setEmailCopied(false), 2000);
+  const copyToClipboard = (text: string, setter: (val: boolean) => void) => {
+    navigator.clipboard.writeText(text);
+    setter(true);
+    setTimeout(() => setter(false), 2000);
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newsletterEmail.trim()) {
-      setNewsletterSubscribed(true);
-      setTimeout(() => {
-        setNewsletterEmail("");
-        setNewsletterSubscribed(false);
-      }, 3000);
+  const getInstallCommand = (pkgs: string) => {
+    switch (packageManager) {
+      case "npm":
+        return `npm i ${pkgs}`;
+      case "yarn":
+        return `yarn add ${pkgs}`;
+      case "bun":
+        return `bun add ${pkgs}`;
+      case "pnpm":
+      default:
+        return `pnpm add ${pkgs}`;
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const allDepNames = (navBarDoc.dependencies || []).map((d) => d.name).join(" ");
+  const installAllDepsCommand = getInstallCommand(allDepNames || "framer-motion clsx tailwind-merge");
+
+  const copyChip = (name: string) => {
+    navigator.clipboard.writeText(getInstallCommand(name));
+    setCopiedChip(name);
+    setTimeout(() => setCopiedChip(null), 1500);
+  };
+
+  // 3D Card Stack helper matching reference design (Apple Watch / iOS vertical card stack)
+  const getCardDeckLayout = (cardId: DeckCardId) => {
+    if (activeDeckCard === 5) {
+      // Card 5 is active in center (Card 4 peeks 40px at top, Card 6 peeks 40px at bottom)
+      if (cardId === 4) {
+        return {
+          top: 10,
+          height: "calc(100% - 100px)",
+          scaleX: 0.93,
+          zIndex: 20,
+          isFront: false,
+          d: -1,
+        };
+      }
+      if (cardId === 5) {
+        return {
+          top: 50,
+          height: "calc(100% - 100px)",
+          scaleX: 1.0,
+          zIndex: 30,
+          isFront: true,
+          d: 0,
+        };
+      }
+      // cardId === 6
+      return {
+        top: 90,
+        height: "calc(100% - 100px)",
+        scaleX: 0.93,
+        zIndex: 20,
+        isFront: false,
+        d: 1,
+      };
+    }
+
+    if (activeDeckCard === 4) {
+      // Card 4 is active at top (Card 5 peeks 40px below, Card 6 peeks 30px below Card 5)
+      if (cardId === 4) {
+        return {
+          top: 10,
+          height: "calc(100% - 90px)",
+          scaleX: 1.0,
+          zIndex: 30,
+          isFront: true,
+          d: 0,
+        };
+      }
+      if (cardId === 5) {
+        return {
+          top: 50,
+          height: "calc(100% - 90px)",
+          scaleX: 0.93,
+          zIndex: 20,
+          isFront: false,
+          d: 1,
+        };
+      }
+      // cardId === 6
+      return {
+        top: 80,
+        height: "calc(100% - 90px)",
+        scaleX: 0.86,
+        zIndex: 10,
+        isFront: false,
+        d: 2,
+      };
+    }
+
+    // activeDeckCard === 6 (Card 6 active at bottom: Card 4 peeks 30px at top, Card 5 peeks 40px below it)
+    if (cardId === 4) {
+      return {
+        top: 10,
+        height: "calc(100% - 90px)",
+        scaleX: 0.86,
+        zIndex: 10,
+        isFront: false,
+        d: -2,
+      };
+    }
+    if (cardId === 5) {
+      return {
+        top: 40,
+        height: "calc(100% - 90px)",
+        scaleX: 0.93,
+        zIndex: 20,
+        isFront: false,
+        d: -1,
+      };
+    }
+    // cardId === 6
+    return {
+      top: 80,
+      height: "calc(100% - 90px)",
+      scaleX: 1.0,
+      zIndex: 30,
+      isFront: true,
+      d: 0,
+    };
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-background text-foreground antialiased selection:bg-primary/20 pb-0">
-      {/* ─── MAIN LAYOUT: AIRY TREE SIDEBAR + CONTENT ─── */}
-      <div className="max-w-7xl mx-auto pt-6 sm:pt-8 px-4 sm:px-6 md:px-8 grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8">
-        {/* Left: Airy Floating Tree Sidebar */}
-        <aside className="hidden md:block sticky top-24 self-start pr-4">
-          <div className="flex flex-col gap-6">
-            <div>
-              <div className="text-[11px] font-bold tracking-wider text-muted-foreground/70 uppercase mb-3 px-2">
-                Getting Started
-              </div>
-              <div className="relative pl-3 border-l border-black/10 dark:border-white/10 flex flex-col gap-1">
-                <div className="px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
-                  Introduction
-                </div>
-                <div className="px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors flex items-center justify-between">
-                  <span>Installation</span>
-                  <span className="text-[10px] font-mono text-zinc-400">CLI</span>
-                </div>
-              </div>
-            </div>
+    <div className="relative w-full min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-x-clip">
+      {/* Seamless GPU-accelerated marquee keyframes: 100% smooth, zero jerk, full vertical clearance */}
+      <style>{`
+        @keyframes marquee-ltr {
+          from {
+            transform: translate3d(calc(-100% - var(--marquee-gap, 10px)), 0, 0);
+          }
+          to {
+            transform: translate3d(0, 0, 0);
+          }
+        }
+        @keyframes marquee-rtl {
+          from {
+            transform: translate3d(0, 0, 0);
+          }
+          to {
+            transform: translate3d(calc(-100% - var(--marquee-gap, 10px)), 0, 0);
+          }
+        }
+        .marquee-track {
+          --marquee-gap: 10px;
+          display: flex;
+          overflow: hidden;
+          user-select: none;
+          gap: var(--marquee-gap);
+          width: 100%;
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+        .marquee-group {
+          display: flex;
+          flex-shrink: 0;
+          align-items: center;
+          gap: var(--marquee-gap);
+          will-change: transform;
+        }
+        .animate-marquee-ltr {
+          animation: marquee-ltr 22s linear infinite;
+        }
+        .animate-marquee-rtl {
+          animation: marquee-rtl 22s linear infinite;
+        }
+        .marquee-track:hover .animate-marquee-ltr,
+        .marquee-track:hover .animate-marquee-rtl {
+          animation-play-state: paused;
+        }
+      `}</style>
 
-            <div>
-              <div className="flex items-center justify-between text-[11px] font-bold tracking-wider text-muted-foreground/70 uppercase mb-3 px-2">
-                <span>Components</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-primary/10 text-primary">12</span>
-              </div>
-              <div className="relative pl-3 border-l border-black/10 dark:border-white/10 flex flex-col gap-1">
-                {[
-                  { name: "Accordion", badge: "Hot", icon: LayoutList },
-                  { name: "Animated Button", badge: "New", icon: Sparkles },
-                  { name: "Switch", badge: null, icon: ToggleRight },
-                  { name: "Slider", badge: null, icon: SlidersHorizontal },
-                  { name: "Bento Grid", badge: "Pro", icon: Layers },
-                ].map((item) => {
-                  const isActive = activeComponent === item.name;
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => setActiveComponent(item.name)}
-                      className={cn(
-                        "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left relative",
-                        isActive
-                          ? "bg-gradient-to-r from-primary/15 via-primary/10 to-transparent text-primary font-bold border border-primary/25 shadow-[0_0_15px_rgba(249,115,22,0.15)]"
-                          : "text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5 hover:text-foreground"
-                      )}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Icon className={cn("w-3.5 h-3.5", isActive ? "text-primary" : "text-muted-foreground")} />
-                        <span>{item.name}</span>
-                      </div>
-                      {item.badge && (
-                        <span
-                          className={cn(
-                            "text-[10px] px-1.5 py-0.5 rounded-full font-bold",
-                            item.badge === "Hot"
-                              ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                              : item.badge === "New"
-                              ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                              : "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
-                          )}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 
-            {/* Pinned Bottom Status Card */}
-            <div className="mt-8 p-3.5 rounded-2xl bg-black/5 dark:bg-white/[0.03] border border-black/5 dark:border-white/10 text-xs">
-              <div className="flex items-center gap-2 mb-1.5 text-emerald-500 font-semibold text-[11px]">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                Registry Online
-              </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Turbopack &amp; React 19 native primitives.
-              </p>
-            </div>
-          </div>
-        </aside>
-
-        {/* Center: Hero Demo Canvas to showcase scroll depth */}
-        <main className="flex flex-col gap-10 min-w-0 pb-16">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-              <Sparkles className="w-3.5 h-3.5" />
-              Live Interactive Prototype
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
-              On-Scroll Motion &amp; Spatial Glass Revamp
-            </h1>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-2xl leading-relaxed">
-              Scroll down this page to witness the **header seamlessly morph** into a floating frosted glass pill with reading progress tracking, and see the **footer bento grid cards emerge with staggered spring depth**.
-            </p>
-          </div>
-
-          {/* Demonstration Interactive Card */}
-          <div className="p-6 sm:p-8 rounded-3xl border border-black/10 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02] backdrop-blur-md relative overflow-hidden">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-lg font-bold">Interactive Component: {activeComponent}</h3>
-                <p className="text-xs text-muted-foreground">Component preview canvas inside new open architecture.</p>
-              </div>
-              <span className="px-2.5 py-1 rounded-full text-xs font-mono bg-primary/10 text-primary font-bold">
-                Preview Mode
-              </span>
-            </div>
-
-            {/* Sample accordion preview representation */}
-            <div className="space-y-3">
-              {[
-                { q: "How does the on-scroll header animation work?", a: "It uses Framer Motion's useScroll with hardware-accelerated transforms. As scrollY exceeds 25px, the container transitions smoothly into an elevated glass pill without reflowing the document." },
-                { q: "Why is the floating tree sidebar better?", a: "Instead of an opaque, heavy box covering the left edge, it uses airy vertical guide-rails and translucent floating pills that breathe with the content." },
-                { q: "What makes the Bento Grid footer unique?", a: "It breaks away from 1990s list columns into modular interactive cards (CLI quick install, GitHub stars, and live system health) that animate upon scroll entry." }
-              ].map((item, idx) => (
-                <div key={idx} className="p-4 rounded-xl border border-black/5 dark:border-white/10 bg-background shadow-xs">
-                  <div className="font-semibold text-sm mb-1">{item.q}</div>
-                  <div className="text-xs text-muted-foreground leading-relaxed">{item.a}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Helper callout inviting the user to scroll */}
-          <div className="p-8 rounded-3xl border border-dashed border-primary/30 bg-primary/[0.03] flex flex-col items-center justify-center text-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center animate-bounce">
-              <ArrowUp className="w-5 h-5 rotate-180" />
-            </div>
-            <div className="font-bold text-base">Keep Scrolling Down!</div>
-            <p className="text-xs text-muted-foreground max-w-md">
-              Scroll down past this card to experience the **Kora-style sticky footer reveal effect**.
-            </p>
-          </div>
-
-          {/* Filler spacer blocks to simulate real document height */}
-          <div className="space-y-6 opacity-75">
-            {[1, 2, 3].map((num) => (
-              <div key={num} className="p-6 rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
-                <div className="h-4 w-48 bg-black/10 dark:bg-white/10 rounded mb-3" />
-                <div className="space-y-2">
-                  <div className="h-3 w-full bg-black/5 dark:bg-white/5 rounded" />
-                  <div className="h-3 w-5/6 bg-black/5 dark:bg-white/5 rounded" />
-                  <div className="h-3 w-4/6 bg-black/5 dark:bg-white/5 rounded" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
-
-      {/* ─── 3. KORA-STYLE EXPANDING SCALE FOOTER ─── */}
-      <section
-        ref={footerRef}
-        className="relative w-full px-2 sm:px-4 md:px-6 pt-24 sm:pt-36 pb-2 sm:pb-3 flex flex-col items-center overflow-visible"
-      >
-        {/* Background Expanding Circle (Dome emerges before content, clipped at bottom to eliminate bottom scroll space) */}
-        <div className="absolute inset-x-0 bottom-0 top-[-80px] sm:top-[-140px] overflow-hidden pointer-events-none -z-10">
-          <motion.div
-            style={{
-              scale: circleScale,
-              y: circleY,
-              x: "-50%",
-              opacity: circleOpacity,
-              backgroundColor: "var(--theme-primary)",
-              willChange: "transform",
-            }}
-            className="absolute top-0 left-1/2 w-[750px] h-[750px] sm:w-[1050px] sm:h-[1050px] rounded-full origin-top shadow-2xl"
-          />
+      {/* Main Workspace Frame: Aligned and viewport bound */}
+      <div className="w-full h-[calc(100vh-5.5rem)] min-h-[640px] flex items-stretch p-3 pt-1 gap-3 xl:gap-4 overflow-hidden shrink-0">
+        {/* EXISTING SIDEBAR ("No change in sidebar", perfectly aligned at top: 0) */}
+        <div className="shrink-0 hidden md:flex h-full">
+          <SidebarWrapper isInline={true} />
         </div>
 
-        {/* Main Content Box: width spreads with scroll from compact to 98% edge-to-edge */}
-        <motion.div
-          style={{
-            width: footerWidth,
-            scale: footerScale,
-            y: footerY,
-            willChange: "transform, width",
-          }}
-          className="min-w-[320px] max-w-[1720px] rounded-[32px] sm:rounded-[44px] bg-[#fafaf7] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 p-6 sm:p-10 md:p-14 pb-0 sm:pb-0 md:pb-0 overflow-hidden relative shadow-2xl flex flex-col justify-between gap-10 sm:gap-14 z-10"
-        >
-          {/* ── TOP SECTION (Logo, Newsletter, Founder Quote, Contact) ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 sm:gap-12 items-start relative z-10">
-            {/* Left Column: Logo & Newsletter */}
-            <div className="flex flex-col justify-between space-y-8">
-              {/* Logo & Address */}
-              <div className="space-y-3">
-                <Link href="/" className="inline-flex items-center gap-2 group">
-                  <span className="font-bold text-2xl sm:text-3xl tracking-tight text-zinc-900 dark:text-white flex items-center gap-2">
-                    <span
-                      style={{ backgroundColor: "var(--theme-primary)" }}
-                      className="h-7 w-7 rounded-xl flex items-center justify-center text-white text-xs font-black shadow-md"
+        {/* WORKSPACE BENTO CANVAS: Exact Design Shapes in Native Theme */}
+        <div className="flex-1 min-h-0 min-w-0 flex flex-col xl:flex-row gap-3 items-stretch overflow-hidden">
+
+          {/* =========================================================================
+              LEFT COLUMN:
+              Region 1 (Molded L-Shape), Region 2 (Dock in Foot), Region 8 (In Cutout)
+              ========================================================================= */}
+          <div ref={leftStageRef} className="relative flex-1 min-h-0 min-w-0 h-full">
+
+            {/* 
+              REGION 1: THE EXACT CONTINUOUS MOLDED L-SHAPED CONTAINER FROM DESIGN
+              Drawn seamlessly as an unbroken SVG path with the exact inner concave fillet ($r=36px$).
+              Adapts dynamically to light and dark mode.
+            */}
+            <svg
+              className={cn(
+                "absolute inset-0 w-full h-full pointer-events-none overflow-visible z-0 transition-opacity duration-150",
+                hasMeasured ? "opacity-100" : "opacity-0"
+              )}
+              style={{ filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.06))" }}
+            >
+              <defs>
+                <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="1" className="fill-zinc-300/40 dark:fill-white/[0.05]" />
+                </pattern>
+              </defs>
+              {/* Molded Shape Fill in Light and Dark Mode */}
+              <path
+                d={region1Path}
+                className="fill-white dark:fill-zinc-900 stroke-zinc-200 dark:stroke-zinc-800"
+                strokeWidth="1.5"
+              />
+              {/* Subtle Texture Grid Overlay */}
+              <path
+                d={region1Path}
+                fill="url(#dot-grid)"
+              />
+            </svg>
+
+            {/* UPPER STAGE OF REGION 1: Center Presentation Stage (Pure CSS bottom anchor eliminates SSR shift) */}
+            <div
+              className="absolute top-0 left-0 right-0 bottom-[197px] z-10 flex flex-col justify-between p-4 sm:p-6"
+            >
+              {/* Stage Top Header: Real Component Title & Active Example Specs */}
+              <div className="flex items-center justify-between w-full shrink-0 select-none">
+                <div className="flex items-center gap-2.5">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isCustomizing ? "customization" : activeTocId}
+                      initial={{ opacity: 0, scale: 0.94, y: -2 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.94, y: 2 }}
+                      transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                      className="flex items-center gap-2 sm:gap-2.5"
                     >
-                      I
-                    </span>
-                    <span>intense<span style={{ color: "var(--theme-primary)" }} className="font-bold">ui™</span></span>
-                  </span>
-                </Link>
-                <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed max-w-xs">
-                  2847 Mission Street<br />San Francisco, CA 94110
-                </p>
+                      {/* Left Capsule: Terminal route pill with scramble animation & theme glow */}
+                      <div className="group px-3 py-1 rounded-full bg-zinc-900/90 dark:bg-black/70 border border-zinc-700/60 dark:border-zinc-800 text-[11px] font-mono text-foreground flex items-center gap-1.5 shadow-xs backdrop-blur-md hover:border-[var(--theme-primary)]/60 hover:shadow-[0_0_16px_-3px_var(--theme-primary)]/30 transition-all cursor-pointer">
+                        <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0 animate-pulse" />
+                        <span className="text-zinc-400 font-medium">nav-bar /</span>
+                        <ScrambleText
+                          text={isCustomizing ? "customization" : activeTocId}
+                          className="font-bold text-white tracking-wide"
+                        />
+                      </div>
+
+                      {/* Right Capsule: Dynamic badge pill with scramble animation & emerald beacon */}
+                      <div className="group px-2.5 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 text-[10px] sm:text-[10.5px] font-mono text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1.5 shadow-xs backdrop-blur-md hover:border-emerald-500/50 hover:shadow-[0_0_16px_-3px_rgba(16,185,129,0.35)] transition-all cursor-pointer">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                        <ScrambleText
+                          text={activeExample.spec?.badge || "Fluid Physics"}
+                          className="tracking-wide"
+                        />
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                <div className="text-[11px] font-mono text-muted-foreground hidden sm:flex items-center gap-2">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isCustomizing ? "customization" : activeTocId}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.18 }}
+                      className="flex items-center gap-2"
+                    >
+                      <Activity className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                      <ScrambleText
+                        text={activeExample.label}
+                        className="text-foreground/90 font-medium cursor-pointer"
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
 
-              {/* Newsletter Subscribe */}
-              <div className="space-y-3">
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-                  Subscribe to our newsletter.
-                </h3>
-                <form onSubmit={handleSubscribe} className="relative max-w-md">
-                  <div className="flex items-center p-1.5 pl-5 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs focus-within:border-[var(--theme-primary)] transition-all">
-                    <input
-                      type="email"
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder="Email"
-                      required
-                      className="flex-1 bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none pr-3"
-                    />
-                    <button
-                      type="submit"
-                      style={{ backgroundColor: "var(--theme-primary)" }}
-                      className="px-5 py-2.5 rounded-full hover:opacity-90 text-white font-medium text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shrink-0 shadow-sm"
+              {/* Center Presentation Stage: Dynamic Navbar Variant Renderer with smooth transitions */}
+              <div className="flex-1 min-h-0 flex flex-col items-center justify-center py-2 relative">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={isCustomizing ? "customization" : activeTocId}
+                    initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.94, y: -10 }}
+                    transition={{
+                      duration: 0.22,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="flex flex-col items-center justify-center w-full"
+                  >
+                    {/* Component Surface */}
+                    <div
+                      className="p-5 sm:p-7 rounded-3xl bg-zinc-50/80 dark:bg-zinc-900/80 border border-border shadow-md backdrop-blur-xl transition-all duration-300"
+                      style={{
+                        boxShadow: customProps.activeColor
+                          ? `0 20px 40px -15px ${customProps.activeColor}25`
+                          : undefined,
+                      }}
                     >
-                      <span>{newsletterSubscribed ? "Subscribed!" : "Subscribe"}</span>
-                      <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                    </button>
-                  </div>
-                </form>
-                <div className="flex items-center gap-2 text-[11px] text-zinc-500 dark:text-zinc-400">
-                  <span className="h-2.5 w-2.5 rounded-full border border-zinc-300 dark:border-zinc-700 bg-zinc-200 dark:bg-zinc-800 shrink-0" />
-                  <span>By subscribing, you agree to our <Link href="/privacy" className="underline hover:text-zinc-900 dark:hover:text-white">privacy policy</Link>.</span>
-                </div>
+                      <NavbarVariantRenderer
+                        id={isCustomizing ? "customization" : activeTocId}
+                        customProps={customProps}
+                      />
+                    </div>
+
+                    {/* Real Live Feedback State */}
+                    <div className="mt-4 flex items-center gap-2 px-3 py-1 rounded-full bg-muted/80 border border-border text-[11px] font-mono text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Variant:</span>
+                      <strong className="text-foreground capitalize">{isCustomizing ? customProps.variant : activeTocId}</strong>
+                      <span className="text-muted-foreground/60">•</span>
+                      <span>Scale:</span>
+                      <strong className="text-foreground uppercase">{customProps.size}</strong>
+                      <span className="text-muted-foreground/60">•</span>
+                      <span>Engine:</span>
+                      <strong className="text-foreground">Framer Motion Spring</strong>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
 
-            {/* Right Column: Founder Quote & Contact */}
-            <div className="flex flex-col justify-between space-y-8">
-              {/* Founder Quote */}
-              <div className="space-y-4">
-                <blockquote className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-800 dark:text-zinc-200 leading-snug">
-                  Stalled revenue, leaky funnels, stretched leadership.{" "}
-                  <span className="text-zinc-950 dark:text-white font-black">
-                    Whatever&apos;s holding you back, let&apos;s solve it.
-                  </span>
-                </blockquote>
+            {/* 
+              REGION 2: THE DOCK SITTING DIRECTLY INSIDE THE LOWER-LEFT FOOT OF REGION 1
+              Houses the actual ComponentTocDock from existing flow with scooped notch!
+            */}
+            <div
+              className="absolute z-20 flex items-center justify-center overflow-hidden bottom-3 left-3 h-[185px]"
+              style={{
+                width: dockWidth - 24,
+              }}
+            >
+              <div className="flex items-center justify-center">
+                <ComponentTocDock
+                  tocItems={navBarDoc.tocItems || []}
+                  activeTocId={isCustomizing ? customProps.variant : activeTocId}
+                  onItemClick={handleTocItemClick}
+                  isInline={true}
+                  className="w-full flex items-center justify-center"
+                />
+              </div>
+            </div>
 
-                {/* Founder Profile */}
-                <div className="flex items-center gap-3 pt-2">
-                  <div
-                    style={{ backgroundColor: "var(--theme-primary)" }}
-                    className="h-11 w-11 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white dark:ring-zinc-900"
-                  >
-                    DK
+            {/* 
+              REGION 8: DEPENDENCIES CARD IN THE CUTOUT NOTCH OF REGION 1
+              Nested inside the molded cutout notch matching the design shape!
+              Features smooth zero-jerk alternating moving marquee and official logos.
+            */}
+            <div
+              className="absolute bottom-0 right-0 z-20 h-[185px] rounded-[30px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-3.5 shadow-sm flex flex-col justify-between overflow-hidden select-none"
+              style={{
+                width: dependenciesWidth,
+              }}
+            >
+              {/* Subtle ambient lighting for modern depth */}
+              <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-28 h-28 rounded-full bg-pink-500/5 dark:bg-pink-500/10 blur-2xl pointer-events-none" />
+
+              {/* Header: Core Dependencies & Real Stats */}
+              <div className="relative z-10 flex items-center justify-between shrink-0 mb-0.5 gap-2">
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="px-2.5 sm:px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-foreground flex items-center gap-1.5 shadow-xs shrink-0 whitespace-nowrap">
+                    <Package className="w-3.5 h-3.5 text-pink-500 shrink-0" />
+                    <span>Dependencies</span>
                   </div>
-                  <div>
-                    <div className="text-sm font-bold text-zinc-900 dark:text-white">Deepak Khandelwal</div>
-                    <div className="text-xs text-zinc-500 dark:text-zinc-400">Founder &amp; CEO</div>
-                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold shadow-xs shrink-0 whitespace-nowrap">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <span className="whitespace-nowrap">4 Direct • 6 Peer</span>
                 </div>
               </div>
 
-              {/* Contact Actions */}
-              <div className="space-y-2 pt-2">
-                <div className="text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400 font-mono">
-                  (510) 895-6500
+              {/* 2 CONTINUOUS ALTERNATING MARQUEE LINES IN A STRAIGHT HORIZONTAL LINE */}
+              <div className="flex flex-col gap-1.5 py-0.5 overflow-hidden relative">
+
+                {/* LINE 1: DIRECT DEPENDENCIES (LTR in a straight horizontal line) */}
+                <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
+                  <div className="marquee-group animate-marquee-ltr">
+                    {DEP_ROW_1.map((dep, idx) => (
+                      <a
+                        key={`r1-a-${idx}`}
+                        href={getNpmPackageUrl(dep.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          copyChip(dep.name);
+                        }}
+                        className={cn(
+                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
+                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
+                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
+                        )}
+                        title={`Click to copy ${getInstallCommand(dep.name)}`}
+                      >
+                        {renderDependencyLogo(dep.name)}
+                        <span className="text-xs font-mono font-bold tracking-tight">
+                          {copiedChip === dep.name ? (
+                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Copied!
+                            </span>
+                          ) : (
+                            dep.name
+                          )}
+                        </span>
+                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
+                          {dep.version}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="marquee-group animate-marquee-ltr" aria-hidden="true">
+                    {DEP_ROW_1.map((dep, idx) => (
+                      <a
+                        key={`r1-b-${idx}`}
+                        href={getNpmPackageUrl(dep.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          copyChip(dep.name);
+                        }}
+                        className={cn(
+                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
+                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
+                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
+                        )}
+                        title={`Click to copy ${getInstallCommand(dep.name)}`}
+                      >
+                        {renderDependencyLogo(dep.name)}
+                        <span className="text-xs font-mono font-bold tracking-tight">
+                          {copiedChip === dep.name ? (
+                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Copied!
+                            </span>
+                          ) : (
+                            dep.name
+                          )}
+                        </span>
+                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
+                          {dep.version}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                {/* LINE 2: FRAMEWORK & PEER DEPENDENCIES (RTL in a straight horizontal line) */}
+                <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
+                  <div className="marquee-group animate-marquee-rtl">
+                    {DEP_ROW_2.map((dep, idx) => (
+                      <a
+                        key={`r2-a-${idx}`}
+                        href={getNpmPackageUrl(dep.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          copyChip(dep.name);
+                        }}
+                        className={cn(
+                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
+                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
+                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
+                        )}
+                        title={`Click to copy ${getInstallCommand(dep.name)}`}
+                      >
+                        {renderDependencyLogo(dep.name)}
+                        <span className="text-xs font-mono font-bold tracking-tight">
+                          {copiedChip === dep.name ? (
+                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Copied!
+                            </span>
+                          ) : (
+                            dep.name
+                          )}
+                        </span>
+                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
+                          {dep.version}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="marquee-group animate-marquee-rtl" aria-hidden="true">
+                    {DEP_ROW_2.map((dep, idx) => (
+                      <a
+                        key={`r2-b-${idx}`}
+                        href={getNpmPackageUrl(dep.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          copyChip(dep.name);
+                        }}
+                        className={cn(
+                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
+                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
+                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
+                        )}
+                        title={`Click to copy ${getInstallCommand(dep.name)}`}
+                      >
+                        {renderDependencyLogo(dep.name)}
+                        <span className="text-xs font-mono font-bold tracking-tight">
+                          {copiedChip === dep.name ? (
+                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> Copied!
+                            </span>
+                          ) : (
+                            dep.name
+                          )}
+                        </span>
+                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
+                          {dep.version}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Bottom Line: Quick Install Terminal Bar */}
+              <div className="relative z-10 flex items-center justify-between gap-2.5 pt-1 border-t border-zinc-200 dark:border-zinc-800/80 shrink-0">
+                <div className="flex-1 flex items-center gap-2 min-w-0">
+                  <div className="h-1.5 w-10 sm:w-12 rounded-full bg-muted-foreground/30 shrink-0" />
+                  <div className="flex-1 border-b border-dashed border-border h-0.5" />
                 </div>
                 <button
                   type="button"
-                  onClick={copyEmail}
-                  className="inline-flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 hover:text-[var(--theme-primary)] transition-colors cursor-pointer group"
+                  onClick={() => copyToClipboard(installAllDepsCommand, setCopiedDeps)}
+                  className="group px-3 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200/90 dark:bg-zinc-800/90 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-700/80 text-[10.5px] font-mono text-foreground flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 hover:border-[var(--theme-primary)]/40 max-w-[240px] shrink-0"
+                  title={`Click to copy: ${installAllDepsCommand}`}
                 >
-                  <div
-                    style={{
-                      backgroundColor: "color-mix(in srgb, var(--theme-primary) 15%, transparent)",
-                      color: "var(--theme-primary)",
-                    }}
-                    className="h-8 w-8 rounded-full flex items-center justify-center transition-all group-hover:scale-105"
-                  >
-                    {emailCopied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                  </div>
-                  <span className="font-mono">hello@intense-ui.com</span>
-                  {emailCopied && (
-                    <span className="text-xs font-bold text-emerald-500 animate-in fade-in">
-                      Copied!
-                    </span>
+                  <Terminal className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <span className="truncate">{copiedDeps ? "Copied to clipboard!" : installAllDepsCommand}</span>
+                  {copiedDeps ? (
+                    <Check className="w-3 h-3 text-emerald-500 shrink-0" />
+                  ) : (
+                    <Copy className="w-3 h-3 text-muted-foreground group-hover:text-foreground shrink-0 transition-colors" />
                   )}
                 </button>
               </div>
             </div>
+
           </div>
 
-          {/* ── MIDDLE SECTION (Socials, Legal, Navigation) ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-8 sm:pt-12 border-t border-black/5 dark:border-white/10 relative z-10 items-start">
-            {/* Left: Socials & Legal */}
-            <div className="space-y-6">
-              <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3">
-                  Socials
+          {/* =========================================================================
+              RIGHT COLUMN:
+              Region 3 (Stadium Capsule), Regions 4, 5, 6 (Cascading Deck), Region 7 (Fanned Cards)
+              Strictly viewport bound with internal card scroll
+              ========================================================================= */}
+          <div className="w-full xl:w-[380px] shrink-0 flex flex-col justify-between gap-3 h-full overflow-hidden">
+
+            {/* REGION 3: DYNAMIC WIDGET SECTION (Greeting, Clock with Analog/Digital Switcher, Full Date & Weather) */}
+            <WidgetCapsule />
+
+            {/* 
+              REGIONS 4, 5, 6: 3D STACKED CARD DECK (WATCHOS / IOS STACK REFERENCE)
+              - 3D perspective layered card deck matching reference design
+              - Every card retains its full smooth rounded corners (rounded-[26px])
+              - Active card in front (scaleX: 1, zIndex: 30, elevated shadow, interactive)
+              - Inactive cards peek above and/or below (scaled width to 0.94/0.88, shaded, zIndex: 20/10)
+              - Prominently visible headers on all peeking cards, smoothly promoted on click
+            */}
+            <div className="relative flex-1 min-h-[300px] w-full select-none rounded-[28px] overflow-hidden">
+              {(() => {
+                const layout4 = getCardDeckLayout(4);
+                const layout5 = getCardDeckLayout(5);
+                const layout6 = getCardDeckLayout(6);
+
+                return (
+                  <>
+                    {/* CARD 4: CLI Installation */}
+                    <motion.div
+                      initial={false}
+                      onClick={() => setActiveDeckCard(4)}
+                      className={cn(
+                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        layout4.isFront
+                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
+                      )}
+                      style={{
+                        zIndex: layout4.zIndex,
+                        transformOrigin: "center center",
+                      }}
+                      animate={{
+                        top: layout4.top,
+                        height: layout4.height,
+                        scaleX: layout4.scaleX,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
+                    >
+                      <div className="flex items-center justify-between shrink-0 h-9">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* Vertical Stadium Handle from Sketch */}
+                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                            <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                          </div>
+                          <div className="flex items-center gap-2 truncate">
+                            <Terminal className="w-4 h-4 text-emerald-500 shrink-0" />
+                            <span className="text-xs font-bold text-foreground tracking-wide truncate">CLI Installation</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pr-1 shrink-0">
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-semibold">
+                            v0.1.0
+                          </span>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {layout4.isFront && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-2 pt-2 border-t border-border flex-1 min-h-0 flex flex-col overflow-y-auto pr-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <InstallTabContent
+                              slug="nav-bar"
+                              usageCode={navBarDoc.usageCode}
+                              dependencies={navBarDoc.dependencies}
+                              packageManager={packageManager}
+                              onPackageManagerChange={setPackageManager}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* When peeking below active card: show bottom indicator */}
+                      {layout4.d > 0 && (
+                        <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                            </div>
+                            <div className="flex items-center gap-2 truncate">
+                              <Terminal className="w-4 h-4 text-emerald-500 shrink-0" />
+                              <span className="text-xs font-bold text-foreground tracking-wide truncate">CLI Installation</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-semibold">
+                            v0.1.0
+                          </span>
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* CARD 5: Playground Studio */}
+                    <motion.div
+                      initial={false}
+                      onClick={() => setActiveDeckCard(5)}
+                      className={cn(
+                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        layout5.isFront
+                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
+                      )}
+                      style={{
+                        zIndex: layout5.zIndex,
+                        transformOrigin: "center center",
+                      }}
+                      animate={{
+                        top: layout5.top,
+                        height: layout5.height,
+                        scaleX: layout5.scaleX,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
+                    >
+                      <div className="flex items-center justify-between shrink-0 h-9">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* Vertical Stadium Handle from Sketch */}
+                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                            <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                          </div>
+                          <div className="flex items-center gap-2 truncate">
+                            <Sliders className="w-4 h-4 text-orange-500 shrink-0" />
+                            <span className="text-xs font-bold text-foreground tracking-wide truncate">Playground Studio</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pr-1 shrink-0">
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-semibold">
+                            Live Sync
+                          </span>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {layout5.isFront && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-2 pt-2 border-t border-border flex-1 min-h-0 flex flex-col overflow-hidden w-full"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsCustomizing(true);
+                            }}
+                          >
+                            <NavbarPlaygroundStudio
+                              customProps={customProps}
+                              onChange={(val) => {
+                                setCustomProps(val);
+                                setIsCustomizing(true);
+                              }}
+                              hidePreview={true}
+                              className="w-full h-full flex-1 min-h-0 flex flex-col"
+                              onViewCode={() => {
+                                setActiveDeckCard(6);
+                                setActiveCodeTab("custom");
+                              }}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* When peeking below active card: show bottom indicator */}
+                      {layout5.d > 0 && (
+                        <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                            </div>
+                            <div className="flex items-center gap-2 truncate">
+                              <Sliders className="w-4 h-4 text-orange-500 shrink-0" />
+                              <span className="text-xs font-bold text-foreground tracking-wide truncate">Playground Studio</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-semibold">
+                            Live Sync
+                          </span>
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* CARD 6: Preview / Code */}
+                    <motion.div
+                      initial={false}
+                      onClick={() => setActiveDeckCard(6)}
+                      className={cn(
+                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        layout6.isFront
+                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
+                      )}
+                      style={{
+                        zIndex: layout6.zIndex,
+                        transformOrigin: "center center",
+                      }}
+                      animate={{
+                        top: layout6.top,
+                        height: layout6.height,
+                        scaleX: layout6.scaleX,
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
+                    >
+                      <div className="flex items-center justify-between shrink-0 h-9">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {/* Vertical Stadium Handle from Sketch */}
+                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                            <div className="w-1 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                          </div>
+                          <div className="flex items-center gap-2 truncate">
+                            <Code2 className="w-4 h-4 text-blue-500 shrink-0" />
+                            <span className="text-xs font-bold text-foreground tracking-wide truncate">Preview &amp; Source Code</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pr-1 shrink-0">
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-bold">
+                            TypeScript
+                          </span>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {layout6.isFront && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-2 pt-2 border-t border-border flex-1 min-h-0 flex flex-col overflow-y-auto pr-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {/* Premium Segmented Sub-tab Navigation */}
+                            <div className="mb-3 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/80 flex items-center gap-1 w-full select-none overflow-hidden">
+                              <button
+                                type="button"
+                                onClick={() => setActiveCodeTab("example")}
+                                className={cn(
+                                  "flex-1 min-w-0 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                                  activeCodeTab === "example"
+                                    ? "bg-white dark:bg-zinc-900 text-foreground shadow-xs border border-zinc-200 dark:border-zinc-700"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
+                                )}
+                              >
+                                <span
+                                  className={cn(
+                                    "w-1.5 h-1.5 rounded-full shrink-0",
+                                    activeCodeTab === "example" ? "bg-emerald-500 animate-pulse" : "bg-muted-foreground/40"
+                                  )}
+                                />
+                                <span className="truncate">Active</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setActiveCodeTab("custom")}
+                                className={cn(
+                                  "flex-1 min-w-0 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                                  activeCodeTab === "custom"
+                                    ? "bg-white dark:bg-zinc-900 text-foreground shadow-xs border border-zinc-200 dark:border-zinc-700"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
+                                )}
+                              >
+                                <Sliders className="w-3.5 h-3.5 shrink-0 text-orange-500" />
+                                <span className="truncate">Custom</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setActiveCodeTab("props")}
+                                className={cn(
+                                  "flex-1 min-w-0 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer",
+                                  activeCodeTab === "props"
+                                    ? "bg-white dark:bg-zinc-900 text-foreground shadow-xs border border-zinc-200 dark:border-zinc-700"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-zinc-200/50 dark:hover:bg-zinc-800"
+                                )}
+                              >
+                                <Layers className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
+                                <span className="truncate">Props</span>
+                              </button>
+                            </div>
+
+                            {/* Tab Content */}
+                            {activeCodeTab === "props" ? (
+                              <div className="p-2 rounded-xl bg-muted/40 border border-border text-foreground">
+                                {navBarDoc.propGroups ? (
+                                  <PropsTable groups={navBarDoc.propGroups} />
+                                ) : (
+                                  <p className="text-xs text-muted-foreground">No props documentation available.</p>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="rounded-xl overflow-hidden border border-border">
+                                <AnimatePresence mode="wait">
+                                  <motion.div
+                                    key={activeCodeTab + (activeCodeTab === "example" ? activeTocId : "")}
+                                    initial={{ opacity: 0, y: 6 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -6 }}
+                                    transition={{ duration: 0.16 }}
+                                  >
+                                    <CodeBlock code={currentDisplayedCode} language="tsx" />
+                                  </motion.div>
+                                </AnimatePresence>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* When peeking below active card: show bottom indicator */}
+                      {layout6.d > 0 && (
+                        <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
+                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                            </div>
+                            <div className="flex items-center gap-2 truncate">
+                              <Code2 className="w-4 h-4 text-blue-500 shrink-0" />
+                              <span className="text-xs font-bold text-foreground tracking-wide truncate">Preview &amp; Source Code</span>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded-full bg-muted text-[10px] font-mono text-muted-foreground font-bold">
+                            TypeScript
+                          </span>
+                        </div>
+                      )}
+                    </motion.div>
+                  </>
+                );
+              })()}
+            </div>
+
+            {/* REGION 7: NEED HELP SECTION WITH FANNED CARDS */}
+            <div className="h-[185px] shrink-0 rounded-[30px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden select-none">
+              {/* Subtle ambient lighting */}
+              <div className="absolute -top-10 -left-10 w-28 h-28 rounded-full bg-indigo-500/5 dark:bg-indigo-500/10 blur-2xl pointer-events-none" />
+
+              {/* Header: Real Support Metadata & Status */}
+              <div className="relative z-10 flex items-center justify-between shrink-0 mb-0.5">
+                <div className="flex items-center gap-2">
+                  <div className="px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-foreground flex items-center gap-1.5 shadow-xs">
+                    <MessageCircle className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>Developer Support</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Active Community</span>
+                  </div>
                   <a
-                    href={siteConfig.links.x}
+                    href="https://github.com/intense-ui/intense-ui/discussions"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
-                    aria-label="X Twitter"
+                    className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    title="Community Discussions"
                   >
-                    <XTwitterIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href={siteConfig.links.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
-                    aria-label="LinkedIn"
-                  >
-                    <LinkedinIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href={siteConfig.links.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
-                    aria-label="Instagram"
-                  >
-                    <InstagramIcon className="w-4 h-4" />
-                  </a>
-                  <a
-                    href={siteConfig.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 hover:bg-[var(--theme-primary)] hover:border-[var(--theme-primary)] hover:text-white transition-all shadow-xs"
-                    aria-label="GitHub"
-                  >
-                    <GithubIcon className="w-4 h-4" />
+                    <ArrowUpRight className="w-3 h-3" />
                   </a>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">
-                  Legal
-                </div>
-                <div className="flex flex-col gap-1.5 text-xs text-zinc-600 dark:text-zinc-400 font-medium">
-                  <Link href="/privacy" className="hover:text-[var(--theme-primary)] transition-colors">Privacy Policy</Link>
-                  <Link href="/terms" className="hover:text-[var(--theme-primary)] transition-colors">Terms of Service</Link>
+              {/* Real Support Action Cards */}
+              <div className="relative z-10 flex items-center justify-between gap-3 my-auto">
+                <div className="flex flex-col gap-2 w-[190px] shrink-0">
+                  {/* Discord Link */}
+                  <a
+                    href="https://discord.gg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1.5 rounded-2xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/80 dark:hover:bg-zinc-700 border border-zinc-200/90 dark:border-zinc-700/80 text-xs text-foreground flex items-center justify-between transition-all group cursor-pointer shadow-xs hover:border-indigo-500/40 active:scale-98"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-7 h-7 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <MessageCircle className="w-3.5 h-3.5 text-indigo-500" />
+                      </div>
+                      <div className="flex flex-col leading-tight min-w-0">
+                        <span className="font-bold text-[11px] truncate">Discord Community</span>
+                        <span className="text-[9.5px] text-muted-foreground truncate">1,800+ Devs • Live QA</span>
+                      </div>
+                    </div>
+                    <ArrowUpRight className="w-3 h-3 text-muted-foreground group-hover:text-indigo-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  </a>
+
+                  {/* GitHub Issues Link */}
+                  <a
+                    href="https://github.com/intense-ui/intense-ui/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-2.5 py-1.5 rounded-2xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/80 dark:hover:bg-zinc-700 border border-zinc-200/90 dark:border-zinc-700/80 text-xs text-foreground flex items-center justify-between transition-all group cursor-pointer shadow-xs hover:border-rose-500/40 active:scale-98"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-7 h-7 rounded-xl bg-rose-500/10 dark:bg-rose-500/20 border border-rose-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
+                      </div>
+                      <div className="flex flex-col leading-tight min-w-0">
+                        <span className="font-bold text-[11px] truncate">Report an Issue</span>
+                        <span className="text-[9.5px] text-muted-foreground truncate">Bugs &amp; Features</span>
+                      </div>
+                    </div>
+                    <ArrowUpRight className="w-3 h-3 text-muted-foreground group-hover:text-rose-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  </a>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between gap-4 pt-2">
-                <div className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                  © 2026 Intense UI All rights reserved.
+              {/* THREE PROMINENT FANNED RECTANGULAR CARDS IN RIGHT SIDE MATCHING SKETCH */}
+              <div className="absolute right-3.5 bottom-2.5 pointer-events-none select-none z-0">
+                <div className="relative w-[130px] h-[105px]">
+                  {/* Back Fanned Card (18 deg) */}
+                  <div className="absolute inset-0 rounded-2xl bg-zinc-200/90 dark:bg-zinc-800/90 border border-zinc-300 dark:border-zinc-700/80 rotate-[18deg] transform translate-x-2 -translate-y-1 shadow-xs" />
+                  {/* Middle Fanned Card (10 deg) */}
+                  <div className="absolute inset-0 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rotate-[10deg] transform translate-x-1 -translate-y-0.5 shadow-sm" />
+                  {/* Front Fanned Card (2 deg) */}
+                  <div className="absolute inset-0 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 shadow-md flex flex-col justify-between p-2.5 rotate-[2deg]">
+                    <div className="flex items-center justify-between">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[8.5px] font-mono text-muted-foreground font-semibold">v0.1.0</span>
+                    </div>
+                    <div className="font-mono text-[10.5px] font-bold text-foreground truncate">
+                      &lt;NavbarGooey /&gt;
+                    </div>
+                    <div className="h-1.5 w-12 rounded-full bg-pink-500" />
+                  </div>
                 </div>
-                <button
-                  onClick={scrollToTop}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium text-zinc-500 hover:text-[var(--theme-primary)] transition-colors cursor-pointer"
+              </div>
+
+              {/* Bottom Line: Consistent Footer */}
+              <div className="relative z-10 flex items-center justify-between gap-3 pt-1 border-t border-border shrink-0">
+                <div className="flex-1 flex items-center gap-2">
+                  <div className="h-1.5 w-16 rounded-full bg-muted-foreground/30" />
+                  <div className="flex-1 border-b border-dashed border-border h-0.5" />
+                </div>
+                <a
+                  href="https://github.com/intense-ui/intense-ui"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-2.5 py-1 rounded-full bg-muted hover:bg-muted/80 border border-border text-[10.5px] font-mono text-foreground flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <ArrowUp className="w-3.5 h-3.5" />
-                  <span>Top</span>
-                </button>
+                  <GithubIcon className="w-3 h-3" />
+                  <span>intense-ui / core</span>
+                </a>
               </div>
             </div>
 
-            {/* Right: Navigation */}
-            <div className="space-y-4">
-              <div className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-3">
-                Navigation
-              </div>
-              <ul className="space-y-2.5 text-base sm:text-lg font-bold text-zinc-800 dark:text-zinc-200">
-                <li>
-                  <Link href="/docs/components" className="inline-flex items-center gap-2 hover:text-[var(--theme-primary)] transition-colors group">
-                    <span className="text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors">•</span>
-                    <span>Case Studies</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/docs" className="inline-flex items-center gap-2 hover:text-[var(--theme-primary)] transition-colors group">
-                    <span className="text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors">•</span>
-                    <span>Insights</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className="inline-flex items-center gap-2 hover:text-[var(--theme-primary)] transition-colors group">
-                    <span className="text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors">•</span>
-                    <span>About us</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="inline-flex items-center gap-2 hover:text-[var(--theme-primary)] transition-colors group">
-                    <span className="text-zinc-400 group-hover:text-[var(--theme-primary)] transition-colors">•</span>
-                    <span>Contact</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
           </div>
+        </div>
+      </div>
 
-          {/* ── BOTTOM SECTION: GIANT FIT-TEXT WATERMARK (Edge-to-edge vector SVG) ── */}
-          <div className="relative w-full overflow-hidden flex justify-center items-end pt-2 sm:pt-6 pb-0 -mb-1">
-            <motion.div
-              style={{
-                scale: giantTextScale,
-                y: giantTextY,
-                opacity: giantTextOpacity,
-                transformOrigin: "center bottom",
-                willChange: "transform",
-              }}
-              className="w-full select-none pointer-events-none flex justify-center items-end"
-            >
-              <svg
-                viewBox="0 0 780 182"
-                className="w-full h-auto select-none pointer-events-none overflow-visible block"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <text
-                  x="50%"
-                  y="88%"
-                  textAnchor="middle"
-                  fill="var(--theme-primary)"
-                  fontSize="215"
-                  fontWeight="900"
-                  letterSpacing="-0.04em"
-                  style={{
-                    fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                  }}
-                >
-                  intense
-                </text>
-              </svg>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
+      {/* ─── KORA-STYLE EXPANDING SCALE FOOTER ─── */}
+      <KoraExpandingFooter />
     </div>
   );
 }

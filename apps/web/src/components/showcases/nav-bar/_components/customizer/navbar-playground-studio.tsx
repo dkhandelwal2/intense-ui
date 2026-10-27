@@ -22,6 +22,8 @@ export interface NavbarPlaygroundStudioProps {
   customProps: CustomNavbarProps;
   onChange: React.Dispatch<React.SetStateAction<CustomNavbarProps>>;
   className?: string;
+  hidePreview?: boolean;
+  onViewCode?: () => void;
 }
 
 const VARIANT_INFO: Record<
@@ -47,8 +49,10 @@ export function NavbarLivePreview({
   customProps: CustomNavbarProps;
 }) {
   return (
-    <div className="w-full flex items-center justify-center origin-center">
-      <NavbarVariantRenderer id="customization" customProps={customProps} />
+    <div className="w-full flex items-center justify-center origin-center overflow-hidden py-1">
+      <div className="scale-[0.82] sm:scale-[0.88] origin-center shrink-0">
+        <NavbarVariantRenderer id="customization" customProps={customProps} />
+      </div>
     </div>
   );
 }
@@ -57,6 +61,8 @@ export function NavbarPlaygroundStudio({
   customProps,
   onChange,
   className,
+  hidePreview = false,
+  onViewCode,
 }: NavbarPlaygroundStudioProps) {
   const modifiedCount = getModifiedCount(customProps);
 
@@ -203,10 +209,11 @@ export function NavbarPlaygroundStudio({
     <PlaygroundStudio
       steps={steps}
       modifiedCount={modifiedCount}
-      preview={<NavbarLivePreview customProps={customProps} />}
+      preview={hidePreview ? undefined : <NavbarLivePreview customProps={customProps} />}
       className={className}
       description="Interact with props below to customize your navigation bar in real time."
       onReset={() => onChange(DEFAULT_CUSTOM_PROPS)}
+      onViewCode={onViewCode}
     />
   );
 }

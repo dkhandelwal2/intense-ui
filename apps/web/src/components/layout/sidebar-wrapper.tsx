@@ -16,7 +16,13 @@ import { DocsSidebar } from "./docs-sidebar";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 
-export function SidebarWrapper() {
+export interface SidebarWrapperProps {
+  className?: string;
+  isInline?: boolean;
+  isEmbedded?: boolean;
+}
+
+export function SidebarWrapper({ className, isInline, isEmbedded }: SidebarWrapperProps = {}) {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
@@ -258,14 +264,19 @@ export function SidebarWrapper() {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ width }}
-        className="sticky top-20 z-30 hidden md:flex flex-col h-[calc(100vh-6rem)] shrink-0 py-1 select-none will-change-[width]"
+        className={cn(
+          isInline
+            ? "relative top-0 z-30 hidden md:flex flex-col h-full shrink-0 select-none will-change-[width]"
+            : "sticky top-20 z-30 hidden md:flex flex-col h-[calc(100vh-6rem)] shrink-0 py-1 select-none will-change-[width]",
+          className
+        )}
       >
         <div
           className={cn(
             "w-full h-full flex flex-col transition-colors duration-300",
-            "bg-background/80 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl",
-            "shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/60",
-            "relative rounded-[32px] py-3.5 px-0 overflow-hidden"
+            isEmbedded
+              ? "bg-zinc-50/40 dark:bg-black/20 border-r border-zinc-200/80 dark:border-zinc-800/80 shadow-none relative py-3.5 px-0 overflow-hidden"
+              : "bg-background/80 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl shadow-lg shadow-black/5 dark:shadow-2xl dark:shadow-black/60 relative rounded-[32px] py-3.5 px-0 overflow-hidden"
           )}
         >
           {/* Right-side gradient hairline separator */}
