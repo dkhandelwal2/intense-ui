@@ -72,31 +72,58 @@ type DeckCardId = 4 | 5 | 6;
 interface DependencyItem {
   name: string;
   version: string;
+  type?: "direct" | "peer";
 }
 
-const DEP_ROW_1: DependencyItem[] = [
-  { name: "framer-motion", version: "^11.18.2" },
-  { name: "lucide-react", version: "^1.52.0" },
-  { name: "clsx", version: "^2.1.1" },
-  { name: "tailwind-merge", version: "^2.6.1" },
-  { name: "tailwindcss", version: "^4.0.0" },
-  { name: "@radix-ui/react-slot", version: "^1.1.0" },
+const DIRECT_DEPENDENCIES: DependencyItem[] = [
+  { name: "framer-motion", version: "^11.18.2", type: "direct" },
+  { name: "lucide-react", version: "^1.52.0", type: "direct" },
+  { name: "clsx", version: "^2.1.1", type: "direct" },
+  { name: "tailwind-merge", version: "^2.6.1", type: "direct" },
 ];
 
-const DEP_ROW_2: DependencyItem[] = [
-  { name: "react", version: "19.2.8" },
-  { name: "react-dom", version: "19.2.8" },
-  { name: "next", version: "16.3.8" },
-  { name: "typescript", version: "^5.0.0" },
-  { name: "next-themes", version: "^0.4.6" },
-  { name: "cmdk", version: "^1.0.4" },
+const PEER_DEPENDENCIES: DependencyItem[] = [
+  { name: "react", version: "19.2.8", type: "peer" },
+  { name: "react-dom", version: "19.2.8", type: "peer" },
+  { name: "next", version: "16.3.8", type: "peer" },
+  { name: "typescript", version: "^5.0.0", type: "peer" },
+  { name: "next-themes", version: "^0.4.6", type: "peer" },
+  { name: "cmdk", version: "^1.0.4", type: "peer" },
 ];
 
-function renderDependencyLogo(name: string) {
+const ALL_MARQUEE_ROWS: [DependencyItem[], DependencyItem[], DependencyItem[]] = [
+  [
+    { name: "framer-motion", version: "^11.18.2", type: "direct" },
+    { name: "react", version: "19.2.8", type: "peer" },
+    { name: "clsx", version: "^2.1.1", type: "direct" },
+    { name: "next-themes", version: "^0.4.6", type: "peer" },
+  ],
+  [
+    { name: "lucide-react", version: "^1.52.0", type: "direct" },
+    { name: "react-dom", version: "19.2.8", type: "peer" },
+    { name: "tailwind-merge", version: "^2.6.1", type: "direct" },
+  ],
+  [
+    { name: "next", version: "16.3.8", type: "peer" },
+    { name: "typescript", version: "^5.0.0", type: "peer" },
+    { name: "cmdk", version: "^1.0.4", type: "peer" },
+  ],
+];
+
+function fillTrack(items: DependencyItem[]): DependencyItem[] {
+  let res = [...items];
+  while (res.length < 6) {
+    res = [...res, ...items];
+  }
+  return res;
+}
+
+function renderDependencyLogo(name: string, isCompact: boolean = false) {
   const n = name.toLowerCase().trim();
+  const iconSize = isCompact ? "w-2.5 h-2.5" : "w-3.5 h-3.5";
   if (n === "react" || n === "react-dom") {
     return (
-      <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-3.5 h-3.5 text-[#00d8ff] shrink-0 drop-shadow-[0_0_6px_rgba(0,216,255,0.4)]" fill="currentColor">
+      <svg viewBox="-11.5 -10.23174 23 20.46348" className={cn(iconSize, "text-[#00d8ff] shrink-0 drop-shadow-[0_0_6px_rgba(0,216,255,0.4)]")} fill="currentColor">
         <circle cx="0" cy="0" r="2.05" />
         <g stroke="currentColor" strokeWidth="1" fill="none">
           <ellipse rx="11" ry="4.2" />
@@ -108,38 +135,44 @@ function renderDependencyLogo(name: string) {
   }
   if (n === "typescript") {
     return (
-      <span className="font-mono font-bold text-[8.5px] px-1.5 py-0.5 rounded bg-[#3178c6] text-white leading-none shrink-0 shadow-xs">
+      <span className={cn(
+        "font-mono font-bold rounded bg-[#3178c6] text-white leading-none shrink-0 shadow-xs",
+        isCompact ? "text-[7px] px-1 py-[0.5px]" : "text-[8.5px] px-1.5 py-0.5"
+      )}>
         TS
       </span>
     );
   }
   if (n === "next") {
     return (
-      <span className="font-mono font-bold text-[8.5px] px-1.5 py-0.5 rounded-md bg-black text-white dark:bg-white dark:text-black leading-none shrink-0 shadow-xs">
+      <span className={cn(
+        "font-mono font-bold rounded-md bg-black text-white dark:bg-white dark:text-black leading-none shrink-0 shadow-xs",
+        isCompact ? "text-[7px] px-1 py-[0.5px]" : "text-[8.5px] px-1.5 py-0.5"
+      )}>
         N
       </span>
     );
   }
   if (n === "next-themes") {
-    return <Sun className="w-3.5 h-3.5 text-amber-500 shrink-0" />;
+    return <Sun className={cn(iconSize, "text-amber-500 shrink-0")} />;
   }
   if (n === "framer-motion") {
-    return <FramerMotionLogo className="h-2.5 w-auto text-pink-500 dark:text-pink-400 shrink-0 drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]" />;
+    return <FramerMotionLogo className={cn(isCompact ? "h-2 w-auto" : "h-2.5 w-auto", "text-pink-500 dark:text-pink-400 shrink-0 drop-shadow-[0_0_6px_rgba(244,63,94,0.3)]")} />;
   }
   if (n === "lucide-react") {
-    return <LucideLogo className="w-3.5 h-3.5 shrink-0" />;
+    return <LucideLogo className={cn(iconSize, "shrink-0")} />;
   }
   if (n === "tailwind-merge" || n === "tailwindcss") {
-    return <TailwindMergeLogo className="w-3.5 h-3.5 text-sky-400 shrink-0 drop-shadow-[0_0_6px_rgba(56,189,248,0.3)]" />;
+    return <TailwindMergeLogo className={cn(iconSize, "text-sky-400 shrink-0 drop-shadow-[0_0_6px_rgba(56,189,248,0.3)]")} />;
   }
   if (n === "clsx") {
-    return <ClsxLogo className="w-3.5 h-3.5 text-violet-500 shrink-0" />;
+    return <ClsxLogo className={cn(iconSize, "text-violet-500 shrink-0")} />;
   }
   if (n.includes("radix")) {
-    return <RadixLogo className="w-3.5 h-3.5 text-purple-400 shrink-0" />;
+    return <RadixLogo className={cn(iconSize, "text-purple-400 shrink-0")} />;
   }
   if (n === "cmdk") {
-    return <Command className="w-3.5 h-3.5 text-zinc-400 shrink-0" />;
+    return <Command className={cn(iconSize, "text-zinc-400 shrink-0")} />;
   }
   return getDependencyLogo(name);
 }
@@ -635,9 +668,10 @@ export default function PreviewRevampPage() {
   const [activeCodeTab, setActiveCodeTab] = useState<"example" | "custom" | "props">("example");
   const [copiedCode, setCopiedCode] = useState(false);
 
-  // Region 8: Dependencies Copied State
+  // Region 8: Dependencies State
   const [copiedDeps, setCopiedDeps] = useState(false);
   const [copiedChip, setCopiedChip] = useState<string | null>(null);
+  const [depFilter, setDepFilter] = useState<"all" | "direct" | "peer">("all");
 
   // Dynamic dimension tracker for pixel-perfect seamless Region 1 Molded SVG
   const leftStageRef = useRef<HTMLDivElement>(null);
@@ -752,7 +786,7 @@ export default function PreviewRevampPage() {
       // Card 5 is active in center (Card 4 peeks 40px at top, Card 6 peeks 40px at bottom)
       if (cardId === 4) {
         return {
-          top: 10,
+          top: 0,
           height: "calc(100% - 100px)",
           scaleX: 0.93,
           zIndex: 20,
@@ -772,7 +806,7 @@ export default function PreviewRevampPage() {
       }
       // cardId === 6
       return {
-        top: 90,
+        top: 100,
         height: "calc(100% - 100px)",
         scaleX: 0.93,
         zIndex: 20,
@@ -785,7 +819,7 @@ export default function PreviewRevampPage() {
       // Card 4 is active at top (Card 5 peeks 40px below, Card 6 peeks 30px below Card 5)
       if (cardId === 4) {
         return {
-          top: 10,
+          top: 0,
           height: "calc(100% - 90px)",
           scaleX: 1.0,
           zIndex: 30,
@@ -805,7 +839,7 @@ export default function PreviewRevampPage() {
       }
       // cardId === 6
       return {
-        top: 80,
+        top: 90,
         height: "calc(100% - 90px)",
         scaleX: 0.86,
         zIndex: 10,
@@ -817,7 +851,7 @@ export default function PreviewRevampPage() {
     // activeDeckCard === 6 (Card 6 active at bottom: Card 4 peeks 30px at top, Card 5 peeks 40px below it)
     if (cardId === 4) {
       return {
-        top: 10,
+        top: 0,
         height: "calc(100% - 90px)",
         scaleX: 0.86,
         zIndex: 10,
@@ -827,7 +861,7 @@ export default function PreviewRevampPage() {
     }
     if (cardId === 5) {
       return {
-        top: 40,
+        top: 45,
         height: "calc(100% - 90px)",
         scaleX: 0.93,
         zIndex: 20,
@@ -837,7 +871,7 @@ export default function PreviewRevampPage() {
     }
     // cardId === 6
     return {
-      top: 80,
+      top: 90,
       height: "calc(100% - 90px)",
       scaleX: 1.0,
       zIndex: 30,
@@ -884,10 +918,10 @@ export default function PreviewRevampPage() {
           will-change: transform;
         }
         .animate-marquee-ltr {
-          animation: marquee-ltr 22s linear infinite;
+          animation: marquee-ltr 32s linear infinite;
         }
         .animate-marquee-rtl {
-          animation: marquee-rtl 22s linear infinite;
+          animation: marquee-rtl 32s linear infinite;
         }
         .marquee-track:hover .animate-marquee-ltr,
         .marquee-track:hover .animate-marquee-rtl {
@@ -1069,203 +1103,295 @@ export default function PreviewRevampPage() {
 
             {/* 
               REGION 8: DEPENDENCIES CARD IN THE CUTOUT NOTCH OF REGION 1
-              Nested inside the molded cutout notch matching the design shape!
-              Features smooth zero-jerk alternating moving marquee and official logos.
+              - Molded scooped notch shape in upper-right corner
+              - Filter: ALL, DIRECT, PEER with active theme primary
+              - Ultra-compact marquee chips (reduced >= 50%)
+              - Simple heading without pill border and padding
+              - Faded top-to-bottom isometric blocks background
             */}
             <div
-              className="absolute bottom-0 right-0 z-20 h-[185px] rounded-[30px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-3.5 shadow-sm flex flex-col justify-between overflow-hidden select-none"
+              className="absolute bottom-0 right-0 z-20 h-[185px] rounded-[26px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm flex flex-col justify-between overflow-hidden select-none"
               style={{
                 width: dependenciesWidth,
               }}
             >
-              {/* Subtle ambient lighting for modern depth */}
-              <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 blur-2xl pointer-events-none" />
-              <div className="absolute -bottom-10 -left-10 w-28 h-28 rounded-full bg-pink-500/5 dark:bg-pink-500/10 blur-2xl pointer-events-none" />
+              {/* Faded Top-to-Bottom Isometric Blocks Background */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+                <defs>
+                  <pattern
+                    id="dep-iso-blocks-pattern"
+                    width="36"
+                    height="20"
+                    patternUnits="userSpaceOnUse"
+                  >
+                    <polygon
+                      points="18,0 36,5 18,10 0,5"
+                      className="fill-zinc-400/[0.04] dark:fill-white/[0.02] stroke-zinc-300/40 dark:stroke-white/[0.06]"
+                      strokeWidth="0.7"
+                    />
+                    <polygon
+                      points="0,5 18,10 18,20 0,15"
+                      className="fill-transparent stroke-zinc-300/30 dark:stroke-white/[0.04]"
+                      strokeWidth="0.7"
+                    />
+                    <polygon
+                      points="18,10 36,5 36,15 18,20"
+                      className="fill-zinc-400/[0.02] dark:fill-white/[0.01] stroke-zinc-300/30 dark:stroke-white/[0.04]"
+                      strokeWidth="0.7"
+                    />
+                  </pattern>
+                </defs>
+                <rect
+                  width="100%"
+                  height="100%"
+                  fill="url(#dep-iso-blocks-pattern)"
+                  style={{
+                    maskImage: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 85%)",
+                    WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 85%)",
+                  }}
+                />
+              </svg>
 
-              {/* Header: Core Dependencies & Real Stats */}
-              <div className="relative z-10 flex items-center justify-between shrink-0 mb-0.5 gap-2">
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="px-2.5 sm:px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-foreground flex items-center gap-1.5 shadow-xs shrink-0 whitespace-nowrap">
-                    <Package className="w-3.5 h-3.5 text-pink-500 shrink-0" />
-                    <span>Dependencies</span>
-                  </div>
+              {/* Molded Scooped Notch in Upper-Right for Filter Tabs */}
+              <svg
+                className="absolute top-0 right-0 pointer-events-none overflow-visible z-1"
+                width="210"
+                height="40"
+                viewBox="0 0 210 40"
+              >
+                {/* Scooped cradle background surface */}
+                <path
+                  d="M 0 0 C 14 0, 18 36, 32 36 L 210 36 L 210 0 Z"
+                  className="fill-zinc-100/60 dark:fill-zinc-950/50"
+                />
+                {/* Molded Scoop Contour Line */}
+                <path
+                  d="M 0 0 C 14 0, 18 36, 32 36 L 210 36"
+                  className="fill-none stroke-zinc-200/90 dark:stroke-zinc-800"
+                  strokeWidth="1.5"
+                />
+              </svg>
+
+              {/* Header Row: Left Title & Right Filter in the Scooped Notch */}
+              <div className="relative z-10 flex items-center justify-between shrink-0 h-9 px-3.5 pt-1.5">
+                {/* Left: Simple heading with icon (no border, no padding) */}
+                <div className="flex items-center gap-1.5 text-xs font-bold text-foreground select-none">
+                  <Package className="w-3.5 h-3.5 text-pink-500 shrink-0" />
+                  <span>Dependencies</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold shadow-xs shrink-0 whitespace-nowrap">
+
+                {/* Right: Filter tabs sitting directly inside the scooped cradle */}
+                <div className="flex items-center gap-2 select-none">
+                  {(
+                    [
+                      { id: "all", label: "ALL" },
+                      { id: "direct", label: "DIRECT" },
+                      { id: "peer", label: "PEER" },
+                    ] as const
+                  ).map((f) => {
+                    const isActive = depFilter === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setDepFilter(f.id)}
+                        className={cn(
+                          "group flex items-center gap-1.5 py-0.5 px-1 rounded transition-all duration-150 select-none cursor-pointer focus:outline-none",
+                          isActive
+                            ? "text-[var(--theme-primary)] font-bold"
+                            : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-medium"
+                        )}
+                        title={`Filter by ${f.label.toLowerCase()} dependencies`}
+                      >
+                        <span
+                          className={cn(
+                            "w-2 h-2 rounded-[1.5px] transition-all duration-150 shrink-0",
+                            isActive
+                              ? "bg-[var(--theme-primary)] shadow-[0_0_8px_var(--theme-primary)]"
+                              : "border border-zinc-400 dark:border-zinc-600 bg-transparent group-hover:border-zinc-500 dark:group-hover:border-zinc-400"
+                          )}
+                        />
+                        <span className="font-mono text-[9px] tracking-wider uppercase leading-none">
+                          {f.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Marquee only on ALL, static unique chips on DIRECT and PEER */}
+              {(() => {
+                const renderChip = (dep: DependencyItem, key: string) => (
+                  <a
+                    key={key}
+                    href={getNpmPackageUrl(dep.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      copyChip(dep.name);
+                    }}
+                    className={cn(
+                      "group inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border transition-all duration-200 cursor-pointer shadow-2xs select-none shrink-0 h-[22px]",
+                      "bg-white/95 dark:bg-zinc-800/90 border-zinc-200/80 dark:border-zinc-700/70 text-foreground",
+                      "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-xs hover:scale-105 active:scale-95"
+                    )}
+                    title={`Click to copy ${getInstallCommand(dep.name)}`}
+                  >
+                    {renderDependencyLogo(dep.name, true)}
+                    <span className="text-[10px] font-mono font-medium tracking-tight">
+                      {copiedChip === dep.name ? (
+                        <span className="text-emerald-500 font-semibold flex items-center gap-0.5 text-[9px]">
+                          <Check className="w-2.5 h-2.5" /> Copied!
+                        </span>
+                      ) : (
+                        dep.name
+                      )}
+                    </span>
+                    <span className="text-[7.5px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1 py-[0.5px] rounded border border-zinc-200 dark:border-zinc-800 font-medium leading-none">
+                      {dep.version}
+                    </span>
+                  </a>
+                );
+
+                if (depFilter === "all") {
+                  return (
+                    <motion.div
+                      key="marquee-all"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.18 }}
+                      className="flex-1 flex flex-col justify-center gap-1.5 py-1.5 overflow-hidden relative z-10"
+                    >
+                      {/* LINE 1: LTR */}
+                      <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
+                        <div
+                          className="marquee-group animate-marquee-ltr"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[0]).map((dep, idx) =>
+                            renderChip(dep, `all-r1-a-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                        <div
+                          className="marquee-group animate-marquee-ltr"
+                          aria-hidden="true"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[0]).map((dep, idx) =>
+                            renderChip(dep, `all-r1-b-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                      </div>
+
+                      {/* LINE 2: RTL */}
+                      <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
+                        <div
+                          className="marquee-group animate-marquee-rtl"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[1]).map((dep, idx) =>
+                            renderChip(dep, `all-r2-a-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                        <div
+                          className="marquee-group animate-marquee-rtl"
+                          aria-hidden="true"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[1]).map((dep, idx) =>
+                            renderChip(dep, `all-r2-b-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                      </div>
+
+                      {/* LINE 3: LTR */}
+                      <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
+                        <div
+                          className="marquee-group animate-marquee-ltr"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[2]).map((dep, idx) =>
+                            renderChip(dep, `all-r3-a-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                        <div
+                          className="marquee-group animate-marquee-ltr"
+                          aria-hidden="true"
+                          style={{ animationDuration: "32s" }}
+                        >
+                          {fillTrack(ALL_MARQUEE_ROWS[2]).map((dep, idx) =>
+                            renderChip(dep, `all-r3-b-${dep.name}-${idx}`)
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                }
+
+                // FILTER APPLIED (DIRECT or PEER): Static unique chips without marquee
+                if (depFilter === "direct") {
+                  return (
+                    <motion.div
+                      key="static-direct"
+                      initial={{ opacity: 0, y: 3 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.18 }}
+                      className="flex-1 flex flex-col justify-center gap-2.5 px-3.5 py-1 z-10"
+                    >
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {renderChip(DIRECT_DEPENDENCIES[0], `d-0-${DIRECT_DEPENDENCIES[0].name}`)}
+                        {renderChip(DIRECT_DEPENDENCIES[1], `d-1-${DIRECT_DEPENDENCIES[1].name}`)}
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {renderChip(DIRECT_DEPENDENCIES[2], `d-2-${DIRECT_DEPENDENCIES[2].name}`)}
+                        {renderChip(DIRECT_DEPENDENCIES[3], `d-3-${DIRECT_DEPENDENCIES[3].name}`)}
+                      </div>
+                    </motion.div>
+                  );
+                }
+
+                // PEER DEPENDENCIES: Exactly 6 unique items
+                return (
+                  <motion.div
+                    key="static-peer"
+                    initial={{ opacity: 0, y: 3 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="flex-1 flex flex-col justify-center gap-2 px-3.5 py-1 z-10"
+                  >
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {renderChip(PEER_DEPENDENCIES[0], `p-0-${PEER_DEPENDENCIES[0].name}`)}
+                      {renderChip(PEER_DEPENDENCIES[1], `p-1-${PEER_DEPENDENCIES[1].name}`)}
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {renderChip(PEER_DEPENDENCIES[2], `p-2-${PEER_DEPENDENCIES[2].name}`)}
+                      {renderChip(PEER_DEPENDENCIES[3], `p-3-${PEER_DEPENDENCIES[3].name}`)}
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {renderChip(PEER_DEPENDENCIES[4], `p-4-${PEER_DEPENDENCIES[4].name}`)}
+                      {renderChip(PEER_DEPENDENCIES[5], `p-5-${PEER_DEPENDENCIES[5].name}`)}
+                    </div>
+                  </motion.div>
+                );
+              })()}
+
+              {/* Bottom Micro Stat Footer */}
+              <div className="relative z-10 flex items-center justify-between px-3.5 pb-2 text-[10px] font-mono text-muted-foreground/70">
+                <span className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                  <span className="whitespace-nowrap">4 Direct • 6 Peer</span>
-                </div>
+                  <span>
+                    {depFilter === "all"
+                      ? "4 direct • 6 peer"
+                      : depFilter === "direct"
+                        ? "4 direct packages"
+                        : "6 peer packages"}
+                  </span>
+                </span>
+                <span className="text-[9px] text-zinc-400 dark:text-zinc-600">click chip to copy</span>
               </div>
 
-              {/* 2 CONTINUOUS ALTERNATING MARQUEE LINES IN A STRAIGHT HORIZONTAL LINE */}
-              <div className="flex flex-col gap-1.5 py-0.5 overflow-hidden relative">
-
-                {/* LINE 1: DIRECT DEPENDENCIES (LTR in a straight horizontal line) */}
-                <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
-                  <div className="marquee-group animate-marquee-ltr">
-                    {DEP_ROW_1.map((dep, idx) => (
-                      <a
-                        key={`r1-a-${idx}`}
-                        href={getNpmPackageUrl(dep.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          copyChip(dep.name);
-                        }}
-                        className={cn(
-                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
-                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
-                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
-                        )}
-                        title={`Click to copy ${getInstallCommand(dep.name)}`}
-                      >
-                        {renderDependencyLogo(dep.name)}
-                        <span className="text-xs font-mono font-bold tracking-tight">
-                          {copiedChip === dep.name ? (
-                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                              <Check className="w-3 h-3" /> Copied!
-                            </span>
-                          ) : (
-                            dep.name
-                          )}
-                        </span>
-                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
-                          {dep.version}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="marquee-group animate-marquee-ltr" aria-hidden="true">
-                    {DEP_ROW_1.map((dep, idx) => (
-                      <a
-                        key={`r1-b-${idx}`}
-                        href={getNpmPackageUrl(dep.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          copyChip(dep.name);
-                        }}
-                        className={cn(
-                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
-                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
-                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
-                        )}
-                        title={`Click to copy ${getInstallCommand(dep.name)}`}
-                      >
-                        {renderDependencyLogo(dep.name)}
-                        <span className="text-xs font-mono font-bold tracking-tight">
-                          {copiedChip === dep.name ? (
-                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                              <Check className="w-3 h-3" /> Copied!
-                            </span>
-                          ) : (
-                            dep.name
-                          )}
-                        </span>
-                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
-                          {dep.version}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* LINE 2: FRAMEWORK & PEER DEPENDENCIES (RTL in a straight horizontal line) */}
-                <div className="marquee-track transform-gpu [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)]">
-                  <div className="marquee-group animate-marquee-rtl">
-                    {DEP_ROW_2.map((dep, idx) => (
-                      <a
-                        key={`r2-a-${idx}`}
-                        href={getNpmPackageUrl(dep.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          copyChip(dep.name);
-                        }}
-                        className={cn(
-                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
-                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
-                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
-                        )}
-                        title={`Click to copy ${getInstallCommand(dep.name)}`}
-                      >
-                        {renderDependencyLogo(dep.name)}
-                        <span className="text-xs font-mono font-bold tracking-tight">
-                          {copiedChip === dep.name ? (
-                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                              <Check className="w-3 h-3" /> Copied!
-                            </span>
-                          ) : (
-                            dep.name
-                          )}
-                        </span>
-                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
-                          {dep.version}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                  <div className="marquee-group animate-marquee-rtl" aria-hidden="true">
-                    {DEP_ROW_2.map((dep, idx) => (
-                      <a
-                        key={`r2-b-${idx}`}
-                        href={getNpmPackageUrl(dep.name)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          copyChip(dep.name);
-                        }}
-                        className={cn(
-                          "group inline-flex items-center gap-2 px-3 py-1.5 rounded-2xl border transition-all duration-200 cursor-pointer shadow-xs select-none shrink-0",
-                          "bg-white/95 dark:bg-zinc-800/95 border-zinc-200/90 dark:border-zinc-700/80 text-foreground",
-                          "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-md hover:scale-105 active:scale-95"
-                        )}
-                        title={`Click to copy ${getInstallCommand(dep.name)}`}
-                      >
-                        {renderDependencyLogo(dep.name)}
-                        <span className="text-xs font-mono font-bold tracking-tight">
-                          {copiedChip === dep.name ? (
-                            <span className="text-emerald-500 font-semibold flex items-center gap-1">
-                              <Check className="w-3 h-3" /> Copied!
-                            </span>
-                          ) : (
-                            dep.name
-                          )}
-                        </span>
-                        <span className="text-[9px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1.5 py-0.5 rounded-md border border-zinc-200 dark:border-zinc-800 font-medium">
-                          {dep.version}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Bottom Line: Quick Install Terminal Bar */}
-              <div className="relative z-10 flex items-center justify-between gap-2.5 pt-1 border-t border-zinc-200 dark:border-zinc-800/80 shrink-0">
-                <div className="flex-1 flex items-center gap-2 min-w-0">
-                  <div className="h-1.5 w-10 sm:w-12 rounded-full bg-muted-foreground/30 shrink-0" />
-                  <div className="flex-1 border-b border-dashed border-border h-0.5" />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(installAllDepsCommand, setCopiedDeps)}
-                  className="group px-3 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200/90 dark:bg-zinc-800/90 dark:hover:bg-zinc-700 border border-zinc-300 dark:border-zinc-700/80 text-[10.5px] font-mono text-foreground flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 hover:border-[var(--theme-primary)]/40 max-w-[240px] shrink-0"
-                  title={`Click to copy: ${installAllDepsCommand}`}
-                >
-                  <Terminal className="w-3 h-3 text-emerald-500 shrink-0" />
-                  <span className="truncate">{copiedDeps ? "Copied to clipboard!" : installAllDepsCommand}</span>
-                  {copiedDeps ? (
-                    <Check className="w-3 h-3 text-emerald-500 shrink-0" />
-                  ) : (
-                    <Copy className="w-3 h-3 text-muted-foreground group-hover:text-foreground shrink-0 transition-colors" />
-                  )}
-                </button>
-              </div>
             </div>
 
           </div>
@@ -1288,7 +1414,7 @@ export default function PreviewRevampPage() {
               - Inactive cards peek above and/or below (scaled width to 0.94/0.88, shaded, zIndex: 20/10)
               - Prominently visible headers on all peeking cards, smoothly promoted on click
             */}
-            <div className="relative flex-1 min-h-[300px] w-full select-none rounded-[28px] overflow-hidden">
+            <div className="relative flex-1 min-h-[300px] w-full select-none rounded-[22px] overflow-hidden">
               {(() => {
                 const layout4 = getCardDeckLayout(4);
                 const layout5 = getCardDeckLayout(5);
@@ -1301,9 +1427,9 @@ export default function PreviewRevampPage() {
                       initial={false}
                       onClick={() => setActiveDeckCard(4)}
                       className={cn(
-                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        "absolute inset-x-0 rounded-[22px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
                         layout4.isFront
-                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          ? "bg-white dark:bg-zinc-900 border-2 border-zinc-300 dark:border-zinc-700 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
                           : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
                       )}
                       style={{
@@ -1313,16 +1439,12 @@ export default function PreviewRevampPage() {
                       animate={{
                         top: layout4.top,
                         height: layout4.height,
-                        scaleX: layout4.scaleX,
+                        // scaleX: layout4.scaleX,
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
                     >
                       <div className="flex items-center justify-between shrink-0 h-9">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          {/* Vertical Stadium Handle from Sketch */}
-                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                            <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                          </div>
                           <div className="flex items-center gap-2 truncate">
                             <Terminal className="w-4 h-4 text-emerald-500 shrink-0" />
                             <span className="text-xs font-bold text-foreground tracking-wide truncate">CLI Installation</span>
@@ -1361,9 +1483,6 @@ export default function PreviewRevampPage() {
                       {layout4.d > 0 && (
                         <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                            </div>
                             <div className="flex items-center gap-2 truncate">
                               <Terminal className="w-4 h-4 text-emerald-500 shrink-0" />
                               <span className="text-xs font-bold text-foreground tracking-wide truncate">CLI Installation</span>
@@ -1381,9 +1500,9 @@ export default function PreviewRevampPage() {
                       initial={false}
                       onClick={() => setActiveDeckCard(5)}
                       className={cn(
-                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        "absolute inset-x-0 rounded-[22px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
                         layout5.isFront
-                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          ? "bg-white dark:bg-zinc-900 border-2 border-zinc-300 dark:border-zinc-700 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
                           : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
                       )}
                       style={{
@@ -1393,16 +1512,12 @@ export default function PreviewRevampPage() {
                       animate={{
                         top: layout5.top,
                         height: layout5.height,
-                        scaleX: layout5.scaleX,
+                        // scaleX: layout5.scaleX,
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
                     >
                       <div className="flex items-center justify-between shrink-0 h-9">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          {/* Vertical Stadium Handle from Sketch */}
-                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                            <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                          </div>
                           <div className="flex items-center gap-2 truncate">
                             <Sliders className="w-4 h-4 text-orange-500 shrink-0" />
                             <span className="text-xs font-bold text-foreground tracking-wide truncate">Playground Studio</span>
@@ -1450,9 +1565,6 @@ export default function PreviewRevampPage() {
                       {layout5.d > 0 && (
                         <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                            </div>
                             <div className="flex items-center gap-2 truncate">
                               <Sliders className="w-4 h-4 text-orange-500 shrink-0" />
                               <span className="text-xs font-bold text-foreground tracking-wide truncate">Playground Studio</span>
@@ -1470,9 +1582,9 @@ export default function PreviewRevampPage() {
                       initial={false}
                       onClick={() => setActiveDeckCard(6)}
                       className={cn(
-                        "absolute inset-x-0 rounded-[30px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+                        "absolute inset-x-0 rounded-[22px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
                         layout6.isFront
-                          ? "bg-white dark:bg-zinc-900 border-2 border-[var(--theme-primary)]/40 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
+                          ? "bg-white dark:bg-zinc-900 border-2 border-zinc-300 dark:border-zinc-700 shadow-2xl ring-2 ring-[var(--theme-primary)]/10 p-3.5 sm:p-4"
                           : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
                       )}
                       style={{
@@ -1482,16 +1594,12 @@ export default function PreviewRevampPage() {
                       animate={{
                         top: layout6.top,
                         height: layout6.height,
-                        scaleX: layout6.scaleX,
+                        // scaleX: layout6.scaleX,
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 28, mass: 0.8 }}
                     >
                       <div className="flex items-center justify-between shrink-0 h-9">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          {/* Vertical Stadium Handle from Sketch */}
-                          <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                            <div className="w-1 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                          </div>
                           <div className="flex items-center gap-2 truncate">
                             <Code2 className="w-4 h-4 text-blue-500 shrink-0" />
                             <span className="text-xs font-bold text-foreground tracking-wide truncate">Preview &amp; Source Code</span>
@@ -1597,9 +1705,6 @@ export default function PreviewRevampPage() {
                       {layout6.d > 0 && (
                         <div className="mt-auto flex items-center justify-between shrink-0 h-10 px-1 text-foreground/90 select-none pb-1">
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-3.5 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 flex items-center justify-center shrink-0 shadow-inner">
-                              <div className="w-1 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
-                            </div>
                             <div className="flex items-center gap-2 truncate">
                               <Code2 className="w-4 h-4 text-blue-500 shrink-0" />
                               <span className="text-xs font-bold text-foreground tracking-wide truncate">Preview &amp; Source Code</span>
