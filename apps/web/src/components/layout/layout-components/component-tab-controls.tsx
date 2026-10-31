@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Monitor, SlidersHorizontal, Terminal } from "lucide-react";
+import { Monitor, SlidersHorizontal, Terminal, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ComponentActiveTab } from "./types";
 
@@ -52,6 +52,11 @@ export function ComponentTabControls({
       id: "info" as const,
       title: "Preview",
       icon: Monitor,
+    },
+    {
+      id: "code" as const,
+      title: "Code",
+      icon: Code,
     },
   ];
 

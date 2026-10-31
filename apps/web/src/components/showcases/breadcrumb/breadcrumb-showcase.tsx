@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { StackedCardsContainer } from "@/components/ui/stacked-card";
 import { useShowcaseCodeUpdate } from "@/components/showcases/common";
-import { useComponentPlayground } from "@/components/layout/component-page-layout";
+import { useComponentPlayground } from "@/context";
 import { BREADCRUMB_EXAMPLES } from "./constants";
 import { CustomProps } from "./types";
 import {
@@ -16,21 +16,14 @@ import { generateBreadcrumbCode } from "./code-generator";
 
 export function BreadcrumbShowcase() {
   const [customProps, setCustomProps] = useState<CustomProps>(DEFAULT_CUSTOM_PROPS);
-  const { registerPlayground, unregisterPlayground, setCustomizedCode } = useComponentPlayground();
+  const { registerPlayground, unregisterPlayground } = useComponentPlayground();
 
-  const code = generateBreadcrumbCode(customProps);
-  useShowcaseCodeUpdate(code);
-
-  useEffect(() => {
-    setCustomizedCode(code);
-  }, [code, setCustomizedCode]);
+  // Syncs generated code into context (no window events)
+  useShowcaseCodeUpdate(generateBreadcrumbCode(customProps));
 
   useEffect(() => {
     registerPlayground(
-      <BreadcrumbPlaygroundStudio
-        customProps={customProps}
-        onChange={setCustomProps}
-      />,
+      <BreadcrumbPlaygroundStudio customProps={customProps} onChange={setCustomProps} />,
       <BreadcrumbLivePreview customProps={customProps} />
     );
     return () => {

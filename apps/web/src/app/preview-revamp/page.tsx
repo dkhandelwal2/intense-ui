@@ -1414,7 +1414,7 @@ export default function PreviewRevampPage() {
               - Inactive cards peek above and/or below (scaled width to 0.94/0.88, shaded, zIndex: 20/10)
               - Prominently visible headers on all peeking cards, smoothly promoted on click
             */}
-            <div className="relative flex-1 min-h-[300px] w-full select-none rounded-[22px] overflow-hidden">
+            <div className="relative flex-1 min-h-[300px] w-full h-full select-none rounded-[22px] overflow-hidden">
               {(() => {
                 const layout4 = getCardDeckLayout(4);
                 const layout5 = getCardDeckLayout(5);

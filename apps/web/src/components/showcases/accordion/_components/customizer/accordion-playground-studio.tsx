@@ -23,30 +23,35 @@ export interface AccordionPlaygroundStudioProps {
   customProps: CustomProps;
   onChange: React.Dispatch<React.SetStateAction<CustomProps>>;
   className?: string;
+  hidePreview?: boolean;
+  onViewCode?: () => void;
 }
 
-export function AccordionLivePreview({
+export const AccordionLivePreview = React.memo(function AccordionLivePreview({
   customProps,
 }: {
   customProps: CustomProps;
 }) {
   return (
-    <div className="w-full max-w-[320px] 2xl:max-w-[380px] flex items-center justify-center py-2 px-1">
+    <div className="w-full flex items-center justify-center py-2 px-1">
       <div className="w-full">
         <AccordionVariantRenderer id="customization" customProps={customProps} />
       </div>
     </div>
   );
-}
+});
 
-export function AccordionPlaygroundStudio({
+export const AccordionPlaygroundStudio = React.memo(function AccordionPlaygroundStudio({
   customProps,
   onChange,
   className,
+  hidePreview = false,
+  onViewCode,
 }: AccordionPlaygroundStudioProps) {
-  const modifiedCount = getModifiedCount(customProps);
+  const modifiedCount = React.useMemo(() => getModifiedCount(customProps), [customProps]);
+  const handleReset = React.useCallback(() => onChange(DEFAULT_CUSTOM_PROPS), [onChange]);
 
-  const steps: PlaygroundStudioStepData[] = [
+  const steps: PlaygroundStudioStepData[] = React.useMemo(() => [
     // Step 1: Border & Radius (Palette: Theme Primary - Violet)
     {
       id: "border",
@@ -274,15 +279,22 @@ export function AccordionPlaygroundStudio({
         },
       ],
     },
-  ];
+  ], [customProps, onChange]);
+
+  const previewElement = React.useMemo(
+    () => (hidePreview ? undefined : <AccordionLivePreview customProps={customProps} />),
+    [hidePreview, customProps]
+  );
 
   return (
     <PlaygroundStudio
       steps={steps}
-      preview={<AccordionLivePreview customProps={customProps} />}
+      preview={previewElement}
+      hidePreview={hidePreview}
       modifiedCount={modifiedCount}
-      onReset={() => onChange(DEFAULT_CUSTOM_PROPS)}
+      onReset={handleReset}
+      onViewCode={onViewCode}
       className={className}
     />
   );
-}
+});

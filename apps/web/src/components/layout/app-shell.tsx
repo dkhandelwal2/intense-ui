@@ -11,7 +11,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isComponentDocs = pathname?.startsWith("/docs/components/");
   const isErrorPage = pathname === "/404" || pathname === "/500" || pathname === "/503";
 
-  if (isPreviewRevamp) {
+  if (isPreviewRevamp || isComponentDocs) {
     return (
       <div className="relative min-h-screen w-full flex flex-col bg-background">
         <SiteHeader />

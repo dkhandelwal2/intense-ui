@@ -23,9 +23,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ColorGrid } from "@/components/ui/color-grid";
-import { Button, AnimatedButton } from "@registry/components/button";
+import { Button } from "@registry/components/button";
 import { Slider } from "@registry/components/slider";
 import { Tooltip } from "@registry/components/tooltip";
+
+// ---------------------------------------------------------------------------
+// Compact mini-card previews (used in index grid / listing cards)
+// ---------------------------------------------------------------------------
 
 function SliderInteractivePreview() {
   const [val, setVal] = React.useState(50);
@@ -64,7 +68,7 @@ const ButtonCardPreview = (
 
 const SwitchCardPreview = (
   <div className="flex items-center justify-center pointer-events-none scale-75">
-    <Switch checked={true} onChange={() => {}} size="md" />
+    <Switch checked={true} onChange={() => { }} size="md" />
   </div>
 );
 
@@ -95,15 +99,11 @@ const BreadcrumbCardPreview = (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <span>Docs</span>
-          </BreadcrumbLink>
+          <BreadcrumbLink asChild><span>Docs</span></BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <span>Components</span>
-          </BreadcrumbLink>
+          <BreadcrumbLink asChild><span>Components</span></BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -126,11 +126,7 @@ const SkeletonCardPreview = (
 
 const ColorGridCardPreview = (
   <div className="p-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-background/50 backdrop-blur-xs flex items-center justify-center">
-    <ColorGrid
-      value="var(--theme-primary)"
-      onChange={() => {}}
-      onClear={() => {}}
-    />
+    <ColorGrid value="var(--theme-primary)" onChange={() => { }} onClear={() => { }} />
   </div>
 );
 
@@ -145,9 +141,11 @@ const NavBarCardPreview = (
   />
 );
 
-// Dictionary of compact preview widgets for index cards and preview grids
+// ---------------------------------------------------------------------------
+// Card-grid mini previews — keyed by both title-case name and slug
+// ---------------------------------------------------------------------------
 export const componentPreviews: Record<string, React.ReactNode> = {
-  // Title-cased keys
+  // Title-cased
   "Accordion": AccordionMiniCardPreview,
   "Button": ButtonCardPreview,
   "Animated Button": ButtonCardPreview,
@@ -162,8 +160,7 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "Color Palette": ColorGridCardPreview,
   "Nav Bar": NavBarCardPreview,
   "Navbar": NavBarCardPreview,
-
-  // Slugified lowercase keys for fallback matching
+  // Slug-cased
   "accordion": AccordionMiniCardPreview,
   "button": ButtonCardPreview,
   "animated-button": ButtonCardPreview,
@@ -180,7 +177,21 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "navbar": NavBarCardPreview,
 };
 
-// Component for dynamic documentation pages ([slug]/page.tsx)
+// ---------------------------------------------------------------------------
+// Full-page rich showcase registry (used on /docs/components/[slug] pages)
+// Each entry is a zero-arg React component that renders the full showcase.
+// To add a new component: add one entry here — no if-chains needed.
+// ---------------------------------------------------------------------------
+const FULL_PAGE_SHOWCASE_REGISTRY: Record<string, React.ComponentType> = {
+  "accordion": AccordionShowcase,
+  "breadcrumb": BreadcrumbShowcase,
+  "nav-bar": NavbarShowcase,
+  "navbar": NavbarShowcase,
+};
+
+// ---------------------------------------------------------------------------
+// ComponentPreview — entry point for /docs/components/[slug]/page.tsx
+// ---------------------------------------------------------------------------
 export function ComponentPreview({
   name,
   slug,
@@ -189,43 +200,31 @@ export function ComponentPreview({
   slug?: string;
 }) {
   const cleanSlug = (slug || "").toLowerCase().trim();
-  const cleanName = (name || "").toLowerCase().trim();
+  const cleanName = (name || "").toLowerCase().replace(/\s+/g, "-").trim();
 
-  // On full documentation page, components render their rich multi-card interactive showcase
-  if (cleanSlug === "accordion" || cleanName === "accordion") {
-    return <AccordionShowcase />;
+  // 1. Check full-page showcase registry first (rich multi-card interactive views)
+  const FullPageShowcase =
+    FULL_PAGE_SHOWCASE_REGISTRY[cleanSlug] ||
+    FULL_PAGE_SHOWCASE_REGISTRY[cleanName];
+
+  if (FullPageShowcase) {
+    return <FullPageShowcase />;
   }
 
-  if (cleanSlug === "breadcrumb" || cleanName === "breadcrumb") {
-    return <BreadcrumbShowcase />;
-  }
-
-  if (
-    cleanSlug === "nav-bar" ||
-    cleanSlug === "navbar" ||
-    cleanName === "nav bar" ||
-    cleanName === "navbar"
-  ) {
-    return <NavbarShowcase />;
-  }
-
+  // 2. Fall back to compact mini-card preview wrapped in a centred container
   const preview =
     componentPreviews[name || ""] ||
     componentPreviews[slug || ""] ||
     componentPreviews[cleanName] ||
     componentPreviews[cleanSlug];
 
-  if (preview) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh] w-full p-4 lg:p-10">
-        {preview}
-      </div>
-    );
-  }
-
   return (
     <div className="flex items-center justify-center min-h-[50vh] w-full p-4 lg:p-10">
-      <div className="text-muted-foreground text-center">Interactive preview coming soon</div>
+      <div className="text-muted-foreground text-center">
+        Interactive preview coming soon
+      </div>
+      {/* {preview ?? (
+      )} */}
     </div>
   );
 }

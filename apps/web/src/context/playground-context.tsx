@@ -1,7 +1,14 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { ComponentActiveTab } from "./layout-components/types";
+import { ComponentActiveTab } from "@/components/layout/layout-components/types";
+import { DeckCardId } from "@/components/layout/bento/types";
+import {
+  COMPONENT_TABS,
+  DECK_CARD_IDS,
+  CODE_TABS,
+  SCREEN_BREAKPOINTS,
+} from "@/components/layout/constants";
 
 export interface ComponentPlaygroundContextValue {
   activeTab: ComponentActiveTab;
@@ -13,9 +20,21 @@ export interface ComponentPlaygroundContextValue {
   setCustomizedCode: (code: string | null) => void;
   registerPlayground: (content: React.ReactNode, preview?: React.ReactNode) => void;
   unregisterPlayground: () => void;
+
+  // Deck & BottomSheet Controls
+  activeDeckCard: DeckCardId;
+  setActiveDeckCard: (card: DeckCardId) => void;
+  activeCodeTab: "example" | "custom" | "props";
+  setActiveCodeTab: (tab: "example" | "custom" | "props") => void;
+  isBottomSheetOpen: boolean;
+  setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  bottomSheetTab: ComponentActiveTab;
+  setBottomSheetTab: (tab: ComponentActiveTab) => void;
+
+  // Action Methods (replacing window custom events)
   openPlayground: () => void;
   setOpenPlaygroundHandler: (handler: () => void) => void;
-  openCode: () => void;
+  openCode: (tab?: "example" | "custom" | "props") => void;
   setOpenCodeHandler: (handler: () => void) => void;
 }
 
@@ -29,6 +48,16 @@ const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue
   setCustomizedCode: () => {},
   registerPlayground: () => {},
   unregisterPlayground: () => {},
+
+  activeDeckCard: 5,
+  setActiveDeckCard: () => {},
+  activeCodeTab: "example",
+  setActiveCodeTab: () => {},
+  isBottomSheetOpen: false,
+  setIsBottomSheetOpen: () => {},
+  bottomSheetTab: "playground",
+  setBottomSheetTab: () => {},
+
   openPlayground: () => {},
   setOpenPlaygroundHandler: () => {},
   openCode: () => {},
@@ -36,15 +65,34 @@ const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue
 });
 
 export function ComponentPlaygroundProvider({ children }: { children: React.ReactNode }) {
-  const [activeTab, setActiveTabState] = useState<ComponentActiveTab>("playground");
+  const [activeTab, setActiveTabState] = useState<ComponentActiveTab>(COMPONENT_TABS.PLAYGROUND);
   const [playgroundContent, setPlaygroundContent] = useState<React.ReactNode | null>(null);
   const [previewContent, setPreviewContent] = useState<React.ReactNode | null>(null);
   const [customizedCode, setCustomizedCode] = useState<string | null>(null);
+
+  // Deck & BottomSheet reactive states
+  const [activeDeckCard, setActiveDeckCardState] = useState<DeckCardId>(DECK_CARD_IDS.PLAYGROUND_STUDIO);
+  const [activeCodeTab, setActiveCodeTabState] = useState<"example" | "custom" | "props">(CODE_TABS.EXAMPLE);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [bottomSheetTab, setBottomSheetTabState] = useState<ComponentActiveTab>(COMPONENT_TABS.PLAYGROUND);
+
   const [openHandler, setOpenHandler] = useState<(() => void) | null>(null);
   const [openCodeHandler, setOpenCodeHandlerState] = useState<(() => void) | null>(null);
 
   const setActiveTab = useCallback((tab: ComponentActiveTab) => {
     setActiveTabState(tab);
+  }, []);
+
+  const setActiveDeckCard = useCallback((card: DeckCardId) => {
+    setActiveDeckCardState(card);
+  }, []);
+
+  const setActiveCodeTab = useCallback((tab: "example" | "custom" | "props") => {
+    setActiveCodeTabState(tab);
+  }, []);
+
+  const setBottomSheetTab = useCallback((tab: ComponentActiveTab) => {
+    setBottomSheetTabState(tab);
   }, []);
 
   const registerPlayground = useCallback((content: React.ReactNode, preview?: React.ReactNode) => {
@@ -60,24 +108,38 @@ export function ComponentPlaygroundProvider({ children }: { children: React.Reac
   }, []);
 
   const openPlayground = useCallback(() => {
-    setActiveTabState("playground");
+    setActiveTabState(COMPONENT_TABS.PLAYGROUND);
+    setBottomSheetTabState(COMPONENT_TABS.PLAYGROUND);
+    if (typeof window !== "undefined" && window.innerWidth < SCREEN_BREAKPOINTS.XL) {
+      setIsBottomSheetOpen(true);
+    } else {
+      setActiveDeckCardState(DECK_CARD_IDS.PLAYGROUND_STUDIO);
+    }
     if (openHandler) {
       openHandler();
     }
-    window.dispatchEvent(new CustomEvent("intense-ui:open-playground"));
   }, [openHandler]);
 
   const setOpenPlaygroundHandler = useCallback((handler: () => void) => {
     setOpenHandler(() => handler);
   }, []);
 
-  const openCode = useCallback(() => {
-    setActiveTabState("code");
-    if (openCodeHandler) {
-      openCodeHandler();
-    }
-    window.dispatchEvent(new CustomEvent("intense-ui:open-code"));
-  }, [openCodeHandler]);
+  const openCode = useCallback(
+    (codeTab: "example" | "custom" | "props" = CODE_TABS.CUSTOM) => {
+      setActiveTabState(COMPONENT_TABS.CODE);
+      setBottomSheetTabState(COMPONENT_TABS.CODE);
+      setActiveCodeTabState(codeTab);
+      if (typeof window !== "undefined" && window.innerWidth < SCREEN_BREAKPOINTS.XL) {
+        setIsBottomSheetOpen(true);
+      } else {
+        setActiveDeckCardState(DECK_CARD_IDS.CODE_PREVIEW);
+      }
+      if (openCodeHandler) {
+        openCodeHandler();
+      }
+    },
+    [openCodeHandler]
+  );
 
   const setOpenCodeHandler = useCallback((handler: () => void) => {
     setOpenCodeHandlerState(() => handler);
@@ -95,6 +157,14 @@ export function ComponentPlaygroundProvider({ children }: { children: React.Reac
         setCustomizedCode,
         registerPlayground,
         unregisterPlayground,
+        activeDeckCard,
+        setActiveDeckCard,
+        activeCodeTab,
+        setActiveCodeTab,
+        isBottomSheetOpen,
+        setIsBottomSheetOpen,
+        bottomSheetTab,
+        setBottomSheetTab,
         openPlayground,
         setOpenPlaygroundHandler,
         openCode,

@@ -1,13 +1,19 @@
 "use client";
 
-import React, { createContext, useContext, useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { TocItem } from "./types";
+import { LAYOUT_CUSTOM_EVENTS } from "../constants";
+import {
+  ComponentActiveTocContext,
+  ComponentActiveTocProvider,
+  useComponentActiveToc,
+} from "@/context/active-toc-context";
 
-export const ComponentActiveTocContext = createContext<string | undefined>(undefined);
-
-export function useComponentActiveToc() {
-  return useContext(ComponentActiveTocContext);
-}
+export {
+  ComponentActiveTocContext,
+  ComponentActiveTocProvider,
+  useComponentActiveToc,
+};
 
 export interface UseComponentTocOptions {
   tocItems?: TocItem[];
@@ -200,7 +206,7 @@ export function useComponentToc({ tocItems = [], mounted }: UseComponentTocOptio
         scrollToSectionRef.current(customEvent.detail.id);
       }
     };
-    window.addEventListener("intense-ui:focus-toc", handleFocusToc);
+    window.addEventListener(LAYOUT_CUSTOM_EVENTS.FOCUS_TOC, handleFocusToc);
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
@@ -209,7 +215,7 @@ export function useComponentToc({ tocItems = [], mounted }: UseComponentTocOptio
       window.removeEventListener("resize", handleScrollOrResize);
       window.removeEventListener("wheel", handleUserInterrupt);
       window.removeEventListener("touchmove", handleUserInterrupt);
-      window.removeEventListener("intense-ui:focus-toc", handleFocusToc);
+      window.removeEventListener(LAYOUT_CUSTOM_EVENTS.FOCUS_TOC, handleFocusToc);
     };
   }, [mounted, tocItems, triggerCodeLoad]);
 

@@ -216,3 +216,54 @@ html[data-theme-vt="active"]::view-transition-group(root) {
 html[data-theme-vt="active"]::view-transition-new(root) {
   clip-path: var(--theme-vt-clip-from);
 }
+
+/* Bento Marquee Keyframes & Utilities */
+@keyframes marquee-ltr {
+  from {
+    transform: translate3d(calc(-100% - var(--marquee-gap, 10px)), 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-100% - var(--marquee-gap, 10px)), 0, 0);
+  }
+}
+
+.marquee-track {
+  --marquee-gap: 10px;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--marquee-gap);
+  width: 100%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--marquee-gap);
+  will-change: transform;
+}
+
+.animate-marquee-ltr {
+  animation: marquee-ltr 32s linear infinite;
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 32s linear infinite;
+}
+
+.marquee-track:hover .animate-marquee-ltr,
+.marquee-track:hover .animate-marquee-rtl {
+  animation-play-state: paused;
+}

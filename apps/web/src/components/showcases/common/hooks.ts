@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
+import { useComponentPlayground } from "@/context";
 
 export function useShowcaseCodeUpdate(code: string) {
+  const { setCustomizedCode } = useComponentPlayground();
+
   useEffect(() => {
-    window.dispatchEvent(
-      new CustomEvent("intense-ui:code-update", {
-        detail: { id: "customization", code },
-      })
-    );
-  }, [code]);
+    if (setCustomizedCode) {
+      setCustomizedCode(code);
+    }
+  }, [code, setCustomizedCode]);
 }

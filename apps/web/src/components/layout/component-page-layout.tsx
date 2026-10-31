@@ -1,28 +1,41 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
 import { PackageManager } from "@/components/ui/package-manager";
-import { ComponentPagination } from "@/components/ui/component-pagination";
+
+// Bento modular subcomponents
+import {
+  DeckCardId,
+  DesktopBentoCanvas,
+  MobileBentoCanvas,
+} from "./bento";
+
+// Helper utilities and showcase registry
+import { resolveDirectDependencies } from "./helpers/dependencies-helper";
+import { getShowcaseDefinition } from "@/components/showcases/registry";
+
 import {
   ComponentPageLayoutProps,
   ComponentActiveTab,
   ComponentCodeLang,
-  ComponentSidebarHeader,
-  ComponentTocDock,
+  TocItem,
   ComponentBottomSheet,
-  ComponentInspectorSidebar,
+  ComponentSidebarHeader,
   ComponentTabPanel,
-  useComponentToc,
-  useComponentActiveToc,
-  ComponentActiveTocContext,
 } from "./layout-components";
 import {
   ComponentPlaygroundProvider,
   useComponentPlayground,
-} from "./playground-context";
-import { getComponentIcon } from "@/config/component-icons";
+  ComponentActiveTocProvider,
+  useComponentActiveToc,
+  ComponentActiveTocContext,
+} from "@/context";
+import {
+  CODE_TABS,
+} from "./constants";
 
+// Re-export existing layout components for backwards compatibility
 export type { ComponentPageLayoutProps, ComponentActiveTab, ComponentCodeLang };
 export {
   SidebarMotionSection,
@@ -42,7 +55,7 @@ export {
 export {
   ComponentPlaygroundProvider,
   useComponentPlayground,
-} from "./playground-context";
+} from "@/context/playground-context";
 
 function ComponentPageLayoutInner({
   title,
@@ -52,169 +65,320 @@ function ComponentPageLayoutInner({
   tocItems = [],
   codeContent,
   codes,
-  installContent,
-  slug,
+  slug = "component",
   usageCode,
   playgroundContent: propsPlaygroundContent,
   children,
 }: ComponentPageLayoutProps) {
-  const [packageManager, setPackageManager] = useState<PackageManager>("npm");
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const centerColumnRef = useRef<HTMLDivElement>(null);
-
-  const {
-    activeTab,
-    setActiveTab,
-    playgroundContent: dynamicPlaygroundContent,
-    previewContent: dynamicPreviewContent,
-    customizedCode,
-    hasPlayground,
-  } = useComponentPlayground();
-
-  const effectivePlaygroundContent =
-    dynamicPlaygroundContent || propsPlaygroundContent;
-  const isPlaygroundAvailable = hasPlayground || Boolean(propsPlaygroundContent);
-  const ComponentIcon = getComponentIcon(slug || title);
+  const cleanSlug = slug.toLowerCase().trim();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // TOC fallback: ensure at least one item exists
+  const effectiveTocItems = useMemo<TocItem[]>(
+    () => (tocItems && tocItems.length > 0 ? tocItems : [{ id: "default", label: title }]),
+    [tocItems, title]
+  );
+
+  // Active TOC variant
+  const [activeTocId, setActiveTocId] = useState<string>(
+    effectiveTocItems[0]?.id || "default"
+  );
+
+  // 1. Resolve Showcase Definition from clean showcase registry (no more switch statements!)
+  const showcaseDef = useMemo(() => getShowcaseDefinition(cleanSlug), [cleanSlug]);
+
+  // 2. Single unified customProps state replacing multiple per-component useState calls
+  const [customProps, setCustomProps] = useState<any>(() => showcaseDef.defaultProps);
+  const [isCustomizing, setIsCustomizing] = useState(false);
+
+  // Sync customProps whenever the component slug changes
   useEffect(() => {
-    const handleOpenPlayground = () => {
-      if (typeof window !== "undefined" && window.innerWidth < 1280) {
-        setIsBottomSheetOpen(true);
-      }
-    };
+    setCustomProps(showcaseDef.defaultProps);
+    setIsCustomizing(false);
+  }, [showcaseDef]);
 
-    window.addEventListener("intense-ui:open-playground", handleOpenPlayground);
+  // Package manager state
+  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
 
-    return () => {
-      window.removeEventListener("intense-ui:open-playground", handleOpenPlayground);
-    };
+  // 3. Centralized layout controls consumed from ComponentPlaygroundContext
+  const {
+    activeDeckCard,
+    setActiveDeckCard,
+    activeCodeTab,
+    setActiveCodeTab,
+    isBottomSheetOpen,
+    setIsBottomSheetOpen,
+    bottomSheetTab,
+    setBottomSheetTab,
+    openPlayground,
+    openCode,
+    playgroundContent: dynamicPlaygroundContent,
+    previewContent: dynamicPreviewContent,
+    customizedCode: contextCustomizedCode,
+    setCustomizedCode,
+  } = useComponentPlayground();
+
+  const handleBottomBarTabClick = useCallback(
+    (tab: ComponentActiveTab) => {
+      setIsBottomSheetOpen((prev) => {
+        if (prev && bottomSheetTab === tab) return false;
+        setBottomSheetTab(tab);
+        return true;
+      });
+    },
+    [bottomSheetTab, setIsBottomSheetOpen, setBottomSheetTab]
+  );
+
+  const handleViewCode = useCallback(() => {
+    openCode(CODE_TABS.CUSTOM);
+  }, [openCode]);
+
+  const handleTocItemClick = useCallback((id: string) => {
+    setActiveTocId(id);
+    setIsCustomizing(false);
   }, []);
 
-  const { activeTocId, isCodeLoading, scrollToSection } = useComponentToc({
-    tocItems,
-    mounted,
-  });
-
-  const handleBottomBarTabClick = (tab: ComponentActiveTab) => {
-    if (isBottomSheetOpen && activeTab === tab) {
-      setIsBottomSheetOpen(false);
-    } else {
-      setActiveTab(tab);
-      setIsBottomSheetOpen(true);
+  // Metadata resolution via showcase definition
+  const { activeScale, activeColor } = useMemo(() => {
+    if (showcaseDef.getMeta) {
+      return showcaseDef.getMeta(customProps);
     }
-  };
+    return { activeScale: "MD", activeColor: "" };
+  }, [showcaseDef, customProps]);
 
-  const tabPanel = (
-    <ComponentTabPanel
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      description={description}
-      dependencies={dependencies}
-      propsTable={propsTable}
-      slug={slug}
-      installContent={installContent}
-      usageCode={usageCode}
-      packageManager={packageManager}
-      onPackageManagerChange={setPackageManager}
-      isCodeLoading={isCodeLoading}
-      activeTocId={activeTocId}
-      codeContent={codeContent}
-      codes={codes}
-      playgroundContent={effectivePlaygroundContent}
-      previewContent={dynamicPreviewContent}
-      customizedCode={customizedCode}
-    />
+  const currentTocItem = useMemo(
+    () => effectiveTocItems.find((it) => it.id === activeTocId) || effectiveTocItems[0],
+    [effectiveTocItems, activeTocId]
+  );
+
+  const activeVariantName = isCustomizing
+    ? "Customized"
+    : currentTocItem?.label || activeTocId;
+
+  const formattedSlugName = useMemo(
+    () =>
+      slug
+        .split("-")
+        .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+        .join(" "),
+    [slug]
+  );
+
+  // Direct dependencies resolution using utility helper
+  const directDeps = useMemo(
+    () => resolveDirectDependencies(dependencies),
+    [dependencies]
+  );
+
+  // Customized code resolution
+  const customizedCode = useMemo(() => {
+    if (showcaseDef.generateCode) {
+      return showcaseDef.generateCode({
+        customProps,
+        title,
+        slug: cleanSlug,
+        contextCode: contextCustomizedCode,
+      });
+    }
+    return contextCustomizedCode || "";
+  }, [showcaseDef, customProps, title, cleanSlug, contextCustomizedCode]);
+
+  // Active displayed code
+  const currentDisplayedCode = useMemo(() => {
+    if (activeCodeTab === "custom" && customizedCode) {
+      return customizedCode;
+    }
+    return codes?.[activeTocId] || codeContent || usageCode || customizedCode || "";
+  }, [activeCodeTab, customizedCode, codes, activeTocId, codeContent, usageCode]);
+
+  useEffect(() => {
+    if (setCustomizedCode && customizedCode) {
+      setCustomizedCode(customizedCode);
+    }
+  }, [customizedCode, setCustomizedCode]);
+
+  // Stable onChange dispatcher: satisfies React.Dispatch<SetStateAction<any>> contract
+  // and marks customizing on every change.
+  const handleCustomPropsChange = useCallback(
+    (newPropsOrUpdater: any) => {
+      setCustomProps((prev: any) => {
+        const next =
+          typeof newPropsOrUpdater === "function"
+            ? newPropsOrUpdater(prev)
+            : newPropsOrUpdater;
+        return next;
+      });
+      setIsCustomizing(true);
+    },
+    []
+  );
+
+  // Clean stage preview delegate via showcase definition
+  const renderStagePreview = useCallback(
+    () =>
+      showcaseDef.renderPreview({
+        activeTocId,
+        customProps,
+        isCustomizing,
+        dynamicPreviewContent,
+        children,
+      }),
+    [showcaseDef, activeTocId, customProps, isCustomizing, dynamicPreviewContent, children]
+  );
+
+  // Clean playground studio delegate via showcase definition
+  const renderPlaygroundStudio = useCallback(
+    () =>
+      showcaseDef.renderPlayground
+        ? showcaseDef.renderPlayground({
+            customProps,
+            onChange: handleCustomPropsChange,
+            onViewCode: handleViewCode,
+            dynamicPlaygroundContent,
+            propsPlaygroundContent,
+            title,
+          })
+        : null,
+    [
+      showcaseDef,
+      customProps,
+      handleCustomPropsChange,
+      handleViewCode,
+      dynamicPlaygroundContent,
+      propsPlaygroundContent,
+      title,
+    ]
+  );
+
+  const tabPanel = useMemo(
+    () => (
+      <ComponentTabPanel
+        activeTab={bottomSheetTab}
+        onTabChange={setBottomSheetTab}
+        description={description}
+        dependencies={dependencies}
+        propsTable={propsTable}
+        slug={slug}
+        usageCode={usageCode}
+        packageManager={packageManager}
+        onPackageManagerChange={setPackageManager}
+        isCodeLoading={false}
+        activeTocId={activeTocId}
+        codeContent={codeContent}
+        codes={codes}
+        playgroundContent={renderPlaygroundStudio()}
+        previewContent={renderStagePreview()}
+        customizedCode={customizedCode}
+      />
+    ),
+    [
+      bottomSheetTab,
+      setBottomSheetTab,
+      description,
+      dependencies,
+      propsTable,
+      slug,
+      usageCode,
+      packageManager,
+      activeTocId,
+      codeContent,
+      codes,
+      renderPlaygroundStudio,
+      renderStagePreview,
+      customizedCode,
+    ]
   );
 
   return (
-    <div className="relative flex w-full min-w-0 items-start gap-4 xl:gap-8">
-      {/* CENTER COLUMN: Component Previews & Interactive Canvas in natural page flow */}
-      <div
-        id="center-content-column"
-        ref={centerColumnRef}
-        className="relative flex-1 min-w-0 flex flex-col px-0 sm:px-2 md:px-4 lg:px-6 md:pb-32"
-      >
-        {/* Component Header / Breadcrumbs & Intro */}
-        <div className="relative z-10 pt-2 pb-6 max-w-4xl space-y-3">
-          <Breadcrumbs currentLabel={title} className="mb-2" />
-          <div className="flex items-center gap-3 sm:gap-3.5">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] border border-[var(--theme-primary)]/20 shadow-xs flex items-center justify-center shrink-0">
-              <ComponentIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase tracking-wide">
-              {title}
-            </h1>
+    <ComponentActiveTocProvider value={activeTocId}>
+      <div className="relative w-full h-[calc(100vh-5.5rem)] min-h-[660px] bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-y-auto 2xl:overflow-hidden">
+        {/* Main Workspace Frame */}
+        <div className="w-full h-full flex items-stretch p-3 pt-1 gap-3 xl:gap-4 overflow-hidden shrink-0">
+          <div className="shrink-0 hidden md:flex h-full">
+            <SidebarWrapper isInline={true} />
           </div>
 
-          {description && (
-            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
-              {description}
-            </p>
-          )}
+          {/* Desktop Bento Canvas (>= xl) */}
+          <DesktopBentoCanvas
+            cleanSlug={cleanSlug}
+            slug={slug}
+            title={title}
+            formattedSlugName={formattedSlugName}
+            activeTocId={activeTocId}
+            currentTocItem={currentTocItem}
+            effectiveTocItems={effectiveTocItems}
+            handleTocItemClick={handleTocItemClick}
+            isCustomizing={isCustomizing}
+            setIsCustomizing={setIsCustomizing}
+            activeVariantName={activeVariantName}
+            activeScale={activeScale}
+            activeColor={activeColor}
+            renderStagePreview={renderStagePreview}
+            renderPlaygroundStudio={renderPlaygroundStudio}
+            handleViewCode={handleViewCode}
+            directDeps={directDeps}
+            packageManager={packageManager}
+            setPackageManager={setPackageManager}
+            usageCode={usageCode}
+            dependencies={dependencies}
+            currentDisplayedCode={currentDisplayedCode}
+            propsTable={propsTable}
+            activeDeckCard={activeDeckCard}
+            setActiveDeckCard={setActiveDeckCard}
+            activeCodeTab={activeCodeTab}
+            setActiveCodeTab={setActiveCodeTab}
+          />
+
+          {/* Mobile & Tablet Responsive Canvas (< xl) */}
+          <MobileBentoCanvas
+            slug={slug}
+            title={title}
+            formattedSlugName={formattedSlugName}
+            activeTocId={activeTocId}
+            currentTocItem={currentTocItem}
+            effectiveTocItems={effectiveTocItems}
+            handleTocItemClick={handleTocItemClick}
+            isCustomizing={isCustomizing}
+            setIsCustomizing={setIsCustomizing}
+            activeVariantName={activeVariantName}
+            activeScale={activeScale}
+            renderStagePreview={renderStagePreview}
+            handleViewCode={handleViewCode}
+            directDeps={directDeps}
+            packageManager={packageManager}
+            onOpenPlayground={openPlayground}
+          />
         </div>
 
-        {/* Component Previews & Interactive Canvas */}
-        <ComponentActiveTocContext.Provider value={activeTocId}>
-          <div className="relative z-10 w-full min-w-0">
-            {mounted && children}
+        {/* Mobile & Tablet (< xl): Bottom Sheet Drawer Modal */}
+        <ComponentBottomSheet
+          isOpen={isBottomSheetOpen}
+          onClose={() => setIsBottomSheetOpen(false)}
+          title={title}
+          slug={slug}
+          activeTab={bottomSheetTab}
+          onTabChange={setBottomSheetTab}
+          hasPlayground={true}
+        >
+          {tabPanel}
+        </ComponentBottomSheet>
 
-            {slug && (
-              <div className="max-w-3xl mx-auto pt-10 sm:pt-16 pb-28 sm:pb-20">
-                <ComponentPagination currentSlug={slug} />
-              </div>
-            )}
-          </div>
-        </ComponentActiveTocContext.Provider>
+        {/* Mobile & Tablet (< xl): Controller Bar */}
+        <ComponentSidebarHeader
+          title={title}
+          slug={slug}
+          activeTab={bottomSheetTab}
+          onTabChange={handleBottomBarTabClick}
+          isBottomBar={true}
+          isOpen={isBottomSheetOpen}
+          hasPlayground={true}
+        />
       </div>
-
-      {/* Mobile & Tablet (< xl): Gesture-Friendly Bottom Sheet Drawer Modal */}
-      <ComponentBottomSheet
-        isOpen={isBottomSheetOpen}
-        onClose={() => setIsBottomSheetOpen(false)}
-        title={title}
-        slug={slug}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        hasPlayground={isPlaygroundAvailable}
-      >
-        {tabPanel}
-      </ComponentBottomSheet>
-
-      {/* Mobile & Tablet (< xl): Fixed Bottom Controller Bar */}
-      <ComponentSidebarHeader
-        title={title}
-        slug={slug}
-        activeTab={activeTab}
-        onTabChange={handleBottomBarTabClick}
-        isBottomBar
-        isOpen={isBottomSheetOpen}
-        hasPlayground={isPlaygroundAvailable}
-      />
-
-      {/* Desktop (>= xl): Sticky Inspector Sidebar */}
-      <ComponentInspectorSidebar
-        title={title}
-        slug={slug}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        hasPlayground={isPlaygroundAvailable}
-      >
-        {tabPanel}
-      </ComponentInspectorSidebar>
-
-      {/* Bottom Floating Navigation (Table of Contents Dock) */}
-      <ComponentTocDock
-        tocItems={tocItems}
-        activeTocId={activeTocId}
-        centerColumnRef={centerColumnRef}
-        onItemClick={scrollToSection}
-      />
-    </div>
+    </ComponentActiveTocProvider>
   );
 }
 

@@ -5,11 +5,12 @@ import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TocItem } from "./types";
+import { LAYOUT_CUSTOM_EVENTS } from "../constants";
 
-const BUTTON_WIDTH = 76;
-const PADDING_X = 54;
+const BUTTON_WIDTH = 72;
+const PADDING_X = 42;
 const DOCK_HEIGHT = 66;
-const CORNER_RADIUS = 28;
+const CORNER_RADIUS = 26;
 
 /**
  * Generates a closed SVG path for the dock container.
@@ -17,9 +18,9 @@ const CORNER_RADIUS = 28;
  * All corners and notch transitions are continuous cubic Beziers with C1 continuity,
  * ensuring a shallow, gentle wave cradle and zero border overlap.
  */
-function generateDockPath(X: number, W: number, H = 66, R = 28) {
-  const Wn = 58;
-  const D = 38;
+function generateDockPath(X: number, W: number, H = 66, R = 26) {
+  const Wn = 50;
+  const D = 36;
   const k = R * 0.55228475;
 
   return [
@@ -48,21 +49,32 @@ export interface ComponentTocDockProps {
   onItemClick?: (id: string) => void;
   className?: string;
   isInline?: boolean;
+  containerWidth?: number;
 }
 
-export function ComponentTocDock({
+const DOCK_SPRING_CONFIG = {
+  type: "spring" as const,
+  stiffness: 280,
+  damping: 20,
+  mass: 0.75,
+};
+
+export const ComponentTocDock = React.memo(function ComponentTocDock({
   tocItems,
   activeTocId,
   centerColumnRef,
   onItemClick,
   className,
   isInline,
+  containerWidth,
 }: ComponentTocDockProps) {
   if (tocItems.length === 0) return null;
 
   const [centerX, setCenterX] = React.useState<number | null>(null);
 
   React.useEffect(() => {
+    if (isInline) return;
+
     const updatePosition = () => {
       const target =
         (centerColumnRef && centerColumnRef.current) ||
@@ -93,39 +105,65 @@ export function ComponentTocDock({
       window.removeEventListener("scroll", updatePosition);
       observer?.disconnect();
     };
-  }, [centerColumnRef]);
+  }, [centerColumnRef, isInline]);
 
-  const allItems = tocItems.map((item, idx) => ({ ...item, idx }));
+  const allItems = React.useMemo(
+    () => tocItems.map((item, idx) => ({ ...item, idx })),
+    [tocItems]
+  );
   const N = allItems.length;
-  const MAX = 7;
-  const activeIdx = allItems.findIndex((i) => i.id === activeTocId) ?? 0;
+  const maxButtons = containerWidth
+    ? Math.max(3, Math.min(5, Math.floor((containerWidth - 70) / BUTTON_WIDTH)))
+    : 5;
+  const MAX = maxButtons;
+  const rawIdx = allItems.findIndex((i) => i.id === activeTocId);
+  const activeIdx = rawIdx >= 0 ? rawIdx : 0;
 
   type VisibleBtn =
     | { type: "item"; item: (typeof allItems)[0] }
     | { type: "prev" | "next"; count: number; targetIdx: number };
 
-  let visibleButtons: VisibleBtn[] = [];
-  if (N <= MAX) {
-    visibleButtons = allItems.map((item) => ({ type: "item", item }));
-  } else {
-    if (activeIdx < 5) {
-      visibleButtons = [
-        ...allItems.slice(0, 6).map((item) => ({ type: "item" as const, item })),
-        { type: "next", count: N - 6, targetIdx: 6 },
+  const visibleButtons = React.useMemo<VisibleBtn[]>(() => {
+    if (N <= MAX) {
+      return allItems.map((item) => ({ type: "item", item }));
+    }
+    const K = MAX - 1;
+    if (activeIdx < K) {
+      return [
+        ...allItems.slice(0, K).map((item) => ({ type: "item" as const, item })),
+        {
+          type: "next",
+          count: N - K,
+          targetIdx: Math.min(N - 1, activeIdx + 1),
+        },
       ];
-    } else if (activeIdx >= N - 4) {
-      visibleButtons = [
-        { type: "prev", count: N - 6, targetIdx: N - 7 },
-        ...allItems.slice(N - 6, N).map((item) => ({ type: "item" as const, item })),
+    } else if (activeIdx >= N - (K - 1)) {
+      return [
+        {
+          type: "prev",
+          count: N - K,
+          targetIdx: Math.max(0, activeIdx - 1),
+        },
+        ...allItems.slice(N - K, N).map((item) => ({ type: "item" as const, item })),
       ];
     } else {
-      visibleButtons = [
-        { type: "prev", count: activeIdx - 2, targetIdx: activeIdx - 3 },
-        ...allItems.slice(activeIdx - 2, activeIdx + 3).map((item) => ({ type: "item" as const, item })),
-        { type: "next", count: N - (activeIdx + 3), targetIdx: activeIdx + 3 },
+      const start = activeIdx - Math.floor((K - 1) / 2);
+      const end = start + (K - 1);
+      return [
+        {
+          type: "prev",
+          count: start,
+          targetIdx: Math.max(0, activeIdx - 1),
+        },
+        ...allItems.slice(start, end).map((item) => ({ type: "item" as const, item })),
+        {
+          type: "next",
+          count: N - end,
+          targetIdx: Math.min(N - 1, activeIdx + 1),
+        },
       ];
     }
-  }
+  }, [allItems, N, activeIdx, MAX]);
 
   const activeBtnIndex = visibleButtons.findIndex(
     (btn) => btn.type === "item" && btn.item.id === activeTocId
@@ -140,14 +178,10 @@ export function ComponentTocDock({
   const totalWidth = PADDING_X * 2 + visibleButtons.length * BUTTON_WIDTH;
   const activeX = PADDING_X + safeActiveIndex * BUTTON_WIDTH + BUTTON_WIDTH / 2;
 
-  const springConfig = {
-    type: "spring" as const,
-    stiffness: 280,
-    damping: 20,
-    mass: 0.75,
-  };
-
-  const dockPath = generateDockPath(activeX, totalWidth, DOCK_HEIGHT, CORNER_RADIUS);
+  const dockPath = React.useMemo(
+    () => generateDockPath(activeX, totalWidth, DOCK_HEIGHT, CORNER_RADIUS),
+    [activeX, totalWidth]
+  );
 
   // Bouncy ball animation controls & state
   const ballControls = useAnimationControls();
@@ -274,7 +308,7 @@ export function ComponentTocDock({
           <motion.path
             d={dockPath}
             animate={{ d: dockPath }}
-            transition={springConfig}
+            transition={DOCK_SPRING_CONFIG}
             className="fill-white dark:fill-[#121215] stroke-black/[0.12] dark:stroke-white/15"
             strokeWidth="1"
           />
@@ -339,13 +373,13 @@ export function ComponentTocDock({
                         onItemClick(item.id);
                       } else {
                         window.dispatchEvent(
-                          new CustomEvent("intense-ui:focus-toc", {
+                          new CustomEvent(LAYOUT_CUSTOM_EVENTS.FOCUS_TOC, {
                             detail: { id: item.id },
                           })
                         );
                       }
                     }}
-                    className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-pointer select-none"
+                    className="flex flex-col items-center justify-center h-full w-[72px] relative shrink-0 pointer-events-auto cursor-pointer select-none"
                   >
                     {/* Inactive Icon (+50% size: 24px) - Completely hidden & invisible when active to eliminate double-render */}
                     <div
@@ -385,20 +419,23 @@ export function ComponentTocDock({
                   transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   key={`more-${btn.type}`}
                   onClick={() => {
-                    const targetItem = allItems[btn.targetIdx];
+                    const jumpIdx = btn.type === "next"
+                      ? Math.min(N - 1, activeIdx + 1)
+                      : Math.max(0, activeIdx - 1);
+                    const targetItem = allItems[jumpIdx] || allItems[btn.targetIdx];
                     if (targetItem) {
                       if (onItemClick) {
                         onItemClick(targetItem.id);
                       } else {
                         window.dispatchEvent(
-                          new CustomEvent("intense-ui:focus-toc", {
+                          new CustomEvent(LAYOUT_CUSTOM_EVENTS.FOCUS_TOC, {
                             detail: { id: targetItem.id },
                           })
                         );
                       }
                     }
                   }}
-                  className="flex flex-col items-center justify-center h-full w-[76px] relative shrink-0 pointer-events-auto cursor-pointer group select-none hover:opacity-90 active:scale-95 transition-all"
+                  className="flex flex-col items-center justify-center h-full w-[72px] relative shrink-0 pointer-events-auto cursor-pointer group select-none hover:opacity-90 active:scale-95 transition-all"
                 >
                   <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-6 h-6 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors flex items-center justify-center [&_svg]:w-5 [&_svg]:h-5">
                     {btn.type === "prev" ? (
@@ -408,7 +445,7 @@ export function ComponentTocDock({
                     )}
                   </div>
                   <span className="absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-zinc-200 font-medium">
-                    +{btn.count} {btn.type === "next" ? "more" : "prev"}
+                    +{btn.count} {btn.type === "next" ? (btn.count === 1 ? "item" : "items") : "prev"}
                   </span>
                 </motion.div>
               );
@@ -418,4 +455,4 @@ export function ComponentTocDock({
       </div>
     </div>
   );
-}
+});

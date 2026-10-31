@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { StackedCardsContainer } from "@/components/ui/stacked-card";
 import { useShowcaseCodeUpdate } from "@/components/showcases/common";
-import { useComponentPlayground } from "@/components/layout/component-page-layout";
+import { useComponentPlayground } from "@/context";
 import { NAVBAR_EXAMPLES } from "./constants";
 import { CustomNavbarProps } from "./types";
 import {
@@ -15,24 +15,15 @@ import {
 import { generateNavbarCode } from "./code-generator";
 
 export function NavbarShowcase() {
-  const [customProps, setCustomProps] =
-    useState<CustomNavbarProps>(DEFAULT_CUSTOM_PROPS);
-  const { registerPlayground, unregisterPlayground, setCustomizedCode } =
-    useComponentPlayground();
+  const [customProps, setCustomProps] = useState<CustomNavbarProps>(DEFAULT_CUSTOM_PROPS);
+  const { registerPlayground, unregisterPlayground } = useComponentPlayground();
 
-  const code = generateNavbarCode(customProps);
-  useShowcaseCodeUpdate(code);
-
-  useEffect(() => {
-    setCustomizedCode(code);
-  }, [code, setCustomizedCode]);
+  // Syncs generated code into context (no window events)
+  useShowcaseCodeUpdate(generateNavbarCode(customProps));
 
   useEffect(() => {
     registerPlayground(
-      <NavbarPlaygroundStudio
-        customProps={customProps}
-        onChange={setCustomProps}
-      />,
+      <NavbarPlaygroundStudio customProps={customProps} onChange={setCustomProps} />,
       <NavbarLivePreview customProps={customProps} />
     );
     return () => {

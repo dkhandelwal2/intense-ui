@@ -23,6 +23,8 @@ export interface BreadcrumbPlaygroundStudioProps {
   customProps: CustomProps;
   onChange: React.Dispatch<React.SetStateAction<CustomProps>>;
   className?: string;
+  hidePreview?: boolean;
+  onViewCode?: () => void;
 }
 
 const VARIANT_INFO: Record<
@@ -56,7 +58,7 @@ const SIZE_INFO: Record<
   lg: { label: "Large", badge: "LG", desc: "spacious touch target" },
 };
 
-export function BreadcrumbLivePreview({
+export const BreadcrumbLivePreview = React.memo(function BreadcrumbLivePreview({
   customProps,
 }: {
   customProps: CustomProps;
@@ -66,16 +68,19 @@ export function BreadcrumbLivePreview({
       <BreadcrumbVariantRenderer id="customization" customProps={customProps} />
     </div>
   );
-}
+});
 
-export function BreadcrumbPlaygroundStudio({
+export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygroundStudio({
   customProps,
   onChange,
   className,
+  hidePreview = false,
+  onViewCode,
 }: BreadcrumbPlaygroundStudioProps) {
-  const modifiedCount = getModifiedCount(customProps);
+  const modifiedCount = React.useMemo(() => getModifiedCount(customProps), [customProps]);
+  const handleReset = React.useCallback(() => onChange(DEFAULT_CUSTOM_PROPS), [onChange]);
 
-  const steps: PlaygroundStudioStepData[] = [
+  const steps: PlaygroundStudioStepData[] = React.useMemo(() => [
     // Step 1: Variant (Palette: Theme Primary - Violet)
     {
       id: "variant",
@@ -294,16 +299,23 @@ export function BreadcrumbPlaygroundStudio({
         </div>
       ),
     },
-  ];
+  ], [customProps, onChange]);
+
+  const previewElement = React.useMemo(
+    () => (hidePreview ? undefined : <BreadcrumbLivePreview customProps={customProps} />),
+    [hidePreview, customProps]
+  );
 
   return (
     <PlaygroundStudio
       steps={steps}
-      preview={<BreadcrumbLivePreview customProps={customProps} />}
+      preview={previewElement}
+      hidePreview={hidePreview}
       modifiedCount={modifiedCount}
-      onReset={() => onChange(DEFAULT_CUSTOM_PROPS)}
+      onReset={handleReset}
+      onViewCode={onViewCode}
       description="Interact with props below to customize your breadcrumb trail in real time."
       className={className}
     />
   );
-}
+});

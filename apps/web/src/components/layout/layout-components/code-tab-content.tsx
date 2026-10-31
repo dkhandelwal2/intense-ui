@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Code, Code2, Sparkles, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "@/components/ui/code-block";
+import { LAYOUT_CUSTOM_EVENTS } from "../constants";
 import { SectionHeader } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
 import { CodeSkeleton } from "@/components/ui/skeleton";
@@ -60,12 +61,12 @@ export function CodeTabContent({
       }
     };
 
-    window.addEventListener("intense-ui:code-update", handleCodeUpdate);
-    window.addEventListener("intense-ui:open-code", handleOpenCode);
+    window.addEventListener(LAYOUT_CUSTOM_EVENTS.CODE_UPDATE, handleCodeUpdate);
+    window.addEventListener(LAYOUT_CUSTOM_EVENTS.OPEN_CODE, handleOpenCode);
 
     return () => {
-      window.removeEventListener("intense-ui:code-update", handleCodeUpdate);
-      window.removeEventListener("intense-ui:open-code", handleOpenCode);
+      window.removeEventListener(LAYOUT_CUSTOM_EVENTS.CODE_UPDATE, handleCodeUpdate);
+      window.removeEventListener(LAYOUT_CUSTOM_EVENTS.OPEN_CODE, handleOpenCode);
     };
   }, []);
 

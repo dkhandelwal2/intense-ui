@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { DocsSidebar } from "./docs-sidebar";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
+import { SCREEN_BREAKPOINTS } from "./constants";
 
 export interface SidebarWrapperProps {
   className?: string;
@@ -72,7 +73,7 @@ export function SidebarWrapper({ className, isInline, isEmbedded }: SidebarWrapp
 
   // Auto-collapse on tablet / small desktop (<1280px)
   React.useEffect(() => {
-    const mql = window.matchMedia("(max-width: 1280px)");
+    const mql = window.matchMedia(`(max-width: ${SCREEN_BREAKPOINTS.XL}px)`);
     const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
       setIsSmallScreen(e.matches);
     };

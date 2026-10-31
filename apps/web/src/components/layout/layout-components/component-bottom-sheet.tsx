@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SCREEN_BREAKPOINTS } from "../constants";
 import { ComponentActiveTab } from "./types";
 import { ComponentTabControls } from "./component-tab-controls";
 import { ComponentTitleBadge } from "./component-title-badge";
@@ -43,7 +44,7 @@ export function ComponentBottomSheet({
 
   // Lock body scroll safely only when actually open on mobile/tablet (< 1280px)
   useEffect(() => {
-    if (typeof window === "undefined" || window.innerWidth >= 1280) return;
+    if (typeof window === "undefined" || window.innerWidth >= SCREEN_BREAKPOINTS.XL) return;
 
     if (isOpen) {
       document.body.classList.add("overflow-hidden");
@@ -67,7 +68,7 @@ export function ComponentBottomSheet({
   // Auto-close on desktop resize (>= 1280px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280 && isOpen) {
+      if (window.innerWidth >= SCREEN_BREAKPOINTS.XL && isOpen) {
         onClose();
       }
     };
