@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Copy, Check, ArrowUp } from "lucide-react";
 import { siteConfig } from "@/config/site";
-import { GithubIcon, XTwitterIcon, LinkedinIcon, InstagramIcon } from "@/icons";
+import { GithubIcon, XTwitterIcon, LinkedinIcon, InstagramIcon } from "@/assets/icons";
 
 export function KoraExpandingFooter() {
   const footerRef = useRef<HTMLDivElement>(null);

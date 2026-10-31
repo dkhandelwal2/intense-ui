@@ -1,0 +1,4 @@
+export const SIDEBAR_DIMENSIONS = {
+  COLLAPSED_WIDTH: 68,
+  EXPANDED_WIDTH: 250,
+} as const;

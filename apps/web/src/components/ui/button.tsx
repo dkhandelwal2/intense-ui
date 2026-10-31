@@ -21,7 +21,7 @@ export function Button({
   size = "md",
   ...props
 }: ButtonProps) {
-  const MotionButton = motion.button as React.ComponentType<any>;
+  const MotionButton = motion.button;
 
   const sizeStyles = {
     sm: "px-3 py-1.5 text-xs rounded-lg gap-1.5",

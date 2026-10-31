@@ -125,6 +125,7 @@ export const AccordionPlaygroundStudio = React.memo(function AccordionPlayground
               Border Accent Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.borderColor || ""}
               defaultValue=""
               onChange={(color) =>
@@ -145,6 +146,7 @@ export const AccordionPlaygroundStudio = React.memo(function AccordionPlayground
               Heading Title Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.headingColor || ""}
               defaultValue=""
               onChange={(color) =>
@@ -162,6 +164,7 @@ export const AccordionPlaygroundStudio = React.memo(function AccordionPlayground
               Content Text Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.contentColor || ""}
               defaultValue=""
               onChange={(color) =>

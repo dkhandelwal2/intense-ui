@@ -70,6 +70,7 @@ export interface ShowcasePlaygroundParams<TProps = any> {
   dynamicPlaygroundContent?: React.ReactNode;
   propsPlaygroundContent?: React.ReactNode;
   title: string;
+  hidePreview?: boolean;
 }
 
 export interface ShowcaseDefinition<TProps = any> {
@@ -96,11 +97,11 @@ export const accordionShowcaseDefinition: ShowcaseDefinition<AccordionCustomProp
     }
     return <AccordionVariantRenderer id={activeTocId} customProps={customProps} />;
   },
-  renderPlayground: ({ customProps, onChange, onViewCode }) => (
+  renderPlayground: ({ customProps, onChange, onViewCode, hidePreview = true }) => (
     <AccordionPlaygroundStudio
       customProps={customProps}
       onChange={onChange}
-      hidePreview={true}
+      hidePreview={hidePreview}
       className="w-full h-full flex-1 min-h-0 flex flex-col"
       onViewCode={onViewCode}
     />
@@ -122,11 +123,11 @@ export const navbarShowcaseDefinition: ShowcaseDefinition<CustomNavbarProps> = {
     }
     return <NavbarVariantRenderer id={activeTocId} customProps={customProps} />;
   },
-  renderPlayground: ({ customProps, onChange, onViewCode }) => (
+  renderPlayground: ({ customProps, onChange, onViewCode, hidePreview = true }) => (
     <NavbarPlaygroundStudio
       customProps={customProps}
       onChange={onChange}
-      hidePreview={true}
+      hidePreview={hidePreview}
       className="w-full h-full flex-1 min-h-0 flex flex-col"
       onViewCode={onViewCode}
     />
@@ -148,11 +149,11 @@ export const breadcrumbShowcaseDefinition: ShowcaseDefinition<BreadcrumbCustomPr
     }
     return <BreadcrumbVariantRenderer id={activeTocId} customProps={customProps} />;
   },
-  renderPlayground: ({ customProps, onChange, onViewCode }) => (
+  renderPlayground: ({ customProps, onChange, onViewCode, hidePreview = true }) => (
     <BreadcrumbPlaygroundStudio
       customProps={customProps}
       onChange={onChange}
-      hidePreview={true}
+      hidePreview={hidePreview}
       className="w-full h-full flex-1 min-h-0 flex flex-col"
       onViewCode={onViewCode}
     />
@@ -193,6 +194,7 @@ export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinitio
       dynamicPlaygroundContent,
       propsPlaygroundContent,
       title,
+      hidePreview = true,
     }) => {
       if (dynamicPlaygroundContent) {
         return dynamicPlaygroundContent;
@@ -206,6 +208,7 @@ export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinitio
           customProps={customProps}
           onChange={onChange}
           onViewCode={onViewCode}
+          hidePreview={hidePreview}
           className="w-full h-full flex-1 min-h-0 flex flex-col"
         />
       );

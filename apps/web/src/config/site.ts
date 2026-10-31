@@ -37,6 +37,10 @@ export const EXTERNAL_LINKS = {
   EMAIL: "intenseui.official@gmail.com",
   MAILTO: "mailto:intenseui.official@gmail.com",
   NPM: NPM_LINKS,
+  WEATHER: {
+    FORECAST_API: "https://api.open-meteo.com/v1/forecast",
+    REVERSE_GEOCODE_API: "https://api.bigdatacloud.net/data/reverse-geocode-client",
+  },
   getGitHubApiUrl: (repo: string = GITHUB_REPO) => `https://api.github.com/repos/${repo}`,
 } as const;
 

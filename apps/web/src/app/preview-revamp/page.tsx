@@ -6,20 +6,16 @@ import {
   Terminal,
   Sliders,
   Code2,
-  Copy,
   Check,
   Sun,
   Moon,
   ArrowUpRight,
   ShieldAlert,
   MessageCircle,
-  X,
   Package,
   Activity,
-  ExternalLink,
   Layers,
   Clock,
-  Sparkles,
   MapPin,
   CloudSun,
   CloudRain,
@@ -31,7 +27,7 @@ import {
   Command,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { GithubIcon } from "@/icons";
+import { GithubIcon } from "@/assets/icons";
 import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
 import { KoraExpandingFooter } from "@/components/layout/kora-expanding-footer";
 import { useTheme } from "next-themes";
@@ -51,7 +47,7 @@ import {
 } from "@/components/showcases/nav-bar/_components";
 import { generateNavbarCode } from "@/components/showcases/nav-bar/code-generator";
 import { CustomNavbarProps } from "@/components/showcases/nav-bar/types";
-import { ComponentTocDock } from "@/components/layout/layout-components/component-toc-dock";
+import { ComponentTocDock } from "@/components/layout/toc-dock";
 import { InstallTabContent } from "@/components/layout/layout-components/install-tab-content";
 import {
   getDependencyLogo,
@@ -646,7 +642,7 @@ function WidgetCapsule() {
 }
 
 export default function PreviewRevampPage() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme: _theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -669,7 +665,7 @@ export default function PreviewRevampPage() {
   const [copiedCode, setCopiedCode] = useState(false);
 
   // Region 8: Dependencies State
-  const [copiedDeps, setCopiedDeps] = useState(false);
+  const [_copiedDeps, _setCopiedDeps] = useState(false);
   const [copiedChip, setCopiedChip] = useState<string | null>(null);
   const [depFilter, setDepFilter] = useState<"all" | "direct" | "peer">("all");
 
@@ -751,7 +747,7 @@ export default function PreviewRevampPage() {
     setIsCustomizing(false);
   };
 
-  const copyToClipboard = (text: string, setter: (val: boolean) => void) => {
+  const _copyToClipboard = (text: string, setter: (val: boolean) => void) => {
     navigator.clipboard.writeText(text);
     setter(true);
     setTimeout(() => setter(false), 2000);
@@ -772,7 +768,7 @@ export default function PreviewRevampPage() {
   };
 
   const allDepNames = (navBarDoc.dependencies || []).map((d) => d.name).join(" ");
-  const installAllDepsCommand = getInstallCommand(allDepNames || "framer-motion clsx tailwind-merge");
+  const _installAllDepsCommand = getInstallCommand(allDepNames || "framer-motion clsx tailwind-merge");
 
   const copyChip = (name: string) => {
     navigator.clipboard.writeText(getInstallCommand(name));

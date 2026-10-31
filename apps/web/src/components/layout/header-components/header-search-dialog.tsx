@@ -4,7 +4,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useHeaderSearch } from "./use-header-search";
+import { useHeaderSearch } from "@/hooks/use-header-search";
 
 export interface HeaderSearchDialogProps {
   isOpen: boolean;

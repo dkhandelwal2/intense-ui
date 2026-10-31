@@ -10,7 +10,6 @@ import {
 } from "@registry/components/accordion";
 import { RTL_ITEMS, DEFAULT_ITEMS } from "../constants";
 import { CustomProps } from "../types";
-import { cn } from "@/lib/utils";
 
 interface AccordionVariantRendererProps {
   id: string;

@@ -6,8 +6,8 @@ import { Package, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getNpmPackageUrl } from "@/components/docs";
 import { DependencyItem, DependenciesCardProps } from "./types";
-import { PEER_DEPENDENCIES, ALL_MARQUEE_ROWS } from "./constants";
-import { renderDependencyLogo } from "./dependency-logos";
+import { PEER_DEPENDENCIES } from "./constants";
+import { renderDependencyLogo } from "@/assets/icons";
 
 function fillTrack(items: DependencyItem[]): DependencyItem[] {
   let res = [...items];

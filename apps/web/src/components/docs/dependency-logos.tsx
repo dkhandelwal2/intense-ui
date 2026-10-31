@@ -1,1 +1,1 @@
-export * from "@/icons/dependency-logos";
+export * from "@/assets/icons/dependency-logos";

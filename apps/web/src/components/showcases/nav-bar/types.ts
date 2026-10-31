@@ -1,4 +1,3 @@
-import React from "react";
 import { NavbarVariant, NavbarSize } from "@/components/ui/nav-bar";
 import { ShowcaseExampleItem } from "@/components/showcases/common";
 

@@ -4,7 +4,6 @@ import React from "react";
 import {
   NavbarGooey,
   NavbarFloating,
-  NavbarSize,
 } from "@/components/ui/nav-bar";
 import { CustomNavbarProps } from "../types";
 import { cn } from "@/lib/utils";

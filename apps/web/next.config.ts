@@ -110,6 +110,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   async redirects() {
     return [
       {

@@ -1,4 +1,3 @@
-import React from "react";
 import { CustomNavbarProps } from "../../types";
 
 export const NAVBAR_VARIANTS = [

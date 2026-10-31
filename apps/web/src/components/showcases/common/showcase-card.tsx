@@ -23,7 +23,7 @@ import { ComponentSpecDetail } from "./spec-detail";
 export function ShowcaseCard({
   id,
   label,
-  icon,
+  icon: _icon,
   description,
   infoContent,
   spec,

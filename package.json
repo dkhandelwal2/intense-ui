@@ -8,6 +8,17 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspaces",
-    "build": "npm run build --workspaces"
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspace=web",
+    "lint": "npm run lint --workspace=web",
+    "check:imports": "node scripts/check-unused-imports.mjs",
+    "fix:imports": "node scripts/check-unused-imports.mjs --fix",
+    "check:files": "knip --include files",
+    "check:unused": "knip",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "knip": "^6.44.0"
   }
 }

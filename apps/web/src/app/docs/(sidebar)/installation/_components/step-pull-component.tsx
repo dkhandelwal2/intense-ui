@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Package,
-  Terminal,
   RotateCcw,
   Play,
   Copy,

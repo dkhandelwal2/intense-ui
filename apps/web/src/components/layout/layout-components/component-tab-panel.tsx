@@ -4,9 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { PackageManager } from "@/components/ui/package-manager";
 import { ComponentActiveTab } from "./types";
-import { PreviewTabContent } from "./preview-tab-content";
 import { InstallTabContent } from "./install-tab-content";
-import { CodeTabContent } from "./code-tab-content";
+import { DeckCodeViewer } from "@/components/layout/bento/bento-card-deck";
 
 export interface ComponentTabPanelProps {
   activeTab: ComponentActiveTab;
@@ -19,70 +18,44 @@ export interface ComponentTabPanelProps {
   usageCode?: string;
   packageManager: PackageManager;
   onPackageManagerChange: (pm: PackageManager) => void;
-  isCodeLoading: boolean;
+  isCodeLoading?: boolean;
   activeTocId?: string;
   codeContent?: string;
   codes?: Record<string, string>;
   playgroundContent?: React.ReactNode;
   previewContent?: React.ReactNode;
   customizedCode?: string | null;
+  activeCodeTab?: "example" | "custom" | "props";
+  setActiveCodeTab?: (tab: "example" | "custom" | "props") => void;
+  currentDisplayedCode?: string;
 }
 
 export function ComponentTabPanel({
   activeTab,
-  onTabChange,
-  description,
+  onTabChange: _onTabChange,
   dependencies,
   propsTable,
-  slug,
+  slug = "component",
   installContent,
   usageCode,
   packageManager,
   onPackageManagerChange,
-  isCodeLoading,
-  activeTocId,
-  codeContent,
-  codes,
+  activeTocId = "default",
   playgroundContent,
-  previewContent,
-  customizedCode,
+  activeCodeTab = "example",
+  setActiveCodeTab = () => {},
+  currentDisplayedCode = "",
 }: ComponentTabPanelProps) {
   return (
     <div className="w-full flex-1 min-h-0 flex flex-col">
-      {activeTab === "playground" && (
-        <motion.div
-          key="tab-playground"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.15 }}
-          className="w-full flex-1 min-h-0 flex flex-col pb-1"
-        >
-          {playgroundContent}
-        </motion.div>
-      )}
-
-      {activeTab === "info" && (
-        <motion.div
-          key="tab-info"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.15 }}
-          className="space-y-4"
-        >
-          <PreviewTabContent
-            description={description}
-            dependencies={dependencies}
-            propsTable={propsTable}
-          />
-        </motion.div>
-      )}
-
+      {/* 1. CLI Installation */}
       {activeTab === "install" && (
         <motion.div
           key="tab-install"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15 }}
+          className="w-full flex-1 min-h-0 flex flex-col"
         >
           <InstallTabContent
             slug={slug}
@@ -95,6 +68,20 @@ export function ComponentTabPanel({
         </motion.div>
       )}
 
+      {/* 2. Playground Studio */}
+      {activeTab === "playground" && (
+        <motion.div
+          key="tab-playground"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.15 }}
+          className="w-full flex-1 min-h-0 flex flex-col pb-1"
+        >
+          {playgroundContent}
+        </motion.div>
+      )}
+
+      {/* 3. Preview & Source Code (Exact same as Desktop Card Deck 6) */}
       {activeTab === "code" && (
         <motion.div
           key="tab-code"
@@ -103,12 +90,12 @@ export function ComponentTabPanel({
           transition={{ duration: 0.15 }}
           className="flex flex-col flex-1 min-h-0 h-full"
         >
-          <CodeTabContent
-            isCodeLoading={isCodeLoading}
+          <DeckCodeViewer
+            activeCodeTab={activeCodeTab}
+            setActiveCodeTab={setActiveCodeTab}
             activeTocId={activeTocId}
-            codeContent={codeContent}
-            codes={codes}
-            customizedCode={customizedCode}
+            currentDisplayedCode={currentDisplayedCode}
+            propsTable={propsTable}
           />
         </motion.div>
       )}

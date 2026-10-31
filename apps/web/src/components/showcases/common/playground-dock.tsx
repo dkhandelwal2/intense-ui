@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PlaygroundDockItem, PlaygroundDockProps } from "./types";
+import { PlaygroundDockProps } from "./types";
 
 const BUTTON_WIDTH = 56;
 const PADDING_X = 16;

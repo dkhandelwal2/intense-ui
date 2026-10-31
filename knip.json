@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@5/overview/configuration-schema.json",
+  "workspaces": {
+    "apps/web": {
+      "next": true,
+      "project": ["src/**/*.{js,jsx,ts,tsx}"]
+    },
+    "packages/registry": {
+      "entry": ["src/index.ts", "src/components/**/*.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  }
+}

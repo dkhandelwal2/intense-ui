@@ -5,7 +5,7 @@ import { motion, type MotionValue } from "framer-motion";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { GithubIcon, SparkleStarIcon } from "@/icons";
+import { GithubIcon, SparkleStarIcon } from "@/assets/icons";
 import { siteConfig } from "@/config/site";
 import { useGitHubStars } from "@/hooks/use-github-stars";
 

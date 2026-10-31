@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Gem } from "lucide-react";
 import {
   RuntimeDependencies,
@@ -11,7 +10,7 @@ import {
   ContactCard,
 } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
-import { SidebarMotionSection } from "./sidebar-motion-section";
+import { ScrollMotionSection as SidebarMotionSection } from "@/components/ui/scroll-motion-section";
 
 export interface PreviewTabContentProps {
   description?: React.ReactNode;

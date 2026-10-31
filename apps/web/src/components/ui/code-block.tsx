@@ -23,7 +23,7 @@ export interface CodeBlockProps {
   onPackageManagerChange?: (pm: PackageManager) => void;
 }
 
-export function CodeBlock({
+export const CodeBlock = React.memo(function CodeBlock({
   code,
   language = "tsx",
   filename,
@@ -60,27 +60,16 @@ export function CodeBlock({
   // Single-line CLI command strip (e.g., npx shadcn@latest add ...)
   if (isSingleLine) {
     return (
-      <div
-        className={cn(
-          "w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] px-2.5 sm:px-3 py-2 flex items-center justify-between gap-2.5 shadow-xs transition-colors relative",
-          className
-        )}
-      >
+      <div className={cn("w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] px-2.5 sm:px-3 py-2 flex items-center justify-between gap-2.5 shadow-xs transition-colors relative", className)}>
         {packageManager && onPackageManagerChange && (
           <div className="flex items-center gap-2 shrink-0">
-            <PackageManagerDropdown
-              value={packageManager}
-              onChange={onPackageManagerChange}
-              size="sm"
-            />
+            <PackageManagerDropdown value={packageManager} onChange={onPackageManagerChange} size="sm" />
             <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-800 shrink-0" />
           </div>
         )}
         <div className="flex items-center gap-2.5 overflow-x-auto hide-scrollbar min-w-0 flex-1 font-mono text-xs sm:text-[13px]">
           <span className="text-[var(--theme-primary)] font-bold select-none shrink-0">&gt;</span>
-          <span className="text-zinc-800 dark:text-zinc-200 whitespace-nowrap select-all font-medium">
-            {code}
-          </span>
+          <span className="text-zinc-800 dark:text-zinc-200 whitespace-nowrap select-all font-medium">{code}</span>
         </div>
         <button
           type="button"
@@ -88,11 +77,7 @@ export function CodeBlock({
           className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xs transition-all shrink-0 active:scale-95 cursor-pointer"
           title="Copy command"
         >
-          {hasCopied ? (
-            <Check className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" />
-          ) : (
-            <Copy className="h-3.5 w-3.5" />
-          )}
+          {hasCopied ? <Check className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
           <span className="sr-only">Copy</span>
         </button>
       </div>
@@ -209,6 +194,6 @@ export function CodeBlock({
       </div>
     </div>
   );
-}
+});
 
 export { TerminalWindow } from "./terminal-window";

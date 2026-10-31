@@ -2,8 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Monitor, SlidersHorizontal, Terminal, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AnimatedTerminalIcon, AnimatedCodeIcon } from "@/assets/icons";
+import { PlaygroundReorderIcon } from "@/components/showcases/common";
 import { ComponentActiveTab } from "./types";
 
 export interface ComponentTabControlsProps {
@@ -21,7 +22,7 @@ export interface ComponentTabControlsProps {
  * Single source of truth for component inspector tab navigation
  * (Terminal Install button + Floating glass capsule with fluid spring indicator).
  */
-export function ComponentTabControls({
+export const ComponentTabControls = React.memo(function ComponentTabControls({
   activeTab,
   onTabChange,
   hasPlayground = true,
@@ -37,26 +38,18 @@ export function ComponentTabControls({
     {
       id: "install" as const,
       title: "CLI Installation",
-      icon: Terminal,
     },
     ...(hasPlayground
       ? [
         {
           id: "playground" as const,
           title: "Playground Studio",
-          icon: SlidersHorizontal,
         },
       ]
       : []),
     {
-      id: "info" as const,
-      title: "Preview",
-      icon: Monitor,
-    },
-    {
       id: "code" as const,
-      title: "Code",
-      icon: Code,
+      title: "Preview & Source Code",
     },
   ];
 
@@ -66,7 +59,6 @@ export function ComponentTabControls({
       <div className="relative flex items-center p-0.5 sm:p-1 bg-zinc-100/90 dark:bg-black/50 border border-black/[0.08] dark:border-white/[0.12] rounded-full backdrop-blur-2xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_2px_rgba(255,255,255,0.06)] shrink-0">
         {tabs.map((tab) => {
           const active = isTabActive(tab.id);
-          const Icon = tab.icon;
           return (
             <button
               key={tab.id}
@@ -88,18 +80,25 @@ export function ComponentTabControls({
                   transition={{ type: "spring", stiffness: 450, damping: 32 }}
                 />
               )}
-              <Icon
-                className={cn(
-                  "relative z-10 w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors duration-200",
-                  active
-                    ? "text-[var(--theme-primary)] drop-shadow-[0_0_8px_var(--theme-primary)]"
-                    : "text-zinc-500 dark:text-zinc-400"
-                )}
-              />
+              {tab.id === "install" && (
+                <div className="relative z-10 flex items-center justify-center">
+                  <AnimatedTerminalIcon size="sm" active={active} />
+                </div>
+              )}
+              {tab.id === "playground" && (
+                <div className="relative z-10 flex items-center justify-center p-0.5">
+                  <PlaygroundReorderIcon size="sm" />
+                </div>
+              )}
+              {tab.id === "code" && (
+                <div className="relative z-10 flex items-center justify-center">
+                  <AnimatedCodeIcon size="sm" active={active} />
+                </div>
+              )}
             </button>
           );
         })}
       </div>
     </div>
   );
-}
+});

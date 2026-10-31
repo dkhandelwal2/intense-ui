@@ -8,7 +8,7 @@ import { AnimatedLogoLoader } from "./animated-logo-loader";
 interface AppLoaderProps {
   /**
    * Whether to enable the initial splash screen on first visit
-   * @default true
+   * @default false (disabled by default for instant LCP and optimal Web Vitals)
    */
   showSplash?: boolean;
   /**
@@ -19,7 +19,7 @@ interface AppLoaderProps {
 }
 
 export function AppLoader({
-  showSplash: enableSplash = true,
+  showSplash: enableSplash = false,
   showRouteLoader = true,
 }: AppLoaderProps) {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export function AppLoader({
   const [isNavigating, setIsNavigating] = useState(false);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 1. Initial Splash Screen on Website First Visit
+  // 1. Initial Splash Screen on Website First Visit (Opt-in only)
   useEffect(() => {
     if (!enableSplash) return;
 
@@ -44,7 +44,7 @@ export function AppLoader({
         const timer = setTimeout(() => {
           setShowSplash(false);
           sessionStorage.setItem("intense_splash_dismissed", "true");
-        }, 1200);
+        }, 1000);
 
         return () => clearTimeout(timer);
       }
@@ -92,14 +92,9 @@ export function AppLoader({
       }
     };
 
-    const handleCustomStart = () => {
-      setIsNavigating(true);
-    };
-
+    const handleCustomStart = () => setIsNavigating(true);
     const handleCustomStop = () => {
-      setTimeout(() => {
-        setIsNavigating(false);
-      }, 150);
+      setTimeout(() => setIsNavigating(false), 120);
     };
 
     document.addEventListener("click", handleLinkClick, true);
@@ -117,45 +112,37 @@ export function AppLoader({
   // 3. Dismiss Route Loader When Route Finishes
   useEffect(() => {
     if (isNavigating) {
-      const timer = setTimeout(() => {
-        setIsNavigating(false);
-      }, 250);
-
+      const timer = setTimeout(() => setIsNavigating(false), 200);
       return () => clearTimeout(timer);
     }
   }, [pathname, searchParams]);
 
-  // Safety fallback: auto-clear navigation after 3.5 seconds
+  // Safety fallback: auto-clear navigation after 2.5 seconds
   useEffect(() => {
     if (isNavigating) {
-      const fallback = setTimeout(() => {
-        setIsNavigating(false);
-      }, 3500);
+      const fallback = setTimeout(() => setIsNavigating(false), 2500);
       return () => clearTimeout(fallback);
     }
   }, [isNavigating]);
 
   return (
     <>
-      {/* 🚀 ROUTE CHANGE FLOATING LOGO LOADER MODAL */}
+      {/* 🚀 NON-BLOCKING TOP ROUTE PROGRESS BAR (Zero INP / LCP penalty) */}
       <AnimatePresence>
         {isNavigating && (
           <motion.div
-            key="route-change-loader"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96, filter: "blur(6px)", pointerEvents: "none" }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-background/60 backdrop-blur-md pointer-events-auto"
-          >
-            <div className="relative p-7 sm:p-9 rounded-3xl bg-background/85 dark:bg-[#0c0c0e]/85 border border-border/40 shadow-2xl backdrop-blur-2xl flex flex-col items-center">
-              <AnimatedLogoLoader size="md" message="NAVIGATING..." />
-            </div>
-          </motion.div>
+            key="route-progress-bar"
+            initial={{ scaleX: 0, opacity: 1 }}
+            animate={{ scaleX: 0.82, opacity: 1 }}
+            exit={{ scaleX: 1, opacity: 0 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            style={{ transformOrigin: "0% 50%" }}
+            className="fixed top-0 left-0 right-0 h-[2px] z-[99999] bg-[var(--theme-primary)] pointer-events-none shadow-[0_0_10px_var(--theme-primary)]"
+          />
         )}
       </AnimatePresence>
 
-      {/* 🌟 CINEMATIC FULLSCREEN SPLASH SCREEN */}
+      {/* 🌟 CINEMATIC FULLSCREEN SPLASH SCREEN (Opt-in only) */}
       <AnimatePresence>
         {showSplash && (
           <motion.div
@@ -166,7 +153,7 @@ export function AppLoader({
               scale: 1.04,
               filter: "blur(12px)",
               pointerEvents: "none",
-              transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+              transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
             }}
             className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-background/98 backdrop-blur-3xl w-screen h-screen overflow-hidden p-6 cursor-pointer"
             onClick={() => setShowSplash(false)}
@@ -180,21 +167,14 @@ export function AppLoader({
   );
 }
 
-// Convenient alias for developers
 export const PageLoader = AppLoader;
 
-/**
- * Programmatic helper to trigger route loader from code
- */
 export function triggerRouteLoader() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("intense:route-loading-start"));
   }
 }
 
-/**
- * Programmatic helper to dismiss route loader from code
- */
 export function dismissRouteLoader() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("intense:route-loading-stop"));

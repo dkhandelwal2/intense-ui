@@ -3,19 +3,19 @@
 import React, { useRef, createContext, useContext } from "react";
 import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useScrollContainer } from "@/components/layout/scroll-context";
 
 const StackedCardsContext = createContext<{ scrollYProgress: MotionValue<number> } | null>(null);
 
 export function StackedCardsContainer({
   children,
   className,
+  scrollContainer,
 }: {
   children: React.ReactNode;
   className?: string;
+  scrollContainer?: React.RefObject<HTMLElement | null>;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollContainer = useScrollContainer();
 
   // Track scroll progress across the entire stack of cards
   const { scrollYProgress } = useScroll({
@@ -130,11 +130,11 @@ export function StackedCard({
           style={
             isLast
               ? undefined
-              : ({
+              : {
                 scale,
                 opacity,
                 y,
-              } as any)
+              }
           }
           className="w-full origin-top"
         >

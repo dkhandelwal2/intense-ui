@@ -199,7 +199,7 @@ export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygrou
           thumbnail: <span className="text-sm">🏠</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.showIcons,
-          onToggleChange: (checked) =>
+          onToggleChange: (checked: boolean) =>
             onChange((prev) => ({ ...prev, showIcons: checked })),
           onSelect: () =>
             onChange((prev) => ({ ...prev, showIcons: !prev.showIcons })),
@@ -211,7 +211,7 @@ export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygrou
           thumbnail: <span className="text-sm">📂</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.hasDropdown,
-          onToggleChange: (checked) =>
+          onToggleChange: (checked: boolean) =>
             onChange((prev) => ({
               ...prev,
               hasDropdown: checked,
@@ -231,7 +231,7 @@ export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygrou
           thumbnail: <span className="text-sm">⋯</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.hasCollapsed,
-          onToggleChange: (checked) =>
+          onToggleChange: (checked: boolean) =>
             onChange((prev) => ({
               ...prev,
               hasCollapsed: checked,
@@ -265,6 +265,7 @@ export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygrou
               Active Page Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.activeColor || ""}
               defaultValue=""
               onChange={(color) =>
@@ -285,6 +286,7 @@ export const BreadcrumbPlaygroundStudio = React.memo(function BreadcrumbPlaygrou
               Separator Delimiter Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.separatorColor || ""}
               defaultValue=""
               onChange={(color) =>

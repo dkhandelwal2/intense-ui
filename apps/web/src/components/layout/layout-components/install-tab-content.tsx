@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Info, Terminal, Code } from "lucide-react";
-import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/ui/package-manager";
 import { CodeBlock } from "@/components/ui/code-block";
 import {
   RuntimeDependencies,
@@ -13,7 +12,7 @@ import {
 } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
 import { getComponentAddCommand } from "@/config/site";
-import { SidebarMotionSection } from "./sidebar-motion-section";
+import { ScrollMotionSection as SidebarMotionSection } from "@/components/ui/scroll-motion-section";
 
 export interface InstallTabContentProps {
   slug?: string;

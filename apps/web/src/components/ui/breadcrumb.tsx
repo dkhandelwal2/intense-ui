@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, MoreHorizontal, ChevronDown } from "lucide-react";
+import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type BreadcrumbVariant = "default" | "chips" | "outline" | "ghost";
@@ -359,7 +359,7 @@ BreadcrumbEllipsis.displayName = "BreadcrumbEllipsis";
 
 export interface BreadcrumbDropdownItemProps {
   href?: string;
-  onClick?: (e?: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
   icon?: React.ReactNode;
   active?: boolean;
@@ -495,7 +495,7 @@ export interface BreadcrumbCollapsedItem {
   href?: string;
   icon?: React.ReactNode;
   isCurrentPage?: boolean;
-  onClick?: (e?: any) => void;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export interface BreadcrumbCollapsedProps

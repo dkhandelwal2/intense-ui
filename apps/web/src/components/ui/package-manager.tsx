@@ -10,7 +10,7 @@ import {
   PACKAGE_MANAGERS,
   type PackageManager,
   type PackageManagerLogoProps,
-} from "@/icons";
+} from "@/assets/icons";
 
 export { PackageManagerLogo, PACKAGE_MANAGERS, type PackageManager, type PackageManagerLogoProps };
 

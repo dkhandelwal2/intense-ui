@@ -220,11 +220,11 @@ export function ComponentPreview({
 
   return (
     <div className="flex items-center justify-center min-h-[50vh] w-full p-4 lg:p-10">
-      <div className="text-muted-foreground text-center">
-        Interactive preview coming soon
-      </div>
-      {/* {preview ?? (
-      )} */}
+      {preview ?? (
+        <div className="text-muted-foreground text-center">
+          Interactive preview coming soon
+        </div>
+      )}
     </div>
   );
 }

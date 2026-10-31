@@ -6,13 +6,11 @@ import { PackageManager } from "@/components/ui/package-manager";
 
 // Bento modular subcomponents
 import {
-  DeckCardId,
-  DesktopBentoCanvas,
-  MobileBentoCanvas,
+  BentoCanvas,
+  resolveDirectDependencies,
 } from "./bento";
 
-// Helper utilities and showcase registry
-import { resolveDirectDependencies } from "./helpers/dependencies-helper";
+// Showcase registry
 import { getShowcaseDefinition } from "@/components/showcases/registry";
 
 import {
@@ -28,8 +26,6 @@ import {
   ComponentPlaygroundProvider,
   useComponentPlayground,
   ComponentActiveTocProvider,
-  useComponentActiveToc,
-  ComponentActiveTocContext,
 } from "@/context";
 import {
   CODE_TABS,
@@ -70,12 +66,7 @@ function ComponentPageLayoutInner({
   playgroundContent: propsPlaygroundContent,
   children,
 }: ComponentPageLayoutProps) {
-  const [mounted, setMounted] = useState(false);
   const cleanSlug = slug.toLowerCase().trim();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // TOC fallback: ensure at least one item exists
   const effectiveTocItems = useMemo<TocItem[]>(
@@ -232,7 +223,7 @@ function ComponentPageLayoutInner({
 
   // Clean playground studio delegate via showcase definition
   const renderPlaygroundStudio = useCallback(
-    () =>
+    (options?: { hidePreview?: boolean }) =>
       showcaseDef.renderPlayground
         ? showcaseDef.renderPlayground({
             customProps,
@@ -241,6 +232,7 @@ function ComponentPageLayoutInner({
             dynamicPlaygroundContent,
             propsPlaygroundContent,
             title,
+            hidePreview: options?.hidePreview ?? true,
           })
         : null,
     [
@@ -270,9 +262,12 @@ function ComponentPageLayoutInner({
         activeTocId={activeTocId}
         codeContent={codeContent}
         codes={codes}
-        playgroundContent={renderPlaygroundStudio()}
+        playgroundContent={renderPlaygroundStudio({ hidePreview: false })}
         previewContent={renderStagePreview()}
         customizedCode={customizedCode}
+        activeCodeTab={activeCodeTab}
+        setActiveCodeTab={setActiveCodeTab}
+        currentDisplayedCode={currentDisplayedCode}
       />
     ),
     [
@@ -290,20 +285,21 @@ function ComponentPageLayoutInner({
       renderPlaygroundStudio,
       renderStagePreview,
       customizedCode,
+      activeCodeTab,
+      setActiveCodeTab,
+      currentDisplayedCode,
     ]
   );
 
   return (
     <ComponentActiveTocProvider value={activeTocId}>
-      <div className="relative w-full h-[calc(100vh-5.5rem)] min-h-[660px] bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-y-auto 2xl:overflow-hidden">
+      <div className="relative w-full h-full flex-1 min-h-0 bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-hidden xl:min-h-[660px]">
         {/* Main Workspace Frame */}
-        <div className="w-full h-full flex items-stretch p-3 pt-1 gap-3 xl:gap-4 overflow-hidden shrink-0">
-          <div className="shrink-0 hidden md:flex h-full">
-            <SidebarWrapper isInline={true} />
-          </div>
+        <div className="w-full h-full flex items-stretch p-2 sm:p-3 pt-1 gap-3 xl:gap-4 overflow-hidden shrink-0">
+          <SidebarWrapper isInline={true} />
 
-          {/* Desktop Bento Canvas (>= xl) */}
-          <DesktopBentoCanvas
+          {/* Unified Bento Canvas (Responsive across Desktop and Mobile) */}
+          <BentoCanvas
             cleanSlug={cleanSlug}
             slug={slug}
             title={title}
@@ -320,6 +316,7 @@ function ComponentPageLayoutInner({
             renderStagePreview={renderStagePreview}
             renderPlaygroundStudio={renderPlaygroundStudio}
             handleViewCode={handleViewCode}
+            onOpenPlayground={openPlayground}
             directDeps={directDeps}
             packageManager={packageManager}
             setPackageManager={setPackageManager}
@@ -331,26 +328,6 @@ function ComponentPageLayoutInner({
             setActiveDeckCard={setActiveDeckCard}
             activeCodeTab={activeCodeTab}
             setActiveCodeTab={setActiveCodeTab}
-          />
-
-          {/* Mobile & Tablet Responsive Canvas (< xl) */}
-          <MobileBentoCanvas
-            slug={slug}
-            title={title}
-            formattedSlugName={formattedSlugName}
-            activeTocId={activeTocId}
-            currentTocItem={currentTocItem}
-            effectiveTocItems={effectiveTocItems}
-            handleTocItemClick={handleTocItemClick}
-            isCustomizing={isCustomizing}
-            setIsCustomizing={setIsCustomizing}
-            activeVariantName={activeVariantName}
-            activeScale={activeScale}
-            renderStagePreview={renderStagePreview}
-            handleViewCode={handleViewCode}
-            directDeps={directDeps}
-            packageManager={packageManager}
-            onOpenPlayground={openPlayground}
           />
         </div>
 

@@ -148,7 +148,7 @@ export function NavbarPlaygroundStudio({
           thumbnail: <span className="text-sm">🏠</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.showIcons,
-          onToggleChange: (checked) =>
+          onToggleChange: (checked: boolean) =>
             onChange((prev) => ({ ...prev, showIcons: checked })),
           onSelect: () =>
             onChange((prev) => ({ ...prev, showIcons: !prev.showIcons })),
@@ -160,7 +160,7 @@ export function NavbarPlaygroundStudio({
           thumbnail: <span className="text-xs font-mono font-bold">PRO</span>,
           actionType: "toggle",
           toggleChecked: !!customProps.showBadges,
-          onToggleChange: (checked) =>
+          onToggleChange: (checked: boolean) =>
             onChange((prev) => ({ ...prev, showBadges: checked })),
           onSelect: () =>
             onChange((prev) => ({ ...prev, showBadges: !prev.showBadges })),
@@ -186,6 +186,7 @@ export function NavbarPlaygroundStudio({
               Active Segment Color
             </span>
             <ColorGrid
+              size="sm"
               value={customProps.activeColor || ""}
               defaultValue=""
               onChange={(color) =>

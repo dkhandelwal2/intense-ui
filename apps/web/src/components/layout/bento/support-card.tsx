@@ -2,7 +2,7 @@
 
 import React from "react";
 import { MessageCircle, ShieldAlert, ArrowUpRight } from "lucide-react";
-import { GithubIcon } from "@/icons";
+import { GithubIcon } from "@/assets/icons";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { SupportCardProps } from "./types";

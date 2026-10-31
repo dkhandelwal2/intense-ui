@@ -1,5 +1,4 @@
 import React from "react";
-import { PackageManager } from "@/components/ui/package-manager";
 
 export interface TocItem {
   id: string;
@@ -7,7 +6,7 @@ export interface TocItem {
   icon?: React.ReactNode;
 }
 
-export type ComponentActiveTab = "info" | "code" | "install" | "playground";
+export type ComponentActiveTab = "install" | "playground" | "code" | "info";
 export type ComponentCodeLang = "tsx" | "js";
 
 export interface ComponentPageLayoutProps {

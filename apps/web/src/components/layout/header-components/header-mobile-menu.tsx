@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { GithubIcon, SparkleStarIcon } from "@/icons";
+import { GithubIcon, SparkleStarIcon } from "@/assets/icons";
 import { useGitHubStars } from "@/hooks/use-github-stars";
 
 export interface HeaderMobileMenuProps {

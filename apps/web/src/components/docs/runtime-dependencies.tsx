@@ -4,7 +4,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Boxes, ShieldCheck, ChevronDown, ExternalLink } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
-import { PackageManager, PackageManagerSelector } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/ui/package-manager";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "@/components/ui/section-header";
 import { DependencyItem } from "./dependency-constants";

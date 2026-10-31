@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code, Code2, Sparkles, SlidersHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Code, Code2, Sparkles } from "lucide-react";
 import { CodeBlock } from "@/components/ui/code-block";
 import { LAYOUT_CUSTOM_EVENTS } from "../constants";
 import { SectionHeader } from "@/components/docs";

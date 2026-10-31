@@ -94,10 +94,10 @@ export function SiteHeader() {
               maxWidth: isMenuOpen ? 820 : headerMaxWidth,
             }}
             className={cn(
-              "w-full h-14 rounded-full flex items-center justify-between px-5 sm:px-6 pointer-events-auto backdrop-blur-2xl relative border transition-all duration-300 will-change-[max-width] max-lg:!max-w-full",
+              "w-full h-14 rounded-full flex items-center justify-between px-5 sm:px-6 pointer-events-auto backdrop-blur-xl relative border transition-[background-color,border-color,box-shadow] duration-200 will-change-[max-width] max-lg:!max-w-full",
               isScrolled || isMenuOpen
-                ? "bg-white/95 dark:bg-[#121215]/98 border-black/[0.08] dark:border-white/20 shadow-[0_4px_16px_rgba(0,0,0,0.05),0_12px_36px_-6px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.95),0_1px_0_0_rgba(255,255,255,0.25)_inset,0_0_30px_0_rgba(255,255,255,0.05)]"
-                : "bg-background/80 dark:bg-[#0c0c0e]/80 border-transparent shadow-none"
+                ? "bg-white/95 dark:bg-[#121215]/98 border-zinc-200/90 dark:border-white/20 shadow-[0_4px_16px_rgba(0,0,0,0.06),0_12px_36px_-6px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.95),0_1px_0_0_rgba(255,255,255,0.25)_inset,0_0_30px_0_rgba(255,255,255,0.05)]"
+                : "bg-background/80 dark:bg-[#0c0c0e]/80 border-zinc-200/40 dark:border-white/10 lg:border-transparent shadow-none"
             )}
           >
             {/* Left side: Logo & Version Badge */}

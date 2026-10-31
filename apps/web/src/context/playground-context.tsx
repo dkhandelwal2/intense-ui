@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import { ComponentActiveTab } from "@/components/layout/layout-components/types";
 import { DeckCardId } from "@/components/layout/bento/types";
 import {
@@ -38,7 +38,7 @@ export interface ComponentPlaygroundContextValue {
   setOpenCodeHandler: (handler: () => void) => void;
 }
 
-const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue>({
+const defaultContext: ComponentPlaygroundContextValue = {
   activeTab: "playground",
   setActiveTab: () => {},
   hasPlayground: false,
@@ -48,7 +48,6 @@ const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue
   setCustomizedCode: () => {},
   registerPlayground: () => {},
   unregisterPlayground: () => {},
-
   activeDeckCard: 5,
   setActiveDeckCard: () => {},
   activeCodeTab: "example",
@@ -57,12 +56,13 @@ const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue
   setIsBottomSheetOpen: () => {},
   bottomSheetTab: "playground",
   setBottomSheetTab: () => {},
-
   openPlayground: () => {},
   setOpenPlaygroundHandler: () => {},
   openCode: () => {},
   setOpenCodeHandler: () => {},
-});
+};
+
+const ComponentPlaygroundContext = createContext<ComponentPlaygroundContextValue>(defaultContext);
 
 export function ComponentPlaygroundProvider({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTabState] = useState<ComponentActiveTab>(COMPONENT_TABS.PLAYGROUND);
@@ -145,32 +145,26 @@ export function ComponentPlaygroundProvider({ children }: { children: React.Reac
     setOpenCodeHandlerState(() => handler);
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      activeTab, setActiveTab, hasPlayground: playgroundContent !== null,
+      playgroundContent, previewContent, customizedCode, setCustomizedCode,
+      registerPlayground, unregisterPlayground, activeDeckCard, setActiveDeckCard,
+      activeCodeTab, setActiveCodeTab, isBottomSheetOpen, setIsBottomSheetOpen,
+      bottomSheetTab, setBottomSheetTab, openPlayground, setOpenPlaygroundHandler,
+      openCode, setOpenCodeHandler,
+    }),
+    [
+      activeTab, setActiveTab, playgroundContent, previewContent, customizedCode,
+      setCustomizedCode, registerPlayground, unregisterPlayground, activeDeckCard,
+      setActiveDeckCard, activeCodeTab, setActiveCodeTab, isBottomSheetOpen,
+      setIsBottomSheetOpen, bottomSheetTab, setBottomSheetTab, openPlayground,
+      setOpenPlaygroundHandler, openCode, setOpenCodeHandler,
+    ]
+  );
+
   return (
-    <ComponentPlaygroundContext.Provider
-      value={{
-        activeTab,
-        setActiveTab,
-        hasPlayground: playgroundContent !== null,
-        playgroundContent,
-        previewContent,
-        customizedCode,
-        setCustomizedCode,
-        registerPlayground,
-        unregisterPlayground,
-        activeDeckCard,
-        setActiveDeckCard,
-        activeCodeTab,
-        setActiveCodeTab,
-        isBottomSheetOpen,
-        setIsBottomSheetOpen,
-        bottomSheetTab,
-        setBottomSheetTab,
-        openPlayground,
-        setOpenPlaygroundHandler,
-        openCode,
-        setOpenCodeHandler,
-      }}
-    >
+    <ComponentPlaygroundContext.Provider value={contextValue}>
       {children}
     </ComponentPlaygroundContext.Provider>
   );

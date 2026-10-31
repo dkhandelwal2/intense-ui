@@ -52,15 +52,7 @@ export interface SupportCardProps {
   style?: React.CSSProperties;
 }
 
-export type WeatherStatus = "idle" | "requesting" | "success" | "denied" | "error";
-
-export interface WeatherState {
-  temp: number | null;
-  condition: string | null;
-  city: string | null;
-  code: number | null;
-  status: WeatherStatus;
-}
+export type { WeatherState, WeatherStatus } from "@/hooks/use-live-weather";
 
 export interface GenericCustomProps {
   color: string;
@@ -79,8 +71,8 @@ export interface GenericPlaygroundStudioProps {
   hidePreview?: boolean;
 }
 
-export interface DesktopBentoCanvasProps {
-  cleanSlug: string;
+export interface BentoCanvasProps {
+  cleanSlug?: string;
   slug: string;
   title: string;
   formattedSlugName: string;
@@ -92,41 +84,26 @@ export interface DesktopBentoCanvasProps {
   setIsCustomizing: (val: boolean) => void;
   activeVariantName: string;
   activeScale: string;
-  activeColor: string;
+  activeColor?: string;
   renderStagePreview: () => React.ReactNode;
-  renderPlaygroundStudio: () => React.ReactNode;
-  handleViewCode: () => void;
+  renderPlaygroundStudio?: () => React.ReactNode;
+  handleViewCode?: () => void;
+  onOpenPlayground?: () => void;
   directDeps: DependencyItem[];
   packageManager: PackageManager;
-  setPackageManager: (pm: PackageManager) => void;
+  setPackageManager?: (pm: PackageManager) => void;
   usageCode?: string;
   dependencies?: { name: string; command: string }[];
-  currentDisplayedCode: string;
+  currentDisplayedCode?: string;
   propsTable?: React.ReactNode;
-  activeDeckCard: DeckCardId;
-  setActiveDeckCard: (id: DeckCardId) => void;
-  activeCodeTab: "example" | "custom" | "props";
-  setActiveCodeTab: (tab: "example" | "custom" | "props") => void;
+  activeDeckCard?: DeckCardId;
+  setActiveDeckCard?: (id: DeckCardId) => void;
+  activeCodeTab?: "example" | "custom" | "props";
+  setActiveCodeTab?: (tab: "example" | "custom" | "props") => void;
 }
 
-export interface MobileBentoCanvasProps {
-  slug: string;
-  title: string;
-  formattedSlugName: string;
-  activeTocId: string;
-  currentTocItem?: TocItem;
-  effectiveTocItems: TocItem[];
-  handleTocItemClick: (id: string) => void;
-  isCustomizing: boolean;
-  setIsCustomizing: (val: boolean) => void;
-  activeVariantName: string;
-  activeScale: string;
-  renderStagePreview: () => React.ReactNode;
-  handleViewCode: () => void;
-  directDeps: DependencyItem[];
-  packageManager: PackageManager;
-  onOpenPlayground: () => void;
-}
+export type DesktopBentoCanvasProps = BentoCanvasProps;
+export type MobileBentoCanvasProps = BentoCanvasProps;
 
 export interface StageBackgroundSvgProps {
   width: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export type NavbarSize = "sm" | "md" | "lg";
@@ -339,7 +339,7 @@ export interface NavbarProps extends React.ComponentPropsWithoutRef<"nav"> {
 }
 
 export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
-  ({ className, variant = "default", size = "md", children, ...props }, ref) => {
+  ({ className, variant = "default", size: _size = "md", children, ...props }, ref) => {
     return (
       <nav
         ref={ref}

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Ban, Layers, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Ban, Layers } from "lucide-react";
 import { componentsConfig } from "@/config/components";
 import { cn } from "@/lib/utils";
 

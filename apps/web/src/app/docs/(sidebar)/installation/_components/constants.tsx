@@ -6,7 +6,6 @@ import {
   Sparkles,
   Box,
 } from "lucide-react";
-import { PackageManager } from "@/components/ui/package-manager";
 
 import { ComponentListItem } from "./types";
 export * from "./types";

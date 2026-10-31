@@ -3,7 +3,6 @@
 import React, { useRef, useEffect } from "react";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { SCREEN_BREAKPOINTS } from "../constants";
 import { ComponentActiveTab } from "./types";
 import { ComponentTabControls } from "./component-tab-controls";
@@ -126,7 +125,7 @@ export function ComponentBottomSheet({
                 dragControls.start(e);
               }
             }}
-            className="px-3 sm:px-6 pb-2.5 pt-1 flex items-center justify-between gap-1.5 sm:gap-3 border-b border-black/5 dark:border-white/10 shrink-0 select-none cursor-grab active:cursor-grabbing touch-none relative z-20 min-w-0"
+            className="px-3 sm:px-6 pb-2.5 pt-1 flex items-center justify-between gap-1.5 sm:gap-3 border-b border-zinc-200/80 dark:border-white/10 shrink-0 select-none cursor-grab active:cursor-grabbing touch-none relative z-20 min-w-0"
           >
             <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
               <ComponentTitleBadge title={title} slug={slug} icon={icon} showStudioTag={false} />
