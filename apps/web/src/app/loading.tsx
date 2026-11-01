@@ -1,4 +1,4 @@
-import { AnimatedLogoLoader } from "@/components/ui/animated-logo-loader";
+import { AnimatedLogoLoader } from "@/components/layout/animated-logo-loader";
 
 export default function RootLoading() {
   return (

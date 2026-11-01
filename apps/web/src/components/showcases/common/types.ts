@@ -33,17 +33,3 @@ export interface ShowcaseCardProps {
   onReset?: () => void;
   liveOutputSummary?: React.ReactNode;
 }
-
-export interface PlaygroundDockItem {
-  id: string;
-  label: string;
-  emoji: string;
-  description: string;
-}
-
-export interface PlaygroundDockProps {
-  items: PlaygroundDockItem[];
-  activeId: string;
-  onSelect: (id: string) => void;
-  className?: string;
-}

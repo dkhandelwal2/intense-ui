@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
-import { PackageManager } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/docs";
 
 // Bento modular subcomponents
 import {

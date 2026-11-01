@@ -1,6 +1,8 @@
 import React from "react";
-import { PackageManager } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/docs/package-manager";
 import { TocItem } from "@/components/layout/layout-components";
+
+export type { PackageManager };
 
 export type DeckCardId = 4 | 5 | 6;
 
@@ -112,4 +114,28 @@ export interface StageBackgroundSvgProps {
   cutoutY: number;
   hasMeasured: boolean;
   className?: string;
+}
+
+export interface StagePreviewCardProps {
+  slug: string;
+  title: string;
+  activeTocId: string;
+  currentTocLabel?: string;
+  isCustomizing: boolean;
+  setIsCustomizing: (val: boolean) => void;
+  activeVariantName?: string;
+  activeScale?: string;
+  renderStagePreview: () => React.ReactNode;
+  handleViewCode?: () => void;
+  onOpenPlayground?: () => void;
+  isCodeOpened?: boolean;
+  isDesktop?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+export interface ScrambleTextProps {
+  text: string;
+  className?: string;
+  scrambleSpeed?: number;
 }

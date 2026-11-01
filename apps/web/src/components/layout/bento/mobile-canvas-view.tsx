@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/lib/utils";
 import {
   WidgetCapsule,
   DependenciesCard,
   SupportCard,
 } from "./index";
-import { StagePreviewCard } from "./stage-preview-card";
+import { StagePreviewCard } from "./cards";
+import { StepCarousel } from "@/components/ui/step-carousel";
 import type { BentoCanvasProps } from "./types";
 
 export const MobileCanvasView = React.memo(function MobileCanvasView({
@@ -28,6 +28,12 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
   directDeps,
   packageManager,
 }: BentoCanvasProps) {
+  const currentStepIndex = React.useMemo(() => {
+    if (!effectiveTocItems || effectiveTocItems.length <= 1) return 0;
+    const idx = effectiveTocItems.findIndex((t) => t.id === activeTocId);
+    return idx >= 0 ? idx : 0;
+  }, [effectiveTocItems, activeTocId]);
+
   return (
     <div className="flex-1 min-h-0 min-w-0 flex flex-col h-full overflow-y-auto px-2 sm:px-4 py-2 pb-28 sm:pb-32 gap-4 hide-scrollbar">
       <WidgetCapsule className="w-full shrink-0" />
@@ -45,39 +51,22 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
         handleViewCode={handleViewCode}
         onOpenPlayground={onOpenPlayground}
         isDesktop={false}
-      />
-
-      {effectiveTocItems.length > 1 && (
-        <div className="w-full flex flex-col gap-1.5 shrink-0">
-          <div className="flex items-center justify-between px-1">
-            <span className="text-[11px] font-mono font-bold text-muted-foreground uppercase tracking-wider">
-              Variants ({effectiveTocItems.length})
-            </span>
-            <span className="text-[10px] font-mono text-zinc-400">Tap to preview</span>
+      >
+        {/* Step Carousel controlling variations in responsive mode */}
+        {effectiveTocItems.length > 1 && !isCustomizing && (
+          <div className="w-full flex items-center justify-center py-1 shrink-0">
+            <StepCarousel
+              totalSteps={effectiveTocItems.length}
+              currentStep={currentStepIndex}
+              onStepChange={(idx) => effectiveTocItems[idx] && handleTocItemClick(effectiveTocItems[idx].id)}
+              duration={3500}
+              loop={false}
+              defaultPlaying={false}
+              size="sm"
+            />
           </div>
-          <div className="w-full flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            {effectiveTocItems.map((item) => {
-              const isActive = !isCustomizing && activeTocId === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleTocItemClick(item.id)}
-                  className={cn(
-                    "px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer shrink-0 border",
-                    isActive
-                      ? "bg-[var(--theme-primary)] text-white border-[var(--theme-primary)] shadow-[0_0_12px_var(--theme-primary)]/40 font-semibold"
-                      : "bg-white dark:bg-zinc-900 text-muted-foreground hover:text-foreground border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-2xs"
-                  )}
-                >
-                  {item.icon && <span className="[&_svg]:w-4 [&_svg]:h-4">{item.icon}</span>}
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+        )}
+      </StagePreviewCard>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-3">
         <DependenciesCard

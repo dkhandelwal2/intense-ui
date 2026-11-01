@@ -13,8 +13,11 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { PackageManager, PackageManagerDropdown } from "@/components/ui/package-manager";
-import { TerminalWindow } from "@/components/ui/terminal-window";
+import {
+  PackageManager,
+  PackageManagerDropdown,
+  TerminalWindow,
+} from "@/components/docs";
 import { ScrollStepCard } from "./scroll-step-card";
 import { siteConfig } from "@/config/site";
 import {

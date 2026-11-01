@@ -48,6 +48,12 @@
     "enabled": true
   },
   {
+    "name": "step-carousel",
+    "title": "Step Carousel",
+    "description": "A beautifully designed, accessible Step Carousel component.",
+    "enabled": true
+  },
+  {
     "name": "switch",
     "title": "Switch",
     "description": "A beautifully designed, accessible Switch component.",

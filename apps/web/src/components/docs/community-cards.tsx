@@ -3,7 +3,7 @@
 import React from "react";
 import { Heart, Scale, Mail, Check, Bug, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SectionHeader } from "@/components/ui/section-header";
+import { SectionHeader } from "./section-header";
 import { siteConfig, EXTERNAL_LINKS } from "@/config/site";
 import { GithubIcon, XTwitterIcon } from "@/assets/icons";
 

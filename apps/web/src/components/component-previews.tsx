@@ -6,12 +6,12 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@registry/components/accordion";
+} from "@/components/ui/accordion";
 import { AccordionShowcase } from "@/components/showcases/accordion/accordion-showcase";
 import { BreadcrumbShowcase } from "@/components/showcases/breadcrumb/breadcrumb-showcase";
 import { NavbarShowcase } from "@/components/showcases/nav-bar/navbar-showcase";
 import { NavbarGooey } from "@/components/ui/nav-bar";
-import { Switch } from "@registry/components/switch";
+import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import {
   Breadcrumb,
@@ -23,9 +23,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ColorGrid } from "@/components/ui/color-grid";
-import { Button } from "@registry/components/button";
-import { Slider } from "@registry/components/slider";
-import { Tooltip } from "@registry/components/tooltip";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Tooltip } from "@/components/ui/tooltip";
 
 // ---------------------------------------------------------------------------
 // Compact mini-card previews (used in index grid / listing cards)

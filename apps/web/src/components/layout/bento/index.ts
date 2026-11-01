@@ -1,18 +1,20 @@
 export * from "./types";
 export * from "./constants";
 export { CanvasBackdropSvg, StageBackgroundSvg } from "@/assets/svg";
-export { ScrambleText } from "@/components/ui/scramble-text";
-export { AnalogClock, AnalogClockMini } from "@/components/ui/analog-clock";
 export { useLiveWeather } from "@/hooks/use-live-weather";
-export * from "./widget-helpers";
-export * from "./capsule-clock";
-export * from "./capsule-weather";
-export * from "./widget-capsule";
-export * from "./dependencies-card";
-export * from "./dependencies-helper";
-export * from "./support-card";
-export * from "./generic-playground-studio";
-export * from "./stage-preview-card";
-export * from "./bento-card-deck";
-export * from "./deck-code-viewer";
+
+// Core Layout & Canvas
 export * from "./bento-canvas";
+export * from "./bento-card-deck";
+export * from "./desktop-canvas-view";
+export * from "./mobile-canvas-view";
+export * from "./generic-playground-studio";
+
+// Cards Subsystem
+export * from "./cards";
+
+// Widgets Subsystem
+export * from "./widgets";
+
+// Backwards-compatible aliases
+export * from "@/components/showcases/code-viewer";

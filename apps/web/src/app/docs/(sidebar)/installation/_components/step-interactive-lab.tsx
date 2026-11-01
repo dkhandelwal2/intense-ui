@@ -4,17 +4,16 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CodeBlock } from "@/components/ui/code-block";
-import { Switch } from "@registry/components/switch";
-import { Slider } from "@registry/components/slider";
+import { CodeBlock, WindowHeader } from "@/components/docs";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@registry/components/accordion";
+} from "@/components/ui/accordion";
 import { ScrollStepCard } from "./scroll-step-card";
-import { WindowHeader } from "@/components/ui/window-header";
 
 export interface StepInteractiveLabProps {
   stepNumber: string;

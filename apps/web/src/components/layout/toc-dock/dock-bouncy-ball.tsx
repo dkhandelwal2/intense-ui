@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import type { IndexedTocItem } from "./types";
+import { getDockItemFallbackIcon } from "./dock-icons";
 
 interface DockBouncyBallProps {
   activeTocId?: string;
@@ -135,9 +136,7 @@ export function DockBouncyBall({
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="w-8 h-8 flex items-center justify-center [&_svg]:w-7 [&_svg]:h-7 text-2xl sm:text-[28px] leading-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
         >
-          {activeItem?.icon || (
-            <div className="w-4 h-4 bg-white rounded-full" />
-          )}
+          {activeItem?.icon || getDockItemFallbackIcon(activeItem?.id, activeItem?.label)}
         </motion.div>
       </AnimatePresence>
     </motion.div>

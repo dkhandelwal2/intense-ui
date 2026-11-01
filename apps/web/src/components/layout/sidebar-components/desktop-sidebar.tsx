@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { Sidebar } from "@/components/layout/sidebar";
+import { Sidebar } from "@/components/layout/docs-sidebar";
 import type { DesktopSidebarProps } from "./types";
 
 export function DesktopSidebar({

@@ -3,10 +3,10 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Boxes, ShieldCheck, ChevronDown, ExternalLink } from "lucide-react";
-import { CodeBlock } from "@/components/ui/code-block";
-import { PackageManager } from "@/components/ui/package-manager";
+import { CodeBlock } from "./code-block";
+import { PackageManager } from "./package-manager";
 import { cn } from "@/lib/utils";
-import { SectionHeader } from "@/components/ui/section-header";
+import { SectionHeader } from "./section-header";
 import { DependencyItem } from "./dependency-constants";
 import { getDependencyLogo } from "./dependency-logos";
 import {

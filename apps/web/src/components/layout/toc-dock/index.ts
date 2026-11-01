@@ -7,4 +7,5 @@ export * from "@/hooks/use-dock-pagination";
 export * from "./dock-bouncy-ball";
 export * from "./dock-button-row";
 export * from "./component-toc-dock";
+export * from "./dock-icons";
 export * from "@/hooks/use-component-toc";

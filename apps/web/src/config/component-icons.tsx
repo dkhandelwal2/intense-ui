@@ -13,6 +13,7 @@ import {
   CreditCard,
   Layers,
   Navigation,
+  PlayCircle,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -38,6 +39,8 @@ export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   navbar: Navigation,
   "bento-grid": LayoutGrid,
   "magnetic-card": CreditCard,
+  "step-carousel": PlayCircle,
+  "step-player": PlayCircle,
 };
 
 /**

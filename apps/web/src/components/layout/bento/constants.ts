@@ -104,3 +104,5 @@ export const GENERIC_SPRING_OPTIONS: { id: "gentle" | "fluid" | "snappy" | "boun
   { id: "snappy", label: "Snappy Pop", spec: "Crisp immediate feedback" },
   { id: "bouncy", label: "Bouncy Spring", spec: "Playful high-rebound elasticity" },
 ];
+
+export const SCRAMBLE_GLYPHS = "0123456789ABCDEF!@#$%&*<>[]{}~_+=/";

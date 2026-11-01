@@ -7,6 +7,8 @@ export interface AnimatedIconProps {
   className?: string;
   size?: "sm" | "md";
   active?: boolean;
+  lineStroke?: string;
+  polylineStroke?: string;
 }
 
 /**
@@ -18,6 +20,8 @@ export const AnimatedTerminalIcon = React.memo(function AnimatedTerminalIcon({
   className,
   size = "md",
   active = false,
+  polylineStroke = "#10B981",
+  lineStroke = "#F59E0B",
 }: AnimatedIconProps) {
   const sizeClass = size === "sm" ? "w-4 h-4" : "w-5 h-5";
 
@@ -29,7 +33,6 @@ export const AnimatedTerminalIcon = React.memo(function AnimatedTerminalIcon({
         className
       )}
       title="CLI Installation"
-      aria-label="CLI Installation"
     >
       <svg
         viewBox="0 0 24 24"
@@ -50,8 +53,8 @@ export const AnimatedTerminalIcon = React.memo(function AnimatedTerminalIcon({
           .anim-term-chevron { animation: term-chevron 1.4s ease-in-out infinite; will-change: transform; }
           .anim-term-cursor { animation: term-cursor 0.8s ease-in-out infinite; will-change: opacity; }
         `}</style>
-        <polyline points="4 17 10 11 4 5" stroke="#10B981" className="anim-term-chevron" />
-        <line x1="12" x2="20" y1="19" y2="19" stroke="#F59E0B" className="anim-term-cursor" />
+        <polyline points="4 17 10 11 4 5" stroke={polylineStroke} className="anim-term-chevron" />
+        <line x1="12" x2="20" y1="19" y2="19" stroke={lineStroke} className="anim-term-cursor" />
       </svg>
     </div>
   );

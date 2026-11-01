@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
-import { Sidebar } from "@/components/layout/sidebar";
+import { Sidebar } from "@/components/layout/docs-sidebar";
 import { usePathname } from "next/navigation";
 import type { MobileSidebarDrawerProps } from "./types";
 

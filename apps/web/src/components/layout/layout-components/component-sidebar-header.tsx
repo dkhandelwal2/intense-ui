@@ -5,21 +5,11 @@ import { PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useSidebarContext } from "@/context";
-import { ComponentActiveTab } from "./types";
+import { ComponentSidebarHeaderProps } from "./types";
 import { ComponentTabControls } from "./component-tab-controls";
 import { ComponentTitleBadge } from "./component-title-badge";
 
-export interface ComponentSidebarHeaderProps {
-  title: string;
-  slug?: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  activeTab: ComponentActiveTab;
-  onTabChange: (tab: ComponentActiveTab) => void;
-  className?: string;
-  isBottomBar?: boolean;
-  isOpen?: boolean;
-  hasPlayground?: boolean;
-}
+
 
 export const ComponentSidebarHeader = React.memo(function ComponentSidebarHeader({
   title,
@@ -86,7 +76,7 @@ export const ComponentSidebarHeader = React.memo(function ComponentSidebarHeader
           paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom, 0px))",
         }}
         className={cn(
-          "fixed bottom-0 left-0 md:left-[68px] right-0 z-40 bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 px-3.5 sm:px-6 pt-2.5 sm:pt-3 shadow-[0_-12px_32px_rgba(0,0,0,0.3)] flex items-center justify-between xl:hidden rounded-t-[28px] touch-manipulation",
+          "fixed bottom-0 left-0 right-0 z-40 bg-background/95 dark:bg-[#0c0c0e]/95 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 px-3.5 sm:px-6 pt-2.5 sm:pt-3 shadow-[0_-12px_32px_rgba(0,0,0,0.3)] flex items-center justify-between xl:hidden rounded-t-[28px] touch-manipulation",
           className
         )}
       >

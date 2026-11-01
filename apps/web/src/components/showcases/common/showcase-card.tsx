@@ -13,9 +13,8 @@ import {
   GripVertical,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StackedCard } from "@/components/ui/stacked-card";
-import { WindowHeader } from "@/components/ui/window-header";
-import { CodeBlock } from "@/components/ui/code-block";
+import { StackedCard } from "@/components/layout/bento";
+import { WindowHeader, CodeBlock } from "@/components/docs";
 import { useComponentActiveToc } from "@/components/layout/component-page-layout";
 import { ShowcaseCardProps } from "./types";
 import { ComponentSpecDetail } from "./spec-detail";

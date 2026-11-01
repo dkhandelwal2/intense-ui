@@ -10,7 +10,7 @@ import {
   SupportCard,
   BentoCardDeck,
 } from "./index";
-import { StagePreviewCard } from "./stage-preview-card";
+import { StagePreviewCard } from "./cards";
 import type { BentoCanvasProps } from "./types";
 
 export const DesktopCanvasView = React.memo(function DesktopCanvasView({
@@ -92,13 +92,7 @@ export const DesktopCanvasView = React.memo(function DesktopCanvasView({
     <div className="flex-1 min-h-0 min-w-0 flex flex-row gap-3 items-stretch overflow-hidden">
       {/* Left Column: Molded SVG Frame + Stage + Dock + Cutout */}
       <div ref={leftStageRef} className="relative flex-1 min-h-0 min-w-0 h-full">
-        <CanvasBackdropSvg
-          width={w}
-          height={h}
-          dockWidth={dockWidth}
-          cutoutY={cutoutY}
-          hasMeasured={hasMeasured}
-        />
+        <CanvasBackdropSvg width={w} height={h} dockWidth={dockWidth} cutoutY={cutoutY} hasMeasured={hasMeasured} />
 
         <div className="absolute top-0 left-0 right-0 bottom-[197px] z-10">
           <StagePreviewCard

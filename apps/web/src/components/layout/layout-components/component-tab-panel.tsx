@@ -2,10 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { PackageManager } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/docs";
 import { ComponentActiveTab } from "./types";
-import { InstallTabContent } from "./install-tab-content";
-import { DeckCodeViewer } from "@/components/layout/bento/bento-card-deck";
+import { InstallTabContent } from "@/components/showcases/cli-installation";
+import { DeckCodeViewer } from "@/components/showcases/code-viewer";
 
 export interface ComponentTabPanelProps {
   activeTab: ComponentActiveTab;

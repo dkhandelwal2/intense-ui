@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
+
+const NextLink = Link as any;
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
@@ -180,7 +182,7 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
 
     if (href && href.startsWith("/")) {
       return (
-        <Link
+        <NextLink
           href={href}
           className={cn(
             "inline-flex items-center gap-1.5 cursor-pointer",
@@ -190,7 +192,7 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
           {...props}
         >
           {content}
-        </Link>
+        </NextLink>
       );
     }
 
@@ -393,7 +395,7 @@ export function BreadcrumbDropdownItem({
 
   if (href) {
     if (href.startsWith("/")) {
-      return <Link href={href}>{content}</Link>;
+      return <NextLink href={href}>{content}</NextLink>;
     }
     return <a href={href}>{content}</a>;
   }

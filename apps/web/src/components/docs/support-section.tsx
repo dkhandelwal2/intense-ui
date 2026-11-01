@@ -3,7 +3,7 @@
 import React from "react";
 import { HelpCircle, Bug, MessageSquare, Mail, ExternalLink, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SectionHeader } from "@/components/ui/section-header";
+import { SectionHeader } from "./section-header";
 import { siteConfig } from "@/config/site";
 
 interface SupportSectionProps {

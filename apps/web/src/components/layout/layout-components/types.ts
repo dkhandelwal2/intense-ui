@@ -25,3 +25,16 @@ export interface ComponentPageLayoutProps {
   playgroundContent?: React.ReactNode;
   children: React.ReactNode;
 }
+
+
+export interface ComponentSidebarHeaderProps {
+  title: string;
+  slug?: string;
+  icon?: React.ComponentType<{ className?: string }>;
+  activeTab: ComponentActiveTab;
+  onTabChange: (tab: ComponentActiveTab) => void;
+  className?: string;
+  isBottomBar?: boolean;
+  isOpen?: boolean;
+  hasPlayground?: boolean;
+}

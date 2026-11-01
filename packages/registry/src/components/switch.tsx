@@ -34,13 +34,7 @@ export function Switch({
     md: isHor ? "w-20 h-8" : "w-8 h-20",
     lg: isHor ? "w-28 h-10" : "w-10 h-28"
   };
-
-  const textClasses = {
-    sm: "text-[7px]",
-    md: "text-[9px]",
-    lg: "text-[11px]"
-  };
-
+  const textClasses = { sm: "text-[7px]", md: "text-[9px]", lg: "text-[11px]" };
   const dotClasses = {
     sm: "w-1 h-1 shadow-[0_0_4px_rgba(var(--dot-color),0.8)]",
     md: "w-1.5 h-1.5 shadow-[0_0_6px_rgba(var(--dot-color),0.8)]",

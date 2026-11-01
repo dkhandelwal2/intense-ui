@@ -3,9 +3,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Code, Code2, Sparkles } from "lucide-react";
-import { CodeBlock } from "@/components/ui/code-block";
+import { CodeBlock, SectionHeader } from "@/components/docs";
 import { LAYOUT_CUSTOM_EVENTS } from "../constants";
-import { SectionHeader } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
 import { CodeSkeleton } from "@/components/ui/skeleton";
 import { ComponentCodeLang } from "./types";

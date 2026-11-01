@@ -10,7 +10,7 @@ import {
   ContactCard,
 } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
-import { ScrollMotionSection as SidebarMotionSection } from "@/components/ui/scroll-motion-section";
+import { ScrollMotionSection as SidebarMotionSection } from "@/components/layout/scroll-motion-section";
 
 export interface PreviewTabContentProps {
   description?: React.ReactNode;

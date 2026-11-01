@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LAYOUT_CUSTOM_EVENTS } from "../constants";
 import { DOCK_DIMENSIONS } from "./constants";
+import { getDockItemFallbackIcon } from "./dock-icons";
 import type { IndexedTocItem, VisibleDockButton } from "./types";
 
 interface DockButtonRowProps {
@@ -73,15 +74,13 @@ export function DockButtonRow({
                       : "opacity-100 scale-100"
                   )}
                 >
-                  {item.icon || (
-                    <div className="w-4 h-4 bg-zinc-400 dark:bg-zinc-600 rounded-full" />
-                  )}
+                  {item.icon || getDockItemFallbackIcon(item.id, item.label)}
                 </div>
 
                 {/* Section Label */}
                 <span
                   className={cn(
-                    "absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-all duration-300 ease-out max-w-[74px] truncate text-center",
+                    "absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-all duration-300 ease-out max-w-[62px] px-0.5 truncate text-center",
                     isItemActive
                       ? "pointer-events-none text-foreground font-semibold"
                       : "opacity-100 scale-100 text-zinc-500 dark:text-zinc-400 font-medium"

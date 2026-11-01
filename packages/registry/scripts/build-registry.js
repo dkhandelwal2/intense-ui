@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const COMPONENTS_DIR = path.join(__dirname, '../src/components');
+const ROOT_DIR = path.join(__dirname, '../../../');
+const COMPONENTS_DIR = path.join(ROOT_DIR, 'apps/web/src/components/ui');
+const SYNC_DIR = path.join(__dirname, '../src/components');
 const DIST_DIR = path.join(__dirname, '../dist');
 const CONFIG_PATH = path.join(__dirname, '../registry-config.json');
-const ROOT_DIR = path.join(__dirname, '../../');
 
 // Dynamically read site configuration from the single source of truth: apps/web/src/config/site.ts
 function loadSiteConfig() {
@@ -182,6 +183,10 @@ function buildRegistry() {
       JSON.stringify(componentJSON, null, 2)
     );
 
+    // Auto-sync into packages/registry/src/components so npm package stays in sync automatically
+    ensureDir(SYNC_DIR);
+    fs.writeFileSync(path.join(SYNC_DIR, `${comp.name}.tsx`), content);
+
     // Registry index entry (for GitHub-based registry)
     registryIndex.push({
       name: comp.name,
@@ -216,6 +221,12 @@ function buildRegistry() {
       items: registryIndex
     }, null, 2)
   );
+
+  // 6. Auto-generate packages/registry/src/index.ts
+  const indexExports = availableComponents
+    .map((c) => `export * from "./components/${c.name}";`)
+    .join('\n');
+  fs.writeFileSync(path.join(__dirname, '../src/index.ts'), indexExports + '\n');
 
   console.log(`✅ Registry built! ${availableComponents.length} components published.`);
   availableComponents.forEach(c => console.log(`   • ${c.name} — ${c.title}`));

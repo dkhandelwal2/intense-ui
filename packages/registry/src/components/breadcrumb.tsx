@@ -1,9 +1,13 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+
+const NextLink = Link as any;
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, MoreHorizontal, ChevronDown } from "lucide-react";
-import { cn } from "../lib/utils";
+import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export type BreadcrumbVariant = "default" | "chips" | "outline" | "ghost";
 export type BreadcrumbSize = "sm" | "md" | "lg";
@@ -86,7 +90,7 @@ const BreadcrumbList = React.forwardRef<HTMLOListElement, BreadcrumbListProps>(
       <ol
         ref={ref}
         className={cn(
-          "flex flex-wrap items-center break-words font-medium text-zinc-500 dark:text-zinc-400",
+          "flex flex-wrap items-center break-words font-medium text-muted-foreground",
           sizeClasses[size],
           variant === "chips" && "gap-1 sm:gap-1.5",
           className
@@ -148,10 +152,10 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
           )
         : isGhostStyle
           ? cn(
-              "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all",
+              "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-foreground transition-all",
               linkSizeStyles[size]
             )
-          : "transition-colors hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer";
+          : "transition-colors hover:text-foreground";
 
     const content = (
       <>
@@ -165,7 +169,7 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
     );
 
     if (asChild && React.isValidElement(children)) {
-      const child = children as React.ReactElement<{ className?: string }>;
+      const child = children as React.ReactElement<{ className?: string; children?: React.ReactNode }>;
       return React.cloneElement(child, {
         className: cn(
           "inline-flex items-center gap-1.5 cursor-pointer",
@@ -174,6 +178,22 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
           className
         ),
       });
+    }
+
+    if (href && href.startsWith("/")) {
+      return (
+        <NextLink
+          href={href}
+          className={cn(
+            "inline-flex items-center gap-1.5 cursor-pointer",
+            variantStyles,
+            className
+          )}
+          {...props}
+        >
+          {content}
+        </NextLink>
+      );
     }
 
     return (
@@ -237,10 +257,10 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
         : isGhostStyle
           ? cn(
               "bg-zinc-100 dark:bg-zinc-800/80 font-semibold",
-              !activeColor && "text-zinc-900 dark:text-zinc-100",
+              !activeColor && "text-foreground",
               linkSizeStyles[size]
             )
-          : cn("font-semibold", !activeColor && "text-zinc-900 dark:text-zinc-100");
+          : cn("font-semibold", !activeColor && "text-foreground");
 
     return (
       <span
@@ -324,7 +344,7 @@ const BreadcrumbEllipsis = ({
     aria-hidden="true"
     onClick={onClick}
     className={cn(
-      "flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer",
+      "flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer",
       className
     )}
     {...props}
@@ -341,7 +361,7 @@ BreadcrumbEllipsis.displayName = "BreadcrumbEllipsis";
 
 export interface BreadcrumbDropdownItemProps {
   href?: string;
-  onClick?: (e?: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
   icon?: React.ReactNode;
   active?: boolean;
@@ -361,7 +381,7 @@ export function BreadcrumbDropdownItem({
         "flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer",
         active
           ? "bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] font-semibold"
-          : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100"
+          : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-foreground"
       )}
     >
       {icon && (
@@ -374,6 +394,9 @@ export function BreadcrumbDropdownItem({
   );
 
   if (href) {
+    if (href.startsWith("/")) {
+      return <NextLink href={href}>{content}</NextLink>;
+    }
     return <a href={href}>{content}</a>;
   }
 
@@ -435,7 +458,7 @@ export function BreadcrumbDropdown({
         {trigger ?? (
           <button
             type="button"
-            className="flex h-6 w-6 items-center justify-center rounded-md border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-2xs cursor-pointer"
+            className="flex h-6 w-6 items-center justify-center rounded-md border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-800/80 text-muted-foreground hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-2xs cursor-pointer"
             aria-label="Open breadcrumb menu"
             aria-expanded={isOpen}
           >
@@ -474,7 +497,7 @@ export interface BreadcrumbCollapsedItem {
   href?: string;
   icon?: React.ReactNode;
   isCurrentPage?: boolean;
-  onClick?: (e?: any) => void;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export interface BreadcrumbCollapsedProps
@@ -684,7 +707,7 @@ const BreadcrumbCollapsed = React.forwardRef<
 BreadcrumbCollapsed.displayName = "BreadcrumbCollapsed";
 
 /* =========================================================================
-   Dynamic Pathname Helpers
+   Dynamic Next.js Pathname Helpers
    ========================================================================= */
 
 export interface BreadcrumbSegment {
@@ -700,9 +723,20 @@ export interface DynamicBreadcrumbsProps
   pathname?: string;
   separator?: React.ReactNode;
   homeHref?: string;
+  currentLabel?: React.ReactNode;
 }
 
-export function parsePathnameToSegments(pathname: string): BreadcrumbSegment[] {
+const KNOWN_LABELS: Record<string, string> = {
+  docs: "Docs",
+  components: "Components",
+  installation: "Installation",
+  introduction: "Documentation",
+};
+
+export function parsePathnameToSegments(
+  pathname: string,
+  currentLabel?: React.ReactNode
+): BreadcrumbSegment[] {
   const cleanPath = pathname.split("?")[0].split("#")[0];
   const parts = cleanPath.split("/").filter(Boolean);
 
@@ -717,10 +751,17 @@ export function parsePathnameToSegments(pathname: string): BreadcrumbSegment[] {
     accumulatedPath += `/${part}`;
     const isCurrentPage = index === parts.length - 1;
 
-    const formattedLabel = part
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    let formattedLabel: React.ReactNode;
+    if (isCurrentPage && currentLabel) {
+      formattedLabel = currentLabel;
+    } else if (KNOWN_LABELS[part.toLowerCase()]) {
+      formattedLabel = KNOWN_LABELS[part.toLowerCase()];
+    } else {
+      formattedLabel = part
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
 
     segments.push({
       label: formattedLabel,
@@ -738,8 +779,9 @@ const Breadcrumbs = React.forwardRef<HTMLElement, BreadcrumbsProps>(
   (
     {
       items,
-      pathname,
+      pathname: customPathname,
       separator,
+      currentLabel,
       className,
       variant = "default",
       size = "md",
@@ -747,11 +789,14 @@ const Breadcrumbs = React.forwardRef<HTMLElement, BreadcrumbsProps>(
     },
     ref
   ) => {
+    const nextPathname = usePathname();
+    const activePath = customPathname ?? nextPathname ?? "";
+
     const computedItems = React.useMemo(() => {
       if (items && items.length > 0) return items;
-      if (pathname) return parsePathnameToSegments(pathname);
+      if (activePath) return parsePathnameToSegments(activePath, currentLabel);
       return [];
-    }, [items, pathname]);
+    }, [items, activePath, currentLabel]);
 
     if (!computedItems.length) return null;
 

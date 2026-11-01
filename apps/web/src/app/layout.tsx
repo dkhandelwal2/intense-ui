@@ -8,7 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import React, { Suspense } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
-import { AppLoader } from "@/components/ui/app-loader";
+import { AppLoader } from "@/components/layout/app-loader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from "@registry/components/accordion";
+} from "@/components/ui/accordion";
 import { RTL_ITEMS, DEFAULT_ITEMS } from "../constants";
 import { CustomProps } from "../types";
 

@@ -25,9 +25,9 @@ export function Logo({ className, onClick }: LogoProps) {
       <Image
         src="/logo-light.webp"
         alt="Intense UI"
-        width={140}
-        height={36}
-        className="h-6 sm:h-7 w-auto dark:hidden transition-transform duration-200 group-hover:scale-[1.02]"
+        width={98}
+        height={28}
+        className="h-6 w-[84px] sm:h-7 sm:w-[98px] aspect-[7/2] object-contain dark:hidden transition-transform duration-200 group-hover:scale-[1.02]"
         priority
         unoptimized
       />
@@ -35,9 +35,9 @@ export function Logo({ className, onClick }: LogoProps) {
       <Image
         src="/logo-dark.webp"
         alt="Intense UI"
-        width={140}
-        height={36}
-        className="h-6 sm:h-7 w-auto hidden dark:block transition-transform duration-200 group-hover:scale-[1.02]"
+        width={98}
+        height={28}
+        className="h-6 w-[84px] sm:h-7 sm:w-[98px] aspect-[7/2] object-contain hidden dark:block transition-transform duration-200 group-hover:scale-[1.02]"
         priority
         unoptimized
       />

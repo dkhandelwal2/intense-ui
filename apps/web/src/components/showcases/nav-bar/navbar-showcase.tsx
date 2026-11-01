@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { StackedCardsContainer } from "@/components/ui/stacked-card";
+import { StackedCardsContainer } from "@/components/layout/bento";
 import { useShowcaseCodeUpdate } from "@/components/showcases/common";
 import { useComponentPlayground } from "@/context";
 import { NAVBAR_EXAMPLES } from "./constants";
 import { CustomNavbarProps } from "./types";
+import { NavbarCard } from "./_components";
 import {
-  NavbarCard,
-  DEFAULT_CUSTOM_PROPS,
   NavbarPlaygroundStudio,
   NavbarLivePreview,
-} from "./_components";
+  NAVBAR_DEFAULT_CUSTOM_PROPS as DEFAULT_CUSTOM_PROPS,
+} from "@/components/showcases/playground-studio";
 import { generateNavbarCode } from "./code-generator";
 
 export function NavbarShowcase() {

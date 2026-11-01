@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PackageManager } from "@/components/ui/package-manager";
 import {
+  PackageManager,
   RuntimeDependencies,
   TroubleshootingSection,
   SupportSection,

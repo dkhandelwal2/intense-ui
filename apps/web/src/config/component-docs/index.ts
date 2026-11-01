@@ -9,6 +9,7 @@ import { skeletonDoc } from "./skeleton";
 import { colorGridDoc } from "./color-grid";
 import { accordionDoc } from "./accordion";
 import { navBarDoc } from "./nav-bar";
+import { stepCarouselDoc } from "./step-carousel";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
@@ -22,6 +23,7 @@ export * from "./breadcrumb";
 export * from "./skeleton";
 export * from "./color-grid";
 export * from "./nav-bar";
+export * from "./step-carousel";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
   "accordion": accordionDoc,
@@ -38,6 +40,8 @@ const DOCS_MAP: Record<string, ComponentDocData> = {
   "skeleton": skeletonDoc,
   "color-grid": colorGridDoc,
   "color-palette": colorGridDoc,
+  "step-carousel": stepCarouselDoc,
+  "step-player": stepCarouselDoc,
 };
 
 export function getComponentDocData(slug: string): ComponentDocData {

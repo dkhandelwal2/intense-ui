@@ -14,7 +14,7 @@
   "scripts": {
     "build:package": "tsup src/index.ts --format cjs,esm --dts --external react,react-dom",
     "build:registry": "node scripts/build-registry.js",
-    "build": "npm run build:package && npm run build:registry"
+    "build": "npm run build:registry && npm run build:package"
   },
   "dependencies": {
     "clsx": "^2.1.0",
@@ -29,6 +29,6 @@
   "devDependencies": {
     "tsup": "^8.5.1",
     "typescript": "^5.0.0",
-    "@types/react": "^18.0.0"
+    "@types/react": "^19.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { PropGroup } from "@/components/ui/props-table";
+import { PropGroup } from "@/components/docs/props-table";
 
 export interface ComponentExample {
   id: string;

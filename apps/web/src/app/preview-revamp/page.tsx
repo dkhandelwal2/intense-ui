@@ -31,9 +31,7 @@ import { GithubIcon } from "@/assets/icons";
 import { SidebarWrapper } from "@/components/layout/sidebar-wrapper";
 import { KoraExpandingFooter } from "@/components/layout/kora-expanding-footer";
 import { useTheme } from "next-themes";
-import { PackageManager } from "@/components/ui/package-manager";
-import { CodeBlock } from "@/components/ui/code-block";
-import { PropsTable } from "@/components/docs";
+import { PackageManager, CodeBlock, PropsTable } from "@/components/docs";
 
 // Real existing components and documentation data
 import { navBarDoc } from "@/config/component-docs/nav-bar";
@@ -43,12 +41,12 @@ import {
 } from "@/components/showcases/nav-bar/_components/navbar-variant-renderer";
 import {
   NavbarPlaygroundStudio,
-  DEFAULT_CUSTOM_PROPS,
-} from "@/components/showcases/nav-bar/_components";
+  NAVBAR_DEFAULT_CUSTOM_PROPS as DEFAULT_CUSTOM_PROPS,
+} from "@/components/showcases/playground-studio";
 import { generateNavbarCode } from "@/components/showcases/nav-bar/code-generator";
 import { CustomNavbarProps } from "@/components/showcases/nav-bar/types";
 import { ComponentTocDock } from "@/components/layout/toc-dock";
-import { InstallTabContent } from "@/components/layout/layout-components/install-tab-content";
+import { InstallTabContent } from "@/components/showcases/cli-installation";
 import {
   getDependencyLogo,
   getNpmPackageUrl,
@@ -1218,38 +1216,58 @@ export default function PreviewRevampPage() {
 
               {/* Marquee only on ALL, static unique chips on DIRECT and PEER */}
               {(() => {
-                const renderChip = (dep: DependencyItem, key: string) => (
-                  <a
-                    key={key}
-                    href={getNpmPackageUrl(dep.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      copyChip(dep.name);
-                    }}
-                    className={cn(
-                      "group inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border transition-all duration-200 cursor-pointer shadow-2xs select-none shrink-0 h-[22px]",
-                      "bg-white/95 dark:bg-zinc-800/90 border-zinc-200/80 dark:border-zinc-700/70 text-foreground",
-                      "hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-xs hover:scale-105 active:scale-95"
-                    )}
-                    title={`Click to copy ${getInstallCommand(dep.name)}`}
-                  >
-                    {renderDependencyLogo(dep.name, true)}
-                    <span className="text-[10px] font-mono font-medium tracking-tight">
-                      {copiedChip === dep.name ? (
-                        <span className="text-emerald-500 font-semibold flex items-center gap-0.5 text-[9px]">
-                          <Check className="w-2.5 h-2.5" /> Copied!
-                        </span>
-                      ) : (
-                        dep.name
-                      )}
-                    </span>
-                    <span className="text-[7.5px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1 py-[0.5px] rounded border border-zinc-200 dark:border-zinc-800 font-medium leading-none">
-                      {dep.version}
-                    </span>
-                  </a>
-                );
+                const renderChip = (dep: DependencyItem, key: string, isDuplicate = false) => {
+                  const content = (
+                    <>
+                      {renderDependencyLogo(dep.name, true)}
+                      <span className="text-[10px] font-mono font-medium tracking-tight">
+                        {copiedChip === dep.name ? (
+                          <span className="text-emerald-500 font-semibold flex items-center gap-0.5 text-[9px]">
+                            <Check className="w-2.5 h-2.5" /> Copied!
+                          </span>
+                        ) : (
+                          dep.name
+                        )}
+                      </span>
+                      <span className="text-[7.5px] text-zinc-500 dark:text-zinc-400 font-mono bg-zinc-100 dark:bg-zinc-900/90 px-1 py-[0.5px] rounded border border-zinc-200 dark:border-zinc-800 font-medium leading-none">
+                        {dep.version}
+                      </span>
+                    </>
+                  );
+
+                  const sharedClassName = cn(
+                    "group inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg border transition-all duration-200 select-none shrink-0 h-[22px]",
+                    "bg-white/95 dark:bg-zinc-800/90 border-zinc-200/80 dark:border-zinc-700/70 text-foreground",
+                    !isDuplicate && "cursor-pointer hover:bg-white dark:hover:bg-zinc-700 hover:border-[var(--theme-primary)]/50 hover:shadow-xs hover:scale-105 active:scale-95 shadow-2xs",
+                    isDuplicate && "pointer-events-none"
+                  );
+
+                  if (isDuplicate) {
+                    return (
+                      <span key={key} className={sharedClassName} aria-hidden="true">
+                        {content}
+                      </span>
+                    );
+                  }
+
+                  return (
+                    <a
+                      key={key}
+                      href={getNpmPackageUrl(dep.name)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Copy ${getInstallCommand(dep.name)}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        copyChip(dep.name);
+                      }}
+                      className={sharedClassName}
+                      title={`Click to copy ${getInstallCommand(dep.name)}`}
+                    >
+                      {content}
+                    </a>
+                  );
+                };
 
                 if (depFilter === "all") {
                   return (
@@ -1276,7 +1294,7 @@ export default function PreviewRevampPage() {
                           style={{ animationDuration: "32s" }}
                         >
                           {fillTrack(ALL_MARQUEE_ROWS[0]).map((dep, idx) =>
-                            renderChip(dep, `all-r1-b-${dep.name}-${idx}`)
+                            renderChip(dep, `all-r1-b-${dep.name}-${idx}`, true)
                           )}
                         </div>
                       </div>
@@ -1297,7 +1315,7 @@ export default function PreviewRevampPage() {
                           style={{ animationDuration: "32s" }}
                         >
                           {fillTrack(ALL_MARQUEE_ROWS[1]).map((dep, idx) =>
-                            renderChip(dep, `all-r2-b-${dep.name}-${idx}`)
+                            renderChip(dep, `all-r2-b-${dep.name}-${idx}`, true)
                           )}
                         </div>
                       </div>
@@ -1318,7 +1336,7 @@ export default function PreviewRevampPage() {
                           style={{ animationDuration: "32s" }}
                         >
                           {fillTrack(ALL_MARQUEE_ROWS[2]).map((dep, idx) =>
-                            renderChip(dep, `all-r3-b-${dep.name}-${idx}`)
+                            renderChip(dep, `all-r3-b-${dep.name}-${idx}`, true)
                           )}
                         </div>
                       </div>
@@ -1542,7 +1560,7 @@ export default function PreviewRevampPage() {
                           >
                             <NavbarPlaygroundStudio
                               customProps={customProps}
-                              onChange={(val) => {
+                              onChange={(val: React.SetStateAction<CustomNavbarProps>) => {
                                 setCustomProps(val);
                                 setIsCustomizing(true);
                               }}

@@ -4,7 +4,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GripVertical, GripHorizontal, Plus, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Tooltip } from "@registry/components/tooltip";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export interface ColorGridProps {
   colors?: string[];

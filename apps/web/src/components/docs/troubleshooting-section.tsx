@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Wrench, AlertCircle, HelpCircle, ChevronDown, ArrowUpRight } from "lucide-react";
-import { CodeBlock } from "@/components/ui/code-block";
+import { CodeBlock } from "./code-block";
 import { cn } from "@/lib/utils";
-import { SectionHeader } from "@/components/ui/section-header";
+import { SectionHeader } from "./section-header";
 import { siteConfig } from "@/config/site";
 
 interface TroubleshootingSectionProps {

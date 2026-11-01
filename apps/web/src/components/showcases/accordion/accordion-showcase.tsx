@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { StackedCardsContainer } from "@/components/ui/stacked-card";
+import { StackedCardsContainer } from "@/components/layout/bento";
 import { useShowcaseCodeUpdate } from "@/components/showcases/common";
 import { useComponentPlayground } from "@/context";
 import { ACCORDION_EXAMPLES } from "./constants";
 import { CustomProps } from "./types";
+import { AccordionCard } from "./_components";
 import {
-  AccordionCard,
   AccordionPlaygroundStudio,
   AccordionLivePreview,
-  DEFAULT_CUSTOM_PROPS,
-} from "./_components";
+  ACCORDION_DEFAULT_CUSTOM_PROPS as DEFAULT_CUSTOM_PROPS,
+} from "@/components/showcases/playground-studio";
 import { generateAccordionCode } from "./code-generator";
 
 export function AccordionShowcase() {

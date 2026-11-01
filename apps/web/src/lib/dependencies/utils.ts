@@ -1,4 +1,4 @@
-import { PackageManager } from "@/components/ui/package-manager";
+import { PackageManager } from "@/components/docs";
 import { NPM_LINKS } from "@/config/site";
 import { DependencyItem } from "./types";
 import {

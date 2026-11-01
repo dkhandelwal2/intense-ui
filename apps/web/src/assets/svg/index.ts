@@ -18,3 +18,12 @@ export type {
   CurvedPodSvgProps,
   PlaygroundHeroShapeSvgProps,
 } from "./curved-pod";
+
+export {
+  IsometricBlocksSvg,
+  ScoopedCornerNotchSvg,
+} from "./card-accents";
+export type {
+  IsometricBlocksSvgProps,
+  ScoopedCornerNotchSvgProps,
+} from "./card-accents";

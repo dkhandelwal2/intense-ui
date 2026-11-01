@@ -4,14 +4,14 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { AnimatedTerminalIcon, AnimatedCodeIcon } from "@/assets/icons";
-import { InstallTabContent } from "@/components/layout/layout-components/install-tab-content";
+import { InstallTabContent } from "@/components/showcases/cli-installation";
 import { PlaygroundReorderIcon } from "@/components/showcases/common";
-import { DeckCodeViewer } from "./deck-code-viewer";
+import { DeckCodeViewer } from "@/components/showcases/code-viewer";
 import { BentoCardDeckProps, DeckCardId } from "./types";
 import { SPRING_TRANSITION, DECK_LAYOUT_CONFIGS } from "./constants";
 
-export { DeckCodeViewer };
-export type { DeckCodeViewerProps } from "./deck-code-viewer";
+export { DeckCodeViewer } from "@/components/showcases/code-viewer";
+export type { DeckCodeViewerProps } from "@/components/showcases/code-viewer";
 
 interface DeckCardDescriptor {
   id: DeckCardId;
