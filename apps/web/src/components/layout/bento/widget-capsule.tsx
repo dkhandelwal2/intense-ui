@@ -20,14 +20,12 @@ interface WidgetCapsuleProps {
 }
 
 export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: WidgetCapsuleProps) {
-  const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [showGreeting, setShowGreeting] = useState(true);
 
   const { weather, fetchLiveWeather } = useLiveWeather();
 
   useEffect(() => {
-    setMounted(true);
     setCurrentTime(new Date());
 
     const timer = setInterval(() => {
@@ -44,23 +42,6 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
     };
   }, []);
 
-  if (!mounted) {
-    return (
-      <div
-        className={cn(
-          "h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-3.5 shadow-sm flex items-center justify-between overflow-hidden",
-          className
-        )}
-      >
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-muted animate-pulse" />
-          <div className="h-4 w-24 bg-muted rounded-full animate-pulse" />
-        </div>
-        <div className="h-6 w-16 bg-muted rounded-full animate-pulse" />
-      </div>
-    );
-  }
-
   const hours = currentTime.getHours();
   const fullDateStr = DATE_FORMATTER.format(currentTime);
   const greeting = getGreeting(currentTime);
@@ -73,11 +54,11 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
         className
       )}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {showGreeting ? (
           <motion.div
             key="greeting"
-            initial={{ opacity: 0, y: 10 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
@@ -94,7 +75,10 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                 </div>
-                <span className="text-[10px] font-mono text-muted-foreground truncate">
+                <span
+                  suppressHydrationWarning
+                  className="text-[10px] font-mono text-muted-foreground truncate"
+                >
                   {fullDateStr}
                 </span>
               </div>

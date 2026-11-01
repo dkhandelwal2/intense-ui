@@ -89,10 +89,10 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
 
       {/* Center Presentation Stage */}
       <div className="relative z-10 flex-1 min-h-[160px] flex flex-col items-center justify-center py-2">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={isCustomizing ? "customization" : activeTocId}
-            initial={{ opacity: 0, scale: 0.94, y: 8 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: -8 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}

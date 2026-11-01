@@ -13,7 +13,7 @@ interface SidebarHeaderProps {
 export function SidebarHeader({ onClick, onToggleCollapse }: SidebarHeaderProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -6 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="shrink-0 px-3.5 pb-2"

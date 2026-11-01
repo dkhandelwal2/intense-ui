@@ -23,7 +23,7 @@ export function DesktopSidebar({
       style={{ width }}
       className={cn(
         isInline
-          ? "relative top-0 z-30 hidden md:flex flex-col h-full shrink-0 select-none will-change-[width]"
+          ? "relative top-0 z-30 hidden xl:flex flex-col h-full shrink-0 select-none will-change-[width]"
           : "sticky top-20 z-30 hidden md:flex flex-col h-[calc(100vh-6rem)] shrink-0 py-1 select-none will-change-[width]",
         className
       )}

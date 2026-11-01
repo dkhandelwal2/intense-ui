@@ -63,7 +63,7 @@ export function Sidebar({
 
       {/* ─── Separator 1: Below Sidebar Logo ─── */}
       <motion.div
-        initial={{ opacity: 0, scaleX: 0 }}
+        initial={false}
         animate={{ opacity: 1, scaleX: 1 }}
         transition={{ duration: 0.35, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
         className="w-full my-2.5 origin-left"
@@ -73,7 +73,7 @@ export function Sidebar({
 
       {/* ─── Navigation Items List (Staggered One-By-One Entrance) ─── */}
       <motion.div
-        initial="hidden"
+        initial={false}
         animate="visible"
         variants={sidebarContainerVariants}
         className="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-1 w-full"
