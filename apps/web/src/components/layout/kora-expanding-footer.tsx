@@ -136,6 +136,7 @@ export function KoraExpandingFooter() {
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     placeholder="Email"
+                    aria-label="Email address for newsletter"
                     required
                     className="flex-1 bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none pr-3"
                   />

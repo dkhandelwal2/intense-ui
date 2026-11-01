@@ -78,7 +78,9 @@ export function CommandMenu() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
+        aria-label="Open search documentation"
         className={cn(
           "relative inline-flex h-9 w-full items-center justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none transition-colors hover:bg-accent hover:text-accent-foreground sm:pr-12 md:w-64 lg:w-80 px-4"
         )}
@@ -122,6 +124,7 @@ export function CommandMenu() {
                   <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                   <input
                     autoFocus
+                    aria-label="Search documentation or run a command"
                     className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                     placeholder="Type a command or search..."
                     value={query}

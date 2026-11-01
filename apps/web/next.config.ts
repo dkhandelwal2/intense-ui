@@ -111,6 +111,14 @@ if (process.env.NODE_ENV !== "production") {
 
 const nextConfig: NextConfig = {
   devIndicators: false,
+  poweredByHeader: false,
+  compress: true,
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   async redirects() {
     return [
       {

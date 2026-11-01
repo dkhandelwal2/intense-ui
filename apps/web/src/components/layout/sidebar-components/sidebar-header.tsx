@@ -44,6 +44,7 @@ export function SidebarHeader({ onClick, onToggleCollapse }: SidebarHeaderProps)
           <button
             type="button"
             onClick={onToggleCollapse}
+            aria-label="Toggle sidebar collapse"
             className="ml-auto text-zinc-500 hover:text-zinc-900 dark:hover:text-white p-1.5 rounded-lg hover:bg-black/[0.05] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
             title="Toggle sidebar"
           >

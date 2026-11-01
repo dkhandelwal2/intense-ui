@@ -52,6 +52,7 @@ export const ComponentSidebarHeader = React.memo(function ComponentSidebarHeader
         <button
           type="button"
           onClick={isBottomBar ? toggleMobileSidebar : undefined}
+          aria-label={isBottomBar ? "Open components sidebar" : undefined}
           className={cn(
             "flex items-center min-w-0 max-w-full text-left",
             isBottomBar && "cursor-pointer active:scale-95 transition-transform"

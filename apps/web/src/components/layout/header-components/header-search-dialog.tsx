@@ -67,11 +67,15 @@ export function HeaderSearchDialog({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search docs, components, CLI... (e.g. Accordion, Installation)"
+                aria-label="Search docs, components, and CLI"
                 className="w-full h-14 bg-transparent text-sm sm:text-base outline-none text-foreground placeholder:text-muted-foreground"
               />
               {searchQuery ? (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
+                  aria-label="Clear search query"
+                  title="Clear search query"
                   className="p-1 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />

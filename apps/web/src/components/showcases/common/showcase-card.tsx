@@ -511,6 +511,7 @@ export function ShowcaseCard({
                         <button
                           type="button"
                           onClick={onReset}
+                          aria-label="Reset to default props"
                           className="p-1 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
                           title="Reset to default props"
                         >

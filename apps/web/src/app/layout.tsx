@@ -25,10 +25,39 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url || "https://intense-ui.com"),
   title: {
-    default: siteConfig.name,
+    default: `${siteConfig.name} - Animated React & Tailwind UI Components`,
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: [
+    "UI components",
+    "React components",
+    "Next.js",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Animated UI",
+    "Accessible components",
+    "Copy and paste UI",
+  ],
+  authors: [{ name: "Deepak Khandelwal" }],
+  creator: "Deepak Khandelwal",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
