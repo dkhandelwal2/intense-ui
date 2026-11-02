@@ -36,22 +36,28 @@ export function Button({ children, className, variant = "default", size = "md", 
 
 export interface ConfirmButtonProps {
   className?: string; size?: "sm" | "md" | "lg"; action?: "delete" | "confirm" | "archive" | "discard";
-  label?: string; confirmLabel?: string; cancelLabel?: string; successLabel?: string; onConfirm?: () => void;
+  label?: string; confirmLabel?: string; cancelLabel?: string; successLabel?: string; iconOnly?: boolean; onConfirm?: () => void;
 }
 
 const ACTION_CONFIGS = {
-  delete: { label: "Delete", confirmLabel: "Delete", prompt: "Are you sure?", success: "Deleted!", icon: Trash2, bg: "bg-red-600 dark:bg-red-600 hover:bg-red-500", confirmBtn: "bg-white text-red-600" },
-  confirm: { label: "Confirm", confirmLabel: "Confirm", prompt: "Proceed?", success: "Confirmed!", icon: Check, bg: "bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-500", confirmBtn: "bg-white text-emerald-700" },
-  archive: { label: "Archive", confirmLabel: "Archive", prompt: "Archive item?", success: "Archived!", icon: Archive, bg: "bg-amber-600 dark:bg-amber-600 hover:bg-amber-500", confirmBtn: "bg-white text-amber-700" },
-  discard: { label: "Discard", confirmLabel: "Discard", prompt: "Discard?", success: "Discarded!", icon: AlertTriangle, bg: "bg-zinc-800 dark:bg-zinc-800 hover:bg-zinc-700", confirmBtn: "bg-white text-zinc-950" },
+  delete: { label: "Delete", confirmLabel: "Delete", prompt: "Are you sure?", success: "Deleted!", icon: Trash2, bg: "bg-red-600 dark:bg-red-600 hover:bg-red-500", confirmBtn: "bg-white text-red-600 hover:bg-zinc-100" },
+  confirm: { label: "Confirm", confirmLabel: "Confirm", prompt: "Proceed?", success: "Confirmed!", icon: Check, bg: "bg-emerald-600 dark:bg-emerald-600 hover:bg-emerald-500", confirmBtn: "bg-white text-emerald-700 hover:bg-zinc-100" },
+  archive: { label: "Archive", confirmLabel: "Archive", prompt: "Archive item?", success: "Archived!", icon: Archive, bg: "bg-amber-600 dark:bg-amber-600 hover:bg-amber-500", confirmBtn: "bg-white text-amber-700 hover:bg-zinc-100" },
+  discard: { label: "Discard", confirmLabel: "Discard", prompt: "Discard?", success: "Discarded!", icon: AlertTriangle, bg: "bg-zinc-800 dark:bg-zinc-800 hover:bg-zinc-700", confirmBtn: "bg-white text-zinc-950 hover:bg-zinc-100" },
 };
 
-export function ConfirmButton({ className, size = "md", action = "delete", label, confirmLabel, successLabel, onConfirm }: ConfirmButtonProps) {
+export function ConfirmButton({ className, size = "md", action = "delete", label, confirmLabel, cancelLabel, successLabel, iconOnly, onConfirm }: ConfirmButtonProps) {
   const [state, setState] = useState<"idle" | "confirming" | "success">("idle");
   const cfg = ACTION_CONFIGS[action] || ACTION_CONFIGS.delete;
   const Icon = cfg.icon;
   const sizeClasses = { sm: "h-8 text-xs", md: "h-10 text-sm", lg: "h-12 text-base" }[size];
-  const widthClasses = state === "confirming" ? { sm: "w-52 px-2", md: "w-60 px-3", lg: "w-68 px-4" }[size] : { sm: "w-24 px-2", md: "w-28 px-3", lg: "w-32 px-4" }[size];
+  const actionBtnSize = { sm: "w-5 h-5", md: "w-6 h-6", lg: "w-7 h-7" }[size];
+  const iconSize = { sm: "w-3 h-3", md: "w-3.5 h-3.5", lg: "w-4 h-4" }[size];
+  const widthClasses = state === "confirming"
+    ? { sm: "w-40 px-2.5", md: "w-48 px-3", lg: "w-56 px-3.5" }[size]
+    : iconOnly
+      ? { sm: "w-8", md: "w-10", lg: "w-12" }[size]
+      : { sm: "w-24 px-2", md: "w-28 px-3", lg: "w-32 px-4" }[size];
 
   const handleConfirm = (e: React.MouseEvent) => {
     e.stopPropagation(); setState("success"); onConfirm?.();
@@ -65,15 +71,15 @@ export function ConfirmButton({ className, size = "md", action = "delete", label
       <AnimatePresence mode="wait">
         {state === "idle" && (
           <motion.button key="idle" type="button" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} onClick={() => setState("confirming")} className="w-full h-full flex items-center justify-center gap-1.5 font-bold tracking-wide outline-none">
-            <Icon className="w-3.5 h-3.5" /> <span>{label || cfg.label}</span>
+            <Icon className={iconSize} /> {!iconOnly && <span>{label || cfg.label}</span>}
           </motion.button>
         )}
         {state === "confirming" && (
           <motion.div key="confirming" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full flex items-center justify-between gap-2 px-1">
             <span className="text-xs font-semibold text-white/90 truncate">{cfg.prompt}</span>
             <div className="flex items-center gap-1.5 shrink-0">
-              <button type="button" onClick={(e) => { e.stopPropagation(); setState("idle"); }} className="w-6 h-6 rounded-full bg-black/20 hover:bg-black/30 text-white flex items-center justify-center transition-transform hover:scale-110" aria-label="Cancel"><X className="w-3 h-3" /></button>
-              <button type="button" onClick={handleConfirm} className={cn("px-2.5 py-1 rounded-full font-bold text-xs transition-transform hover:scale-105 shadow-xs flex items-center gap-1", cfg.confirmBtn)}><Check className="w-3 h-3" /> {confirmLabel || cfg.confirmLabel}</button>
+              <button type="button" onClick={(e) => { e.stopPropagation(); setState("idle"); }} className={cn(actionBtnSize, "rounded-full bg-black/20 hover:bg-black/30 active:scale-95 text-white flex items-center justify-center transition-transform hover:scale-110")} aria-label={cancelLabel || "Cancel"}><X className={iconSize} /></button>
+              <button type="button" onClick={handleConfirm} className={cn(actionBtnSize, "rounded-full font-bold transition-transform hover:scale-110 active:scale-95 shadow-xs flex items-center justify-center", cfg.confirmBtn)} aria-label={confirmLabel || cfg.confirmLabel}><Check className={cn(iconSize, "stroke-[2.5]")} /></button>
             </div>
           </motion.div>
         )}
