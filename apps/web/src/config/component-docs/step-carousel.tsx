@@ -35,6 +35,7 @@ export const STEP_CAROUSEL_EXAMPLES = [
   { id: "without-button", label: "Minimal Dots", emoji: "🔘", code: `<StepCarousel totalSteps={5} showPlayButton={false} />` },
   { id: "pause-on-hover", label: "Pause On Hover", emoji: "⏸️", code: `<StepCarousel totalSteps={5} defaultPlaying={true} pauseOnHover={true} />` },
   { id: "fast", label: "Fast Speed", emoji: "⚡", code: `<StepCarousel totalSteps={5} duration={1200} defaultPlaying={true} loop={true} />` },
+  { id: "overflow", label: "Overflow (+More)", emoji: "🔢", code: `<StepCarousel totalSteps={8} maxVisibleSteps={5} />` },
   { id: "controlled", label: "External Controls", emoji: "🎛️", code: `<div className="flex flex-col items-center gap-4">
   <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} />
   <div className="flex gap-2">
@@ -79,6 +80,7 @@ export const stepCarouselDoc: ComponentDocData = {
         { prop: "gooey", type: "boolean", defaultValue: "true", description: "Enables liquid SVG gooey metaball filter." },
         { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Size scale of step pill container and button." },
         { prop: "colorScheme", type: '"default" | "primary"', defaultValue: '"default"', description: "Color scheme for active progress fill." },
+        { prop: "maxVisibleSteps", type: "number", defaultValue: "5", description: "Maximum visible dot indicators before showing +overflow count badge." },
         { prop: "showPlayButton", type: "boolean", defaultValue: "true", description: "Whether to display circular play/pause button." },
         { prop: "pauseOnHover", type: "boolean", defaultValue: "false", description: "Whether to pause timer on cursor hover." },
       ],

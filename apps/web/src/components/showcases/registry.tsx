@@ -4,7 +4,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { ShowcaseDefinition } from "./registry-types";
 
-// Customizer Studios & Defaults
+// Customizer Studios & Defaults for legacy showcase definitions
 import {
   AccordionLivePreview,
   AccordionPlaygroundStudio,
@@ -18,22 +18,18 @@ import {
   StepCarouselPlaygroundStudio,
 } from "@/components/showcases/playground-studio";
 
-// Accordion Showcase Assets
 import { AccordionVariantRenderer } from "@/components/showcases/accordion/_components/accordion-variant-renderer";
 import { generateAccordionCode } from "@/components/showcases/accordion/code-generator";
 import { CustomProps as AccordionCustomProps } from "@/components/showcases/accordion/types";
 
-// Navbar Showcase Assets
 import { NavbarVariantRenderer } from "@/components/showcases/nav-bar/_components/navbar-variant-renderer";
 import { generateNavbarCode } from "@/components/showcases/nav-bar/code-generator";
 import { CustomNavbarProps } from "@/components/showcases/nav-bar/types";
 
-// Breadcrumb Showcase Assets
 import { BreadcrumbVariantRenderer } from "@/components/showcases/breadcrumb/_components/breadcrumb-variant-renderer";
 import { generateBreadcrumbCode } from "@/components/showcases/breadcrumb/code-generator";
 import { CustomProps as BreadcrumbCustomProps } from "@/components/showcases/breadcrumb/types";
 
-// StepCarousel Showcase Assets
 import {
   StepCarouselPreview,
   DEFAULT_STEP_CAROUSEL_PROPS,
@@ -41,7 +37,14 @@ import {
   generateStepCarouselCode,
 } from "@/components/showcases/step-carousel";
 
-// Generic Showcase Fallback Assets
+// Modular Showcase Definitions
+import { buttonShowcaseDefinition, DEFAULT_BUTTON_PROPS, ButtonCustomProps } from "@/components/showcases/button";
+import { switchShowcaseDefinition, DEFAULT_SWITCH_PROPS, SwitchCustomProps } from "@/components/showcases/switch";
+import { sliderShowcaseDefinition, DEFAULT_SLIDER_PROPS, SliderCustomProps } from "@/components/showcases/slider";
+import { colorGridShowcaseDefinition, DEFAULT_COLOR_GRID_PROPS, ColorGridCustomProps } from "@/components/showcases/color-grid";
+import { separatorShowcaseDefinition, DEFAULT_SEPARATOR_PROPS, SeparatorCustomProps } from "@/components/showcases/separator";
+import { tooltipShowcaseDefinition, DEFAULT_TOOLTIP_PROPS, TooltipCustomProps } from "@/components/showcases/tooltip";
+
 import {
   GenericPlaygroundStudio,
   DEFAULT_GENERIC_PROPS,
@@ -55,6 +58,12 @@ export {
   ACCORDION_DEFAULT_CUSTOM_PROPS,
   BREADCRUMB_DEFAULT_CUSTOM_PROPS,
   DEFAULT_STEP_CAROUSEL_PROPS,
+  DEFAULT_BUTTON_PROPS,
+  DEFAULT_SWITCH_PROPS,
+  DEFAULT_SLIDER_PROPS,
+  DEFAULT_COLOR_GRID_PROPS,
+  DEFAULT_SEPARATOR_PROPS,
+  DEFAULT_TOOLTIP_PROPS,
   DEFAULT_GENERIC_PROPS,
 };
 export type {
@@ -62,10 +71,16 @@ export type {
   AccordionCustomProps,
   BreadcrumbCustomProps,
   StepCarouselCustomProps,
+  ButtonCustomProps,
+  SwitchCustomProps,
+  SliderCustomProps,
+  ColorGridCustomProps,
+  SeparatorCustomProps,
+  TooltipCustomProps,
   GenericCustomProps,
 };
 
-// 1. Accordion Showcase Definition
+// Built-in Legacy Definitions
 export const accordionShowcaseDefinition: ShowcaseDefinition<AccordionCustomProps> = {
   slug: "accordion",
   defaultProps: ACCORDION_DEFAULT_CUSTOM_PROPS,
@@ -78,7 +93,6 @@ export const accordionShowcaseDefinition: ShowcaseDefinition<AccordionCustomProp
   getMeta: (props) => ({ activeScale: props.size || "MD", activeColor: props.borderColor || "" }),
 };
 
-// 2. Navbar Showcase Definition
 export const navbarShowcaseDefinition: ShowcaseDefinition<CustomNavbarProps> = {
   slug: "nav-bar",
   defaultProps: NAVBAR_DEFAULT_CUSTOM_PROPS,
@@ -91,7 +105,6 @@ export const navbarShowcaseDefinition: ShowcaseDefinition<CustomNavbarProps> = {
   getMeta: (props) => ({ activeScale: props.size || "MD", activeColor: props.activeColor || "" }),
 };
 
-// 3. Breadcrumb Showcase Definition
 export const breadcrumbShowcaseDefinition: ShowcaseDefinition<BreadcrumbCustomProps> = {
   slug: "breadcrumb",
   defaultProps: BREADCRUMB_DEFAULT_CUSTOM_PROPS,
@@ -104,31 +117,28 @@ export const breadcrumbShowcaseDefinition: ShowcaseDefinition<BreadcrumbCustomPr
   getMeta: (props) => ({ activeScale: props.size || "MD", activeColor: props.activeColor || "" }),
 };
 
-// 4. Step Carousel Showcase Definition
 export const stepCarouselShowcaseDefinition: ShowcaseDefinition<StepCarouselCustomProps> = {
   slug: "step-carousel",
   defaultProps: DEFAULT_STEP_CAROUSEL_PROPS,
   renderPreview: ({ customProps, activeTocId, isCustomizing }) => (
-    <StepCarouselPreview
-      customProps={customProps}
-      activeTocId={activeTocId}
-      isCustomizing={isCustomizing}
-    />
+    <StepCarouselPreview customProps={customProps} activeTocId={activeTocId} isCustomizing={isCustomizing} />
   ),
   renderPlayground: ({ customProps, onChange, hidePreview = true, onViewCode }) => (
-    <StepCarouselPlaygroundStudio
-      customProps={customProps}
-      onChange={onChange}
-      hidePreview={hidePreview}
-      className="w-full h-full flex-1 min-h-0 flex flex-col"
-      onViewCode={onViewCode}
-    />
+    <StepCarouselPlaygroundStudio customProps={customProps} onChange={onChange} hidePreview={hidePreview} className="w-full h-full flex-1 min-h-0 flex flex-col" onViewCode={onViewCode} />
   ),
   generateCode: ({ customProps }) => generateStepCarouselCode(customProps),
   getMeta: (props) => ({ activeScale: (props.size || "md").toUpperCase(), activeColor: props.colorScheme || "default" }),
 };
 
-// 5. Generic Fallback Definition
+export {
+  buttonShowcaseDefinition,
+  switchShowcaseDefinition,
+  sliderShowcaseDefinition,
+  colorGridShowcaseDefinition,
+  separatorShowcaseDefinition,
+  tooltipShowcaseDefinition,
+};
+
 export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinition<GenericCustomProps> {
   return {
     slug,
@@ -158,6 +168,15 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "breadcrumb": breadcrumbShowcaseDefinition,
   "step-carousel": stepCarouselShowcaseDefinition,
   "step-player": stepCarouselShowcaseDefinition,
+  "button": buttonShowcaseDefinition,
+  "animated-button": buttonShowcaseDefinition,
+  "glowing-button": buttonShowcaseDefinition,
+  "switch": switchShowcaseDefinition,
+  "slider": sliderShowcaseDefinition,
+  "color-grid": colorGridShowcaseDefinition,
+  "color-palette": colorGridShowcaseDefinition,
+  "separator": separatorShowcaseDefinition,
+  "tooltip": tooltipShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {

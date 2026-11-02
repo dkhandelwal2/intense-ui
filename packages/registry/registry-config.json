@@ -32,14 +32,14 @@
   {
     "name": "separator",
     "title": "Separator",
-    "description": "A beautifully designed, accessible Separator component.",
-    "enabled": true
+    "description": "Visual divider separating sections of content.",
+    "enabled": false
   },
   {
     "name": "skeleton",
     "title": "Skeleton",
-    "description": "A beautifully designed, accessible Skeleton component.",
-    "enabled": true
+    "description": "Visual placeholder while content is loading.",
+    "enabled": false
   },
   {
     "name": "slider",

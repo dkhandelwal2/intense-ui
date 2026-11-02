@@ -12,7 +12,6 @@ const GOOEY_ITEMS = [
   { id: "home", label: "Home", icon: "🏠" },
   { id: "explore", label: "Explore", icon: "🧭" },
   { id: "library", label: "Library", icon: "📚" },
-  { id: "settings", label: "Settings", icon: "⚙️" },
 ];
 
 const WITH_ICON_ITEMS = [
@@ -45,7 +44,7 @@ function PreviewCanvas({
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-center p-4",
+        "w-full flex items-start justify-center ",
         className
       )}
     >

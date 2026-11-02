@@ -3,8 +3,6 @@ export * from "./components/breadcrumb";
 export * from "./components/button";
 export * from "./components/color-grid";
 export * from "./components/nav-bar";
-export * from "./components/separator";
-export * from "./components/skeleton";
 export * from "./components/slider";
 export * from "./components/step-carousel";
 export * from "./components/switch";

@@ -1,3 +1,7 @@
+/**
+ * @disabled
+ * Visual divider separating sections of content.
+ */
 import * as React from "react";
 import { cn } from "@/lib/utils";
 

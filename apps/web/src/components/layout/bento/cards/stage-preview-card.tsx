@@ -33,8 +33,8 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
   return (
     <div
       className={cn(
-        "flex flex-col justify-between relative overflow-hidden select-none w-full",
-        isDesktop ? "h-full p-4 sm:p-6" : "sm:h-[40vh] h-[60vh] rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-4 sm:p-6 shadow-sm gap-4 shrink-0",
+        "flex flex-col justify-between relative overflow-y-scroll select-none w-full p-4",
+        isDesktop ? "h-full rounded-3xl" : "sm:h-[40vh] h-[60vh] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
         className
       )}
     >
@@ -73,10 +73,10 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
           >
             <div
               className={cn(
-                "rounded-3xl transition-all duration-300 flex items-center justify-center",
+                "rounded-3xl transition-all duration-300 flex items-center justify-center p-2",
                 isDesktop
-                  ? "w-[62%] h-full p-5 sm:p-7 shadow-md backdrop-blur-xl"
-                  : "w-full max-w-[620px] max-h-[250px] p-4 sm:p-6 rounded-2xl shadow-xs backdrop-blur-xl"
+                  ? "w-[62%] h-full shadow-md backdrop-blur-xl"
+                  : "w-full max-w-[620px] max-h-[250px] rounded-2xl shadow-xs backdrop-blur-xl"
               )}
             >
               <div className="w-full h-full flex items-start justify-center overflow-y-auto no-scrollbar">

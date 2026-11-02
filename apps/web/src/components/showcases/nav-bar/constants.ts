@@ -26,7 +26,6 @@ export default function GooeyNavbarDemo() {
     { id: "home", label: "Home", icon: "🏠" },
     { id: "explore", label: "Explore", icon: "🧭" },
     { id: "library", label: "Library", icon: "📚" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
   ];
 
   return (
@@ -286,7 +285,6 @@ export default function NavbarDemo() {
     { id: "home", label: "Home", icon: "🏠" },
     { id: "explore", label: "Explore", icon: "🧭" },
     { id: "library", label: "Library", icon: "📚" },
-    { id: "settings", label: "Settings", icon: "⚙️" },
   ];
 
   return (

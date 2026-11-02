@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _request: NextRequest,
-  context: { params: Promise<{ name: string }> | { name: string } }
+  context: { params: Promise<{ name: string }> }
 ) {
   const params = await context.params;
   const item = getDynamicComponentItem(params.name);

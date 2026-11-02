@@ -119,28 +119,28 @@ export const NavbarGooey = React.forwardRef<HTMLElement, NavbarGooeyProps>(
           const radiusClass = isItemActive
             ? "rounded-2xl"
             : isFirstOfGroup && isLastOfGroup
-            ? "rounded-2xl"
-            : isFirstOfGroup
-            ? "rounded-l-2xl rounded-r-none"
-            : isLastOfGroup
-            ? "rounded-r-2xl rounded-l-none"
-            : "rounded-none";
+              ? "rounded-2xl"
+              : isFirstOfGroup
+                ? "rounded-l-2xl rounded-r-none"
+                : isLastOfGroup
+                  ? "rounded-r-2xl rounded-l-none"
+                  : "rounded-none";
 
           // Clean border outlines for unified islands (1px constant to avoid layout shifts)
           const borderClass = isItemActive
             ? "border border-transparent"
             : isFirstOfGroup && isLastOfGroup
-            ? "border border-zinc-200/90 dark:border-white/5"
-            : isFirstOfGroup
-            ? "border-y border-l border-r-0 border-zinc-200/90 dark:border-white/5"
-            : isLastOfGroup
-            ? "border-y border-r border-l-0 border-zinc-200/90 dark:border-white/5"
-            : "border-y border-x-0 border-zinc-200/90 dark:border-white/5";
+              ? "border border-zinc-200/90 dark:border-white/5"
+              : isFirstOfGroup
+                ? "border-y border-l border-r-0 border-zinc-200/90 dark:border-white/5"
+                : isLastOfGroup
+                  ? "border-y border-r border-l-0 border-zinc-200/90 dark:border-white/5"
+                  : "border-y border-x-0 border-zinc-200/90 dark:border-white/5";
 
           const customActiveStyle: React.CSSProperties = isItemActive
             ? {
-                backgroundColor: activeColor || "var(--theme-primary)",
-              }
+              backgroundColor: activeColor || "var(--theme-primary)",
+            }
             : {};
 
           return (
@@ -287,9 +287,9 @@ export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>
                   style={
                     activeColor
                       ? {
-                          backgroundColor: activeColor,
-                          boxShadow: `0 2px 10px ${activeColor}40`,
-                        }
+                        backgroundColor: activeColor,
+                        boxShadow: `0 2px 10px ${activeColor}40`,
+                      }
                       : undefined
                   }
                   className={cn(
@@ -347,7 +347,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
         className={cn(
           "w-full flex items-center justify-between",
           variant === "floating" &&
-            "rounded-full border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-lg p-1.5",
+          "rounded-full border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-lg p-1.5",
           variant === "pills" && "gap-2",
           className
         )}

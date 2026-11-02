@@ -120,12 +120,7 @@ export function DockButtonRow({
                 )}
               </div>
               <span className="absolute bottom-[8px] left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap transition-colors duration-300 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-zinc-200 font-medium">
-                +{btn.count}{" "}
-                {btn.type === "next"
-                  ? btn.count === 1
-                    ? "item"
-                    : "items"
-                  : "prev"}
+                +{btn.count} more
               </span>
             </motion.div>
           );

@@ -28,14 +28,20 @@ export const BentoCanvas = React.memo(function BentoCanvas(props: BentoCanvasPro
 
   if (isDesktop) {
     return (
-      <div className="hidden xl:flex flex-1 min-h-0 min-w-0 w-full h-full">
+      <div
+        suppressHydrationWarning
+        className="hidden xl:flex flex-1 min-h-0 min-w-0 w-full h-full"
+      >
         <DesktopCanvasView {...props} />
       </div>
     );
   }
 
   return (
-    <div className="flex xl:hidden flex-1 min-h-0 min-w-0 w-full h-full flex-col">
+    <div
+      suppressHydrationWarning
+      className="flex xl:hidden flex-1 min-h-0 min-w-0 w-full h-full flex-col"
+    >
       <MobileCanvasView {...props} />
     </div>
   );

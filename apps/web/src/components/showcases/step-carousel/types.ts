@@ -21,3 +21,9 @@ export const DEFAULT_STEP_CAROUSEL_PROPS: StepCarouselCustomProps = {
   gooey: false,
   pauseOnHover: false,
 };
+
+export interface StepCarouselPreviewProps {
+  customProps: StepCarouselCustomProps;
+  activeTocId?: string;
+  isCustomizing?: boolean;
+}

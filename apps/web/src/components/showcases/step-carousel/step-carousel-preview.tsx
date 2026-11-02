@@ -2,24 +2,11 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Layers, Sliders, CheckCircle2, Wand2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StepCarousel } from "@/components/ui/step-carousel";
-import { StepCarouselCustomProps } from "./types";
-
-interface StepCarouselPreviewProps {
-  customProps: StepCarouselCustomProps;
-  activeTocId?: string;
-  isCustomizing?: boolean;
-}
-
-const STEP_CARDS = [
-  { title: "Border & Radius", subtitle: "Gooey curves & hairlines", description: "Configurable outline borders with liquid rounded geometry.", icon: Layers, accent: "from-sky-500/20 via-cyan-500/10 to-transparent" },
-  { title: "Typography Scale", subtitle: "Fluid responsive typography", description: "Hierarchical type ramping with optical letter spacing.", icon: Sparkles, accent: "from-purple-500/20 via-pink-500/10 to-transparent" },
-  { title: "Color Themes", subtitle: "Adaptive dual-tone palettes", description: "Engineered high-contrast tokens adhering to WCAG AAA standards.", icon: Sliders, accent: "from-amber-500/20 via-orange-500/10 to-transparent" },
-  { title: "Motion Dynamics", subtitle: "Spring-damped gooey filters", description: "Physically calculated liquid matrix filters powered by SVG feColorMatrix.", icon: Wand2, accent: "from-emerald-500/20 via-teal-500/10 to-transparent" },
-  { title: "Production Ready", subtitle: "Zero-config export code", description: "Self-contained accessible primitives ready for immediate zero-config copy-paste.", icon: CheckCircle2, accent: "from-rose-500/20 via-red-500/10 to-transparent" },
-];
+import { StepCarouselPreviewProps } from "./types";
+import { STEP_CARDS } from "./constants";
 
 export function StepCarouselPreview({ customProps, activeTocId = "basic", isCustomizing = false }: StepCarouselPreviewProps) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -30,7 +17,7 @@ export function StepCarouselPreview({ customProps, activeTocId = "basic", isCust
 
   if (isCustomizing) {
     return (
-      <div className="w-full max-w-md flex flex-col items-center gap-6 p-4">
+      <div className="w-full max-w-md flex flex-col items-center gap-6">
         <StepCarousel
           totalSteps={customProps.totalSteps}
           duration={customProps.duration}
@@ -126,7 +113,7 @@ export function StepCarouselPreview({ customProps, activeTocId = "basic", isCust
   // 6. Minimal Dots (Without Play Button)
   if (activeTocId === "without-button") {
     return (
-      <div className="w-full max-w-md flex flex-col items-center gap-6 p-4">
+      <div className="w-full max-w-md flex flex-col items-center gap-6">
         <div className="text-center flex flex-col items-center gap-1">
           <span className="text-xs font-semibold text-foreground">Minimal Dots</span>
           <span className="text-[11px] text-muted-foreground">Decoupled indicator without play action button</span>
@@ -162,10 +149,23 @@ export function StepCarouselPreview({ customProps, activeTocId = "basic", isCust
     );
   }
 
+  // 9. Overflow (+More items badge)
+  if (activeTocId === "overflow") {
+    return (
+      <div className="w-full max-w-md flex flex-col items-center gap-6 p-6">
+        <div className="text-center flex flex-col items-center gap-1">
+          <span className="text-xs font-semibold text-foreground">Overflow Dynamic Windowing</span>
+          <span className="text-[11px] text-muted-foreground">Caps at 5 visible steps with dynamic +3 overflow counter</span>
+        </div>
+        <StepCarousel totalSteps={8} maxVisibleSteps={5} defaultStep={0} />
+      </div>
+    );
+  }
+
   // Basic Carousel (Interactive Card Deck)
   return (
-    <div className="w-full max-w-md flex flex-col items-center gap-6 p-4">
-      <div className="relative w-full h-44 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-lg p-5 flex flex-col justify-between">
+    <div className="w-full max-w-md flex flex-col items-center gap-6">
+      <div className="relative w-full h-35 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl shadow-lg p-3 flex flex-col justify-between">
         <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50 pointer-events-none transition-all duration-500", card.accent)} />
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex items-center gap-2">

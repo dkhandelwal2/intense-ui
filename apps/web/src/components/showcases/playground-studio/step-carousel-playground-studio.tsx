@@ -27,6 +27,8 @@ const STEP_OPTIONS = [
   { count: 3, label: "3 Steps", badge: "03" },
   { count: 4, label: "4 Steps", badge: "04" },
   { count: 5, label: "5 Steps", badge: "05" },
+  { count: 7, label: "7 Steps (+2)", badge: "07" },
+  { count: 8, label: "8 Steps (+3)", badge: "08" },
 ];
 
 export function StepCarouselPlaygroundStudio({

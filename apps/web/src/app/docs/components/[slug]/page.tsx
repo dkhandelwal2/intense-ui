@@ -14,7 +14,7 @@ export function generateStaticParams() {
     }));
 }
 
-export default async function DynamicComponentPage(props: { params: Promise<{ slug: string }> | { slug: string } }) {
+export default async function DynamicComponentPage(props: { params: Promise<{ slug: string }> }) {
   const headersList = await headers();
   const userAgentStr = headersList.get("user-agent") || "";
   const isMobile = Boolean(
