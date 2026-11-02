@@ -17,6 +17,7 @@ export function AnalogClock({ date, className }: AnalogClockProps) {
 
   return (
     <div
+      suppressHydrationWarning
       className={cn(
         "relative w-7 h-7 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-inner flex items-center justify-center shrink-0",
         className

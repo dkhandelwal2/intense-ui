@@ -26,7 +26,10 @@ export const CapsuleClock = React.memo(function CapsuleClock({
       </div>
 
       <div className="flex flex-col min-w-0 leading-tight">
-        <div className="flex items-center gap-1 text-xs font-mono font-bold text-foreground tracking-tight">
+        <div
+          suppressHydrationWarning
+          className="flex items-center gap-1 text-xs font-mono font-bold text-foreground tracking-tight"
+        >
           <span>
             {hoursStr}:{minutesStr}
           </span>
@@ -37,7 +40,10 @@ export const CapsuleClock = React.memo(function CapsuleClock({
             {ampm}
           </span>
         </div>
-        <span className="text-[10px] font-mono text-muted-foreground truncate">
+        <span
+          suppressHydrationWarning
+          className="text-[10px] font-mono text-muted-foreground truncate"
+        >
           {dateStr}
         </span>
       </div>

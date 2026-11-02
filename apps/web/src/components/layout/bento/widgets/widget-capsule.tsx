@@ -7,6 +7,7 @@ import { getGreeting } from "./weather-helpers";
 import { CapsuleClock } from "./capsule-clock";
 import { CapsuleWeather } from "./capsule-weather";
 import { useLiveWeather } from "@/hooks/use-live-weather";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
   weekday: "short",
@@ -20,12 +21,14 @@ interface WidgetCapsuleProps {
 }
 
 export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: WidgetCapsuleProps) {
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [mounted, setMounted] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date>(() => new Date(0));
   const [showGreeting, setShowGreeting] = useState(true);
 
   const { weather, fetchLiveWeather } = useLiveWeather();
 
   useEffect(() => {
+    setMounted(true);
     setCurrentTime(new Date());
 
     const timer = setInterval(() => {
@@ -41,6 +44,29 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
       clearTimeout(greetingTimer);
     };
   }, []);
+
+  if (!mounted) {
+    return (
+      <div
+        className={cn(
+          "h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-3.5 pr-4 shadow-sm flex items-center justify-between overflow-hidden relative select-none",
+          className
+        )}
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <Skeleton className="w-8 h-8 rounded-full" />
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <Skeleton className="h-3 w-20 rounded-full" />
+            <Skeleton className="h-2 w-14 rounded-full" />
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <Skeleton className="h-2.5 w-8 rounded-full hidden sm:block" />
+          <Skeleton className="w-7 h-7 rounded-full" />
+        </div>
+      </div>
+    );
+  }
 
   const hours = currentTime.getHours();
   const fullDateStr = DATE_FORMATTER.format(currentTime);
