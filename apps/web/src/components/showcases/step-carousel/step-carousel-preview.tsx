@@ -155,7 +155,7 @@ export function StepCarouselPreview({ customProps, activeTocId = "basic", isCust
       <div className="w-full max-w-md flex flex-col items-center gap-6 p-6">
         <div className="text-center flex flex-col items-center gap-1">
           <span className="text-xs font-semibold text-foreground">Overflow Dynamic Windowing</span>
-          <span className="text-[11px] text-muted-foreground">Caps at 5 visible steps with dynamic +3 overflow counter</span>
+          <span className="text-[11px] text-muted-foreground">Caps at 5 visible steps, countdown badge reduces as slides advance</span>
         </div>
         <StepCarousel totalSteps={8} maxVisibleSteps={5} defaultStep={0} />
       </div>
