@@ -19,7 +19,7 @@ export const STEP_CAROUSEL_SIZES = {
   lg: { container: "h-12 sm:h-14 px-5 gap-2", dotWidth: 10, dotHeight: 10, activeWidth: 56, button: "w-12 h-12 sm:w-14 sm:h-14", icon: "w-4.5 h-4.5" },
 } as const;
 
-const SPRING_TRANSITION = { type: "spring", stiffness: 350, damping: 30 } as const;
+const SPRING_TRANSITION = { type: "spring", stiffness: 320, damping: 28, mass: 0.8 } as const;
 
 function GooeyFilter({ id }: { id: string }) {
   return (
@@ -138,11 +138,12 @@ export function StepCarousel({
   const isPrimary = colorScheme === "primary";
   if (totalSteps <= 0) return null;
 
-  const visibleCount = Math.min(totalSteps, maxVisibleSteps);
-  const startIdx = totalSteps > maxVisibleSteps && activeIndex >= maxVisibleSteps
+  const hasOverflow = totalSteps > maxVisibleSteps;
+  const startIdx = hasOverflow && activeIndex >= maxVisibleSteps
     ? Math.min(activeIndex - maxVisibleSteps + 1, totalSteps - maxVisibleSteps) : 0;
-  const remainingAhead = Math.max(0, totalSteps - (startIdx + visibleCount));
-  const hasOverflow = remainingAhead > 0;
+  const visibleIndices = Array.from({ length: Math.min(totalSteps, maxVisibleSteps) }, (_, i) => startIdx + i);
+  const remainingAhead = Math.max(0, totalSteps - (startIdx + visibleIndices.length));
+  const showOverflowBadge = hasOverflow && remainingAhead > 0;
 
   const pillTrack = isPrimary ? "bg-[var(--theme-primary)]/25" : "bg-zinc-400/50 dark:bg-zinc-600/60";
   const pillInactive = isPrimary ? "bg-[var(--theme-primary)]/40 hover:bg-[var(--theme-primary)]" : "bg-zinc-400 dark:bg-zinc-500/70 hover:bg-zinc-600 dark:hover:bg-zinc-300";
@@ -158,12 +159,11 @@ export function StepCarousel({
         </div>
       )}
       <div className={cn("relative z-10 inline-flex items-center", gooey ? "gap-0.5" : "gap-3")}>
-        <motion.div layout transition={SPRING_TRANSITION} className={cn("flex items-center justify-center rounded-full transition-colors relative", !gooey && surfaceStyle, sz.container)}>
-          {Array.from({ length: visibleCount }, (_, slot) => {
-            const idx = startIdx + slot;
+        <motion.div layout transition={SPRING_TRANSITION} className={cn("flex items-center justify-center rounded-full transition-colors relative overflow-hidden", !gooey && surfaceStyle, sz.container)}>
+          {visibleIndices.map((idx) => {
             const isActive = idx === activeIndex;
             return (
-              <motion.button key={slot} type="button" layout transition={SPRING_TRANSITION} onClick={() => handleStepChange(idx)} className="group/dot relative flex items-center justify-center cursor-pointer min-h-11 sm:min-h-12 py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full touch-manipulation" aria-label={`Jump to step ${idx + 1} of ${totalSteps}`} aria-current={isActive ? "step" : undefined}>
+              <motion.button key={idx} type="button" layout transition={SPRING_TRANSITION} onClick={() => handleStepChange(idx)} className="group/dot relative flex items-center justify-center cursor-pointer min-h-11 sm:min-h-12 py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full touch-manipulation" aria-label={`Jump to step ${idx + 1} of ${totalSteps}`} aria-current={isActive ? "step" : undefined}>
                 <motion.div layout transition={SPRING_TRANSITION} animate={{ width: isActive ? sz.activeWidth : sz.dotWidth, height: sz.dotHeight }} className={cn("relative rounded-full overflow-hidden transition-colors duration-200", isActive ? pillTrack : pillInactive)}>
                   <AnimatePresence>
                     {isActive && (
@@ -175,10 +175,10 @@ export function StepCarousel({
             );
           })}
           <AnimatePresence mode="popLayout">
-            {hasOverflow && (
+            {showOverflowBadge && (
               <motion.button
                 key="overflow-badge" type="button" layout initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6 }} transition={SPRING_TRANSITION}
-                onClick={() => handleStepChange(Math.min(totalSteps - 1, startIdx + visibleCount))}
+                onClick={() => handleStepChange(Math.min(totalSteps - 1, startIdx + visibleIndices.length))}
                 className="relative flex items-center justify-center px-1.5 py-0.5 rounded-full bg-zinc-300/80 dark:bg-zinc-700/80 hover:bg-zinc-400 dark:hover:bg-zinc-600 transition-colors text-[9px] font-mono font-bold text-zinc-800 dark:text-zinc-200 ml-0.5 cursor-pointer select-none"
                 title={`${remainingAhead} more items`}
               >
