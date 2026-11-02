@@ -23,9 +23,9 @@ const SWITCH_VARIANTS = [
 ];
 
 const SWITCH_SIZES = [
-  { id: "sm" as const, label: "Small", badge: "SM", spec: "Compact scale switch" },
-  { id: "md" as const, label: "Medium", badge: "MD", spec: "Standard baseline dimensions" },
-  { id: "lg" as const, label: "Large", badge: "LG", spec: "Prominent touch-target size" },
+  { id: "sm" as const, label: "Small (SM)", badge: "SM", spec: "Compact scale for tight navigation bars" },
+  { id: "md" as const, label: "Medium (MD)", badge: "MD", spec: "Standard baseline UI dimensions" },
+  { id: "lg" as const, label: "Large (LG)", badge: "LG", spec: "Prominent touch-target size for mobile/hero" },
 ];
 
 export function SwitchPlaygroundStudio({
@@ -66,38 +66,21 @@ export function SwitchPlaygroundStudio({
       categoryTag: "02 / 03",
       colorGradient: "bg-gradient-to-br from-[#10B981] via-[#059669] to-[#047857]",
       icon: <Maximize2 className="w-3.5 h-3.5" />,
-      headerTitle: "Scale & Alignment",
-      headerSubtitle: "dimensions and axis",
+      headerTitle: "Scale Options",
+      headerSubtitle: "switch sizing across all archetypes",
       headerEmoji: "📐",
-      rows: [
-        ...SWITCH_SIZES.map((sz) => ({
-          id: `size-${sz.id}`,
-          label: `${sz.label} Size`,
-          spec: sz.spec,
-          thumbnail: (
-            <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 uppercase">
-              {sz.badge}
-            </span>
-          ),
-          isSelected: customProps.size === sz.id,
-          onSelect: () => onChange((p) => ({ ...p, size: sz.id })),
-        })),
-        {
-          id: "orientation-toggle",
-          label: "Vertical Alignment",
-          spec: "Orient switch vertically instead of horizontal",
-          thumbnail: <span className="text-sm">↕️</span>,
-          actionType: "toggle" as const,
-          toggleChecked: customProps.orientation === "vertical",
-          onToggleChange: (checked: boolean) =>
-            onChange((p) => ({ ...p, orientation: checked ? "vertical" : "horizontal" })),
-          onSelect: () =>
-            onChange((p) => ({
-              ...p,
-              orientation: p.orientation === "vertical" ? "horizontal" : "vertical",
-            })),
-        },
-      ],
+      rows: SWITCH_SIZES.map((sz) => ({
+        id: `size-${sz.id}`,
+        label: sz.label,
+        spec: sz.spec,
+        thumbnail: (
+          <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 uppercase">
+            {sz.badge}
+          </span>
+        ),
+        isSelected: customProps.size === sz.id,
+        onSelect: () => onChange((p) => ({ ...p, size: sz.id })),
+      })),
     },
     {
       id: "behavior",
@@ -110,6 +93,16 @@ export function SwitchPlaygroundStudio({
       headerSubtitle: "labels and interactivity",
       headerEmoji: "🔤",
       rows: [
+        {
+          id: "state-toggle",
+          label: "Active State (Checked)",
+          spec: "Toggle current on/off boolean state",
+          thumbnail: <span className="text-sm">{customProps.checked ? "✅" : "⚪"}</span>,
+          actionType: "toggle" as const,
+          toggleChecked: customProps.checked,
+          onToggleChange: (c: boolean) => onChange((p) => ({ ...p, checked: c })),
+          onSelect: () => onChange((p) => ({ ...p, checked: !p.checked })),
+        },
         {
           id: "mode-onoff",
           label: "ON / OFF Text",
@@ -128,8 +121,8 @@ export function SwitchPlaygroundStudio({
         },
         {
           id: "dot-toggle",
-          label: "Glowing Status Dot",
-          spec: "Show glowing color indicator dot inside knob",
+          label: "Status Indicator Dot",
+          spec: "Show glowing color status dot inside rocker knob",
           thumbnail: <span className="text-sm">🟢</span>,
           actionType: "toggle" as const,
           toggleChecked: customProps.showDotIcon,

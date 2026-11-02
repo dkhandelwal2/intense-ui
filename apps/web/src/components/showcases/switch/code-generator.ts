@@ -9,9 +9,6 @@ export function generateSwitchCode(props: SwitchCustomProps): string {
   if (props.size !== "md") {
     parts.push(`size="${props.size}"`);
   }
-  if (props.orientation !== "horizontal") {
-    parts.push(`orientation="${props.orientation}"`);
-  }
   if (props.sliderText !== "on/off") {
     parts.push(`sliderText="${props.sliderText}"`);
   }
