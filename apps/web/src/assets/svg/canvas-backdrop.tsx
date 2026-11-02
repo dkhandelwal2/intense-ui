@@ -26,21 +26,31 @@ export function computeCutoutPath(
   cornerRadius = 24,
   concaveRadius = 24
 ): string {
+  if (
+    !Number.isFinite(width) ||
+    !Number.isFinite(height) ||
+    width <= 0 ||
+    height <= 0
+  ) {
+    return "";
+  }
   const w = width;
   const h = height;
-  const r = cornerRadius;
-  const rConcave = concaveRadius;
+  const r = Math.min(cornerRadius, w / 2, h / 2);
+  const rConcave = Math.min(concaveRadius, w / 2, h / 2);
+  const safeDockWidth = Math.max(0, Math.min(w, dockWidth || 0));
+  const safeCutoutY = Math.max(0, Math.min(h, cutoutY || 0));
 
   return `
     M ${r} 0
     L ${w - r} 0
     A ${r} ${r} 0 0 1 ${w} ${r}
-    L ${w} ${cutoutY - r}
-    A ${r} ${r} 0 0 1 ${w - r} ${cutoutY}
-    L ${dockWidth + rConcave} ${cutoutY}
-    A ${rConcave} ${rConcave} 0 0 0 ${dockWidth} ${cutoutY + rConcave}
-    L ${dockWidth} ${h - r}
-    A ${r} ${r} 0 0 1 ${dockWidth - r} ${h}
+    L ${w} ${safeCutoutY - r}
+    A ${r} ${r} 0 0 1 ${w - r} ${safeCutoutY}
+    L ${safeDockWidth + rConcave} ${safeCutoutY}
+    A ${rConcave} ${rConcave} 0 0 0 ${safeDockWidth} ${safeCutoutY + rConcave}
+    L ${safeDockWidth} ${h - r}
+    A ${r} ${r} 0 0 1 ${safeDockWidth - r} ${h}
     L ${r} ${h}
     A ${r} ${r} 0 0 1 0 ${h - r}
     L 0 ${r}
@@ -100,12 +110,16 @@ export const CanvasBackdropSvg = React.memo(function CanvasBackdropSvg({
           />
         </pattern>
       </defs>
-      <path
-        d={pathD}
-        className="fill-white dark:fill-zinc-900 stroke-zinc-200 dark:stroke-zinc-800"
-        strokeWidth="1.5"
-      />
-      <path d={pathD} fill="url(#canvas-dot-grid)" />
+      {pathD ? (
+        <>
+          <path
+            d={pathD}
+            className="fill-white dark:fill-zinc-900 stroke-zinc-200 dark:stroke-zinc-800"
+            strokeWidth="1.5"
+          />
+          <path d={pathD} fill="url(#canvas-dot-grid)" />
+        </>
+      ) : null}
     </svg>
   );
 });

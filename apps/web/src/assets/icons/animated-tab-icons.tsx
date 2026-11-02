@@ -80,7 +80,6 @@ export const AnimatedCodeIcon = React.memo(function AnimatedCodeIcon({
         className
       )}
       title="Preview & Source Code"
-      aria-label="Preview & Source Code"
     >
       <svg
         viewBox="0 0 24 24"

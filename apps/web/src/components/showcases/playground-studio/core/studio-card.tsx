@@ -56,13 +56,27 @@ export const PlaygroundStudioCard = React.memo(function PlaygroundStudioCard({
   const notchH = 40;
 
   const scoopedPath = useMemo(() => {
-    if (cardSize.width <= 0 || cardSize.height <= 0) return "";
-    return getScoopedCardPath(cardSize.width, cardSize.height, 24, notchW, notchH, 14, 0);
+    if (
+      !Number.isFinite(cardSize.width) ||
+      !Number.isFinite(cardSize.height) ||
+      cardSize.width <= 0 ||
+      cardSize.height <= 0
+    ) {
+      return "";
+    }
+    return getScoopedCardPath(cardSize.width, cardSize.height, 24, notchW, notchH, 14, 0) || "";
   }, [cardSize.width, cardSize.height]);
 
   const scoopedStrokePath = useMemo(() => {
-    if (cardSize.width <= 0 || cardSize.height <= 0) return "";
-    return getScoopedCardPath(cardSize.width, cardSize.height, 24, notchW, notchH, 14, 0.5);
+    if (
+      !Number.isFinite(cardSize.width) ||
+      !Number.isFinite(cardSize.height) ||
+      cardSize.width <= 0 ||
+      cardSize.height <= 0
+    ) {
+      return "";
+    }
+    return getScoopedCardPath(cardSize.width, cardSize.height, 24, notchW, notchH, 14, 0.5) || "";
   }, [cardSize.width, cardSize.height]);
 
   return (

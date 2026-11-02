@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { DOCK_DIMENSIONS, DOCK_SPRING_CONFIG } from "./constants";
+import { DOCK_DIMENSIONS } from "./constants";
 import { generateDockPath } from "./dock-geometry";
 import { useDockPosition } from "@/hooks/use-dock-position";
 import { useDockPagination } from "@/hooks/use-dock-pagination";
@@ -79,13 +78,13 @@ export const ComponentTocDock = React.memo(function ComponentTocDock({
           style={{ willChange: "contents", transform: "translateZ(0)" }}
           className="absolute inset-0 overflow-visible pointer-events-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.08)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
         >
-          <motion.path
-            d={dockPath}
-            animate={{ d: dockPath }}
-            transition={DOCK_SPRING_CONFIG}
-            className="fill-white dark:fill-[#121215] stroke-black/[0.12] dark:stroke-white/15"
-            strokeWidth="1"
-          />
+          {dockPath ? (
+            <path
+              d={dockPath}
+              className="fill-white dark:fill-[#121215] stroke-black/[0.12] dark:stroke-white/15 transition-all duration-300 ease-out"
+              strokeWidth="1"
+            />
+          ) : null}
         </svg>
 
         {/* Floating Active Bouncy Ball */}

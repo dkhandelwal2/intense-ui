@@ -46,7 +46,6 @@ export const PlaygroundReorderIcon = React.memo(function PlaygroundReorderIcon({
           : "w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-xl",
         className
       )}
-      aria-label="Reorder animation"
     >
       <div
         className={cn(

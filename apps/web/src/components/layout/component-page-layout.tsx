@@ -64,6 +64,7 @@ function ComponentPageLayoutInner({
   slug = "component",
   usageCode,
   playgroundContent: propsPlaygroundContent,
+  isMobileDevice,
   children,
 }: ComponentPageLayoutProps) {
   const cleanSlug = slug.toLowerCase().trim();
@@ -328,6 +329,7 @@ function ComponentPageLayoutInner({
             setActiveDeckCard={setActiveDeckCard}
             activeCodeTab={activeCodeTab}
             setActiveCodeTab={setActiveCodeTab}
+            isMobileDevice={isMobileDevice}
           />
         </div>
 

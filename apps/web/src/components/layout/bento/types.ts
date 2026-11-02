@@ -102,6 +102,7 @@ export interface BentoCanvasProps {
   setActiveDeckCard?: (id: DeckCardId) => void;
   activeCodeTab?: "example" | "custom" | "props";
   setActiveCodeTab?: (tab: "example" | "custom" | "props") => void;
+  isMobileDevice?: boolean;
 }
 
 export type DesktopBentoCanvasProps = BentoCanvasProps;

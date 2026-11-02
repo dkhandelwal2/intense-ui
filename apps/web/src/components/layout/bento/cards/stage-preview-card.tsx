@@ -49,7 +49,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
           <div className="px-3 py-1 rounded-full bg-zinc-100/90 dark:bg-black/70 border border-zinc-700/60 dark:border-zinc-800 text-[11px] font-mono flex items-center gap-1.5 shadow-xs backdrop-blur-md">
             {/* <Terminal className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0 animate-pulse" /> */}
             <AnimatedTerminalIcon size="sm" lineStroke="var(--theme-primary)" polylineStroke="var(--palette-1)" />
-            <span className="text-black dark:text-white font-medium">{slug}</span>
+            <span className="text-black dark:text-white font-medium capitalize">{slug}</span>
             {/* <span className="font-bold text-white tracking-wide">{isCustomizing ? "customization" : activeTocId}</span> */}
           </div>
         </div>

@@ -33,11 +33,11 @@ export const CapsuleClock = React.memo(function CapsuleClock({
           <span className="text-[10px] text-muted-foreground font-normal">
             :{secondsStr}
           </span>
-          <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 ml-0.5">
+          <span className="text-[10px] font-semibold text-foreground/70 ml-0.5">
             {ampm}
           </span>
         </div>
-        <span className="text-[9.5px] font-mono text-muted-foreground truncate">
+        <span className="text-[10px] font-mono text-muted-foreground truncate">
           {dateStr}
         </span>
       </div>

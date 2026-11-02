@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { componentsConfig } from "@/config/components";
 import { ComponentPreview } from "@/components/component-previews";
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
@@ -14,6 +15,13 @@ export function generateStaticParams() {
 }
 
 export default async function DynamicComponentPage(props: { params: Promise<{ slug: string }> | { slug: string } }) {
+  const headersList = await headers();
+  const userAgentStr = headersList.get("user-agent") || "";
+  const isMobile = Boolean(
+    userAgentStr &&
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgentStr)
+  );
+
   const params = await props.params;
   const slug = params.slug;
 
@@ -41,6 +49,7 @@ export default async function DynamicComponentPage(props: { params: Promise<{ sl
       tocItems={docData.tocItems}
       dependencies={docData.dependencies}
       propsTable={propsTable}
+      isMobileDevice={isMobile}
     >
       <ComponentPreview name={component.name} slug={slug} />
     </ComponentPageLayout>

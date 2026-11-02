@@ -23,6 +23,7 @@ export interface ComponentPageLayoutProps {
   slug?: string;
   usageCode?: string;
   playgroundContent?: React.ReactNode;
+  isMobileDevice?: boolean;
   children: React.ReactNode;
 }
 

@@ -10,6 +10,9 @@ export function generateDockPath(
   H = 66,
   R = 26
 ): string {
+  if (!Number.isFinite(X) || !Number.isFinite(W) || W <= 0 || H <= 0) {
+    return "";
+  }
   const Wn = 50;
   const D = 36;
   const k = R * 0.55228475;
