@@ -21,10 +21,19 @@ const BUTTON_SIZES = [
 
 const BUTTON_VARIANTS = [
   { id: "default" as const, label: "Default Solid", badge: "01", spec: "High contrast primary fill with spring physics" },
+  { id: "delete" as const, label: "In-Place Delete", badge: "DEL", spec: "In-place confirmation delete button (no dialog)" },
+  { id: "confirm" as const, label: "In-Place Confirm", badge: "OK", spec: "In-place confirmation morphing button" },
   { id: "share" as const, label: "Social Share", badge: "02", spec: "Expandable social sharing morphing pill button" },
   { id: "glow" as const, label: "Neon Radiant Glow", badge: "03", spec: "Drop-shadow primary aura with highlight border" },
   { id: "outline" as const, label: "Minimal Outline", badge: "04", spec: "Hairline border with muted hover background" },
   { id: "subtle" as const, label: "Subtle Neutral", badge: "05", spec: "Soft tonal background for secondary actions" },
+];
+
+const CONFIRM_ACTIONS = [
+  { id: "delete" as const, label: "Delete Action", badge: "🗑️", spec: "Red destructive deletion confirmation" },
+  { id: "confirm" as const, label: "Confirm Action", badge: "✅", spec: "Emerald positive confirmation" },
+  { id: "archive" as const, label: "Archive Action", badge: "📦", spec: "Amber storage archive confirmation" },
+  { id: "discard" as const, label: "Discard Action", badge: "⚠️", spec: "Neutral discard confirmation" },
 ];
 
 export function ButtonPlaygroundStudio({
@@ -88,19 +97,26 @@ export function ButtonPlaygroundStudio({
       categoryTag: "03 / 03",
       colorGradient: "bg-gradient-to-br from-[#7C5CFC] via-[#6a42f5] to-[#5123ea]",
       icon: <Sliders className="w-3.5 h-3.5" />,
-      headerTitle: "Features & States",
-      headerSubtitle: "interactive toggles",
+      headerTitle: "Features & Confirmation",
+      headerSubtitle: "in-place action presets and toggles",
       headerEmoji: "⚡",
       rows: [
+        ...CONFIRM_ACTIONS.map((act) => ({
+          id: `act-${act.id}`,
+          label: act.label,
+          spec: act.spec,
+          thumbnail: <span className="text-sm">{act.badge}</span>,
+          isSelected: customProps.confirmAction === act.id,
+          onSelect: () => onChange((p) => ({ ...p, confirmAction: act.id, variant: "confirm" })),
+        })),
         {
           id: "icon",
           label: "Show Leading Icon",
-          spec: "Display Lucide icon beside button label",
+          spec: "Display Lucide icon beside standard button label",
           thumbnail: <span className="text-sm">✨</span>,
           actionType: "toggle" as const,
           toggleChecked: !!customProps.showIcon,
-          onToggleChange: (checked: boolean) =>
-            onChange((p) => ({ ...p, showIcon: checked })),
+          onToggleChange: (checked: boolean) => onChange((p) => ({ ...p, showIcon: checked })),
           onSelect: () => onChange((p) => ({ ...p, showIcon: !p.showIcon })),
         },
         {
@@ -110,8 +126,7 @@ export function ButtonPlaygroundStudio({
           thumbnail: <span className="text-sm">🚫</span>,
           actionType: "toggle" as const,
           toggleChecked: !!customProps.disabled,
-          onToggleChange: (checked: boolean) =>
-            onChange((p) => ({ ...p, disabled: checked })),
+          onToggleChange: (checked: boolean) => onChange((p) => ({ ...p, disabled: checked })),
           onSelect: () => onChange((p) => ({ ...p, disabled: !p.disabled })),
         },
       ],

@@ -6,6 +6,12 @@ export function generateButtonCode(props: ButtonCustomProps): string {
     return `<Button variant="share"${sizePart} onShare={(platform) => console.log(platform)} />`;
   }
 
+  if (props.variant === "delete" || props.variant === "confirm") {
+    const sizePart = props.size !== "md" ? ` size="${props.size}"` : "";
+    const actionPart = props.confirmAction ? ` confirmAction="${props.confirmAction}"` : "";
+    return `<Button variant="${props.variant}"${actionPart}${sizePart} onConfirm={() => console.log("Action confirmed")} />`;
+  }
+
   const parts: string[] = [];
 
   if (props.variant !== "default") {

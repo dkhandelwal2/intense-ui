@@ -44,7 +44,7 @@ function PreviewCanvas({
   return (
     <div
       className={cn(
-        "w-full flex items-start justify-center ",
+        "w-full flex items-center justify-center ",
         className
       )}
     >

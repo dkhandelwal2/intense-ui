@@ -3,15 +3,16 @@ import { ComponentDocData } from "./types";
 
 export const BUTTON_USAGE = `"use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, ConfirmButton } from "@/components/ui/button";
 
 export default function ButtonDemo() {
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 p-8">
       <Button variant="default">Default Button</Button>
+      <Button variant="delete" onConfirm={() => console.log("Deleted")} />
+      <Button variant="confirm" confirmAction="archive" onConfirm={() => console.log("Archived")} />
       <Button variant="share" onShare={(p) => console.log(p)} />
       <Button variant="glow">Glowing Action</Button>
-      <Button variant="outline">Minimal Outline</Button>
     </div>
   );
 }`;
@@ -22,6 +23,17 @@ export const BUTTON_EXAMPLES = [
     label: "Basic Button",
     emoji: "🔘",
     code: `<Button variant="default" size="md">Interactive Button</Button>`,
+  },
+  {
+    id: "delete",
+    label: "In-Place Delete & Confirm",
+    emoji: "🗑️",
+    code: `<div className="flex flex-wrap gap-4">
+  <Button variant="delete" confirmAction="delete" onConfirm={() => console.log("Deleted")} />
+  <Button variant="confirm" confirmAction="confirm" onConfirm={() => console.log("Confirmed")} />
+  <Button variant="confirm" confirmAction="archive" onConfirm={() => console.log("Archived")} />
+  <Button variant="confirm" confirmAction="discard" onConfirm={() => console.log("Discarded")} />
+</div>`,
   },
   {
     id: "share",
@@ -113,12 +125,12 @@ export const buttonDoc: ComponentDocData = {
     {
       title: "Button Props",
       props: [
-        { prop: "variant", type: '"default" | "glow" | "outline" | "subtle" | "share"', defaultValue: '"default"', description: "Visual appearance style and background treatment." },
-        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Button sizing scale affecting padding, text, and border-radius." },
-        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback invoked when a platform icon is selected in the share menu." },
-        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables click events and reduces opacity with pointer-events-none." },
-        { prop: "className", type: "string", defaultValue: "-", description: "Additional Tailwind CSS classes." },
-        { prop: "children", type: "React.ReactNode", defaultValue: "-", description: "Button label, icons, or nested elements." },
+        { prop: "variant", type: '"default" | "glow" | "outline" | "subtle" | "share" | "confirm" | "delete"', defaultValue: '"default"', description: "Button visual style preset and interaction archetype." },
+        { prop: "confirmAction", type: '"delete" | "confirm" | "archive" | "discard"', defaultValue: '"delete"', description: "Action archetype preset for in-place confirmation buttons." },
+        { prop: "onConfirm", type: "() => void", defaultValue: "-", description: "Callback fired when the in-place confirmation is clicked." },
+        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback triggered when a social platform is selected on share variant." },
+        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Scale size of the button." },
+        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables user interaction." },
       ],
     },
   ],
