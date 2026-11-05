@@ -1,5 +1,8 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { SWITCH_EXAMPLES } from "@/components/showcases/switch/constants";
+
+export { SWITCH_EXAMPLES };
 
 export const SWITCH_USAGE = `"use client";
 
@@ -15,45 +18,6 @@ export default function SwitchDemo() {
     </div>
   );
 }`;
-
-export const SWITCH_EXAMPLES = [
-  {
-    id: "basic",
-    label: "3D Origami Rocker",
-    emoji: "🔘",
-    code: `<Switch checked={checked} onChange={setChecked} variant="rocker" size="md" />`,
-  },
-  {
-    id: "pill",
-    label: "Classic Smooth Pill",
-    emoji: "💊",
-    code: `<Switch variant="pill" checked={checked} onChange={setChecked} size="md" />`,
-  },
-  {
-    id: "cutout",
-    label: "Ring Donut Slider",
-    emoji: "🟠",
-    code: `<Switch variant="cutout" checked={checked} onChange={setChecked} size="md" />`,
-  },
-  {
-    id: "capsule-text",
-    label: "Inline Text Capsule",
-    emoji: "🏷️",
-    code: `<Switch variant="capsule-text" checked={checked} onChange={setChecked} size="md" />`,
-  },
-  {
-    id: "industrial",
-    label: "Industrial Machinery",
-    emoji: "⚙️",
-    code: `<Switch variant="industrial" checked={checked} onChange={setChecked} size="md" />`,
-  },
-  {
-    id: "square",
-    label: "Square Push Tile",
-    emoji: "🔲",
-    code: `<Switch variant="square" checked={checked} onChange={setChecked} sliderText="yes/no" size="md" />`,
-  },
-];
 
 export const switchDoc: ComponentDocData = {
   usageCode: SWITCH_USAGE,

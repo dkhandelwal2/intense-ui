@@ -1,63 +1,23 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { SLIDER_EXAMPLES } from "@/components/showcases/slider/constants";
 
 export const SLIDER_USAGE = `"use client";
 
 import { useState } from "react";
-import { Slider } from "@/components/ui/slider";
+import { Slider, RangeSlider } from "@/components/ui/slider";
 
 export default function SliderDemo() {
   const [value, setValue] = useState(50);
+  const [range, setRange] = useState<[number, number]>([25, 75]);
 
   return (
-    <div className="w-full max-w-sm space-y-3 p-6">
-      <div className="flex justify-between text-sm font-medium">
-        <span>Volume</span>
-        <span className="text-muted-foreground">{value}%</span>
-      </div>
-      <Slider value={value} min={0} max={100} onChange={setValue} />
+    <div className="w-full max-w-sm space-y-6 p-6">
+      <Slider value={value} onChange={setValue} tooltip />
+      <RangeSlider value={range} onChange={setRange} tooltip />
     </div>
   );
 }`;
-
-export const SLIDER_EXAMPLES = [
-  {
-    id: "basic",
-    label: "Basic Slider",
-    emoji: "🎚️",
-    code: `<Slider value={value} min={0} max={100} onChange={setValue} />`,
-  },
-  {
-    id: "custom-range",
-    label: "Custom Boundaries",
-    emoji: "📊",
-    code: `<Slider value={range} min={0} max={50} onChange={setRange} />`,
-  },
-  {
-    id: "stepped",
-    label: "Discrete Intervals",
-    emoji: "🪜",
-    code: `<Slider value={stepped} min={0} max={100} onChange={(v) => setStepped(Math.round(v / 10) * 10)} />`,
-  },
-  {
-    id: "with-badge",
-    label: "Value Tag Badge",
-    emoji: "🏷️",
-    code: `<div className="space-y-4">
-  <div className="flex justify-between">
-    <span>Gain</span>
-    <span className="px-2 py-0.5 rounded bg-primary text-xs">{value} dB</span>
-  </div>
-  <Slider value={value} min={0} max={100} onChange={setValue} />
-</div>`,
-  },
-  {
-    id: "disabled",
-    label: "Disabled State",
-    emoji: "🚫",
-    code: `<Slider value={35} min={0} max={100} onChange={() => {}} disabled />`,
-  },
-];
 
 export const sliderDoc: ComponentDocData = {
   usageCode: SLIDER_USAGE,
@@ -77,6 +37,7 @@ export const sliderDoc: ComponentDocData = {
   })),
   dependencies: [
     { name: "framer-motion", command: "npm install framer-motion" },
+    { name: "lucide-react", command: "npm install lucide-react" },
     { name: "clsx", command: "npm install clsx" },
     { name: "tailwind-merge", command: "npm install tailwind-merge" },
   ],
@@ -84,11 +45,35 @@ export const sliderDoc: ComponentDocData = {
     {
       title: "Slider Props",
       props: [
-        { prop: "value", type: "number", defaultValue: "-", description: "Current numerical value of the slider thumb position." },
-        { prop: "min", type: "number", defaultValue: "0", description: "Minimum allowable boundary value for the track." },
-        { prop: "max", type: "number", defaultValue: "100", description: "Maximum allowable boundary value for the track." },
-        { prop: "onChange", type: "(val: number) => void", defaultValue: "-", description: "Callback invoked continuously as the slider thumb drags." },
-        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables thumb interaction and dims track opacity." },
+        { prop: "value", type: "number", defaultValue: "-", description: "Numerical value position of the slider thumb." },
+        { prop: "min", type: "number", defaultValue: "0", description: "Minimum allowable boundary value." },
+        { prop: "max", type: "number", defaultValue: "100", description: "Maximum allowable boundary value." },
+        { prop: "step", type: "number", defaultValue: "1", description: "Granular stepping interval between values." },
+        { prop: "onChange", type: "(val: number) => void", defaultValue: "-", description: "Callback triggered continuously on thumb drag." },
+        { prop: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "Track orientation layout direction." },
+        { prop: "variant", type: '"primary" | "success" | "danger" | "warning" | "info"', defaultValue: '"primary"', description: "Color theme intent for track and thumb." },
+        { prop: "fillColor", type: "string", defaultValue: "-", description: "Custom CSS/hex color override for the filled track and thumb indicator." },
+        { prop: "thumbAnimation", type: '"none" | "pulse" | "glow" | "scale"', defaultValue: '"none"', description: "Visual animation effect on the thumb dot." },
+        { prop: "tooltip", type: "boolean", defaultValue: "false", description: "Whether to render a floating value badge on the thumb." },
+        { prop: "thumbIcon", type: "ReactNode", defaultValue: "-", description: "Custom icon element centered inside the thumb." },
+        { prop: "leftIcon", type: "ReactNode", defaultValue: "-", description: "Interactive min boundary icon on the left edge." },
+        { prop: "rightIcon", type: "ReactNode", defaultValue: "-", description: "Interactive max boundary icon on the right edge." },
+        { prop: "showInput", type: "boolean", defaultValue: "false", description: "Synchronized numerical input box next to track." },
+        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables interaction and dims track opacity." },
+      ],
+    },
+    {
+      title: "RangeSlider Props",
+      props: [
+        { prop: "value", type: "[number, number]", defaultValue: "-", description: "Dual-thumb interval boundaries [low, high]." },
+        { prop: "min", type: "number", defaultValue: "0", description: "Minimum boundary limit." },
+        { prop: "max", type: "number", defaultValue: "100", description: "Maximum boundary limit." },
+        { prop: "step", type: "number", defaultValue: "1", description: "Granular stepping increment." },
+        { prop: "onChange", type: "(val: [number, number]) => void", defaultValue: "-", description: "Callback triggered as either thumb is dragged." },
+        { prop: "variant", type: '"primary" | "success" | "danger" | "warning" | "info"', defaultValue: '"primary"', description: "Color theme intent for range span." },
+        { prop: "fillColor", type: "string", defaultValue: "-", description: "Custom CSS/hex color override for the selected span between thumbs." },
+        { prop: "tooltip", type: "boolean", defaultValue: "false", description: "Show value tooltip popovers above both thumbs." },
+        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables interaction on both thumbs." },
       ],
     },
   ],

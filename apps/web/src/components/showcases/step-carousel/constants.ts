@@ -7,3 +7,53 @@ export const STEP_CARDS = [
   { title: "Motion Dynamics", subtitle: "Spring-damped gooey filters", description: "Physically calculated liquid matrix filters powered by SVG feColorMatrix.", icon: Wand2, accent: "from-emerald-500/20 via-teal-500/10 to-transparent" },
   { title: "Production Ready", subtitle: "Zero-config export code", description: "Self-contained accessible primitives ready for immediate zero-config copy-paste.", icon: CheckCircle2, accent: "from-rose-500/20 via-red-500/10 to-transparent" },
 ];
+
+export interface StepCarouselExample {
+  id: string;
+  label: string;
+  emoji: string;
+  code: string;
+}
+
+export const STEP_CAROUSEL_EXAMPLES: StepCarouselExample[] = [
+  {
+    id: "basic", label: "Basic Carousel", emoji: "🎬",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function BasicCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} duration={3500} loop={false} />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "gooey", label: "Gooey Fluid Matrix", emoji: "🫧",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function GooeyCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} duration={3500} loop gooey />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "sizes", label: "Size Variants", emoji: "📐",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function SizesCarouselDemo() {\n  const [s1, setS1] = useState(0);\n  const [s2, setS2] = useState(1);\n  const [s3, setS3] = useState(2);\n  return (\n    <div className="flex flex-col items-center gap-6 p-6">\n      <StepCarousel totalSteps={4} currentStep={s1} onStepChange={setS1} size="sm" />\n      <StepCarousel totalSteps={5} currentStep={s2} onStepChange={setS2} size="md" />\n      <StepCarousel totalSteps={6} currentStep={s3} onStepChange={setS3} size="lg" />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "primary", label: "Primary Accent", emoji: "🎨",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function PrimaryCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} colorScheme="primary" />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "autoplay", label: "Autoplay Loop", emoji: "🔄",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function AutoplayCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} defaultPlaying loop duration={3000} />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "without-button", label: "Minimal Dots", emoji: "🔘",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function MinimalCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} showPlayButton={false} />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "pause-on-hover", label: "Pause On Hover", emoji: "⏸️",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function PauseOnHoverCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} defaultPlaying pauseOnHover />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "fast", label: "Fast Speed", emoji: "⚡",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function FastCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} duration={1200} defaultPlaying loop />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "overflow", label: "Overflow (+More)", emoji: "🔢",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function OverflowCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex items-center justify-center p-6">\n      <StepCarousel totalSteps={8} currentStep={step} onStepChange={setStep} maxVisibleSteps={5} />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "controlled", label: "External Controls", emoji: "🎛️",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { StepCarousel } from "@/components/ui/step-carousel";\n\nexport default function ControlledCarouselDemo() {\n  const [step, setStep] = useState(0);\n  return (\n    <div className="flex flex-col items-center gap-4 p-6">\n      <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} />\n      <div className="flex gap-2">\n        <button onClick={() => setStep(s => Math.max(0, s - 1))} className="px-3 py-1 text-xs rounded border border-border">Prev</button>\n        <button onClick={() => setStep(s => Math.min(4, s + 1))} className="px-3 py-1 text-xs rounded border border-border">Next</button>\n      </div>\n    </div>\n  );\n}`,
+  },
+];

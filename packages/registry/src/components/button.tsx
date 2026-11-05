@@ -94,7 +94,7 @@ export function ConfirmationButton({ className, size = "md", action = "delete", 
   if (type === "icon") {
     return (
       <motion.div layout transition={{ type: "spring", stiffness: 450, damping: 30 }}
-        className={cn("relative rounded-2xl bg-zinc-100 dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shadow-xs overflow-hidden select-none cursor-pointer h-12 transition-colors", state === "confirming" ? "w-36 px-2" : "w-12", state === "success" && "border-zinc-300 dark:border-zinc-700", className)}
+        className={cn("relative rounded-2xl bg-zinc-200 dark:bg-zinc-800 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center shadow-xs overflow-hidden select-none cursor-pointer h-12 transition-colors", state === "confirming" ? "w-32 pl-2" : "w-12", state === "success" && "border-zinc-300 dark:border-zinc-700", className)}
       >
         <AnimatePresence mode="wait">
           {state === "idle" && (
@@ -105,9 +105,9 @@ export function ConfirmationButton({ className, size = "md", action = "delete", 
           {state === "confirming" && (
             <motion.div key="icon-confirming" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full flex items-center justify-between gap-1">
               <motion.div animate={{ rotate: action === "delete" ? -15 : 0 }} className="w-7 h-7 flex items-center justify-center text-zinc-600 dark:text-zinc-400 shrink-0"><Icon className="w-4 h-4" /></motion.div>
-              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-zinc-200/80 dark:bg-zinc-950/80 border border-zinc-300/80 dark:border-zinc-800/80 shrink-0">
-                <button type="button" onClick={handleConfirm} className="w-7 h-7 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-xs" aria-label={confirmLabel || "Confirm"}><Check className={cn("w-3.5 h-3.5 stroke-[2.5]", cfg.accent)} /></button>
-                <button type="button" onClick={(e) => { e.stopPropagation(); setState("idle"); }} className="w-7 h-7 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-800/80 flex items-center justify-center transition-transform hover:scale-110 active:scale-95 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white shadow-xs" aria-label={cancelLabel || "Cancel"}><X className="w-3.5 h-3.5 stroke-[2.5]" /></button>
+              <div className=" relative flex items-center gap-1.5 h-12 p-2 rounded-xl bg-zinc-400 dark:bg-zinc-950/80 shrink-0 before:content-[attr(data-label)] before:absolute before:flex before:items-center before:justify-center before:transition-transform before:duration-300 before:ease-out before:w-2 before:h-2 before:left-[-3px] before:zIndex-[-1] dark:before:bg-zinc-950/80 before:rotate-[45deg] before:rounded-[2px] before:bg-zinc-400">
+                <button type="button" onClick={handleConfirm} className="w-7 h-7 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center transition-transform hover:scale-110 active:scale-95 shadow-xs" aria-label={confirmLabel || "Confirm"}><Check className={cn("w-3.5 h-3.5 stroke-[2.5]", cfg.accent)} /></button>
+                <button type="button" onClick={(e) => { e.stopPropagation(); setState("idle"); }} className="w-7 h-7 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center justify-center transition-transform hover:scale-110 active:scale-95 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white shadow-xs" aria-label={cancelLabel || "Cancel"}><X className="w-3.5 h-3.5 stroke-[2.5]" /></button>
               </div>
             </motion.div>
           )}

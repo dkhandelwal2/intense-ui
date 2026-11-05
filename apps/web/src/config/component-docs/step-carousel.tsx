@@ -1,5 +1,8 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { STEP_CAROUSEL_EXAMPLES } from "@/components/showcases/step-carousel/constants";
+
+export { STEP_CAROUSEL_EXAMPLES };
 
 export const STEP_CAROUSEL_USAGE = `"use client";
 
@@ -21,29 +24,6 @@ export default function StepCarouselDemo() {
     </div>
   );
 }`;
-
-export const STEP_CAROUSEL_EXAMPLES = [
-  { id: "basic", label: "Basic Carousel", emoji: "🎬", code: `<StepCarousel totalSteps={5} duration={3500} loop={false} />` },
-  { id: "gooey", label: "Gooey Fluid Matrix", emoji: "🫧", code: `<StepCarousel totalSteps={5} duration={3500} loop={true} gooey={true} />` },
-  { id: "sizes", label: "Size Variants", emoji: "📐", code: `<div className="flex flex-col gap-4">
-  <StepCarousel totalSteps={4} size="sm" />
-  <StepCarousel totalSteps={5} size="md" defaultStep={1} />
-  <StepCarousel totalSteps={6} size="lg" defaultStep={2} />
-</div>` },
-  { id: "primary", label: "Primary Accent", emoji: "🎨", code: `<StepCarousel totalSteps={5} colorScheme="primary" />` },
-  { id: "autoplay", label: "Autoplay Loop", emoji: "🔄", code: `<StepCarousel totalSteps={5} defaultPlaying={true} loop={true} duration={3000} />` },
-  { id: "without-button", label: "Minimal Dots", emoji: "🔘", code: `<StepCarousel totalSteps={5} showPlayButton={false} />` },
-  { id: "pause-on-hover", label: "Pause On Hover", emoji: "⏸️", code: `<StepCarousel totalSteps={5} defaultPlaying={true} pauseOnHover={true} />` },
-  { id: "fast", label: "Fast Speed", emoji: "⚡", code: `<StepCarousel totalSteps={5} duration={1200} defaultPlaying={true} loop={true} />` },
-  { id: "overflow", label: "Overflow (+More)", emoji: "🔢", code: `<StepCarousel totalSteps={8} maxVisibleSteps={5} />` },
-  { id: "controlled", label: "External Controls", emoji: "🎛️", code: `<div className="flex flex-col items-center gap-4">
-  <StepCarousel totalSteps={5} currentStep={step} onStepChange={setStep} />
-  <div className="flex gap-2">
-    <button onClick={() => setStep(s => Math.max(0, s - 1))}>Prev</button>
-    <button onClick={() => setStep(s => Math.min(4, s + 1))}>Next</button>
-  </div>
-</div>` },
-];
 
 export const stepCarouselDoc: ComponentDocData = {
   usageCode: STEP_CAROUSEL_USAGE,

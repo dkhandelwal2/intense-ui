@@ -1,5 +1,8 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { TOOLTIP_EXAMPLES } from "@/components/showcases/tooltip/constants";
+
+export { TOOLTIP_EXAMPLES };
 
 export const TOOLTIP_USAGE = `import { Tooltip } from "@/components/ui/tooltip";
 
@@ -14,49 +17,6 @@ export default function TooltipDemo() {
     </div>
   );
 }`;
-
-export const TOOLTIP_EXAMPLES = [
-  {
-    id: "basic",
-    label: "Top Placement",
-    emoji: "💬",
-    code: `<Tooltip content="Quick action tooltip" position="top">
-  <button>Hover me</button>
-</Tooltip>`,
-  },
-  {
-    id: "bottom",
-    label: "Bottom Placement",
-    emoji: "⬇️",
-    code: `<Tooltip content="Tooltip docked below" position="bottom">
-  <button>Hover me</button>
-</Tooltip>`,
-  },
-  {
-    id: "left",
-    label: "Left Placement",
-    emoji: "⬅️",
-    code: `<Tooltip content="Tooltip docked left" position="left">
-  <button>Hover me</button>
-</Tooltip>`,
-  },
-  {
-    id: "right",
-    label: "Right Placement",
-    emoji: "➡️",
-    code: `<Tooltip content="Tooltip docked right" position="right">
-  <button>Hover me</button>
-</Tooltip>`,
-  },
-  {
-    id: "custom-bg",
-    label: "Custom Colors & Aura",
-    emoji: "🎨",
-    code: `<Tooltip content="Electric Sapphire" position="top" bgColor="#3b82f6">
-  <button>Hover me</button>
-</Tooltip>`,
-  },
-];
 
 export const tooltipDoc: ComponentDocData = {
   usageCode: TOOLTIP_USAGE,

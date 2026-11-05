@@ -1,5 +1,8 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { COLOR_GRID_EXAMPLES } from "@/components/showcases/color-grid/constants";
+
+export { COLOR_GRID_EXAMPLES };
 
 export const COLOR_GRID_USAGE = `"use client";
 
@@ -25,49 +28,6 @@ export default function ColorGridDemo() {
     </div>
   );
 }`;
-
-export const COLOR_GRID_EXAMPLES = [
-  {
-    id: "basic",
-    label: "Basic Swatches",
-    emoji: "🎨",
-    code: `<ColorGrid value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} showCustomPicker />`,
-  },
-  {
-    id: "vertical",
-    label: "Vertical Layout",
-    emoji: "📐",
-    code: `<ColorGrid orientation="vertical" value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} />`,
-  },
-  {
-    id: "sizes",
-    label: "Size Variants",
-    emoji: "📏",
-    code: `<div className="space-y-4">
-  <ColorGrid size="sm" value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} />
-  <ColorGrid size="md" value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} />
-  <ColorGrid size="lg" value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} />
-</div>`,
-  },
-  {
-    id: "custom-picker",
-    label: "Custom Picker & EyeDropper",
-    emoji: "💧",
-    code: `<ColorGrid value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} showCustomPicker={true} />`,
-  },
-  {
-    id: "draggable",
-    label: "Draggable Reorder",
-    emoji: "✋",
-    code: `<ColorGrid value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} draggable={true} />`,
-  },
-  {
-    id: "grid-layout",
-    label: "Responsive Columns",
-    emoji: "▦",
-    code: `<ColorGrid columns={3} value={color} onChange={setColor} defaultValue="var(--theme-primary)" onClear={() => setColor("var(--theme-primary)")} />`,
-  },
-];
 
 export const colorGridDoc: ComponentDocData = {
   usageCode: COLOR_GRID_USAGE,
@@ -98,13 +58,13 @@ export const colorGridDoc: ComponentDocData = {
         { prop: "value", type: "string", defaultValue: '"var(--theme-primary)"', description: "Currently selected color (hex or CSS variable string)." },
         { prop: "defaultValue", type: "string", defaultValue: "-", description: "Baseline color against which modifications trigger the reset button." },
         { prop: "onChange", type: "(color: string) => void", defaultValue: "-", description: "Callback triggered whenever a swatch or custom hex is picked." },
-        { prop: "onClear", type: "() => void", defaultValue: "-", description: "Callback invoked when clicking the reset button to restore default color." },
-        { prop: "colors", type: "string[]", defaultValue: "DEFAULT_COLORS", description: "Array of color swatches available in the palette." },
-        { prop: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "Direction in which swatches are aligned." },
-        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Scale of individual color swatches and spacing." },
-        { prop: "showCustomPicker", type: "boolean", defaultValue: "false", description: "Enables hex color input and native eyedropper button." },
-        { prop: "draggable", type: "boolean", defaultValue: "false", description: "Enables drag handle to reorder swatches." },
-        { prop: "columns", type: "number", defaultValue: "-", description: "Organizes swatches into fixed column grid count." },
+        { prop: "onClear", type: "() => void", defaultValue: "-", description: "Callback triggered by the reset button to restore default baseline." },
+        { prop: "colors", type: "string[]", defaultValue: "DEFAULT_PALETTE", description: "Array of color swatches available for selection." },
+        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Dimensions scale for swatch circles." },
+        { prop: "orientation", type: '"horizontal" | "vertical"', defaultValue: '"horizontal"', description: "Arrangement axis for the swatch container." },
+        { prop: "showCustomPicker", type: "boolean", defaultValue: "false", description: "Display eye dropper and native color picker button." },
+        { prop: "draggable", type: "boolean", defaultValue: "false", description: "Enable drag and drop reordering of palette swatches." },
+        { prop: "columns", type: "number", defaultValue: "-", description: "Multi-row grid layout with explicit column count." },
       ],
     },
   ],

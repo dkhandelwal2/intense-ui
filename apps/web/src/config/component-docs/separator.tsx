@@ -24,38 +24,24 @@ export default function SeparatorDemo() {
 
 export const SEPARATOR_EXAMPLES = [
   {
-    id: "basic",
-    label: "Gradient Hairline",
-    emoji: "✨",
-    code: `<Separator variant="gradient" />`,
+    id: "basic", label: "Gradient Hairline", emoji: "✨",
+    code: `import { Separator } from "@/components/ui/separator";\n\nexport default function GradientSeparatorDemo() {\n  return (\n    <div className="w-full max-w-sm p-6">\n      <Separator variant="gradient" />\n    </div>\n  );\n}`,
   },
   {
-    id: "subtle",
-    label: "Subtle Solid",
-    emoji: "➖",
-    code: `<Separator variant="subtle" />`,
+    id: "subtle", label: "Subtle Solid", emoji: "➖",
+    code: `import { Separator } from "@/components/ui/separator";\n\nexport default function SubtleSeparatorDemo() {\n  return (\n    <div className="w-full max-w-sm p-6">\n      <Separator variant="subtle" />\n    </div>\n  );\n}`,
   },
   {
-    id: "dashed",
-    label: "Dashed Divider",
-    emoji: "✂️",
-    code: `<Separator variant="dashed" />`,
+    id: "dashed", label: "Dashed Divider", emoji: "✂️",
+    code: `import { Separator } from "@/components/ui/separator";\n\nexport default function DashedSeparatorDemo() {\n  return (\n    <div className="w-full max-w-sm p-6">\n      <Separator variant="dashed" />\n    </div>\n  );\n}`,
   },
   {
-    id: "vertical",
-    label: "Vertical Divider",
-    emoji: "↕️",
-    code: `<div className="flex h-5 items-center space-x-4">
-  <span>Left</span>
-  <Separator orientation="vertical" />
-  <span>Right</span>
-</div>`,
+    id: "vertical", label: "Vertical Divider", emoji: "↕️",
+    code: `import { Separator } from "@/components/ui/separator";\n\nexport default function VerticalSeparatorDemo() {\n  return (\n    <div className="flex h-6 items-center space-x-4 p-6">\n      <span>Left</span>\n      <Separator orientation="vertical" />\n      <span>Right</span>\n    </div>\n  );\n}`,
   },
   {
-    id: "glow",
-    label: "Neon Aura Glow",
-    emoji: "🌟",
-    code: `<Separator variant="gradient" glow />`,
+    id: "glow", label: "Neon Aura Glow", emoji: "🌟",
+    code: `import { Separator } from "@/components/ui/separator";\n\nexport default function GlowSeparatorDemo() {\n  return (\n    <div className="w-full max-w-sm p-6">\n      <Separator variant="gradient" glow />\n    </div>\n  );\n}`,
   },
 ];
 

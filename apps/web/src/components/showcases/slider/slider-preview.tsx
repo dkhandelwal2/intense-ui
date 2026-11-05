@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Slider } from "@/components/ui/slider";
+import React, { useState, useEffect } from "react";
+import { Slider, RangeSlider } from "@/components/ui/slider";
 import { SliderCustomProps } from "./types";
+import { Volume1, Volume2, Sun } from "lucide-react";
 
 interface SliderPreviewProps {
   customProps: SliderCustomProps;
@@ -11,150 +12,169 @@ interface SliderPreviewProps {
 }
 
 export function SliderPreview({
-  customProps,
-  activeTocId = "basic",
-  isCustomizing = false,
+  customProps, activeTocId = "basic", isCustomizing = false,
 }: SliderPreviewProps) {
-  const [basicVal, setBasicVal] = useState(60);
-  const [rangeVal, setRangeVal] = useState(25);
-  const [steppedVal, setSteppedVal] = useState(40);
-  const [badgeVal, setBadgeVal] = useState(72);
-  const [customVal, setCustomVal] = useState(customProps.value);
+  const [val, setVal] = useState(50);
+  const [zoomVal, setZoomVal] = useState(320);
+  const [rangeVal, setRangeVal] = useState<[number, number]>([25, 75]);
+  const [iconsVal, setIconsVal] = useState(65);
+  const [thumbIconVal, setThumbIconVal] = useState(80);
+  const [vertVal, setVertVal] = useState(60);
+  const [pulseVal, setPulseVal] = useState(40);
+  const [glowVal, setGlowVal] = useState(70);
+  const [scaleVal, setScaleVal] = useState(55);
+  const [pVal, setPVal] = useState(75);
+  const [sVal, setSVal] = useState(60);
+  const [dVal, setDVal] = useState(30);
+  const [inputVal, setInputVal] = useState(42);
+  const [tipVal, setTipVal] = useState(85);
 
-  // Sync if customProps value changes
-  React.useEffect(() => {
+  const [customVal, setCustomVal] = useState(customProps.value);
+  const [customRange, setCustomRange] = useState(customProps.rangeValue);
+
+  useEffect(() => {
     setCustomVal(customProps.value);
-  }, [customProps.value]);
+    setCustomRange(customProps.rangeValue);
+  }, [customProps.value, customProps.rangeValue]);
 
   if (isCustomizing) {
     return (
-      <div className="w-full max-w-sm space-y-4 p-8">
-        {customProps.showValueBadge && (
-          <div className="flex items-center justify-between text-xs font-mono">
-            <span className="text-muted-foreground">CUSTOM THRESHOLD</span>
-            <span className="px-2 py-0.5 rounded bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] font-bold">
-              {customVal}
-            </span>
+      <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 p-8">
+        {customProps.isRange ? (
+          <div className="w-full space-y-4">
+            <div className="flex justify-between text-xs font-mono text-muted-foreground">
+              <span>Range: {customRange[0]} - {customRange[1]}</span>
+            </div>
+            <RangeSlider
+              value={customRange} min={customProps.min} max={customProps.max}
+              step={customProps.step} onChange={setCustomRange}
+              variant={customProps.variant} fillColor={customProps.fillColor}
+              tooltip={customProps.tooltip} disabled={customProps.disabled}
+            />
           </div>
+        ) : (
+          <Slider
+            value={customVal} min={customProps.min} max={customProps.max} step={customProps.step}
+            onChange={setCustomVal} disabled={customProps.disabled} orientation={customProps.orientation}
+            variant={customProps.variant} fillColor={customProps.fillColor}
+            thumbAnimation={customProps.thumbAnimation}
+            tooltip={customProps.tooltip} showInput={customProps.showInput}
+            leftIcon={customProps.withIcons ? <Volume1 className="w-4 h-4" /> : undefined}
+            rightIcon={customProps.withIcons ? <Volume2 className="w-4 h-4" /> : undefined}
+          />
         )}
-        <Slider
-          value={customVal}
-          min={customProps.min}
-          max={customProps.max}
-          onChange={setCustomVal}
-          disabled={customProps.disabled}
-        />
-        <div className="flex justify-between text-[10px] font-mono text-muted-foreground/60">
-          <span>Min: {customProps.min}</span>
-          <span>Max: {customProps.max}</span>
-        </div>
+        <span className="text-xs font-mono text-muted-foreground text-center">Interactive customization mode with live property controls and real-time preview</span>
       </div>
     );
   }
 
-  // 1. Custom Range
-  if (activeTocId === "custom-range") {
+  if (activeTocId === "zoom") {
     return (
-      <div className="w-full max-w-sm space-y-6 p-8">
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs font-mono">
-            <span className="text-muted-foreground">Range: 0 to 50</span>
-            <span className="text-[var(--theme-primary)] font-semibold">{rangeVal}</span>
-          </div>
-          <Slider value={rangeVal} min={0} max={50} onChange={setRangeVal} />
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full flex justify-between text-xs font-mono">
+          <span className="text-muted-foreground">Canvas Zoom: 100% to 500%</span>
+          <span className="font-bold text-[var(--theme-primary)]">{zoomVal}%</span>
         </div>
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs font-mono">
-            <span className="text-muted-foreground">Zoom: 100 to 500</span>
-            <span className="text-[var(--theme-primary)] font-semibold">320</span>
-          </div>
-          <Slider value={320} min={100} max={500} onChange={() => {}} />
-        </div>
+        <Slider value={zoomVal} min={100} max={500} onChange={setZoomVal} zoomEffect tooltip />
+        <span className="text-xs font-mono text-muted-foreground text-center">Configurable numerical boundaries with fine-grained step resolution for canvas zoom</span>
       </div>
     );
   }
 
-  // 2. Stepped
-  if (activeTocId === "stepped") {
+  if (activeTocId === "range") {
     return (
-      <div className="w-full max-w-sm space-y-4 p-8">
-        <div className="flex justify-between text-xs font-mono">
-          <span className="text-muted-foreground">Discrete Steps (Snap)</span>
-          <span className="text-[var(--theme-primary)] font-semibold">{steppedVal}%</span>
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full flex justify-between text-xs font-mono">
+          <span className="text-muted-foreground">Price Filter:</span>
+          <span className="font-bold text-[var(--theme-primary)]">${rangeVal[0]} - ${rangeVal[1]}</span>
         </div>
-        <Slider
-          value={steppedVal}
-          min={0}
-          max={100}
-          onChange={(v) => setSteppedVal(Math.round(v / 10) * 10)}
-        />
-        <div className="flex justify-between text-[10px] text-muted-foreground font-mono">
-          <span>0%</span>
-          <span>25%</span>
-          <span>50%</span>
-          <span>75%</span>
-          <span>100%</span>
-        </div>
+        <RangeSlider value={rangeVal} min={0} max={100} onChange={setRangeVal} tooltip />
+        <span className="text-xs font-mono text-muted-foreground text-center">Dual-thumb interactive range selector with independent low and high bounds</span>
       </div>
     );
   }
 
-  // 3. With Value Badge
-  if (activeTocId === "with-badge") {
+  if (activeTocId === "with-icons") {
     return (
-      <div className="w-full max-w-sm space-y-4 p-8">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">Output Gain</span>
-          <span className="px-2.5 py-1 text-xs font-mono font-bold rounded-full bg-[var(--theme-primary)] text-primary-foreground shadow-sm">
-            {badgeVal} dB
-          </span>
-        </div>
-        <Slider value={badgeVal} min={0} max={100} onChange={setBadgeVal} />
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {[25, 50, 75, 100].map((preset) => (
-            <button
-              key={preset}
-              onClick={() => setBadgeVal(preset)}
-              className="text-[10px] font-mono px-2 py-0.5 rounded border border-border/40 hover:bg-secondary/40 transition-colors"
-            >
-              {preset}%
-            </button>
-          ))}
-        </div>
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <Slider value={iconsVal} onChange={setIconsVal} leftIcon={<Volume1 className="w-4 h-4" />} rightIcon={<Volume2 className="w-4 h-4" />} />
+        <span className="text-xs font-mono text-muted-foreground text-center">Interactive edge icons for instant one-click min and max boundary snaps</span>
       </div>
     );
   }
 
-  // 4. Disabled State
-  if (activeTocId === "disabled") {
+  if (activeTocId === "thumb-icon") {
     return (
-      <div className="w-full max-w-sm space-y-6 p-8">
-        <div className="space-y-2 opacity-60">
-          <div className="flex justify-between text-xs font-mono text-muted-foreground">
-            <span>Readonly Preset</span>
-            <span>35%</span>
-          </div>
-          <Slider value={35} min={0} max={100} onChange={() => {}} disabled />
-        </div>
-        <div className="space-y-2 opacity-60">
-          <div className="flex justify-between text-xs font-mono text-muted-foreground">
-            <span>Locked Peak</span>
-            <span>90%</span>
-          </div>
-          <Slider value={90} min={0} max={100} onChange={() => {}} disabled />
-        </div>
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <Slider value={thumbIconVal} onChange={setThumbIconVal} thumbIcon={<Sun className="w-3.5 h-3.5" />} variant="warning" tooltip />
+        <span className="text-xs font-mono text-muted-foreground text-center">Custom icon embedded directly within the sliding thumb indicator</span>
       </div>
     );
   }
 
-  // Default: Basic
+  if (activeTocId === "vertical") {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 p-8 h-72">
+        <Slider value={vertVal} onChange={setVertVal} orientation="vertical" tooltip />
+        <span className="text-xs font-mono text-muted-foreground text-center">Space-saving vertical orientation with inverted bottom-to-top fluid fill</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "animation") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full space-y-4">
+          <div className="space-y-1"><span className="text-[10px] uppercase font-mono text-muted-foreground">Pulse Effect</span><Slider value={pulseVal} onChange={setPulseVal} thumbAnimation="pulse" variant="info" /></div>
+          <div className="space-y-1"><span className="text-[10px] uppercase font-mono text-muted-foreground">Glow Aura</span><Slider value={glowVal} onChange={setGlowVal} thumbAnimation="glow" variant="success" /></div>
+          <div className="space-y-1"><span className="text-[10px] uppercase font-mono text-muted-foreground">Scale on Hover</span><Slider value={scaleVal} onChange={setScaleVal} thumbAnimation="scale" variant="primary" /></div>
+        </div>
+        <span className="text-xs font-mono text-muted-foreground text-center">Visual micro-interaction reactions including pulse, glow halo, and hover scale</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "intents") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full space-y-4">
+          <Slider value={pVal} onChange={setPVal} variant="primary" />
+          <Slider value={sVal} onChange={setSVal} variant="success" />
+          <Slider value={dVal} onChange={setDVal} variant="danger" />
+        </div>
+        <span className="text-xs font-mono text-muted-foreground text-center">Semantic color themes for primary, success, danger, and warning feedback</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "with-input") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <Slider value={inputVal} onChange={setInputVal} showInput />
+        <span className="text-xs font-mono text-muted-foreground text-center">Bidirectional synchronized numeric text field with real-time value validation</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "tooltip") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8 pt-12">
+        <Slider value={tipVal} onChange={setTipVal} tooltip />
+        <span className="text-xs font-mono text-muted-foreground text-center">Floating popover indicator displaying real-time numerical value on hover and drag</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full max-w-sm space-y-3 p-8">
-      <div className="flex justify-between text-sm font-medium">
-        <span>Volume Intensity</span>
-        <span className="font-mono text-xs text-muted-foreground">{basicVal}%</span>
+    <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+      <div className="w-full space-y-3">
+        <div className="flex justify-between text-sm font-medium">
+          <span>Volume Intensity</span>
+          <span className="font-mono text-xs text-muted-foreground">{val}%</span>
+        </div>
+        <Slider value={val} min={0} max={100} onChange={setVal} />
       </div>
-      <Slider value={basicVal} min={0} max={100} onChange={setBasicVal} />
+      <span className="text-xs font-mono text-muted-foreground text-center">Fluid spring-animated single value slider with responsive track feedback</span>
     </div>
   );
 }

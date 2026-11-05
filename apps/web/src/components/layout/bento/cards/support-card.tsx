@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import { MessageCircle, ShieldAlert, ArrowUpRight } from "lucide-react";
+import { MessageCircle, ShieldAlert, ArrowUpRight, Mail } from "lucide-react";
 import { GithubIcon } from "@/assets/icons";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { SupportCardProps } from "../types";
+import Image from "next/image";
 
 interface SupportLinkItem {
   id: string;
@@ -21,18 +22,18 @@ interface SupportLinkItem {
 }
 
 const SUPPORT_LINKS: SupportLinkItem[] = [
-  {
-    id: "discord",
-    href: siteConfig.links.discord,
-    icon: MessageCircle,
-    iconBg: "bg-indigo-500/10 dark:bg-indigo-500/20",
-    iconBorder: "border-indigo-500/30",
-    iconColor: "text-indigo-500",
-    hoverBorder: "hover:border-indigo-500/40",
-    arrowHoverColor: "group-hover:text-indigo-400",
-    title: "Discord Community",
-    subtitle: "1,800+ Devs • Live QA",
-  },
+  // {
+  //   id: "discord",
+  //   href: siteConfig.links.discord,
+  //   icon: MessageCircle,
+  //   iconBg: "bg-indigo-500/10 dark:bg-indigo-500/20",
+  //   iconBorder: "border-indigo-500/30",
+  //   iconColor: "text-indigo-500",
+  //   hoverBorder: "hover:border-indigo-500/40",
+  //   arrowHoverColor: "group-hover:text-indigo-400",
+  //   title: "Discord Community",
+  //   subtitle: "1,800+ Devs • Live QA",
+  // },
   {
     id: "issues",
     href: siteConfig.links.issues,
@@ -44,6 +45,18 @@ const SUPPORT_LINKS: SupportLinkItem[] = [
     arrowHoverColor: "group-hover:text-rose-400",
     title: "Report an Issue",
     subtitle: "Bugs & Features",
+  },
+  {
+    id: "email",
+    href: `${siteConfig.links.email}`,
+    icon: Mail,
+    iconBg: "bg-green-500/10 dark:bg-green-500/20",
+    iconBorder: "border-green-500/30",
+    iconColor: "text-green-500",
+    hoverBorder: "hover:border-green-500/40",
+    arrowHoverColor: "group-hover:text-green-400",
+    title: "Email",
+    subtitle: "Write to us",
   },
 ];
 
@@ -61,16 +74,12 @@ export function SupportCard({ componentName, className, style }: SupportCardProp
       {/* Header */}
       <div className="relative z-10 flex items-center justify-between shrink-0 mb-0.5">
         <div className="flex items-center gap-1.5">
-          <div className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[11px] font-bold text-foreground flex items-center gap-1.5 shadow-xs">
+          <div className="text-[11px] font-bold text-foreground flex items-center gap-1.5 shadow-xs">
             <MessageCircle className="w-3 h-3 text-indigo-500" />
             <span>Developer Support</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-500/30 font-semibold shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Active Community</span>
-          </div>
           <a
             href={siteConfig.links.discussions}
             target="_blank"
@@ -84,7 +93,7 @@ export function SupportCard({ componentName, className, style }: SupportCardProp
       </div>
 
       {/* Support links mapped dynamically */}
-      <div className="relative z-10 flex items-center justify-between gap-2.5 my-auto">
+      <div className="relative z-10 flex items-center justify-between">
         <div className="flex flex-col gap-1.5 w-[175px] 2xl:w-[190px] shrink-0">
           {SUPPORT_LINKS.map((item) => {
             const Icon = item.icon;
@@ -133,7 +142,13 @@ export function SupportCard({ componentName, className, style }: SupportCardProp
           <div className="absolute inset-0 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rotate-[10deg] transform translate-x-1 -translate-y-0.5 shadow-sm" />
           <div className="absolute inset-0 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 shadow-md flex flex-col justify-between p-2 rotate-[2deg]">
             <div className="flex items-center justify-between">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <Image
+                src="/logo-icon.png"
+                alt="logo"
+                width={15}
+                height={15}
+                className=""
+              />
               <span className="text-[8px] font-mono text-muted-foreground font-semibold">v0.1.0</span>
             </div>
             <div className="font-mono text-[10px] font-bold text-foreground truncate">
@@ -145,10 +160,9 @@ export function SupportCard({ componentName, className, style }: SupportCardProp
       </div>
 
       {/* Bottom repo bar */}
-      <div className="relative z-10 flex items-center justify-between gap-2 pt-1 border-t border-border shrink-0">
+      <div className="relative z-10 flex items-center justify-between gap-2 pt-2 shrink-0">
         <div className="flex-1 flex items-center gap-1.5">
-          <div className="h-1 w-12 rounded-full bg-muted-foreground/30" />
-          <div className="flex-1 border-b border-dashed border-border h-0.5" />
+          <div className="text-[9.5px] 2xl:text-[10px] font-mono text-foreground">Made with <span className="animate-pulse">❤️</span> from India.</div>
         </div>
         <a
           href={siteConfig.links.github}

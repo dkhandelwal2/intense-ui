@@ -52,7 +52,7 @@ export const DesktopCanvasView = React.memo(function DesktopCanvasView({
   const effectiveSetDeckCard = setActiveDeckCard ?? setFallbackDeckCard;
   const effectiveCodeTab = activeCodeTab ?? fallbackCodeTab;
   const effectiveSetCodeTab = setActiveCodeTab ?? setFallbackCodeTab;
-  const effectiveSetPackageManager = setPackageManager ?? (() => {});
+  const effectiveSetPackageManager = setPackageManager ?? (() => { });
   const effectiveRenderPlayground = renderPlaygroundStudio ?? (() => null);
   const effectiveDisplayedCode = currentDisplayedCode ?? "";
 
@@ -159,7 +159,7 @@ export const DesktopCanvasView = React.memo(function DesktopCanvasView({
         </div>
         <SupportCard
           componentName={formattedSlugName}
-          className="shrink-0 rounded-[30px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden select-none"
+          className="shrink-0 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden select-none"
           style={{ height: bottomBarHeight }}
         />
       </div>
