@@ -1,45 +1,73 @@
 import { ButtonCustomProps } from "./types";
 
 export function generateButtonCode(props: ButtonCustomProps): string {
-  if (props.variant === "share") {
-    const sizePart = props.size !== "md" ? ` size="${props.size}"` : "";
-    return `<Button variant="share"${sizePart} onShare={(platform) => console.log(platform)} />`;
+  const iconImports: string[] = [];
+  if (props.showIcon) {
+    if (props.iconPosition === "right") iconImports.push("ArrowRight");
+    else iconImports.push("Sparkles");
+  } else if (props.size === "icon") {
+    iconImports.push("Sparkles");
   }
 
-  if (props.variant === "delete" || props.variant === "confirm") {
-    const sizePart = props.size !== "md" ? ` size="${props.size}"` : "";
-    const actionPart = props.confirmAction ? ` confirmAction="${props.confirmAction}"` : "";
-    return `<Button variant="${props.variant}"${actionPart}${sizePart} onConfirm={() => console.log("Action confirmed")} />`;
+  const iconImportLine = iconImports.length > 0 ? `\nimport { ${iconImports.join(", ")} } from "lucide-react";` : "";
+
+  if (props.variant === "share") {
+    const sizePart = props.size !== "md" ? `\n      size="${props.size}"` : "";
+    return `import { Button } from "@/components/ui/button";
+
+export default function ShareButtonDemo() {
+  return (
+    <Button
+      variant="share"${sizePart}
+      onShare={(platform) => console.log(platform)}
+    />
+  );
+}`;
+  }
+
+  if (props.variant === "confirmation") {
+    const sizePart = props.size !== "md" ? `\n      size="${props.size}"` : "";
+    const actionPart = props.confirmAction ? `\n      confirmAction="${props.confirmAction}"` : "";
+    const typePart = props.confirmType === "icon" ? `\n      confirmType="icon"` : "";
+    return `import { Button } from "@/components/ui/button";
+
+export default function ConfirmationButtonDemo() {
+  return (
+    <Button
+      variant="confirmation"${actionPart}${typePart}${sizePart}
+      onConfirm={() => console.log("Action confirmed")}
+    />
+  );
+}`;
   }
 
   const parts: string[] = [];
-
-  if (props.variant !== "default") {
-    parts.push(`variant="${props.variant}"`);
-  }
-  if (props.size !== "md") {
-    parts.push(`size="${props.size}"`);
-  }
-  if (props.disabled) {
-    parts.push(`disabled`);
-  }
+  if (props.variant !== "default") parts.push(`variant="${props.variant}"`);
+  if (props.size !== "md") parts.push(`size="${props.size}"`);
+  if (props.rounded) parts.push(`rounded`);
+  if (props.loading) parts.push(`loading`);
+  if (props.disabled) parts.push(`disabled`);
 
   const propsStr = parts.length > 0 ? " " + parts.join(" ") : "";
 
-  if (props.showIcon) {
+  let inner = `      ${props.label || "Interactive Button"}`;
+  if (props.size === "icon") {
+    inner = `      <Sparkles className="w-4 h-4" />`;
+  } else if (props.showIcon) {
     if (props.iconPosition === "right") {
-      return `<Button${propsStr}>
-  ${props.label || "Interactive Button"}
-  <ArrowRight className="w-4 h-4" />
-</Button>`;
+      inner = `      ${props.label || "Interactive Button"}\n      <ArrowRight className="w-4 h-4" />`;
+    } else {
+      inner = `      <Sparkles className="w-4 h-4" />\n      ${props.label || "Interactive Button"}`;
     }
-    return `<Button${propsStr}>
-  <Sparkles className="w-4 h-4" />
-  ${props.label || "Interactive Button"}
-</Button>`;
   }
 
-  return `<Button${propsStr}>
-  ${props.label || "Interactive Button"}
-</Button>`;
+  return `import { Button } from "@/components/ui/button";${iconImportLine}
+
+export default function ButtonDemo() {
+  return (
+    <Button${propsStr}>
+${inner}
+    </Button>
+  );
+}`;
 }

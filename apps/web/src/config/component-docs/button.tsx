@@ -1,103 +1,24 @@
 import React from "react";
 import { ComponentDocData } from "./types";
+import { BUTTON_EXAMPLES } from "@/components/showcases/button/constants";
 
 export const BUTTON_USAGE = `"use client";
 
-import { Button, ConfirmButton } from "@/components/ui/button";
+import { Button, ConfirmationButton } from "@/components/ui/button";
 
 export default function ButtonDemo() {
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 p-8">
       <Button variant="default">Default Button</Button>
-      <Button variant="delete" onConfirm={() => console.log("Deleted")} />
-      <Button variant="confirm" confirmAction="archive" onConfirm={() => console.log("Archived")} />
+      <Button variant="confirmation" confirmAction="delete" confirmType="pill" onConfirm={() => console.log("Deleted")} />
+      <Button variant="confirmation" confirmAction="confirm" confirmType="icon" onConfirm={() => console.log("Confirmed")} />
+      <Button variant="3d">3D Depth</Button>
+      <Button variant="shimmer">Shimmer</Button>
+      <Button loading>Loading...</Button>
       <Button variant="share" onShare={(p) => console.log(p)} />
-      <Button variant="glow">Glowing Action</Button>
     </div>
   );
 }`;
-
-export const BUTTON_EXAMPLES = [
-  {
-    id: "basic",
-    label: "Basic Button",
-    emoji: "🔘",
-    code: `<Button variant="default" size="md">Interactive Button</Button>`,
-  },
-  {
-    id: "delete",
-    label: "In-Place Delete & Confirm",
-    emoji: "🗑️",
-    code: `<div className="flex flex-wrap gap-4">
-  <Button variant="delete" confirmAction="delete" onConfirm={() => console.log("Deleted")} />
-  <Button variant="confirm" confirmAction="confirm" onConfirm={() => console.log("Confirmed")} />
-  <Button variant="confirm" confirmAction="archive" onConfirm={() => console.log("Archived")} />
-  <Button variant="confirm" confirmAction="discard" onConfirm={() => console.log("Discarded")} />
-</div>`,
-  },
-  {
-    id: "share",
-    label: "Social Share Morph",
-    emoji: "🔗",
-    code: `<Button variant="share" size="md" onShare={(platform) => console.log(platform)} />`,
-  },
-  {
-    id: "glow",
-    label: "Neon Glow",
-    emoji: "🌟",
-    code: `<Button variant="glow" size="lg">
-  <Sparkles className="w-4 h-4" />
-  Glowing Action
-</Button>`,
-  },
-  {
-    id: "outline",
-    label: "Minimal Outline",
-    emoji: "🔲",
-    code: `<div className="flex gap-3">
-  <Button variant="outline" size="sm">Small Outline</Button>
-  <Button variant="outline" size="md">Medium Outline</Button>
-  <Button variant="outline" size="lg">Large Outline</Button>
-</div>`,
-  },
-  {
-    id: "subtle",
-    label: "Subtle Muted",
-    emoji: "☁️",
-    code: `<Button variant="subtle" size="md">Subtle Neutral</Button>`,
-  },
-  {
-    id: "sizes",
-    label: "Size Variants",
-    emoji: "📐",
-    code: `<div className="flex items-center gap-3">
-  <Button size="sm">Small (SM)</Button>
-  <Button size="md">Medium (MD)</Button>
-  <Button size="lg">Large (LG)</Button>
-</div>`,
-  },
-  {
-    id: "icon",
-    label: "With Icons",
-    emoji: "🏷️",
-    code: `<div className="flex gap-3">
-  <Button variant="glow">
-    <Sparkles className="w-4 h-4" />
-    Get Started
-  </Button>
-  <Button variant="outline">
-    Continue
-    <ArrowRight className="w-4 h-4" />
-  </Button>
-</div>`,
-  },
-  {
-    id: "disabled",
-    label: "Disabled State",
-    emoji: "🚫",
-    code: `<Button variant="default" disabled>Default Disabled</Button>`,
-  },
-];
 
 export const buttonDoc: ComponentDocData = {
   usageCode: BUTTON_USAGE,
@@ -123,14 +44,35 @@ export const buttonDoc: ComponentDocData = {
   ],
   propGroups: [
     {
-      title: "Button Props",
+      title: "Core Button Props",
       props: [
-        { prop: "variant", type: '"default" | "glow" | "outline" | "subtle" | "share" | "confirm" | "delete"', defaultValue: '"default"', description: "Button visual style preset and interaction archetype." },
-        { prop: "confirmAction", type: '"delete" | "confirm" | "archive" | "discard"', defaultValue: '"delete"', description: "Action archetype preset for in-place confirmation buttons." },
-        { prop: "onConfirm", type: "() => void", defaultValue: "-", description: "Callback fired when the in-place confirmation is clicked." },
-        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback triggered when a social platform is selected on share variant." },
-        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Scale size of the button." },
-        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables user interaction." },
+        { prop: "variant", type: '"default" | "glow" | "outline" | "subtle" | "text" | "ghost" | "3d" | "shimmer" | "ripple" | "filled-border" | "confirmation" | "share"', defaultValue: '"default"', description: "Visual style preset and interaction archetype." },
+        { prop: "size", type: '"sm" | "md" | "lg" | "icon"', defaultValue: '"md"', description: "Button dimensions or square icon container." },
+        { prop: "rounded", type: "boolean", defaultValue: "false", description: "Applies full border radius capsule (rounded-full)." },
+        { prop: "loading", type: "boolean", defaultValue: "false", description: "Displays animated spinner and locks interaction." },
+        { prop: "disabled", type: "boolean", defaultValue: "false", description: "Disables hover physics and pointer events." },
+        { prop: "children", type: "React.ReactNode", defaultValue: "-", description: "Content or label elements inside the button." },
+        { prop: "className", type: "string", defaultValue: "-", description: "Custom Tailwind CSS utility classes." },
+        { prop: "onClick", type: "(e: React.MouseEvent) => void", defaultValue: "-", description: "Click event handler." },
+      ],
+    },
+    {
+      title: "Confirmation Props",
+      props: [
+        { prop: "confirmType", type: '"pill" | "icon"', defaultValue: '"pill"', description: "Morphing layout: 'pill' with label or 'icon' squircle micro-interaction." },
+        { prop: "confirmAction", type: '"delete" | "confirm" | "archive" | "discard"', defaultValue: '"delete"', description: "Action color and preset prompt theme." },
+        { prop: "onConfirm", type: "() => void", defaultValue: "-", description: "Callback triggered upon user confirmation." },
+        { prop: "label", type: "string", defaultValue: "-", description: "Custom label text for initial idle state." },
+        { prop: "confirmLabel", type: "string", defaultValue: "-", description: "Accessible label for confirm button." },
+        { prop: "cancelLabel", type: "string", defaultValue: '"Cancel"', description: "Accessible label for cancel button." },
+        { prop: "successLabel", type: "string", defaultValue: "-", description: "Feedback text displayed upon success." },
+      ],
+    },
+    {
+      title: "Share Props",
+      props: [
+        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback triggered when a social platform is selected." },
+        { prop: "color", type: "string", defaultValue: '"#2563eb"', description: "Custom background color for the share capsule." },
       ],
     },
   ],

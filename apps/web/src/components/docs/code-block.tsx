@@ -55,10 +55,10 @@ export const CodeBlock = React.memo(function CodeBlock({
   const syntaxStyle = isLight ? modernLightTheme : vscDarkPlus;
 
   const hasHeader = Boolean(filename || terminalTitle || headerAction);
-  const isSingleLine = !code.includes("\n") && !hasHeader;
+  const isCliCommand = (language === "bash" || language === "sh" || language === "shell") && !code.includes("\n") && !hasHeader;
 
   // Single-line CLI command strip (e.g., npx shadcn@latest add ...)
-  if (isSingleLine) {
+  if (isCliCommand) {
     return (
       <div className={cn("w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-[#0c0c0e] px-2.5 sm:px-3 py-2 flex items-center justify-between gap-2.5 shadow-xs transition-colors relative", className)}>
         {packageManager && onPackageManagerChange && (
