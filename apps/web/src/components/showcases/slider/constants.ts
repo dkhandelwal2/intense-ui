@@ -13,9 +13,19 @@ export const SLIDER_EXAMPLES: SliderExample[] = [
     code: `"use client";\nimport { useState } from "react";\nimport { Slider } from "@/components/ui/slider";\n\nexport default function BasicSliderDemo() {\n  const [val, setVal] = useState(50);\n  return (\n    <div className="w-full max-w-sm space-y-3 p-6">\n      <div className="flex justify-between text-sm font-medium">\n        <span>Volume</span>\n        <span className="font-mono text-muted-foreground">{val}%</span>\n      </div>\n      <Slider value={val} min={0} max={100} onChange={setVal} />\n    </div>\n  );\n}`,
   },
   {
+    id: "step", label: "Step Slider & Marks", emoji: "📊",
+    description: "Discrete snap steps with props-driven bottom percentage markers or custom labels",
+    code: `"use client";\nimport { useState } from "react";\nimport { Slider } from "@/components/ui/slider";\n\nexport default function StepSliderDemo() {\n  const [val, setVal] = useState(50);\n  return (\n    <div className="w-full max-w-sm space-y-4 p-6">\n      <div className="flex justify-between text-sm font-medium">\n        <span>Step Progress</span>\n        <span className="font-mono text-muted-foreground">{val}%</span>\n      </div>\n      <Slider value={val} step={25} min={0} max={100} onChange={setVal} marks={["0%", "25%", "50%", "75%", "100%"]} />\n    </div>\n  );\n}`,
+  },
+  {
+    id: "multi", label: "Multi-Thumb (3+ Dots)", emoji: "🎯",
+    description: "Multi-point slider supporting 3 or more independently draggable thumbs on a single track",
+    code: `"use client";\nimport { useState } from "react";\nimport { MultiSlider } from "@/components/ui/slider";\n\nexport default function MultiSliderDemo() {\n  const [vals, setVals] = useState<number[]>([20, 50, 80]);\n  return (\n    <div className="w-full max-w-sm space-y-4 p-6">\n      <div className="flex justify-between text-sm font-medium">\n        <span>Multi-Checkpoint Bounds</span>\n        <span className="font-mono text-xs text-muted-foreground">{vals.join(" • ")}</span>\n      </div>\n      <MultiSlider values={vals} min={0} max={100} onChange={setVals} tooltip marks={["Min", "Low", "Mid", "High", "Max"]} />\n    </div>\n  );\n}`,
+  },
+  {
     id: "zoom", label: "Zoom Range (100-500)", emoji: "🔍",
     description: "Configurable numerical boundaries with fine-grained step resolution for canvas zoom",
-    code: `"use client";\nimport { useState } from "react";\nimport { Slider } from "@/components/ui/slider";\n\nexport default function ZoomSliderDemo() {\n  const [zoom, setZoom] = useState(320);\n  return (\n    <div className="w-full max-w-sm space-y-3 p-6">\n      <div className="flex justify-between text-sm font-medium">\n        <span>Canvas Zoom</span>\n        <span className="font-mono font-bold text-[var(--theme-primary)]">{zoom}%</span>\n      </div>\n      <Slider value={zoom} min={100} max={500} onChange={setZoom} />\n    </div>\n  );\n}`,
+    code: `"use client";\nimport { useState } from "react";\nimport { Slider } from "@/components/ui/slider";\n\nexport default function ZoomSliderDemo() {\n  const [zoom, setZoom] = useState(320);\n  return (\n    <div className="w-full max-w-sm space-y-3 p-6">\n      <div className="flex justify-between text-sm font-medium">\n        <span>Canvas Zoom</span>\n        <span className="font-mono font-bold text-[var(--theme-primary)]">{zoom}%</span>\n      </div>\n      <Slider value={zoom} min={100} max={500} onChange={setZoom} zoomEffect tooltip />\n    </div>\n  );\n}`,
   },
   {
     id: "range", label: "Range Slider", emoji: "↔️",

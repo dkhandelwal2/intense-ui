@@ -125,7 +125,7 @@ export const DesktopCanvasView = React.memo(function DesktopCanvasView({
         </div>
 
         <div
-          className="absolute bottom-0 right-0 z-20 rounded-[26px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm flex flex-col justify-between overflow-hidden select-none"
+          className="absolute bottom-0 right-0 z-20 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm flex flex-col justify-between overflow-hidden select-none"
           style={{ width: depsWidth, height: bottomBarHeight }}
         >
           <DependenciesCard

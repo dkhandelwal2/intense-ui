@@ -1,33 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Slider, RangeSlider } from "@/components/ui/slider";
+import { Slider, RangeSlider, MultiSlider } from "@/components/ui/slider";
 import { SliderCustomProps } from "./types";
 import { Volume1, Volume2, Sun } from "lucide-react";
 
 interface SliderPreviewProps {
-  customProps: SliderCustomProps;
-  activeTocId?: string;
-  isCustomizing?: boolean;
+  customProps: SliderCustomProps; activeTocId?: string; isCustomizing?: boolean;
 }
 
 export function SliderPreview({
   customProps, activeTocId = "basic", isCustomizing = false,
 }: SliderPreviewProps) {
-  const [val, setVal] = useState(50);
-  const [zoomVal, setZoomVal] = useState(320);
-  const [rangeVal, setRangeVal] = useState<[number, number]>([25, 75]);
-  const [iconsVal, setIconsVal] = useState(65);
-  const [thumbIconVal, setThumbIconVal] = useState(80);
-  const [vertVal, setVertVal] = useState(60);
-  const [pulseVal, setPulseVal] = useState(40);
-  const [glowVal, setGlowVal] = useState(70);
-  const [scaleVal, setScaleVal] = useState(55);
-  const [pVal, setPVal] = useState(75);
-  const [sVal, setSVal] = useState(60);
-  const [dVal, setDVal] = useState(30);
-  const [inputVal, setInputVal] = useState(42);
-  const [tipVal, setTipVal] = useState(85);
+  const [val, setVal] = useState(50), [stepVal, setStepVal] = useState(50), [multiVal, setMultiVal] = useState<number[]>([20, 50, 80]);
+  const [zoomVal, setZoomVal] = useState(320), [rangeVal, setRangeVal] = useState<[number, number]>([25, 75]), [iconsVal, setIconsVal] = useState(65);
+  const [thumbIconVal, setThumbIconVal] = useState(80), [vertVal, setVertVal] = useState(60), [inputVal, setInputVal] = useState(42), [tipVal, setTipVal] = useState(85);
+  const [pulseVal, setPulseVal] = useState(40), [glowVal, setGlowVal] = useState(70), [scaleVal, setScaleVal] = useState(55);
+  const [pVal, setPVal] = useState(75), [sVal, setSVal] = useState(60), [dVal, setDVal] = useState(30);
 
   const [customVal, setCustomVal] = useState(customProps.value);
   const [customRange, setCustomRange] = useState(customProps.rangeValue);
@@ -42,28 +31,39 @@ export function SliderPreview({
       <div className="w-full max-w-sm flex flex-col items-center justify-center gap-4 p-8">
         {customProps.isRange ? (
           <div className="w-full space-y-4">
-            <div className="flex justify-between text-xs font-mono text-muted-foreground">
-              <span>Range: {customRange[0]} - {customRange[1]}</span>
-            </div>
-            <RangeSlider
-              value={customRange} min={customProps.min} max={customProps.max}
-              step={customProps.step} onChange={setCustomRange}
-              variant={customProps.variant} fillColor={customProps.fillColor}
-              tooltip={customProps.tooltip} disabled={customProps.disabled}
-            />
+            <div className="flex justify-between text-xs font-mono text-muted-foreground"><span>Range: {customRange[0]} - {customRange[1]}</span></div>
+            <RangeSlider value={customRange} min={customProps.min} max={customProps.max} step={customProps.step} onChange={setCustomRange} variant={customProps.variant} fillColor={customProps.fillColor} tooltip={customProps.tooltip} disabled={customProps.disabled} />
           </div>
         ) : (
-          <Slider
-            value={customVal} min={customProps.min} max={customProps.max} step={customProps.step}
-            onChange={setCustomVal} disabled={customProps.disabled} orientation={customProps.orientation}
-            variant={customProps.variant} fillColor={customProps.fillColor}
-            thumbAnimation={customProps.thumbAnimation}
-            tooltip={customProps.tooltip} showInput={customProps.showInput}
-            leftIcon={customProps.withIcons ? <Volume1 className="w-4 h-4" /> : undefined}
-            rightIcon={customProps.withIcons ? <Volume2 className="w-4 h-4" /> : undefined}
-          />
+          <Slider value={customVal} min={customProps.min} max={customProps.max} step={customProps.step} onChange={setCustomVal} disabled={customProps.disabled} orientation={customProps.orientation} variant={customProps.variant} fillColor={customProps.fillColor} thumbAnimation={customProps.thumbAnimation} tooltip={customProps.tooltip} showInput={customProps.showInput} leftIcon={customProps.withIcons ? <Volume1 className="w-4 h-4" /> : undefined} rightIcon={customProps.withIcons ? <Volume2 className="w-4 h-4" /> : undefined} />
         )}
         <span className="text-xs font-mono text-muted-foreground text-center">Interactive customization mode with live property controls and real-time preview</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "step") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full flex justify-between text-xs font-mono">
+          <span className="text-muted-foreground">Step Snap Progress</span>
+          <span className="font-bold text-[var(--theme-primary)]">{stepVal}%</span>
+        </div>
+        <Slider value={stepVal} step={25} min={0} max={100} onChange={setStepVal} marks={["0%", "25%", "50%", "75%", "100%"]} />
+        <span className="text-xs font-mono text-muted-foreground text-center">Discrete snap steps with props-driven bottom percentage markers or custom labels</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "multi") {
+    return (
+      <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
+        <div className="w-full flex justify-between text-xs font-mono">
+          <span className="text-muted-foreground">Multi-Point Checkpoints</span>
+          <span className="font-mono text-xs font-bold text-[var(--theme-primary)]">{multiVal.join(" • ")}</span>
+        </div>
+        <MultiSlider values={multiVal} min={0} max={100} onChange={setMultiVal} tooltip marks={["Min", "Low", "Mid", "High", "Max"]} />
+        <span className="text-xs font-mono text-muted-foreground text-center">Multi-point slider supporting 3 or more independently draggable thumbs on a single track</span>
       </div>
     );
   }
@@ -71,10 +71,7 @@ export function SliderPreview({
   if (activeTocId === "zoom") {
     return (
       <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
-        <div className="w-full flex justify-between text-xs font-mono">
-          <span className="text-muted-foreground">Canvas Zoom: 100% to 500%</span>
-          <span className="font-bold text-[var(--theme-primary)]">{zoomVal}%</span>
-        </div>
+        <div className="w-full flex justify-between text-xs font-mono"><span className="text-muted-foreground">Canvas Zoom: 100% to 500%</span><span className="font-bold text-[var(--theme-primary)]">{zoomVal}%</span></div>
         <Slider value={zoomVal} min={100} max={500} onChange={setZoomVal} zoomEffect tooltip />
         <span className="text-xs font-mono text-muted-foreground text-center">Configurable numerical boundaries with fine-grained step resolution for canvas zoom</span>
       </div>
@@ -84,10 +81,7 @@ export function SliderPreview({
   if (activeTocId === "range") {
     return (
       <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
-        <div className="w-full flex justify-between text-xs font-mono">
-          <span className="text-muted-foreground">Price Filter:</span>
-          <span className="font-bold text-[var(--theme-primary)]">${rangeVal[0]} - ${rangeVal[1]}</span>
-        </div>
+        <div className="w-full flex justify-between text-xs font-mono"><span className="text-muted-foreground">Price Filter:</span><span className="font-bold text-[var(--theme-primary)]">${rangeVal[0]} - ${rangeVal[1]}</span></div>
         <RangeSlider value={rangeVal} min={0} max={100} onChange={setRangeVal} tooltip />
         <span className="text-xs font-mono text-muted-foreground text-center">Dual-thumb interactive range selector with independent low and high bounds</span>
       </div>
@@ -168,10 +162,7 @@ export function SliderPreview({
   return (
     <div className="w-full max-w-sm flex flex-col items-center gap-4 p-8">
       <div className="w-full space-y-3">
-        <div className="flex justify-between text-sm font-medium">
-          <span>Volume Intensity</span>
-          <span className="font-mono text-xs text-muted-foreground">{val}%</span>
-        </div>
+        <div className="flex justify-between text-sm font-medium"><span>Volume Intensity</span><span className="font-mono text-xs text-muted-foreground">{val}%</span></div>
         <Slider value={val} min={0} max={100} onChange={setVal} />
       </div>
       <span className="text-xs font-mono text-muted-foreground text-center">Fluid spring-animated single value slider with responsive track feedback</span>

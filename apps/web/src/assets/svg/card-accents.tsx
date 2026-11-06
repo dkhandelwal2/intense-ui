@@ -84,7 +84,7 @@ export const ScoopedCornerNotchSvg = React.memo(function ScoopedCornerNotchSvg({
       <path
         d={`M 0 0 C 14 0, 18 ${height - 4}, 32 ${height - 4} L ${width} ${height - 4}`}
         className="fill-none stroke-zinc-200/90 dark:stroke-zinc-800"
-        strokeWidth="1.5"
+        strokeWidth="1"
       />
     </svg>
   );

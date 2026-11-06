@@ -103,10 +103,10 @@ export const BentoCardDeck = React.memo(function BentoCardDeck({
             initial={false}
             onClick={() => setActiveDeckCard(card.id)}
             className={cn(
-              "absolute inset-x-0 rounded-[22px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none",
+              "absolute inset-x-0 rounded-[22px] border transition-colors cursor-pointer overflow-hidden flex flex-col justify-start select-none border border-zinc-300 dark:border-zinc-700",
               layout.isFront
-                ? cn("bg-white dark:bg-zinc-900 border-2 border-zinc-300 dark:border-zinc-700 shadow-2xl ring-2 ring-[var(--theme-primary)]/10", card.paddingClass || "p-3.5 sm:p-4")
-                : "bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-700 shadow-xl px-3.5 py-2 hover:brightness-105"
+                ? cn("bg-white dark:bg-zinc-900 shadow-2xl ring-2 ring-[var(--theme-primary)]/10", card.paddingClass || "p-3.5 sm:p-4")
+                : "bg-zinc-100 dark:bg-zinc-800 shadow-xl px-3.5 py-2 hover:brightness-105"
             )}
             style={{ zIndex: layout.zIndex, transformOrigin: "center center" }}
             animate={{ top: layout.top, height: layout.height, scaleX: layout.scaleX }}

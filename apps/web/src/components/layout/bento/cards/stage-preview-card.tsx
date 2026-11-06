@@ -34,7 +34,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
     <div
       className={cn(
         "flex flex-col justify-between relative overflow-y-scroll select-none w-full p-4",
-        isDesktop ? "h-full rounded-3xl" : "sm:h-[40vh] h-[60vh] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
+        isDesktop ? "h-full rounded-3xl" : "rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
         className
       )}
     >

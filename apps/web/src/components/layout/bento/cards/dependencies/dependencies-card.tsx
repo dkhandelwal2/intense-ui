@@ -44,7 +44,7 @@ export const DependenciesCard = React.memo(function DependenciesCard({
   return (
     <div
       className={cn(
-        "rounded-[26px] bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm flex flex-col justify-between overflow-hidden select-none",
+        "rounded-xl bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between overflow-hidden select-none",
         className || "h-[185px] absolute bottom-0 right-0 z-20"
       )}
       style={width ? { width } : undefined}

@@ -227,14 +227,14 @@ function ComponentPageLayoutInner({
     (options?: { hidePreview?: boolean }) =>
       showcaseDef.renderPlayground
         ? showcaseDef.renderPlayground({
-            customProps,
-            onChange: handleCustomPropsChange,
-            onViewCode: handleViewCode,
-            dynamicPlaygroundContent,
-            propsPlaygroundContent,
-            title,
-            hidePreview: options?.hidePreview ?? true,
-          })
+          customProps,
+          onChange: handleCustomPropsChange,
+          onViewCode: handleViewCode,
+          dynamicPlaygroundContent,
+          propsPlaygroundContent,
+          title,
+          hidePreview: options?.hidePreview ?? true,
+        })
         : null,
     [
       showcaseDef,
@@ -296,7 +296,7 @@ function ComponentPageLayoutInner({
     <ComponentActiveTocProvider value={activeTocId}>
       <div className="relative w-full h-full flex-1 min-h-0 bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-hidden xl:min-h-[660px]">
         {/* Main Workspace Frame */}
-        <div className="w-full h-full flex items-stretch p-2 sm:p-3 pt-1 gap-3 xl:gap-4 overflow-hidden shrink-0">
+        <div className="w-full h-full flex items-stretch sm:pb-3 gap-3 xl:gap-4 overflow-hidden shrink-0">
           <SidebarWrapper isInline={true} />
 
           {/* Unified Bento Canvas (Responsive across Desktop and Mobile) */}
