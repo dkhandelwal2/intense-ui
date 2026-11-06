@@ -17,14 +17,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {isPreviewRevamp || isComponentDocs ? (
         <div className="relative h-dvh max-h-dvh w-full flex flex-col bg-background overflow-hidden">
           <SiteHeader />
-          <main id="main-content" role="main" className="flex-1 min-h-0 pt-24 flex flex-col overflow-hidden">
+          <main id="main-content" role="main" className="flex-1 min-h-0 pt-20 flex flex-col overflow-hidden">
             {children}
           </main>
         </div>
       ) : (
         <div className="relative flex min-h-screen flex-col overflow-x-clip">
           {!isErrorPage && <SiteHeader />}
-          <main id="main-content" role="main" className={`flex-1 ${!isErrorPage ? "pt-20 sm:pt-24" : ""}`}>
+          <main id="main-content" role="main" className={`flex-1 ${!isErrorPage ? "pt-20" : ""}`}>
             {children}
           </main>
           {!isPreviewRevamp && !isComponentDocs && !isErrorPage && <SiteFooter />}

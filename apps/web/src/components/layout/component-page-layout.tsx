@@ -294,9 +294,9 @@ function ComponentPageLayoutInner({
 
   return (
     <ComponentActiveTocProvider value={activeTocId}>
-      <div className="relative w-full h-full flex-1 min-h-0 bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)] overflow-hidden xl:min-h-[660px]">
+      <div className="relative w-full h-full flex-1 min-h-0 bg-background text-foreground flex flex-col antialiased selection:bg-[var(--theme-primary)]/20 selection:text-[var(--theme-primary)]">
         {/* Main Workspace Frame */}
-        <div className="w-full h-full flex items-stretch sm:pb-3 gap-3 xl:gap-4 overflow-hidden shrink-0">
+        <div className="w-full h-full flex items-stretch sm:pb-3 sm:pr-3 gap-3 xl:gap-4 overflow-hidden shrink-0">
           <SidebarWrapper isInline={true} />
 
           {/* Unified Bento Canvas (Responsive across Desktop and Mobile) */}
