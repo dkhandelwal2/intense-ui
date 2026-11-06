@@ -148,8 +148,6 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   // Title-cased
   "Accordion": AccordionMiniCardPreview,
   "Button": ButtonCardPreview,
-  "Animated Button": ButtonCardPreview,
-  "Glowing Button": ButtonCardPreview,
   "Switch": SwitchCardPreview,
   "Slider": <SliderInteractivePreview />,
   "Tooltip": TooltipCardPreview,
@@ -163,8 +161,6 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   // Slug-cased
   "accordion": AccordionMiniCardPreview,
   "button": ButtonCardPreview,
-  "animated-button": ButtonCardPreview,
-  "glowing-button": ButtonCardPreview,
   "switch": SwitchCardPreview,
   "slider": <SliderInteractivePreview />,
   "tooltip": TooltipCardPreview,

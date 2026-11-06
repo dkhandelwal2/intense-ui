@@ -115,7 +115,7 @@ export default function ThreeDButtonDemo() {
     code: `import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
 
-export default function AnimatedButtonDemo() {
+export default function ButtonAnimationDemo() {
   return (
     <div className="flex flex-wrap gap-4">
       <Button variant="shimmer"><Sparkles className="w-4 h-4" /> Shimmer Beam</Button>
@@ -146,11 +146,16 @@ export default function RoundedButtonDemo() {
 
 export default function ShareButtonDemo() {
   return (
-    <Button
-      variant="share"
-      size="md"
-      onShare={(platform) => console.log(platform)}
-    />
+    <div className="flex flex-col gap-4">
+      {/* 1. Floating Glow */}
+      <Button variant="share" shareVariant="glow" />
+
+      {/* 2. Neumorphic Soft Card */}
+      <Button variant="share" shareVariant="neumorphic" />
+
+      {/* 3. Bold Solid Capsule */}
+      <Button variant="share" shareVariant="default" />
+    </div>
   );
 }`,
   },

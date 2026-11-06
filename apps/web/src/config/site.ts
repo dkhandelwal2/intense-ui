@@ -149,7 +149,6 @@ export const SIDEBAR_CONFIG = {
   componentBadges: {
     accordion: { badge: "Hot", color: "rose" },
     button: { badge: "New", color: "emerald" },
-    "animated-button": { badge: "New", color: "emerald" },
   } as Record<string, { badge: string; color?: "rose" | "emerald" | "blue" | "zinc" }>,
 } as const;
 

@@ -71,8 +71,11 @@ export const buttonDoc: ComponentDocData = {
     {
       title: "Share Props",
       props: [
-        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback triggered when a social platform is selected." },
+        { prop: "shareVariant", type: '"default" | "glow" | "neumorphic"', defaultValue: '"default"', description: "Visual style: 'glow' (floating glow capsule), 'neumorphic' (soft 3D card), or 'default' (bold solid)." },
+        { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Proportional scale of the share button ('sm' = 140px/40px, 'md' = 160px/48px, 'lg' = 180px/56px)." },
         { prop: "color", type: "string", defaultValue: '"#2563eb"', description: "Custom background color for the share capsule." },
+        { prop: "platforms", type: "SharePlatform[]", defaultValue: "WhatsApp, Instagram, X, Facebook", description: "Custom list of share items/platforms with custom icons, actions, or URLs (e.g. YouTube)." },
+        { prop: "onShare", type: "(platform: string) => void", defaultValue: "-", description: "Callback triggered when a social platform is selected." },
       ],
     },
   ],

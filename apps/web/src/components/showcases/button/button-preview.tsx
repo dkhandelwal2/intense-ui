@@ -11,10 +11,24 @@ export function ButtonPreview({ customProps, activeTocId = "basic", isCustomizin
 
   if (isCustomizing) {
     if (customProps.variant === "share") {
+      const platforms = [
+        { id: "whatsapp", label: "WhatsApp" },
+        { id: "instagram", label: "Instagram" },
+        { id: "x", label: "X" },
+        { id: "facebook", label: "Facebook" },
+        ...(customProps.includeYoutube ? [{ id: "youtube", label: "YouTube", url: "https://youtube.com" }] : []),
+      ];
       return (
         <div className="flex flex-col items-center justify-center gap-4 p-8">
-          <Button variant="share" size={customProps.size === "icon" ? "md" : customProps.size} onShare={(p) => setSharedPlatform(p)} />
-          {sharedPlatform && <span className="text-xs font-mono text-emerald-500">Shared to {sharedPlatform}!</span>}
+          <Button
+            variant="share"
+            shareVariant={customProps.shareVariant || "default"}
+            color={customProps.shareColor || "#2563eb"}
+            size={customProps.size === "icon" ? "md" : customProps.size}
+            platforms={platforms}
+            onShare={(p) => setSharedPlatform(p)}
+          />
+          {sharedPlatform && <span className="text-xs font-mono text-emerald-500">Shared to {sharedPlatform.toUpperCase()}!</span>}
         </div>
       );
     }
@@ -139,13 +153,31 @@ export function ButtonPreview({ customProps, activeTocId = "basic", isCustomizin
   }
 
   if (activeTocId === "share") {
+    const platforms = [
+      { id: "whatsapp", label: "WhatsApp" },
+      { id: "instagram", label: "Instagram" },
+      { id: "x", label: "X" },
+      { id: "facebook", label: "Facebook" },
+      ...(customProps.includeYoutube ? [{ id: "youtube", label: "YouTube", url: "https://youtube.com" }] : []),
+    ];
+    const size = customProps.size === "icon" ? "md" : customProps.size;
     return (
-      <div className="flex flex-col items-center justify-center gap-6 p-8">
-        <div className="flex flex-wrap items-center justify-center gap-8">
-          <Button variant="share" size="md" onShare={(p) => setSharedPlatform(p)} />
-          <Button variant="share" size="lg" onShare={(p) => setSharedPlatform(p)} />
+      <div className="flex flex-col items-center justify-center gap-8 p-8 min-h-[380px]">
+        <div className="flex flex-col items-center gap-8 w-full max-w-md">
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[11px] font-mono text-muted-foreground tracking-wider uppercase">1. Floating Glow</span>
+            <Button variant="share" shareVariant="glow" size={size} color={customProps.shareColor} platforms={platforms} onShare={(p) => setSharedPlatform(p)} />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[11px] font-mono text-muted-foreground tracking-wider uppercase">2. Neumorphic Soft Card</span>
+            <Button variant="share" shareVariant="neumorphic" size={size} platforms={platforms} onShare={(p) => setSharedPlatform(p)} />
+          </div>
+          <div className="flex flex-col items-center gap-2 pt-1">
+            <span className="text-[11px] font-mono text-muted-foreground tracking-wider uppercase">3. Bold Solid Capsule</span>
+            <Button variant="share" shareVariant="default" size={size} color={customProps.shareColor} platforms={platforms} onShare={(p) => setSharedPlatform(p)} />
+          </div>
         </div>
-        <span className="text-xs text-muted-foreground font-mono">{sharedPlatform ? `Shared to ${sharedPlatform.toUpperCase()}!` : "Click 'SHARE' to expand social platforms"}</span>
+        <span className="text-xs text-muted-foreground font-mono">{sharedPlatform ? `Shared to ${sharedPlatform.toUpperCase()}!` : "Click any button to expand social platforms"}</span>
       </div>
     );
   }

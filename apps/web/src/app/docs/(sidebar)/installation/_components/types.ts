@@ -7,7 +7,7 @@ export type ComponentSlug =
   | "slider"
   | "accordion"
   | "tooltip"
-  | "animated-button";
+  | "button";
 
 export interface ComponentListItem {
   slug: ComponentSlug;

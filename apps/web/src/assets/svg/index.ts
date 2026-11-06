@@ -27,3 +27,11 @@ export type {
   IsometricBlocksSvgProps,
   ScoopedCornerNotchSvgProps,
 } from "./card-accents";
+
+export {
+  WhatsAppIcon,
+  InstagramIcon,
+  FacebookIcon,
+  XIcon,
+  YouTubeIcon,
+} from "./social-icons";

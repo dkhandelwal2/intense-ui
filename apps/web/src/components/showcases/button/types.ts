@@ -9,6 +9,9 @@ export interface ButtonCustomProps {
   iconPosition: "left" | "right";
   confirmAction: "delete" | "confirm" | "archive" | "discard";
   confirmType: "pill" | "icon";
+  shareVariant?: "default" | "glow" | "neumorphic";
+  shareColor?: string;
+  includeYoutube?: boolean;
 }
 
 export const DEFAULT_BUTTON_PROPS: ButtonCustomProps = {
@@ -22,4 +25,7 @@ export const DEFAULT_BUTTON_PROPS: ButtonCustomProps = {
   iconPosition: "left",
   confirmAction: "delete",
   confirmType: "pill",
+  shareVariant: "default",
+  shareColor: "#2563eb",
+  includeYoutube: false,
 };

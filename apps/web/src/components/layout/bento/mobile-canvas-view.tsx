@@ -36,8 +36,7 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
 
   return (
     <div className="flex-1 min-h-0 min-w-0 flex flex-col h-full overflow-y-auto px-2 sm:px-4 py-2 pb-28 sm:pb-32 gap-4 hide-scrollbar">
-      <WidgetCapsule className="w-full shrink-0" />
-
+      {/* 1. Primary Hero: Interactive Component Preview (zero top wasted space) */}
       <StagePreviewCard
         slug={slug}
         title={title}
@@ -51,6 +50,7 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
         handleViewCode={handleViewCode}
         onOpenPlayground={onOpenPlayground}
         isDesktop={false}
+        animation="flip"
       >
         {/* Step Carousel controlling variations in responsive mode */}
         {effectiveTocItems.length > 1 && !isCustomizing && (
@@ -63,11 +63,13 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
               loop={false}
               defaultPlaying={true}
               size="sm"
+              animation="flip"
             />
           </div>
         )}
       </StagePreviewCard>
 
+      {/* 2. Secondary Info Bento Grid: Dependencies & Support */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-3">
         <DependenciesCard
           directDeps={directDeps}
@@ -80,6 +82,9 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
           className="w-full h-full rounded-xl shrink-0"
         />
       </div>
+
+      {/* 3. Ambient Status Capsule (placed at bottom of content stream) */}
+      <WidgetCapsule className="w-full shrink-0" />
     </div>
   );
 });

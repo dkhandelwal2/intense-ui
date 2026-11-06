@@ -26,6 +26,7 @@ export default function GooeyNavbarDemo() {
     { id: "home", label: "Home", icon: "🏠" },
     { id: "explore", label: "Explore", icon: "🧭" },
     { id: "library", label: "Library", icon: "📚" },
+    { id: "news", label: "News", icon: "📰" },
   ];
 
   return (
@@ -78,7 +79,7 @@ export default function WithIconsNavbarDemo() {
   },
   {
     id: "floating",
-    label: "Floating Capsule Nav Bar",
+    label: "Floating Capsule",
     description:
       "Glassmorphic floating capsule container with spring indicator physics.",
     spec: {
@@ -285,6 +286,7 @@ export default function NavbarDemo() {
     { id: "home", label: "Home", icon: "🏠" },
     { id: "explore", label: "Explore", icon: "🧭" },
     { id: "library", label: "Library", icon: "📚" },
+    { id: "news", label: "News", icon: "📰" },
   ];
 
   return (

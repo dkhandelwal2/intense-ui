@@ -1,32 +1,25 @@
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
 import { componentsConfig } from "@/config/components";
 import { ComponentPreview } from "@/components/component-previews";
 import { ComponentPageLayout } from "@/components/layout/component-page-layout";
 import { getComponentDocData } from "@/config/component-docs";
 import { PropsTable } from "@/components/docs";
+import { checkIsMobileDevice } from "@/lib/device";
 
 export function generateStaticParams() {
   return componentsConfig
     .filter((component) => component.enabled)
     .map((component) => ({
-      slug: component.href.split("/").pop(),
+      slug: component.href.split("/").pop() || component.slug,
     }));
 }
 
 export default async function DynamicComponentPage(props: { params: Promise<{ slug: string }> }) {
-  const headersList = await headers();
-  const userAgentStr = headersList.get("user-agent") || "";
-  const isMobile = Boolean(
-    userAgentStr &&
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgentStr)
-  );
-
-  const params = await props.params;
-  const slug = params.slug;
+  const isMobile = await checkIsMobileDevice();
+  const { slug } = await props.params;
 
   const component = componentsConfig.find(
-    (c) => c.href === `/docs/components/${slug}`
+    (c) => c.href === `/docs/components/${slug}` || c.slug === slug
   );
 
   if (!component || !component.enabled) {

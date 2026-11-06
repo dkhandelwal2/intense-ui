@@ -13,12 +13,15 @@ export function generateButtonCode(props: ButtonCustomProps): string {
 
   if (props.variant === "share") {
     const sizePart = props.size !== "md" ? `\n      size="${props.size}"` : "";
+    const variantPart = props.shareVariant && props.shareVariant !== "default" ? `\n      shareVariant="${props.shareVariant}"` : "";
+    const colorPart = props.shareColor && props.shareColor !== "#2563eb" ? `\n      color="${props.shareColor}"` : "";
+    const platformsPart = props.includeYoutube ? `\n      platforms={[\n        { id: "whatsapp", label: "WhatsApp" },\n        { id: "instagram", label: "Instagram" },\n        { id: "x", label: "X" },\n        { id: "facebook", label: "Facebook" },\n        { id: "youtube", label: "YouTube", url: "https://youtube.com" },\n      ]}` : "";
     return `import { Button } from "@/components/ui/button";
 
 export default function ShareButtonDemo() {
   return (
     <Button
-      variant="share"${sizePart}
+      variant="share"${variantPart}${colorPart}${sizePart}${platformsPart}
       onShare={(platform) => console.log(platform)}
     />
   );

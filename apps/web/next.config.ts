@@ -14,24 +14,29 @@ function syncRegistryConfig() {
 
     const compDir = path.join(registryPkgDir, "src/components");
     const configPath = path.join(registryPkgDir, "registry-config.json");
-
-    const files = fs
-      .readdirSync(compDir)
-      .filter(
-        (f) =>
-          f.endsWith(".tsx") &&
-          !f.startsWith("_") &&
-          !f.includes(".draft.") &&
-          !f.includes(".test.")
-      );
-
+    const entries = fs.readdirSync(compDir, { withFileTypes: true });
     const components = [];
 
-    for (const file of files) {
-      const slug = file.replace(/\.tsx$/, "");
-      const content = fs.readFileSync(path.join(compDir, file), "utf8");
+    for (const entry of entries) {
+      if (entry.name.startsWith("_") || entry.name.includes(".draft.") || entry.name.includes(".test.")) {
+        continue;
+      }
 
-      if (/^\s*export\s+\*\s+from\s+["']\.\//.test(content.trim())) {
+      let slug = "";
+      let content = "";
+
+      if (entry.isDirectory()) {
+        const idx = path.join(compDir, entry.name, "index.tsx");
+        if (!fs.existsSync(idx)) continue;
+        slug = entry.name;
+        content = fs.readFileSync(idx, "utf8");
+      } else if (entry.isFile() && entry.name.endsWith(".tsx")) {
+        slug = entry.name.replace(/\.tsx$/, "");
+        content = fs.readFileSync(path.join(compDir, entry.name), "utf8");
+        if (/^\s*export\s+\*\s+from\s+["']\.\//.test(content.trim())) {
+          continue;
+        }
+      } else {
         continue;
       }
 
@@ -96,8 +101,8 @@ if (process.env.NODE_ENV !== "production") {
   if (compDir) {
     let watchDebounce: NodeJS.Timeout | null = null;
     try {
-      fs.watch(compDir, (_eventType, filename) => {
-        if (!filename || !filename.endsWith(".tsx")) return;
+      fs.watch(compDir, { recursive: true }, (_eventType, filename) => {
+        if (!filename || (!filename.endsWith(".tsx") && !filename.endsWith(".ts"))) return;
         if (watchDebounce) clearTimeout(watchDebounce);
         watchDebounce = setTimeout(() => {
           syncRegistryConfig();

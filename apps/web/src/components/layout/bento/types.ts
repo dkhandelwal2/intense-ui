@@ -131,6 +131,7 @@ export interface StagePreviewCardProps {
   onOpenPlayground?: () => void;
   isCodeOpened?: boolean;
   isDesktop?: boolean;
+  animation?: "slide" | "zoom" | "flip" | "stagger";
   className?: string;
   children?: React.ReactNode;
 }

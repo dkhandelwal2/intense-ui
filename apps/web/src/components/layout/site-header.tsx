@@ -86,7 +86,7 @@ export function SiteHeader() {
       />
 
       {/* ─── 1. FIXED FLOATING HEADER BAR ─── */}
-      <header className="fixed top-0 left-0 right-0 z-[70] pointer-events-none pt-3 px-4 sm:px-6 md:px-8 flex justify-center">
+      <header className="fixed top-0 left-0 right-0 z-[70] pointer-events-none py-3 px-4 sm:px-6 md:px-8 flex justify-center">
         <div className="w-full max-w-7xl relative flex justify-center">
           <motion.div
             initial={false}

@@ -27,7 +27,6 @@ export type ComponentIconType = React.ComponentType<{ className?: string }>;
 export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   accordion: LayoutList,
   button: MousePointerClick,
-  "animated-button": MousePointerClick,
   switch: ToggleRight,
   slider: SlidersHorizontal,
   tooltip: MessageSquare,

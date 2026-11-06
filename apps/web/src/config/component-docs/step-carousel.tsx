@@ -51,6 +51,8 @@ export const stepCarouselDoc: ComponentDocData = {
     {
       title: "StepCarousel Props",
       props: [
+        { prop: "items", type: "ReactNode[]", defaultValue: "-", description: "Array of slide elements rendered above the dots bar with animated transitions." },
+        { prop: "animation", type: '"slide" | "zoom" | "flip" | "stagger"', defaultValue: '"slide"', description: "Motion transition effect triggered when active step changes." },
         { prop: "totalSteps", type: "number", defaultValue: "-", description: "Total number of steps or slides to cycle through." },
         { prop: "currentStep", type: "number", defaultValue: "0", description: "Controlled index of the currently active step (0-indexed)." },
         { prop: "onStepChange", type: "(step: number) => void", defaultValue: "-", description: "Callback invoked when user clicks a dot or step advances." },

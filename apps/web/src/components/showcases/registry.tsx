@@ -169,8 +169,6 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "step-carousel": stepCarouselShowcaseDefinition,
   "step-player": stepCarouselShowcaseDefinition,
   "button": buttonShowcaseDefinition,
-  "animated-button": buttonShowcaseDefinition,
-  "glowing-button": buttonShowcaseDefinition,
   "switch": switchShowcaseDefinition,
   "slider": sliderShowcaseDefinition,
   "color-grid": colorGridShowcaseDefinition,

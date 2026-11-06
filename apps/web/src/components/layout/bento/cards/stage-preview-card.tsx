@@ -8,6 +8,7 @@ import { useComponentPlayground } from "@/context/playground-context";
 import { PlaygroundReorderIcon } from "@/components/showcases/common";
 import { StagePreviewCardProps } from "../types";
 import { AnimatedCodeIcon, AnimatedTerminalIcon } from "@/assets/icons";
+import { STEP_CAROUSEL_ANIMATIONS } from "@/components/ui/step-carousel";
 
 export const StagePreviewCard = React.memo(function StagePreviewCard({
   slug,
@@ -23,6 +24,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
   onOpenPlayground,
   isCodeOpened,
   isDesktop = false,
+  animation,
   className,
   children,
 }: StagePreviewCardProps) {
@@ -34,7 +36,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
     <div
       className={cn(
         "flex flex-col justify-between relative overflow-y-scroll select-none w-full p-4",
-        isDesktop ? "h-full rounded-3xl" : "h-[60vh] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
+        isDesktop ? "h-full rounded-3xl" : "px-2 h-[calc(100vh-180px)] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
         className
       )}
     >
@@ -65,17 +67,18 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={isCustomizing ? "customization" : activeTocId}
-            initial={false}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: -8 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            variants={animation ? STEP_CAROUSEL_ANIMATIONS[animation] : undefined}
+            initial={animation ? "initial" : false}
+            animate={animation ? "animate" : { opacity: 1, scale: 1, y: 0 }}
+            exit={animation ? "exit" : { opacity: 0, scale: 0.94, y: -8 }}
+            transition={animation ? { type: "spring", stiffness: 320, damping: 26 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-center justify-center w-full"
           >
             <div
               className={cn(
-                "rounded-3xl transition-all duration-300 flex items-center justify-center p-2",
+                "rounded-3xl transition-all duration-300 flex items-center justify-center",
                 isDesktop
-                  ? "w-[62%] h-full shadow-md backdrop-blur-xl"
+                  ? "w-[62%] h-full shadow-md backdrop-blur-xl p-2"
                   : "w-full max-w-[620px] max-h-[250px] rounded-2xl shadow-xs backdrop-blur-xl"
               )}
             >

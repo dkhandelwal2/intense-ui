@@ -17,7 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {isPreviewRevamp || isComponentDocs ? (
         <div className="relative h-dvh max-h-dvh w-full flex flex-col bg-background overflow-hidden">
           <SiteHeader />
-          <main id="main-content" role="main" className="flex-1 min-h-0 pt-20 flex flex-col overflow-hidden">
+          <main id="main-content" role="main" className="flex-1 min-h-0 pt-19 md:pt-20 flex flex-col overflow-hidden">
             {children}
           </main>
         </div>

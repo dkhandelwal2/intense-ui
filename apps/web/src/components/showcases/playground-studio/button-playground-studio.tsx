@@ -39,6 +39,19 @@ const CONFIRM_ACTIONS = [
   { id: "discard" as const, label: "Discard Action", badge: "⚠️", spec: "Neutral discard confirmation" },
 ];
 
+const SHARE_STYLES = [
+  { id: "glow" as const, label: "Floating Glow Capsule", badge: "GLW", spec: "Floating glow shadow with crescent handle" },
+  { id: "neumorphic" as const, label: "Neumorphic Soft Card", badge: "NEU", spec: "Double-layered 3D soft neumorphism card" },
+  { id: "default" as const, label: "Bold Solid Capsule", badge: "BLD", spec: "Electric blue high-contrast uppercase pill" },
+];
+
+const SHARE_COLORS = [
+  { id: "#2563eb", label: "Electric Blue", badge: "🔵" },
+  { id: "#ef4444", label: "YouTube Red", badge: "🔴" },
+  { id: "#10b981", label: "Emerald Green", badge: "🟢" },
+  { id: "#8b5cf6", label: "Vibrant Purple", badge: "🟣" },
+];
+
 export function ButtonPlaygroundStudio({ customProps, onChange, className, hidePreview = false, onViewCode }: ButtonPlaygroundStudioProps) {
   const steps: PlaygroundStudioStepData[] = [
     {
@@ -66,6 +79,35 @@ export function ButtonPlaygroundStudio({ customProps, onChange, className, hideP
       colorGradient: "bg-gradient-to-br from-[#7C5CFC] via-[#6a42f5] to-[#5123ea]",
       icon: <Sliders className="w-3.5 h-3.5" />, headerTitle: "Features & Confirmation", headerSubtitle: "action presets and toggles", headerEmoji: "⚡",
       rows: [
+        ...(customProps.variant === "share"
+          ? [
+              ...SHARE_STYLES.map((st) => ({
+                id: `share-style-${st.id}`, label: st.label, spec: st.spec,
+                thumbnail: <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">{st.badge}</span>,
+                isSelected: (customProps.shareVariant || "default") === st.id,
+                onSelect: () => onChange((p) => ({ ...p, shareVariant: st.id, variant: "share" })),
+              })),
+              {
+                id: "share-youtube", label: "Include YouTube Item", spec: "Add YouTube link to expanded share platforms",
+                thumbnail: <span className="text-sm">▶️</span>,
+                actionType: "toggle" as const, toggleChecked: !!customProps.includeYoutube,
+                onToggleChange: (checked: boolean) => onChange((p) => ({ ...p, includeYoutube: checked, variant: "share" })),
+                onSelect: () => onChange((p) => ({ ...p, includeYoutube: !p.includeYoutube, variant: "share" })),
+              },
+              ...SHARE_COLORS.map((c) => ({
+                id: `share-color-${c.id}`, label: c.label, spec: `Custom background color (${c.id})`,
+                thumbnail: <span className="text-sm">{c.badge}</span>,
+                isSelected: customProps.shareColor === c.id,
+                onSelect: () => onChange((p) => ({ ...p, shareColor: c.id, variant: "share" })),
+              })),
+            ]
+          : [
+              {
+                id: "switch-to-share", label: "Social Share Mode", spec: "Customize share styles, colors & items",
+                thumbnail: <span className="text-sm">🔗</span>,
+                isSelected: false, onSelect: () => onChange((p) => ({ ...p, variant: "share" })),
+              },
+            ]),
         {
           id: "confirm-mode", label: "Icon-Based Confirmation", spec: "Morphing squircle icon instead of pill text", thumbnail: <span className="text-sm">🔲</span>,
           actionType: "toggle" as const, toggleChecked: customProps.confirmType === "icon",

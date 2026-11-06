@@ -12,6 +12,7 @@ const GOOEY_ITEMS = [
   { id: "home", label: "Home", icon: "🏠" },
   { id: "explore", label: "Explore", icon: "🧭" },
   { id: "library", label: "Library", icon: "📚" },
+  { id: "news", label: "News", icon: "📰" },
 ];
 
 const WITH_ICON_ITEMS = [
@@ -44,7 +45,7 @@ function PreviewCanvas({
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-center ",
+        "w-full flex items-start md:items-center justify-center ",
         className
       )}
     >
@@ -96,7 +97,7 @@ export function NavbarVariantRenderer({
 
     case "sizes":
       return (
-        <div className="flex flex-col gap-6 items-center justify-center py-6 px-4 w-full">
+        <div className="flex flex-col gap-6 items-center justify-center md:py-6 md:px-4 w-full">
           <div className="w-full flex flex-col items-center justify-center text-center gap-1.5">
             <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
               Small (sm)

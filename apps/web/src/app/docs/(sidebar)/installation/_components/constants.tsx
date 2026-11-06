@@ -15,7 +15,7 @@ export const COMPONENTS_LIST: ComponentListItem[] = [
   { slug: "slider", label: "Slider", icon: <SlidersHorizontal className="w-3.5 h-3.5" />, desc: "Smooth spring-tracked slider" },
   { slug: "accordion", label: "Accordion", icon: <LayoutList className="w-3.5 h-3.5" />, desc: "Physics animated accordion" },
   { slug: "tooltip", label: "Tooltip", icon: <Sparkles className="w-3.5 h-3.5" />, desc: "Hover floating preview" },
-  { slug: "animated-button", label: "Button", icon: <Box className="w-3.5 h-3.5" />, desc: "Magnetic glow button" },
+  { slug: "button", label: "Button", icon: <Box className="w-3.5 h-3.5" />, desc: "Interactive button with animations" },
 ];
 
 export {

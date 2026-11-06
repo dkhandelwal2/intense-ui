@@ -30,8 +30,6 @@ const DOCS_MAP: Record<string, ComponentDocData> = {
   "nav-bar": navBarDoc,
   "navbar": navBarDoc,
   "button": buttonDoc,
-  "animated-button": buttonDoc,
-  "glowing-button": buttonDoc,
   "switch": switchDoc,
   "slider": sliderDoc,
   "tooltip": tooltipDoc,
