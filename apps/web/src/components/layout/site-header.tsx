@@ -21,7 +21,6 @@ export { Logo, type LogoProps } from "./header-components";
 export function SiteHeader() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const {
@@ -38,31 +37,21 @@ export function SiteHeader() {
     desktopHamburgerPointerEvents,
   } = useHeaderScroll();
 
-  // Close full-screen menu smoothly
-  const handleCloseMenu = useCallback(() => {
-    if (!isMenuOpen || isMenuClosing) return;
-    setIsMenuClosing(true);
-    setIsMenuOpen(false);
-    setTimeout(() => {
-      setIsMenuClosing(false);
-    }, 350);
-  }, [isMenuOpen, isMenuClosing]);
-
   const handleToggleMenu = useCallback(() => {
-    if (isMenuOpen) {
-      handleCloseMenu();
-    } else {
-      setIsMenuOpen(true);
-    }
-  }, [isMenuOpen, handleCloseMenu]);
+    setIsMenuOpen((prev) => !prev);
+  }, []);
+
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      const prevOverflow = document.body.style.overflow;
+      const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = prevOverflow;
+        document.body.style.overflow = prev;
       };
     }
   }, [isMenuOpen]);
@@ -103,7 +92,6 @@ export function SiteHeader() {
             {/* Left side: Logo & Version Badge */}
             <div className="flex items-center gap-3 shrink-0">
               <Logo onClick={handleCloseMenu} />
-
               <span className="hidden xl:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 v0.1.0 Beta
@@ -122,7 +110,6 @@ export function SiteHeader() {
             {/* Right side: Search, GitHub, Theme, and Hamburger buttons */}
             <HeaderActions
               isMenuOpen={isMenuOpen}
-              isMenuClosing={isMenuClosing}
               onOpenSearch={() => {
                 if (isMenuOpen) handleCloseMenu();
                 setIsSearchOpen(true);
