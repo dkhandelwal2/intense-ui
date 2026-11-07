@@ -30,4 +30,8 @@ export const SWITCH_EXAMPLES: SwitchExample[] = [
     id: "square", label: "Square Push Tile", emoji: "🔲",
     code: `"use client";\n\nimport { useState } from "react";\nimport { Switch } from "@/components/ui/switch";\n\nexport default function SquareSwitchDemo() {\n  const [checked, setChecked] = useState(true);\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Switch variant="square" checked={checked} onChange={setChecked} sliderText="yes/no" size="md" />\n    </div>\n  );\n}`,
   },
+  {
+    id: "binary-io", label: "Binary I/O Morph", emoji: "🟢",
+    code: `"use client";\n\nimport { useState } from "react";\nimport { Switch } from "@/components/ui/switch";\n\nexport default function BinaryIoSwitchDemo() {\n  const [checked, setChecked] = useState(true);\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Switch variant="binary-io" checked={checked} onChange={setChecked} size="md" />\n    </div>\n  );\n}`,
+  },
 ];

@@ -20,6 +20,7 @@ const SWITCH_VARIANTS = [
   { id: "capsule-text" as const, label: "Text Capsule", badge: "TXT", spec: "Capsule outline with inline OFF / ON text" },
   { id: "industrial" as const, label: "Industrial", badge: "IND", spec: "Vertical machinery switch with | and ○" },
   { id: "square" as const, label: "Square Tile", badge: "SQR", spec: "Neo-brutalist tactile square tile with NO / YES" },
+  { id: "binary-io" as const, label: "Binary I/O", badge: "BIO", spec: "Morphing neon binary I (ON) and O (OFF)" },
 ];
 
 const SWITCH_SIZES = [

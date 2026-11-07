@@ -21,6 +21,7 @@ export function SwitchPreview({
   const [industrialVal, setIndustrialVal] = useState(true);
   const [squareVal, setSquareVal] = useState(true);
   const [pillVal, setPillVal] = useState(true);
+  const [binaryVal, setBinaryVal] = useState(true);
 
   if (isCustomizing) {
     return (
@@ -97,6 +98,18 @@ export function SwitchPreview({
         <Switch variant="pill" checked={pillVal} onChange={setPillVal} size="md" />
         <span className="text-xs font-mono text-muted-foreground">
           Ultra-smooth minimalist pill slider with edge-to-edge spring thumb
+        </span>
+      </div>
+    );
+  }
+
+  // 6. Binary I/O Morphing Capsule
+  if (activeTocId === "binary-io") {
+    return (
+      <div className="flex flex-col items-center justify-center gap-6 p-8">
+        <Switch variant="binary-io" checked={binaryVal} onChange={setBinaryVal} size="md" />
+        <span className="text-xs font-mono text-muted-foreground">
+          Neon binary switch morphing between green bar (ON) and orange ring (OFF)
         </span>
       </div>
     );

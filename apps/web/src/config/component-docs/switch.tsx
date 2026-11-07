@@ -46,7 +46,7 @@ export const switchDoc: ComponentDocData = {
       props: [
         { prop: "checked", type: "boolean", defaultValue: "-", description: "Controlled boolean value of the switch." },
         { prop: "onChange", type: "(checked: boolean) => void", defaultValue: "-", description: "Callback triggered when switch is toggled." },
-        { prop: "variant", type: '"rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square"', defaultValue: '"rocker"', description: "Visual archetype and animation style of the toggle switch." },
+        { prop: "variant", type: '"rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square" | "binary-io"', defaultValue: '"rocker"', description: "Visual archetype and animation style of the toggle switch." },
         { prop: "size", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Dimensions scale of the track and toggle thumb (supported across all variants)." },
         { prop: "sliderText", type: '"on/off" | "true/false" | "yes/no"', defaultValue: '"on/off"', description: "State labels embossed on the switch face." },
         { prop: "showDotIcon", type: "boolean", defaultValue: "true", description: "Whether to render a glowing status dot indicator on 3D rocker." },

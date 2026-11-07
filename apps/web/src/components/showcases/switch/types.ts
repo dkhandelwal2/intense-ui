@@ -1,7 +1,7 @@
 export interface SwitchCustomProps {
   checked: boolean;
   disabled: boolean;
-  variant: "rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square";
+  variant: "rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square" | "binary-io";
   size: "sm" | "md" | "lg";
   sliderText: "on/off" | "true/false" | "yes/no";
   showDotIcon: boolean;

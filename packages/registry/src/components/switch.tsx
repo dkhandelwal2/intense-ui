@@ -9,7 +9,7 @@ export interface SwitchProps {
   onChange: (checked: boolean) => void;
   className?: string;
   disabled?: boolean;
-  variant?: "rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square";
+  variant?: "rocker" | "pill" | "cutout" | "capsule-text" | "industrial" | "square" | "binary-io" | "binary";
   size?: "sm" | "md" | "lg";
   sliderText?: "on/off" | "true/false" | "yes/no";
   showDotIcon?: boolean;
@@ -23,6 +23,8 @@ const SIZE_CLASSES = {
   "capsule-text": { sm: "w-16 h-6", md: "w-20 h-7", lg: "w-24 h-8" },
   industrial: { sm: "w-8 h-14", md: "w-10 h-18", lg: "w-12 h-22" },
   square: { sm: "w-9 h-9", md: "w-11 h-11", lg: "w-14 h-14" },
+  "binary-io": { sm: "w-11 h-6", md: "w-13 h-7", lg: "w-16 h-8" },
+  binary: { sm: "w-11 h-6", md: "w-13 h-7", lg: "w-16 h-8" },
 } as const;
 
 export function Switch({
@@ -44,6 +46,7 @@ export function Switch({
       {variant === "capsule-text" && <CapsuleTextView checked={checked} size={size} sliderText={sliderText} />}
       {variant === "industrial" && <IndustrialView checked={checked} size={size} />}
       {variant === "square" && <SquareView checked={checked} size={size} sliderText={sliderText} />}
+      {(variant === "binary-io" || variant === "binary") && <BinaryIoView checked={checked} />}
     </button>
   );
 }
@@ -98,8 +101,14 @@ function CutoutView({ checked }: { checked: boolean }) {
     <div className={cn("w-full h-full rounded-full bg-zinc-900 border border-zinc-700 flex items-center p-0.5 shadow-inner", checked ? "justify-end" : "justify-start")}>
       <motion.div
         layout
+        initial={false}
         transition={{ type: "spring", stiffness: 500, damping: 35 }}
-        className="h-full aspect-square rounded-full border-[3px] border-orange-500 bg-transparent shadow-[0_0_10px_rgba(249,115,22,0.7)] shrink-0"
+        animate={{
+          borderColor: checked ? "#f97316" : "rgba(113, 113, 122, 0.5)",
+          backgroundColor: checked ? "rgba(0, 0, 0, 0)" : "rgba(39, 39, 42, 0.4)",
+          boxShadow: checked ? "0 0 10px rgba(249, 115, 22, 0.7)" : "0 0 0px rgba(0, 0, 0, 0)",
+        }}
+        className="h-full aspect-square rounded-full border-[3px] shrink-0"
       />
     </div>
   );
@@ -126,14 +135,14 @@ function IndustrialView({ checked, size }: any) {
   const hCls = { sm: "h-5", md: "h-6", lg: "h-7" }[size as "sm" | "md" | "lg"];
   return (
     <div className="w-full h-full rounded-lg bg-zinc-900 border-2 border-zinc-700 p-1 flex flex-col items-center justify-between shadow-inner">
-      <span className={cn("text-[9px] font-mono font-bold leading-none select-none", checked ? "text-green-400 drop-shadow-[0_0_4px_#4ade80]" : "text-zinc-600")}>|</span>
+      <span className={cn("text-[9px] font-mono font-bold leading-none select-none transition-colors", checked ? "text-green-400 drop-shadow-[0_0_4px_#4ade80]" : "text-zinc-600")}>|</span>
       <motion.div
         layout
         transition={{ type: "spring", stiffness: 500, damping: 35 }}
         className={cn("w-full rounded bg-zinc-700 border border-zinc-500 shadow-md", hCls)}
         style={{ transform: checked ? "perspective(100px) rotateX(15deg)" : "perspective(100px) rotateX(-15deg)" }}
       />
-      <span className={cn("text-[9px] font-mono font-bold leading-none select-none", !checked ? "text-zinc-400" : "text-zinc-600")}>○</span>
+      <span className={cn("text-[9px] font-mono font-bold leading-none select-none transition-colors", !checked ? "text-red-400 drop-shadow-[0_0_4px_#f87171]" : "text-zinc-600")}>○</span>
     </div>
   );
 }
@@ -153,5 +162,29 @@ function SquareView({ checked, size, sliderText }: any) {
     >
       {checked ? lOn : lOff}
     </motion.div>
+  );
+}
+
+function BinaryIoView({ checked }: { checked: boolean }) {
+  return (
+    <div className={cn("w-full h-full rounded-full bg-zinc-900 border border-zinc-700/80 flex items-center p-0.5 shadow-inner", checked ? "justify-end" : "justify-start")}>
+      <motion.div
+        layout
+        transition={{ type: "spring", stiffness: 500, damping: 35 }}
+        className="h-full aspect-square flex items-center justify-center shrink-0"
+      >
+        <motion.div
+          initial={false}
+          animate={{
+            width: checked ? "40%" : "100%",
+            backgroundColor: checked ? "#22c55e" : "rgba(0, 0, 0, 0)",
+            borderColor: checked ? "#22c55e" : "#f87171",
+            boxShadow: checked ? "0 0 10px rgba(34, 197, 94, 0.8)" : "0 0 8px rgba(249, 115, 22, 0.7)",
+          }}
+          transition={{ type: "spring", stiffness: 500, damping: 35 }}
+          className="h-full rounded-full border-[3px]"
+        />
+      </motion.div>
+    </div>
   );
 }
