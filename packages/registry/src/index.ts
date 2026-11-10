@@ -2,6 +2,7 @@ export * from "./components/accordion";
 export * from "./components/breadcrumb";
 export * from "./components/button";
 export * from "./components/color-grid";
+export * from "./components/confetti";
 export * from "./components/nav-bar";
 export * from "./components/slider";
 export * from "./components/step-carousel";

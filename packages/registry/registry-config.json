@@ -24,6 +24,12 @@
     "enabled": true
   },
   {
+    "name": "confetti",
+    "title": "Confetti",
+    "description": "Confetti: High-performance, zero-dependency canvas confetti animation engine. Featuring declarative canvas containers, interactive trigger buttons, and built-in variants: basic bursts, fireworks, side cannons, stars, custom shapes, and emojis.",
+    "enabled": true
+  },
+  {
     "name": "nav-bar",
     "title": "Nav Bar",
     "description": "A beautifully designed, accessible Nav Bar component.",

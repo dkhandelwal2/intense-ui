@@ -12,3 +12,4 @@ export * from "./slider-playground-studio";
 export * from "./color-grid-playground-studio";
 export * from "./separator-playground-studio";
 export * from "./tooltip-playground-studio";
+export * from "./confetti-playground-studio";
