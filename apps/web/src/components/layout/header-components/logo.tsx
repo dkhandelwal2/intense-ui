@@ -1,14 +1,9 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-
-export interface LogoProps {
-  className?: string;
-  onClick?: () => void;
-}
+import { LogoProps } from "./types";
 
 /**
  * Standard brand Logo component for Intense UI

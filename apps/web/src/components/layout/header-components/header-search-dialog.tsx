@@ -5,12 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, CornerDownLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHeaderSearch } from "@/hooks/use-header-search";
-
-export interface HeaderSearchDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onNavigate: (href: string) => void;
-}
+import { HeaderSearchDialogProps } from "./types";
 
 /**
  * Interactive search command dialog modal with keyboard navigation (Cmd+K, Escape, Arrows, Enter)

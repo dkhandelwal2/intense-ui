@@ -16,11 +16,7 @@ import {
   ITEM_ENTER_TRANSITION,
   ITEM_EXIT_TRANSITION,
 } from "./constants";
-
-export interface HeaderMobileMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { HeaderMobileMenuProps } from "./types";
 
 type MenuPhase = "closed" | "sliding-down" | "open" | "items-exiting" | "sliding-up";
 

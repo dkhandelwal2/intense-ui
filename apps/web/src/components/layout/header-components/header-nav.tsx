@@ -1,19 +1,11 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, type MotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
-
-export interface HeaderNavProps {
-  isMenuOpen: boolean;
-  navOpacity: MotionValue<number>;
-  navScale: MotionValue<number>;
-  navX: MotionValue<number>;
-  navPointerEvents: MotionValue<"none" | "auto">;
-}
+import { HeaderNavProps } from "./types";
 
 /**
  * Desktop navigation menu tabs with Framer Motion active pill indicator

@@ -16,16 +16,7 @@ import {
   setupViewTransitionRoot,
   cleanupViewTransitionRoot,
 } from "@/lib/animated-theme-toggler-utils";
-
-export interface AnimatedThemeTogglerProps
-  extends React.ComponentPropsWithoutRef<"button"> {
-  duration?: number;
-  variant?: TransitionVariant;
-  /** When true, the transition expands from the viewport center instead of the button center */
-  fromCenter?: boolean;
-  theme?: "light" | "dark";
-  onThemeChange?: (theme: "light" | "dark") => void;
-}
+import { AnimatedThemeTogglerProps } from "./types";
 
 export function AnimatedThemeToggler({
   className,
@@ -150,7 +141,7 @@ export function AnimatedThemeToggler({
       });
 
       if (typeof transition?.finished?.finally === "function") {
-        transition.finished.finally(cleanup).catch(() => {});
+        transition.finished.finally(cleanup).catch(() => { });
       } else {
         cleanup();
       }
@@ -172,7 +163,7 @@ export function AnimatedThemeToggler({
             );
             activeAnimRef.current = anim;
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     },
     [

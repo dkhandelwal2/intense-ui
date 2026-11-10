@@ -1,24 +1,13 @@
 "use client";
 
-import React from "react";
-import { motion, type MotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GithubIcon, SparkleStarIcon } from "@/assets/icons";
 import { siteConfig } from "@/config/site";
 import { useGitHubStars } from "@/hooks/use-github-stars";
-
-export interface HeaderActionsProps {
-  isMenuOpen: boolean;
-  onOpenSearch: () => void;
-  onToggleMenu: () => void;
-  desktopHamburgerWidth: MotionValue<number>;
-  desktopHamburgerOpacity: MotionValue<number>;
-  desktopHamburgerScale: MotionValue<number>;
-  desktopHamburgerMarginLeft: MotionValue<number>;
-  desktopHamburgerPointerEvents: MotionValue<"none" | "auto">;
-}
+import { HeaderActionsProps } from "./types";
 
 function HamburgerLines({ isMenuOpen, isDesktop }: { isMenuOpen: boolean; isDesktop?: boolean }) {
   const yOffset = isDesktop ? 4 : 4.5;
