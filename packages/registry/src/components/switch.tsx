@@ -178,8 +178,8 @@ function BinaryIoView({ checked }: { checked: boolean }) {
           animate={{
             width: checked ? "40%" : "100%",
             backgroundColor: checked ? "#22c55e" : "rgba(0, 0, 0, 0)",
-            borderColor: checked ? "#22c55e" : "#f87171",
-            boxShadow: checked ? "0 0 10px rgba(34, 197, 94, 0.8)" : "0 0 8px rgba(249, 115, 22, 0.7)",
+            borderColor: checked ? "#22c55e" : "#ef4444",
+            boxShadow: checked ? "0 0 10px rgba(34, 197, 94, 0.8)" : "0 0 8px rgba(239, 68, 68, 0.7)",
           }}
           transition={{ type: "spring", stiffness: 500, damping: 35 }}
           className="h-full rounded-full border-[3px]"

@@ -112,6 +112,8 @@ function ComponentPageLayoutInner({
     previewContent: dynamicPreviewContent,
     customizedCode: contextCustomizedCode,
     setCustomizedCode,
+    activeVariantCode,
+    setActiveVariantCode,
   } = useComponentPlayground();
 
   const handleBottomBarTabClick = useCallback(
@@ -126,6 +128,10 @@ function ComponentPageLayoutInner({
   );
 
   const handleViewCode = useCallback(() => {
+    openCode(CODE_TABS.EXAMPLE);
+  }, [openCode]);
+
+  const handlePlaygroundViewCode = useCallback(() => {
     openCode(CODE_TABS.CUSTOM);
   }, [openCode]);
 
@@ -184,8 +190,17 @@ function ComponentPageLayoutInner({
     if (activeCodeTab === "custom" && customizedCode) {
       return customizedCode;
     }
+    if (activeCodeTab === "example" && activeVariantCode) {
+      return activeVariantCode;
+    }
     return codes?.[activeTocId] || codeContent || usageCode || customizedCode || "";
-  }, [activeCodeTab, customizedCode, codes, activeTocId, codeContent, usageCode]);
+  }, [activeCodeTab, customizedCode, activeVariantCode, codes, activeTocId, codeContent, usageCode]);
+
+  useEffect(() => {
+    if (setActiveVariantCode) {
+      setActiveVariantCode(null);
+    }
+  }, [activeTocId, setActiveVariantCode]);
 
   useEffect(() => {
     if (setCustomizedCode && customizedCode) {
@@ -229,7 +244,7 @@ function ComponentPageLayoutInner({
         ? showcaseDef.renderPlayground({
           customProps,
           onChange: handleCustomPropsChange,
-          onViewCode: handleViewCode,
+          onViewCode: handlePlaygroundViewCode,
           dynamicPlaygroundContent,
           propsPlaygroundContent,
           title,
@@ -240,7 +255,7 @@ function ComponentPageLayoutInner({
       showcaseDef,
       customProps,
       handleCustomPropsChange,
-      handleViewCode,
+      handlePlaygroundViewCode,
       dynamicPlaygroundContent,
       propsPlaygroundContent,
       title,

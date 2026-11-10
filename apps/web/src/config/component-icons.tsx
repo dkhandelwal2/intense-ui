@@ -14,6 +14,7 @@ import {
   Layers,
   Navigation,
   PlayCircle,
+  Barcode as BarcodeIcon,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -40,6 +41,7 @@ export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   "magnetic-card": CreditCard,
   "step-carousel": PlayCircle,
   "step-player": PlayCircle,
+  barcode: BarcodeIcon,
 };
 
 /**

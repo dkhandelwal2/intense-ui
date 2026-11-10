@@ -40,7 +40,7 @@ function syncRegistryConfig() {
         continue;
       }
 
-      const title = slug
+      let title = slug
         .split("-")
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" ");
@@ -48,6 +48,8 @@ function syncRegistryConfig() {
       const jsdocMatch = content.match(/\/\*\*\s*([\s\S]*?)\*\//);
       let description = "";
       if (jsdocMatch) {
+        const titleMatch = jsdocMatch[1].match(/@title\s+([^\n\r*]+)/);
+        if (titleMatch) title = titleMatch[1].trim();
         const cleaned = jsdocMatch[1]
           .split("\n")
           .map((l) => l.replace(/^\s*\*\s?/, "").trim())

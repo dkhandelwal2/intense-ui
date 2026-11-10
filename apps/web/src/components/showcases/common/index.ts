@@ -1,6 +1,6 @@
 export { ShowcaseCard } from "./showcase-card";
 export { PlaygroundStudio, PlaygroundReorderIcon } from "../playground-studio";
-export { useShowcaseCodeUpdate } from "./hooks";
+export { useShowcaseCodeUpdate, useShowcaseActiveCode } from "./hooks";
 export {
   ComponentSpecDetail,
   SpecDetail,

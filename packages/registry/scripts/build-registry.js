@@ -45,6 +45,16 @@ function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
+function getFiles(dir, base = '') {
+  let res = [];
+  for (const e of fs.readdirSync(path.join(dir, base), { withFileTypes: true })) {
+    const rel = base ? `${base}/${e.name}` : e.name;
+    if (e.isDirectory()) res = res.concat(getFiles(dir, rel));
+    else if (/\.(ts|tsx)$/.test(e.name) && !e.name.includes('.test.')) res.push(rel);
+  }
+  return res;
+}
+
 function detectDependencies(content) {
   return Object.entries(KNOWN_PACKAGES).filter(([, r]) => r.test(content)).map(([p]) => p);
 }
@@ -57,10 +67,12 @@ function detectRegistryDependencies(content) {
 }
 
 function getTitleAndDesc(name, content) {
-  const title = name.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  let title = name.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const jsdoc = content.match(/\/\*\*\s*([\s\S]*?)\*\//);
   let description = `A beautifully designed, accessible ${title} component.`;
   if (jsdoc) {
+    const t = jsdoc[1].match(/@title\s+([^\n\r*]+)/);
+    if (t) title = t[1].trim();
     const cleaned = jsdoc[1].split('\n').map((l) => l.replace(/^\s*\*\s?/, '').trim()).filter((l) => l && !l.startsWith('@')).join(' ');
     if (cleaned) description = cleaned;
   }
@@ -117,7 +129,7 @@ function buildRegistry() {
 
     if (comp.isDir) {
       const dirPath = path.join(COMPONENTS_DIR, comp.name);
-      const subFiles = fs.readdirSync(dirPath).filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes('.test.'));
+      const subFiles = getFiles(dirPath);
       const targetSubDir = path.join(SYNC_DIR, comp.name);
       ensureDir(targetSubDir);
       const oldFlat = path.join(SYNC_DIR, `${comp.name}.tsx`);
@@ -127,7 +139,9 @@ function buildRegistry() {
         const fileContent = fs.readFileSync(path.join(dirPath, sf), 'utf8');
         deps = [...new Set([...deps, ...detectDependencies(fileContent)])];
         regDeps = [...new Set([...regDeps, ...detectRegistryDependencies(fileContent)])];
-        fs.writeFileSync(path.join(targetSubDir, sf), fileContent);
+        const dest = path.join(targetSubDir, sf);
+        ensureDir(path.dirname(dest));
+        fs.writeFileSync(dest, fileContent);
         files.push({ name: sf, content: fileContent, target: `components/ui/${comp.name}/${sf}` });
         indexFiles.push({ path: `packages/registry/src/components/${comp.name}/${sf}`, type: 'registry:file', target: `components/ui/${comp.name}/${sf}` });
       }

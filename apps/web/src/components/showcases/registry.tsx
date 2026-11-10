@@ -44,6 +44,7 @@ import { sliderShowcaseDefinition, DEFAULT_SLIDER_PROPS, SliderCustomProps } fro
 import { colorGridShowcaseDefinition, DEFAULT_COLOR_GRID_PROPS, ColorGridCustomProps } from "@/components/showcases/color-grid";
 import { separatorShowcaseDefinition, DEFAULT_SEPARATOR_PROPS, SeparatorCustomProps } from "@/components/showcases/separator";
 import { tooltipShowcaseDefinition, DEFAULT_TOOLTIP_PROPS, TooltipCustomProps } from "@/components/showcases/tooltip";
+import { barcodeShowcaseDefinition, DEFAULT_BARCODE_PROPS, BarcodeCustomProps } from "@/components/showcases/barcode";
 
 import {
   GenericPlaygroundStudio,
@@ -64,6 +65,7 @@ export {
   DEFAULT_COLOR_GRID_PROPS,
   DEFAULT_SEPARATOR_PROPS,
   DEFAULT_TOOLTIP_PROPS,
+  DEFAULT_BARCODE_PROPS,
   DEFAULT_GENERIC_PROPS,
 };
 export type {
@@ -77,6 +79,7 @@ export type {
   ColorGridCustomProps,
   SeparatorCustomProps,
   TooltipCustomProps,
+  BarcodeCustomProps,
   GenericCustomProps,
 };
 
@@ -137,6 +140,7 @@ export {
   colorGridShowcaseDefinition,
   separatorShowcaseDefinition,
   tooltipShowcaseDefinition,
+  barcodeShowcaseDefinition,
 };
 
 export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinition<GenericCustomProps> {
@@ -175,6 +179,7 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "color-palette": colorGridShowcaseDefinition,
   "separator": separatorShowcaseDefinition,
   "tooltip": tooltipShowcaseDefinition,
+  "barcode": barcodeShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {

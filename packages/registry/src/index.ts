@@ -1,4 +1,5 @@
 export * from "./components/accordion";
+export * from "./components/barcode";
 export * from "./components/breadcrumb";
 export * from "./components/button";
 export * from "./components/color-grid";

@@ -6,6 +6,12 @@
     "enabled": true
   },
   {
+    "name": "barcode",
+    "title": "Barcode / QR Code",
+    "description": "Barcode / QR Code: Zero-dependency, 100% dynamic vector barcode component. Supports 1D (Code 128, Code 39, EAN-13, UPC-A) & 2D square matrix (QR Code, Data Matrix). Renders via single-path SVG with real-world variants (Brand Connect Card, Boarding Pass, Shipping Label, Cyber Scan, Retail Tag).",
+    "enabled": true
+  },
+  {
     "name": "breadcrumb",
     "title": "Breadcrumb",
     "description": "A beautifully designed, accessible Breadcrumb component.",
