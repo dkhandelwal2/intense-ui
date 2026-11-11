@@ -12,11 +12,29 @@ export function CyberScanBarcode({
   dotStyle,
   size,
   color,
+  accentColor,
+  headerIcon,
+  copyable = false,
+  downloadable = false,
   metadata,
   className,
 }: BarcodeProps) {
   const [isScanning, setIsScanning] = useState(true);
   const title = metadata?.title || "CYBER_ID // 0x8F9";
+  const barColor = color || metadata?.color || "#34d399";
+
+  const activeHeaderIcon = headerIcon || metadata?.headerIcon || metadata?.icon || (
+    <Crosshair className="w-3.5 h-3.5 text-emerald-400 animate-spin-slow" />
+  );
+
+  const scanningText = metadata?.scanningLabel || metadata?.status || "SCANNING";
+  const standbyText = metadata?.standbyLabel || "STANDBY";
+
+  const freq = metadata?.frequency || metadata?.freq || "915.00 MHz";
+  const freqLabel = metadata?.frequencyLabel !== undefined ? metadata.frequencyLabel : (freq.startsWith("FREQ") ? "" : "FREQ: ");
+
+  const lock = metadata?.opticalLock || metadata?.lockStatus || "TRUE";
+  const lockLabel = metadata?.opticalLockLabel !== undefined ? metadata.opticalLockLabel : (lock.startsWith("OPTICAL") ? "" : "OPTICAL_LOCK: ");
 
   return (
     <div
@@ -34,7 +52,7 @@ export function CyberScanBarcode({
       {/* Cyber Header */}
       <div className="flex items-center justify-between mb-4 border-b border-emerald-500/20 pb-2.5">
         <div className="flex items-center gap-2">
-          <Crosshair className="w-3.5 h-3.5 text-emerald-400 animate-spin-slow" />
+          {activeHeaderIcon}
           <span className="text-xs font-bold tracking-wider text-emerald-400">
             {title}
           </span>
@@ -50,7 +68,7 @@ export function CyberScanBarcode({
           )}
         >
           <Radio className={cn("w-2.5 h-2.5", isScanning && "animate-pulse")} />
-          {isScanning ? "SCANNING" : "STANDBY"}
+          {isScanning ? scanningText : standbyText}
         </button>
       </div>
 
@@ -67,17 +85,18 @@ export function CyberScanBarcode({
           size={size || 130}
           dotStyle={dotStyle}
           barWidth={1.8}
-          color={color || "#34d399"}
+          color={barColor}
+          textColor={barColor}
           showText={true}
-          copyable={true}
-          downloadable={true}
+          copyable={copyable}
+          downloadable={downloadable}
         />
       </div>
 
       {/* Bottom Status Ticker */}
       <div className="mt-3 flex items-center justify-between text-[9px] text-emerald-400/80">
-        <span>FREQ: 915.00 MHz</span>
-        <span>OPTICAL_LOCK: TRUE</span>
+        <span>{freqLabel}{freq}</span>
+        <span>{lockLabel}{lock}</span>
       </div>
     </div>
   );

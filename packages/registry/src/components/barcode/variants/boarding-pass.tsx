@@ -13,17 +13,13 @@ import { TicketNotchDivider } from "./ticket-notch-divider";
 const TOP_NOTCH_STYLE = {
   backgroundImage:
     "radial-gradient(circle 14px at 0% 100%, transparent 13.5px, var(--card-bg) 14px), radial-gradient(circle 14px at 100% 100%, transparent 13.5px, var(--card-bg) 14px)",
-  backgroundSize: "51% 100%",
-  backgroundPosition: "left top, right top",
-  backgroundRepeat: "no-repeat",
+  backgroundSize: "51% 100%", backgroundPosition: "left top, right top", backgroundRepeat: "no-repeat",
 };
 
 const BOTTOM_NOTCH_STYLE = {
   backgroundImage:
     "radial-gradient(circle 14px at 0% 0%, transparent 13.5px, var(--card-bg) 14px), radial-gradient(circle 14px at 100% 0%, transparent 13.5px, var(--card-bg) 14px)",
-  backgroundSize: "51% 100%",
-  backgroundPosition: "left top, right top",
-  backgroundRepeat: "no-repeat",
+  backgroundSize: "51% 100%", backgroundPosition: "left top, right top", backgroundRepeat: "no-repeat",
 };
 
 const FLIGHT_TIMES = [0, 0.7, 0.82, 0.88, 0.9, 0.96, 1];
@@ -34,13 +30,23 @@ export function BoardingPassBarcode({
   dotStyle = "dots",
   size,
   color,
+  accentColor,
+  airplaneIcon,
   metadata,
   className,
 }: BarcodeProps) {
   const [isPlaying, setIsPlaying] = useState(true);
 
-  const { from = "YYZ", to = "LAX", flight = "AC518", seat = "04A", gate = "G12" } = metadata || {};
-  const { fromCity = "TORONTO", toCity = "LOS ANGELES", departure = "11:12 AM", arrival = "4:34 PM", status = "ON TIME" } = (metadata as any) || {};
+  const {
+    from = "YYZ", to = "LAX", flight = "AC518", seat = "04A", gate = "G12",
+    group = "PRIORITY", groupLabel = "Group", fromCity = "TORONTO", toCity = "LOS ANGELES",
+    departure = "11:12 AM", arrival = "4:34 PM", departureLabel = "DEPARTURE", arrivalLabel = "ARRIVAL",
+    status = "ON TIME", statusLabel, statusColor, logo, icon,
+  } = metadata || {};
+
+  const activePlane = airplaneIcon || metadata?.airplaneIcon || metadata?.flightIcon || metadata?.icon || (
+    <AirplaneIcon className="w-4 h-4 text-zinc-900 dark:text-white drop-shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+  );
 
   return (
     <div className={cn("relative w-full max-w-[340px] text-zinc-900 dark:text-zinc-100 font-sans select-none drop-shadow-xl", className)}>
@@ -57,8 +63,8 @@ export function BoardingPassBarcode({
 
         {/* Departure & Arrival Times */}
         <div className="flex items-center justify-between text-[10px] font-mono tracking-wider text-zinc-500 dark:text-zinc-400 font-medium mb-3">
-          <span>DEPARTURE: {departure}</span>
-          <span>ARRIVAL: {arrival}</span>
+          <span>{departureLabel ? `${departureLabel}: ` : ""}{departure}</span>
+          <span>{arrivalLabel ? `${arrivalLabel}: ` : ""}{arrival}</span>
         </div>
 
         {/* Airport Codes & Moving Airplane Route */}
@@ -100,15 +106,18 @@ export function BoardingPassBarcode({
                 }
                 transition={{ duration: 6, ease: "easeInOut", repeat: Infinity, times: FLIGHT_TIMES }}
               >
-                <AirplaneIcon className="w-4 h-4 text-zinc-900 dark:text-white drop-shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+                {activePlane}
               </motion.div>
 
               <div className="absolute right-0 w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-600 z-10" />
             </div>
 
-            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-bold tracking-widest text-emerald-600 dark:text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              {status}
+            <div
+              className={cn("flex items-center gap-1.5 mt-1.5 text-[10px] font-bold tracking-widest", !statusColor && "text-emerald-600 dark:text-emerald-400")}
+              style={statusColor ? { color: statusColor } : undefined}
+            >
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: statusColor || "#10b981" }} />
+              {statusLabel || status}
             </div>
           </div>
 
@@ -128,8 +137,11 @@ export function BoardingPassBarcode({
           <div className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 text-[11px] font-mono font-bold text-zinc-800 dark:text-zinc-200 tracking-wide shadow-xs">
             {flight}
           </div>
-          <div className="w-7 h-7 rounded-full bg-red-600 border border-red-500 flex items-center justify-center shadow-[0_0_12px_rgba(239,68,68,0.4)]">
-            <Compass className="w-4 h-4 text-white" />
+          <div
+            className="w-7 h-7 rounded-full flex items-center justify-center border shadow-xs"
+            style={{ backgroundColor: accentColor || (metadata as any)?.accentColor || "#dc2626", borderColor: accentColor || (metadata as any)?.accentColor || "#ef4444" }}
+          >
+            {logo || icon || <Compass className="w-4 h-4 text-white" />}
           </div>
         </div>
       </div>
@@ -158,8 +170,8 @@ export function BoardingPassBarcode({
             <div className="font-bold text-emerald-600 dark:text-emerald-400 text-xs">{seat}</div>
           </div>
           <div>
-            <div className="text-zinc-500 uppercase text-[9px]">Group</div>
-            <div className="font-bold text-zinc-900 dark:text-zinc-200 text-xs">PRIORITY</div>
+            <div className="text-zinc-500 uppercase text-[9px]">{groupLabel}</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-200 text-xs">{group}</div>
           </div>
         </div>
 

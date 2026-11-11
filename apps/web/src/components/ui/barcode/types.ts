@@ -8,7 +8,8 @@ export type BarcodeVariant =
   | "shipping-label"
   | "cyber-scan"
   | "retail-tag"
-  | "brand-card";
+  | "brand-card"
+  | "location-card";
 
 export type BarcodeDotStyle = "square" | "dots" | "rounded";
 
@@ -17,6 +18,7 @@ export interface BarcodeRenderOptions {
   height?: number;
   size?: number;
   color?: string;
+  textColor?: string;
   background?: string;
   showText?: boolean;
   fontSize?: number;
@@ -31,6 +33,7 @@ export interface BarcodeProps extends React.HTMLAttributes<HTMLDivElement> {
   height?: number;
   size?: number;
   color?: string;
+  textColor?: string;
   accentColor?: string;
   showShape?: boolean;
   shape?: "diamond" | "none";
@@ -41,6 +44,7 @@ export interface BarcodeProps extends React.HTMLAttributes<HTMLDivElement> {
   dotStyle?: BarcodeDotStyle;
   centerIcon?: React.ReactNode;
   headerIcon?: React.ReactNode;
+  airplaneIcon?: React.ReactNode;
   metadata?: {
     title?: string;
     subtitle?: string;
@@ -51,6 +55,10 @@ export interface BarcodeProps extends React.HTMLAttributes<HTMLDivElement> {
     shape?: "diamond" | "none";
     logo?: React.ReactNode;
     icon?: React.ReactNode;
+    headerIcon?: React.ReactNode;
+    airplaneIcon?: React.ReactNode;
+    routeIcon?: React.ReactNode;
+    flightIcon?: React.ReactNode;
     avatar?: string;
     from?: string;
     to?: string;
@@ -58,13 +66,37 @@ export interface BarcodeProps extends React.HTMLAttributes<HTMLDivElement> {
     toCity?: string;
     departure?: string;
     arrival?: string;
+    departureLabel?: string;
+    arrivalLabel?: string;
     status?: string;
+    statusLabel?: string;
+    statusColor?: string;
     flight?: string;
     seat?: string;
     gate?: string;
+    group?: string;
+    groupLabel?: string;
     trackingId?: string;
+    coordinates?: string;
+    place?: string;
+    address?: string;
     carrier?: string;
     weight?: string;
+    service?: string;
+    pieces?: string;
+    method?: string;
+    trackingLabel?: string;
+    showSortMatrix?: boolean;
+    securityLabel?: string;
+    compliance?: string;
+    frequency?: string;
+    freq?: string;
+    frequencyLabel?: string;
+    opticalLock?: string;
+    lockStatus?: string;
+    opticalLockLabel?: string;
+    scanningLabel?: string;
+    standbyLabel?: string;
     price?: string;
     currency?: string;
   };

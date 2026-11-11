@@ -29,15 +29,9 @@ export function BarcodePreview({
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8 w-full max-w-xl mx-auto">
         <Barcode
-          value={customProps.value}
-          format={customProps.format}
-          variant={customProps.variant}
-          barWidth={customProps.barWidth}
-          height={customProps.height}
-          dotStyle={customProps.dotStyle}
-          showText={customProps.showText}
-          copyable={customProps.copyable}
-          downloadable={customProps.downloadable}
+          value={customProps.value} format={customProps.format} variant={customProps.variant}
+          barWidth={customProps.barWidth} height={customProps.height} dotStyle={customProps.dotStyle}
+          showText={customProps.showText} copyable={customProps.copyable} downloadable={customProps.downloadable}
         />
         <span className="text-xs font-mono text-muted-foreground uppercase">
           Format: {customProps.format} • Variant: {customProps.variant} • Dot: {customProps.dotStyle || "square"}
@@ -60,9 +54,25 @@ export function BarcodePreview({
           downloadable
           metadata={{ title: "Intense UI", subtitle: "Scan to explore components" }}
         />
-        <span className="text-xs font-mono text-muted-foreground text-center">
-          QR Brand card with embedded logo, custom dot geometry, and quick scan pass
-        </span>
+        <span className="text-xs font-mono text-muted-foreground text-center">QR Brand card with embedded logo, custom dot geometry, and quick scan pass</span>
+      </div>
+    );
+  }
+
+  if (activeTocId === "location-card") {
+    return (
+      <div className="flex flex-col items-center justify-center gap-6 p-8">
+        <Barcode
+          value="https://maps.google.com/?q=40.7739,-73.9712"
+          format="qr"
+          variant="location-card"
+          dotStyle="dots"
+          accentColor="#10b981"
+          copyable
+          downloadable
+          metadata={{ title: "Bethesda Terrace", subtitle: "Central Park, New York, NY", coordinates: "40.7739° N, 73.9712° W" }}
+        />
+        <span className="text-xs font-mono text-muted-foreground text-center">GPS location check-in card with radar grid, live coordinates, and navigation pass</span>
       </div>
     );
   }
@@ -93,9 +103,7 @@ export function BarcodePreview({
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8">
         <Barcode value="DM-SN-99482-X" format="data-matrix" copyable downloadable />
-        <span className="text-xs font-mono text-muted-foreground">
-          Industrial Data Matrix (ECC 200) square barcode with solid L-border
-        </span>
+        <span className="text-xs font-mono text-muted-foreground">Industrial Data Matrix (ECC 200) square barcode with solid L-border</span>
       </div>
     );
   }
@@ -106,11 +114,13 @@ export function BarcodePreview({
         <Barcode
           value="AC518-YYZ-LAX-04A"
           variant="boarding-pass"
-          metadata={{ from: "YYZ", to: "LAX", fromCity: "TORONTO", toCity: "LOS ANGELES", flight: "AC518", seat: "04A", gate: "G12" }}
+          metadata={{
+            from: "YYZ", to: "LAX", fromCity: "TORONTO", toCity: "LOS ANGELES",
+            departure: "11:12 AM", arrival: "4:34 PM", flight: "AC518",
+            gate: "G12", seat: "04A", group: "PRIORITY", status: "ON TIME",
+          }}
         />
-        <span className="text-xs font-mono text-muted-foreground text-center">
-          Interactive flight tracker pass with moving airplane, dotted Earth globe, and stub barcode
-        </span>
+        <span className="text-xs font-mono text-muted-foreground text-center">Interactive flight tracker pass with moving airplane, dotted Earth globe, and stub barcode</span>
       </div>
     );
   }
@@ -121,11 +131,18 @@ export function BarcodePreview({
         <Barcode
           value="1Z-999-999-99-9999"
           variant="shipping-label"
-          metadata={{ carrier: "EXPRESS LOGISTICS", weight: "2.45 KG", trackingId: "1Z99999999", badge: "PRIORITY 1" }}
+          accentColor="#f59e0b"
+          copyable
+          downloadable
+          metadata={{
+            carrier: "GLOBAL AIR CARGO", subtitle: "FREIGHT WAYBILL // EXPEDITE",
+            from: "JFK", fromCity: "NEW YORK, NY", to: "ORD-04", toCity: "CHICAGO O'HARE",
+            weight: "2.45 KG", trackingId: "1Z-999-999-99-9999", badge: "PRIORITY 1 // AIR",
+            service: "NEXT-DAY AIR", pieces: "1 OF 1", status: "SORT CLEARED",
+            securityLabel: "IATA SECURE CARGO", compliance: "CLASS 9 // AUTO-SORT PASS",
+          }}
         />
-        <span className="text-xs font-mono text-muted-foreground">
-          Cargo warehouse tracking card with priority routing details
-        </span>
+        <span className="text-xs font-mono text-muted-foreground text-center">Industrial air cargo freight waybill with route telemetry, ticket notches, and scannable tracking barcode</span>
       </div>
     );
   }
@@ -133,10 +150,8 @@ export function BarcodePreview({
   if (activeTocId === "cyber-scan") {
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8">
-        <Barcode value="CYBER-NODE-0x8F" variant="cyber-scan" metadata={{ title: "CYBER_ID // 0x8F9" }} />
-        <span className="text-xs font-mono text-muted-foreground">
-          Sci-fi HUD terminal with real-time glowing animated laser scanline
-        </span>
+        <Barcode value="CYBER-NODE-0x8F" variant="cyber-scan" metadata={{ title: "CYBER_ID // 0x8F9", frequency: "915.00 MHz", opticalLock: "TRUE", status: "SCANNING" }} />
+        <span className="text-xs font-mono text-muted-foreground">Sci-fi HUD terminal with real-time glowing animated laser scanline</span>
       </div>
     );
   }
@@ -150,9 +165,7 @@ export function BarcodePreview({
           variant="retail-tag"
           metadata={{ title: "INTENSE STUDIO", subtitle: "OVERSIZED HOODIE // BLK", price: "$185.00" }}
         />
-        <span className="text-xs font-mono text-muted-foreground">
-          Boutique price hangtag with metallic eyelet ring and retail EAN-13
-        </span>
+        <span className="text-xs font-mono text-muted-foreground">Boutique price hangtag with metallic eyelet ring and retail EAN-13</span>
       </div>
     );
   }
@@ -161,9 +174,7 @@ export function BarcodePreview({
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8">
         <Barcode value="PART-8924-X" format="code39" barWidth={2} height={75} copyable downloadable />
-        <span className="text-xs font-mono text-muted-foreground">
-          Code 39 industrial alphanumeric standard with start/stop asterisks
-        </span>
+        <span className="text-xs font-mono text-muted-foreground">Code 39 industrial alphanumeric standard with start/stop asterisks</span>
       </div>
     );
   }
@@ -172,9 +183,7 @@ export function BarcodePreview({
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8">
         <Barcode value="9780201379624" format="ean13" barWidth={2} height={75} copyable downloadable />
-        <span className="text-xs font-mono text-muted-foreground">
-          GS1 EAN-13 / UPC-A retail product barcode with modulo-10 checksum
-        </span>
+        <span className="text-xs font-mono text-muted-foreground">GS1 EAN-13 / UPC-A retail product barcode with modulo-10 checksum</span>
       </div>
     );
   }
@@ -182,9 +191,7 @@ export function BarcodePreview({
   return (
     <div className="flex flex-col items-center justify-center gap-6 p-8">
       <Barcode value="INTENSE-2026" format="code128" barWidth={2} height={80} copyable downloadable />
-      <span className="text-xs font-mono text-muted-foreground">
-        High-density Code 128 vector barcode rendered via single SVG path
-      </span>
+      <span className="text-xs font-mono text-muted-foreground">High-density Code 128 vector barcode rendered via single SVG path</span>
     </div>
   );
 }

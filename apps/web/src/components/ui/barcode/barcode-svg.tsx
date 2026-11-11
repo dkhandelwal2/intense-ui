@@ -13,6 +13,7 @@ export interface BarcodeSVGProps extends React.HTMLAttributes<HTMLDivElement> {
   height?: number;
   size?: number;
   color?: string;
+  textColor?: string;
   background?: string;
   showText?: boolean;
   copyable?: boolean;
@@ -28,6 +29,7 @@ export function BarcodeSVG({
   height = 80,
   size,
   color = "currentColor",
+  textColor,
   background = "transparent",
   showText = true,
   copyable = false,
@@ -48,7 +50,7 @@ export function BarcodeSVG({
       const matrix = encoded.matrix;
       const n = matrix.length;
       const dim = size || (height > 100 ? height : 140);
-      const pad = 8;
+      const pad = dim <= 60 ? 2 : 8;
       const m = (dim - pad * 2) / n;
       const clearRadius = centerIcon ? Math.floor(n * 0.15) : 0;
       const centerCoord = (n - 1) / 2;
@@ -155,17 +157,20 @@ export function BarcodeSVG({
           )}
           <path d={pathData} fill={color} />
           {centerIcon && encoded.is2D && badgeDim && (
-            <g
-              className="qr-center-icon"
-              transform={`translate(${badgeDim.pos}, ${badgeDim.pos})`}
-            >
+            <g className="qr-center-icon" transform={`translate(${badgeDim.pos}, ${badgeDim.pos})`}>
               {typeof centerIcon === "string" ? (
                 <image href={centerIcon} width={badgeDim.size} height={badgeDim.size} preserveAspectRatio="xMidYMid meet" />
               ) : React.isValidElement(centerIcon) ? (
-                React.cloneElement(centerIcon as React.ReactElement<{ width?: number; height?: number; size?: number }>, {
+                React.cloneElement(centerIcon as React.ReactElement<any>, {
                   width: badgeDim.size,
                   height: badgeDim.size,
                   size: badgeDim.size,
+                  className: ((centerIcon as React.ReactElement<any>).props?.className || "").replace(/\b([wh]|size)-\S+/g, "").trim(),
+                  style: {
+                    ...((centerIcon as React.ReactElement<any>).props?.style || {}),
+                    width: badgeDim.size,
+                    height: badgeDim.size,
+                  },
                 })
               ) : (
                 centerIcon
@@ -176,7 +181,13 @@ export function BarcodeSVG({
       </div>
 
       {showText && (
-        <span className="font-mono text-xs tracking-[0.25em] text-foreground/80 mt-2 select-text font-medium text-center max-w-[200px] truncate">
+        <span
+          className={cn(
+            "font-mono text-xs tracking-[0.25em] mt-2 select-text font-medium text-center max-w-[200px] truncate",
+            !textColor && (!color || color === "currentColor") ? "text-foreground/80" : ""
+          )}
+          style={{ color: textColor || (color && color !== "currentColor" ? color : undefined) }}
+        >
           {encoded.text}
         </span>
       )}

@@ -19,6 +19,12 @@ export const BARCODE_EXAMPLES: BarcodeExample[] = [
     code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function BrandCardDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="https://intenseui.dev"\n        format="qr"\n        variant="brand-card"\n        dotStyle="dots"\n        accentColor="#6366f1"\n        shape="diamond"\n        copyable\n        downloadable\n        metadata={{\n          title: "Intense UI",\n          subtitle: "Scan to explore components",\n        }}\n      />\n    </div>\n  );\n}`,
   },
   {
+    id: "location-card",
+    label: "Location GPS Check-in",
+    emoji: "📍",
+    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function LocationCardDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="https://maps.google.com/?q=40.7739,-73.9712"\n        format="qr"\n        variant="location-card"\n        dotStyle="dots"\n        accentColor="#10b981"\n        copyable\n        downloadable\n        metadata={{\n          title: "Bethesda Terrace",\n          subtitle: "Central Park, New York, NY",\n          coordinates: "40.7739° N, 73.9712° W",\n        }}\n      />\n    </div>\n  );\n}`,
+  },
+  {
     id: "qr-standard",
     label: "QR Code (Square Matrix)",
     emoji: "📱",
@@ -40,19 +46,19 @@ export const BARCODE_EXAMPLES: BarcodeExample[] = [
     id: "boarding-pass",
     label: "Airline Boarding Pass",
     emoji: "✈️",
-    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function BoardingPassDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="AC518-YYZ-LAX-04A"\n        variant="boarding-pass"\n        metadata={{\n          from: "YYZ",\n          to: "LAX",\n          fromCity: "TORONTO",\n          toCity: "LOS ANGELES",\n          flight: "AC518",\n          seat: "04A",\n          gate: "G12",\n        }}\n      />\n    </div>\n  );\n}`,
+    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\nimport { Plane } from "lucide-react";\n\nexport default function BoardingPassDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="AC518-YYZ-LAX-04A"\n        variant="boarding-pass"\n        airplaneIcon={<Plane className="w-4 h-4" />}\n        metadata={{\n          from: "YYZ",\n          to: "LAX",\n          fromCity: "TORONTO",\n          toCity: "LOS ANGELES",\n          departure: "11:12 AM",\n          arrival: "4:34 PM",\n          flight: "AC518",\n          gate: "G12",\n          seat: "04A",\n          group: "PRIORITY",\n          status: "ON TIME",\n        }}\n      />\n    </div>\n  );\n}`,
   },
   {
     id: "shipping-label",
     label: "Logistics Cargo Label",
     emoji: "📦",
-    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function ShippingLabelDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="1Z-999-999-99-9999"\n        variant="shipping-label"\n        metadata={{\n          carrier: "EXPRESS LOGISTICS",\n          weight: "2.45 KG",\n          trackingId: "1Z99999999",\n          badge: "PRIORITY 1",\n        }}\n      />\n    </div>\n  );\n}`,
+    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\nimport { Plane } from "lucide-react";\n\nexport default function ShippingLabelDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="1Z-999-999-99-9999"\n        variant="shipping-label"\n        accentColor="#f59e0b"\n        airplaneIcon={<Plane className="w-3.5 h-3.5 rotate-45" />}\n        copyable\n        downloadable\n        metadata={{\n          carrier: "GLOBAL AIR CARGO",\n          subtitle: "FREIGHT WAYBILL // EXPEDITE",\n          from: "JFK",\n          fromCity: "NEW YORK, NY",\n          to: "ORD-04",\n          toCity: "CHICAGO O'HARE",\n          weight: "2.45 KG",\n          trackingId: "1Z-999-999-99-9999",\n          badge: "PRIORITY 1 // AIR",\n          service: "NEXT-DAY AIR",\n          pieces: "1 OF 1",\n          status: "SORT CLEARED",\n          securityLabel: "IATA SECURE CARGO",\n          compliance: "CLASS 9 // AUTO-SORT PASS",\n        }}\n      />\n    </div>\n  );\n}`,
   },
   {
     id: "cyber-scan",
     label: "Cyber Laser Scanner",
     emoji: "🎯",
-    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function CyberScannerDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="CYBER-NODE-0x8F"\n        variant="cyber-scan"\n        metadata={{\n          title: "CYBER_ID // 0x8F9",\n        }}\n      />\n    </div>\n  );\n}`,
+    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\nimport { Crosshair } from "lucide-react";\n\nexport default function CyberScannerDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="CYBER-NODE-0x8F"\n        variant="cyber-scan"\n        headerIcon={<Crosshair className="w-3.5 h-3.5 text-emerald-400" />}\n        metadata={{\n          title: "CYBER_ID // 0x8F9",\n          status: "SCANNING",\n          frequency: "915.00 MHz",\n          opticalLock: "TRUE",\n        }}\n      />\n    </div>\n  );\n}`,
   },
   {
     id: "retail-tag",

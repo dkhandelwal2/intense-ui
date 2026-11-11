@@ -9,6 +9,7 @@ import { ShippingLabelBarcode } from "./variants/shipping-label";
 import { CyberScanBarcode } from "./variants/cyber-scan";
 import { RetailTagBarcode } from "./variants/retail-tag";
 import { BrandCardBarcode } from "./variants/brand-card";
+import { LocationCardBarcode } from "./variants/location-card";
 
 export * from "./types";
 export * from "./encoders";
@@ -18,6 +19,7 @@ export { ShippingLabelBarcode } from "./variants/shipping-label";
 export { CyberScanBarcode } from "./variants/cyber-scan";
 export { RetailTagBarcode } from "./variants/retail-tag";
 export { BrandCardBarcode } from "./variants/brand-card";
+export { LocationCardBarcode } from "./variants/location-card";
 
 /**
  * @title Barcode / QR Code
@@ -33,7 +35,9 @@ export function Barcode({
   height = 80,
   size,
   color,
+  textColor,
   accentColor,
+  airplaneIcon,
   showShape,
   shape,
   background,
@@ -67,6 +71,24 @@ export function Barcode({
     );
   }
 
+  if (variant === "location-card" || variant === ("location" as any)) {
+    return (
+      <LocationCardBarcode
+        value={value}
+        format={format}
+        size={size}
+        dotStyle={dotStyle}
+        color={color}
+        accentColor={accentColor}
+        centerIcon={centerIcon}
+        headerIcon={headerIcon}
+        metadata={metadata}
+        className={className}
+        {...props}
+      />
+    );
+  }
+
   if (variant === "boarding-pass") {
     return (
       <BoardingPassBarcode
@@ -75,6 +97,8 @@ export function Barcode({
         size={size}
         dotStyle={dotStyle}
         color={color}
+        accentColor={accentColor}
+        airplaneIcon={airplaneIcon}
         metadata={metadata}
         className={className}
         {...props}
@@ -90,6 +114,9 @@ export function Barcode({
         size={size}
         dotStyle={dotStyle}
         color={color}
+        accentColor={accentColor}
+        airplaneIcon={airplaneIcon}
+        headerIcon={headerIcon}
         metadata={metadata}
         className={className}
         {...props}
@@ -105,6 +132,10 @@ export function Barcode({
         size={size}
         dotStyle={dotStyle}
         color={color}
+        accentColor={accentColor}
+        headerIcon={headerIcon}
+        copyable={copyable}
+        downloadable={downloadable}
         metadata={metadata}
         className={className}
         {...props}
@@ -145,6 +176,7 @@ export function Barcode({
         dotStyle={dotStyle}
         centerIcon={centerIcon}
         color={color || "currentColor"}
+        textColor={textColor}
         background={background || "transparent"}
         showText={showText}
         copyable={copyable}
