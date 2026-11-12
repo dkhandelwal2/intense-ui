@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import {
   Breadcrumb,
@@ -10,6 +10,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   Breadcrumbs,
+  BreadcrumbDropdown,
+  BreadcrumbDropdownItem,
   parsePathnameToSegments,
 } from "../../src/components/breadcrumb";
 
@@ -68,5 +70,20 @@ describe("Breadcrumb Components", () => {
     expect(screen.getByText("Dashboard")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();
     expect(screen.getByText("Profile")).toBeInTheDocument();
+  });
+
+  it("opens dropdown and displays items when clicked", () => {
+    render(
+      <BreadcrumbDropdown>
+        <BreadcrumbDropdownItem>Documentation</BreadcrumbDropdownItem>
+        <BreadcrumbDropdownItem>Guides</BreadcrumbDropdownItem>
+      </BreadcrumbDropdown>
+    );
+
+    expect(screen.queryByText("Documentation")).not.toBeInTheDocument();
+    const trigger = screen.getByRole("button", { name: /open breadcrumb menu/i });
+    fireEvent.click(trigger);
+    expect(screen.getByText("Documentation")).toBeInTheDocument();
+    expect(screen.getByText("Guides")).toBeInTheDocument();
   });
 });

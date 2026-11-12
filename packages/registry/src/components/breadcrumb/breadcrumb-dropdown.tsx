@@ -87,8 +87,11 @@ export function BreadcrumbDropdown({
   return (
     <div ref={containerRef} className={cn("relative inline-block", className)}>
       <div
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="cursor-pointer select-none"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
+        }}
+        className="cursor-pointer select-none inline-flex items-center"
       >
         {trigger ?? (
           <button
