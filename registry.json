@@ -1,0 +1,476 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "intense-ui",
+  "homepage": "https://intense-ui.com",
+  "items": [
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "A beautifully designed, accessible Accordion component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/accordion/accordion-content.tsx",
+          "type": "registry:file",
+          "target": "components/ui/accordion/accordion-content.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/accordion-item.tsx",
+          "type": "registry:file",
+          "target": "components/ui/accordion/accordion-item.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/accordion-trigger.tsx",
+          "type": "registry:file",
+          "target": "components/ui/accordion/accordion-trigger.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/accordion/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/context.ts",
+          "type": "registry:file",
+          "target": "components/ui/accordion/context.ts"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/accordion/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/accordion/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/accordion/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "barcode",
+      "type": "registry:ui",
+      "title": "Barcode / QR Code",
+      "description": "Barcode / QR Code: Zero-dependency, 100% dynamic vector barcode component. Supports 1D (Code 128, Code 39, EAN-13, UPC-A) & 2D square matrix (QR Code, Data Matrix). Renders via single-path SVG with real-world variants (Brand Connect Card, Boarding Pass, Shipping Label, Cyber Scan, Retail Tag).",
+      "dependencies": [
+        "lucide-react",
+        "framer-motion",
+        "sonner"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/barcode/barcode-svg.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/barcode-svg.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/code128.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/code128.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/code39.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/code39.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/data-matrix.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/data-matrix.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/ean13.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/ean13.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/index.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/index.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/qr/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/qr/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/qr/gf256.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/qr/gf256.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/qr/index.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/qr/index.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/encoders/qr/matrix.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/encoders/qr/matrix.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/types.ts"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/airplane-icon.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/airplane-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/boarding-pass.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/boarding-pass.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/brand-card.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/brand-card.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/cyber-scan.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/cyber-scan.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/dotted-globe.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/dotted-globe.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/location-card.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/location-card.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/retail-tag.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/retail-tag.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/shipping-label.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/shipping-label.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/ticket-notch-divider.tsx",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/ticket-notch-divider.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/barcode/variants/world-map-path.ts",
+          "type": "registry:file",
+          "target": "components/ui/barcode/variants/world-map-path.ts"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "A beautifully designed, accessible Breadcrumb component.",
+      "dependencies": [
+        "lucide-react",
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/breadcrumb/breadcrumb-base.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/breadcrumb-base.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/breadcrumb-collapsed.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/breadcrumb-collapsed.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/breadcrumb-dropdown.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/breadcrumb-dropdown.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/breadcrumb-links.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/breadcrumb-links.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/context.ts",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/context.ts"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/dynamic-breadcrumbs.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/dynamic-breadcrumbs.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/breadcrumb/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/breadcrumb/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "A beautifully designed, accessible Button component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/button/confirmation-button.tsx",
+          "type": "registry:file",
+          "target": "components/ui/button/confirmation-button.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/button/constants.tsx",
+          "type": "registry:file",
+          "target": "components/ui/button/constants.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/button/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/button/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/button/neumorphic-share.tsx",
+          "type": "registry:file",
+          "target": "components/ui/button/neumorphic-share.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/button/share-button.tsx",
+          "type": "registry:file",
+          "target": "components/ui/button/share-button.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/button/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/button/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "color-grid",
+      "type": "registry:ui",
+      "title": "Color Grid",
+      "description": "A beautifully designed, accessible Color Grid component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "packages/registry/src/components/color-grid/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/color-grid/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/color-grid/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/color-grid/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/color-grid/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/color-grid/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "nav-bar",
+      "type": "registry:ui",
+      "title": "Nav Bar",
+      "description": "A beautifully designed, accessible Nav Bar component.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/nav-bar/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/nav-bar/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/nav-bar/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/nav-bar/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/nav-bar/navbar-floating.tsx",
+          "type": "registry:file",
+          "target": "components/ui/nav-bar/navbar-floating.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/nav-bar/navbar-gooey.tsx",
+          "type": "registry:file",
+          "target": "components/ui/nav-bar/navbar-gooey.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/nav-bar/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/nav-bar/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "A beautifully designed, accessible Slider component.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/slider/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/slider/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/slider/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/slider/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/slider/multi-slider.tsx",
+          "type": "registry:file",
+          "target": "components/ui/slider/multi-slider.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/slider/slider-thumb.tsx",
+          "type": "registry:file",
+          "target": "components/ui/slider/slider-thumb.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/slider/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/slider/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "step-carousel",
+      "type": "registry:ui",
+      "title": "Step Carousel",
+      "description": "A beautifully designed, accessible Step Carousel component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/step-carousel/constants.tsx",
+          "type": "registry:file",
+          "target": "components/ui/step-carousel/constants.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/step-carousel/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/step-carousel/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/step-carousel/step-carousel-button.tsx",
+          "type": "registry:file",
+          "target": "components/ui/step-carousel/step-carousel-button.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/step-carousel/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/step-carousel/types.ts"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "A beautifully designed, accessible Switch component.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/switch/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/switch/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/switch/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/switch/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/switch/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/switch/types.ts"
+        },
+        {
+          "path": "packages/registry/src/components/switch/variants.tsx",
+          "type": "registry:file",
+          "target": "components/ui/switch/variants.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "A beautifully designed, accessible Tooltip component.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/tooltip/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/tooltip/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/tooltip/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/tooltip/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/tooltip/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/tooltip/types.ts"
+        }
+      ]
+    }
+  ]
+}

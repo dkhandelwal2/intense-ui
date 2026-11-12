@@ -179,13 +179,16 @@ function buildRegistry() {
     });
   }
 
-  fs.writeFileSync(path.join(DIST_DIR, 'index.json'), JSON.stringify(registryIndex, null, 2));
-  fs.writeFileSync(path.join(DIST_DIR, 'registry.json'), JSON.stringify({
+  const registryJsonContent = JSON.stringify({
     $schema: registryMeta.schema.registry,
     name: registryMeta.name,
     homepage: registryMeta.homepage,
     items: registryIndex,
-  }, null, 2));
+  }, null, 2);
+
+  fs.writeFileSync(path.join(DIST_DIR, 'index.json'), JSON.stringify(registryIndex, null, 2));
+  fs.writeFileSync(path.join(DIST_DIR, 'registry.json'), registryJsonContent);
+  fs.writeFileSync(path.join(ROOT_DIR, 'registry.json'), registryJsonContent);
 
   const indexExports = available.map((c) => `export * from "./components/${c.name}";`).join('\n');
   fs.writeFileSync(path.join(__dirname, '../src/index.ts'), indexExports + '\n');
