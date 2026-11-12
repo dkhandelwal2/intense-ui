@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "npm run dev --workspaces",
     "build": "npm run build --workspaces",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "npm run typecheck --workspace=web",
     "lint": "npm run lint --workspace=web",
     "check:imports": "node scripts/check-unused-imports.mjs",
@@ -18,7 +20,11 @@
     "prepare": "node -e \"if (!process.env.CI && !process.env.VERCEL && process.env.NODE_ENV !== 'production') { try { require('child_process').execSync('husky', { stdio: 'inherit' }); } catch {} }\""
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
     "husky": "^9.1.7",
-    "knip": "^6.44.0"
+    "jsdom": "^29.1.1",
+    "knip": "^6.44.0",
+    "vitest": "^4.1.12"
   }
 }

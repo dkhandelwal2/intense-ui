@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
+    "paths": {
+      "@/*": ["./apps/web/src/*"],
+      "@registry/*": ["./packages/registry/src/*"],
+      "@registry-config": ["./packages/registry/registry-config.json"],
+      "intense-ui": ["./packages/registry/src/index.ts"]
+    }
+  },
+  "include": [
+    "vitest.d.ts",
+    "vitest.config.mts",
+    "vitest.setup.ts",
+    "apps/web/__tests__/**/*",
+    "packages/registry/__tests__/**/*"
+  ],
+  "exclude": ["node_modules", "dist", ".next"]
+}
