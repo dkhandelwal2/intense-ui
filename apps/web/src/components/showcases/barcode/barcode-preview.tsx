@@ -63,16 +63,22 @@ export function BarcodePreview({
     return (
       <div className="flex flex-col items-center justify-center gap-6 p-8">
         <Barcode
-          value="https://maps.google.com/?q=40.7739,-73.9712"
+          value="https://maps.google.com/?q=40.6782,-73.9442"
           format="qr"
           variant="location-card"
           dotStyle="dots"
-          accentColor="#10b981"
+          accentColor="#38bdf8"
           copyable
           downloadable
-          metadata={{ title: "Bethesda Terrace", subtitle: "Central Park, New York, NY", coordinates: "40.7739° N, 73.9712° W" }}
+          metadata={{
+            title: "BROOKLYN",
+            subtitle: "New York, NY",
+            coordinates: "40.6782° N, 73.9442° W",
+          }}
         />
-        <span className="text-xs font-mono text-muted-foreground text-center">GPS location check-in card with radar grid, live coordinates, and navigation pass</span>
+        <span className="text-xs font-mono text-muted-foreground text-center">
+          GPS location check-in card with concentric sonar pulse, live coordinates, and navigation pass
+        </span>
       </div>
     );
   }

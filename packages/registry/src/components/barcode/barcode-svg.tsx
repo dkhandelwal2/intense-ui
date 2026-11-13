@@ -97,7 +97,7 @@ export function BarcodeSVG({
     if (!svgRef.current) return;
     let s = new XMLSerializer().serializeToString(svgRef.current);
     if (!s.includes('xmlns="http://www.w3.org/2000/svg"')) s = s.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-    s = s.replaceAll('fill="currentColor"', 'fill="#09090b"');
+    s = s.replace(/fill="currentColor"/g, 'fill="#09090b"');
     const blob = new Blob([s], { type: "image/svg+xml;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -161,19 +161,29 @@ export function BarcodeSVG({
               {typeof centerIcon === "string" ? (
                 <image href={centerIcon} width={badgeDim.size} height={badgeDim.size} preserveAspectRatio="xMidYMid meet" />
               ) : React.isValidElement(centerIcon) ? (
-                React.cloneElement(centerIcon as React.ReactElement<any>, {
-                  width: badgeDim.size,
-                  height: badgeDim.size,
-                  size: badgeDim.size,
-                  className: ((centerIcon as React.ReactElement<any>).props?.className || "").replace(/\b([wh]|size)-\S+/g, "").trim(),
-                  style: {
-                    ...((centerIcon as React.ReactElement<any>).props?.style || {}),
+                typeof centerIcon.type === "string" && centerIcon.type !== "svg" ? (
+                  <foreignObject width={badgeDim.size} height={badgeDim.size}>
+                    <div className="w-full h-full flex items-center justify-center">
+                      {centerIcon}
+                    </div>
+                  </foreignObject>
+                ) : (
+                  React.cloneElement(centerIcon as React.ReactElement<any>, {
                     width: badgeDim.size,
                     height: badgeDim.size,
-                  },
-                })
+                    size: badgeDim.size,
+                    className: ((centerIcon as React.ReactElement<any>).props?.className || "").replace(/\b([wh]|size)-\S+/g, "").trim(),
+                    style: {
+                      ...((centerIcon as React.ReactElement<any>).props?.style || {}),
+                      width: badgeDim.size,
+                      height: badgeDim.size,
+                    },
+                  })
+                )
               ) : (
-                centerIcon
+                <foreignObject width={badgeDim.size} height={badgeDim.size}>
+                  {centerIcon}
+                </foreignObject>
               )}
             </g>
           )}

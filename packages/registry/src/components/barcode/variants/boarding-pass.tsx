@@ -6,8 +6,7 @@ import { Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BarcodeSVG } from "../barcode-svg";
 import { BarcodeProps } from "../types";
-import { DottedGlobe } from "./dotted-globe";
-import { AirplaneIcon } from "./airplane-icon";
+import { DottedGlobe, AirplaneIcon } from "@/assets/svg";
 import { TicketNotchDivider } from "./ticket-notch-divider";
 
 const TOP_NOTCH_STYLE = {

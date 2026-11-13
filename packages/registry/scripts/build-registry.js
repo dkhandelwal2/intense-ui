@@ -8,6 +8,7 @@ const SYNC_DIR = path.join(__dirname, '../src/components');
 const SYNC_ASSETS_DIR = path.join(__dirname, '../src/assets/svg');
 const DIST_DIR = path.join(__dirname, '../dist');
 const CONFIG_PATH = path.join(__dirname, '../registry-config.json');
+const REGISTRY_CONFIG_DIR = path.join(__dirname, '../src/config');
 
 function loadSiteConfig() {
   const p = path.join(ROOT_DIR, 'apps/web/src/config/site.ts');
@@ -64,6 +65,70 @@ function detectRegistryDependencies(content) {
   let match;
   while ((match = regex.exec(content)) !== null) deps.push(match[1]);
   return [...new Set(deps)];
+}
+
+function addAssetNestedDependencies(assetFile, assetFiles) {
+  if (!fs.existsSync(path.join(ASSETS_DIR, assetFile))) return;
+  const assetSrc = fs.readFileSync(path.join(ASSETS_DIR, assetFile), 'utf8');
+  const subRelRegex = /from\s+["']\.\/([^"'/]+)["']/g;
+  let subM;
+  while ((subM = subRelRegex.exec(assetSrc)) !== null) {
+    for (const subExt of ['.ts', '.tsx']) {
+      const subFileName = subM[1].endsWith(subExt) ? subM[1] : subM[1] + subExt;
+      if (fs.existsSync(path.join(ASSETS_DIR, subFileName)) && !assetFiles.has(subFileName)) {
+        assetFiles.add(subFileName);
+        addAssetNestedDependencies(subFileName, assetFiles);
+      }
+    }
+  }
+}
+
+function detectAssetDependencies(content) {
+  const assetFiles = new Set();
+  if (!fs.existsSync(ASSETS_DIR)) return [];
+
+  // 1. Direct path imports: from "@/assets/svg/<filename>"
+  const directRegex = /from\s+["']@\/assets\/svg\/([^"'/]+)["']/g;
+  let m;
+  while ((m = directRegex.exec(content)) !== null) {
+    const base = m[1];
+    for (const ext of ['.tsx', '.ts']) {
+      const fileName = base.endsWith(ext) ? base : base + ext;
+      if (fs.existsSync(path.join(ASSETS_DIR, fileName))) {
+        assetFiles.add(fileName);
+        addAssetNestedDependencies(fileName, assetFiles);
+      }
+    }
+  }
+
+  // 2. Named imports from barrel: import { X, Y } from "@/assets/svg"
+  const barrelRegex = /import\s*\{([^}]+)\}\s*from\s*["']@\/assets\/svg["']/g;
+  while ((m = barrelRegex.exec(content)) !== null) {
+    if (fs.existsSync(path.join(ASSETS_DIR, 'index.ts'))) {
+      assetFiles.add('index.ts');
+    }
+    const identifiers = m[1].split(',').map((id) => id.trim().split(/\s+as\s+/)[0].trim()).filter(Boolean);
+    for (const id of identifiers) {
+      for (const assetFile of fs.readdirSync(ASSETS_DIR)) {
+        if (assetFile === 'index.ts' || (!assetFile.endsWith('.ts') && !assetFile.endsWith('.tsx'))) continue;
+        const assetSrc = fs.readFileSync(path.join(ASSETS_DIR, assetFile), 'utf8');
+        if (new RegExp(`export\\s+(function|const|class|interface|type)\\s+${id}\\b`).test(assetSrc)) {
+          assetFiles.add(assetFile);
+          addAssetNestedDependencies(assetFile, assetFiles);
+        }
+      }
+    }
+  }
+
+  return Array.from(assetFiles);
+}
+
+function detectConfigDependencies(content) {
+  const configs = new Set();
+  if (/from\s+["']@\/config\/site["']/.test(content)) {
+    configs.add('site.ts');
+  }
+  return Array.from(configs);
 }
 
 function getTitleAndDesc(name, content) {
@@ -126,6 +191,8 @@ function buildRegistry() {
 
   for (const comp of available) {
     let deps = [], regDeps = [], files = [], indexFiles = [];
+    const compAssetFiles = new Set();
+    const compConfigFiles = new Set();
 
     if (comp.isDir) {
       const dirPath = path.join(COMPONENTS_DIR, comp.name);
@@ -139,6 +206,8 @@ function buildRegistry() {
         const fileContent = fs.readFileSync(path.join(dirPath, sf), 'utf8');
         deps = [...new Set([...deps, ...detectDependencies(fileContent)])];
         regDeps = [...new Set([...regDeps, ...detectRegistryDependencies(fileContent)])];
+        detectAssetDependencies(fileContent).forEach((af) => compAssetFiles.add(af));
+        detectConfigDependencies(fileContent).forEach((cf) => compConfigFiles.add(cf));
         const dest = path.join(targetSubDir, sf);
         ensureDir(path.dirname(dest));
         fs.writeFileSync(dest, fileContent);
@@ -149,9 +218,25 @@ function buildRegistry() {
       const content = fs.readFileSync(path.join(COMPONENTS_DIR, `${comp.name}.tsx`), 'utf8');
       deps = detectDependencies(content);
       regDeps = detectRegistryDependencies(content);
+      detectAssetDependencies(content).forEach((af) => compAssetFiles.add(af));
+      detectConfigDependencies(content).forEach((cf) => compConfigFiles.add(cf));
       fs.writeFileSync(path.join(SYNC_DIR, `${comp.name}.tsx`), content);
       files.push({ name: `${comp.name}.tsx`, content, target: `components/ui/${comp.name}.tsx` });
       indexFiles.push({ path: `packages/registry/src/components/${comp.name}.tsx`, type: 'registry:file', target: `components/ui/${comp.name}.tsx` });
+    }
+
+    for (const af of compAssetFiles) {
+      const assetContent = fs.readFileSync(path.join(ASSETS_DIR, af), 'utf8');
+      files.push({ name: `assets/svg/${af}`, content: assetContent, target: `assets/svg/${af}` });
+      indexFiles.push({ path: `packages/registry/src/assets/svg/${af}`, type: 'registry:file', target: `assets/svg/${af}` });
+    }
+
+    for (const cf of compConfigFiles) {
+      if (fs.existsSync(path.join(REGISTRY_CONFIG_DIR, cf))) {
+        const configContent = fs.readFileSync(path.join(REGISTRY_CONFIG_DIR, cf), 'utf8');
+        files.push({ name: `config/${cf}`, content: configContent, target: `config/${cf}` });
+        indexFiles.push({ path: `packages/registry/src/config/${cf}`, type: 'registry:file', target: `config/${cf}` });
+      }
     }
 
     regDeps = regDeps.filter((d) => d !== comp.name);

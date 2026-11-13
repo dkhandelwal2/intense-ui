@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Copy, ExternalLink, LocateFixed, MapPin, Navigation2, QrCode } from "lucide-react";
+import { Check, Copy, Navigation2, Radio } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { EXTERNAL_LINKS } from "@/config/site";
 import { BarcodeSVG } from "../barcode-svg";
 import { BarcodeProps } from "../types";
+import { GpsBeaconPin, LocationStreetGrid } from "@/assets/svg";
+
+export { GpsBeaconPin, LocationStreetGrid } from "@/assets/svg";
 
 export interface LocationCardBarcodeProps extends BarcodeProps {
   accentColor?: string;
@@ -28,25 +32,28 @@ export function LocationCardBarcode({
 }: LocationCardBarcodeProps) {
   const [copied, setCopied] = useState(false);
 
-  const title = metadata?.title || (metadata as any)?.place || "Bethesda Terrace";
-  const subtitle = metadata?.subtitle || (metadata as any)?.address || "Central Park, New York, NY";
-  const coordinates = (metadata as any)?.coordinates || "40.7739° N, 73.9712° W";
-  const badge = metadata?.badge || "GEO LOCK";
-  const accent = accentColor || color || (metadata as any)?.accentColor || (metadata as any)?.color || "#10b981";
+  // Defaults aligned with Pinterest reference (Brooklyn GPS check-in)
+  const title = metadata?.title || (metadata as any)?.place || "BROOKLYN";
+  const subtitle = metadata?.subtitle || (metadata as any)?.address || "New York, NY";
+  const coordinates = (metadata as any)?.coordinates || "40.6782° N, 73.9442° W";
+  const badge = metadata?.badge || "GPS CHECK-IN";
+  const accent = accentColor || color || (metadata as any)?.accentColor || (metadata as any)?.color || "#38bdf8";
 
-  const defaultCenterIcon = <Navigation2 className="fill-current" style={{ color: accent }} strokeWidth={1.5} />;
-  const activeCenterIcon = centerIcon !== undefined ? centerIcon : metadata?.logo !== undefined ? metadata.logo : defaultCenterIcon;
+  const defaultCenterIcon = <GpsBeaconPin accent={accent} size={36} />;
 
-  const activeHeaderIcon = headerIcon !== undefined ? headerIcon : metadata?.icon !== undefined ? metadata.icon : (
-    <MapPin className="w-4 h-4" style={{ color: accent }} />
-  );
+  const activeCenterIcon =
+    centerIcon !== undefined
+      ? centerIcon
+      : metadata?.logo !== undefined
+      ? metadata.logo
+      : defaultCenterIcon;
 
   const handleCopy = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(value);
+      navigator.clipboard.writeText(coordinates || value);
       setCopied(true);
-      toast.success("Location coordinates copied!");
+      toast.success("Coordinates copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -54,7 +61,10 @@ export function LocationCardBarcode({
   const handleOpenMaps = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (typeof window !== "undefined") {
-      const url = value.startsWith("http") ? value : `https://maps.google.com/?q=${encodeURIComponent(value)}`;
+      const target = coordinates || value;
+      const url = target.startsWith("http")
+        ? target
+        : EXTERNAL_LINKS.getGoogleMapsUrl(target);
       window.open(url, "_blank", "noopener,noreferrer");
     }
   };
@@ -63,124 +73,144 @@ export function LocationCardBarcode({
     <div
       style={{
         ["--loc-accent" as any]: accent,
-        boxShadow: "0 20px 50px -15px rgba(0,0,0,0.14), 0 0 35px -10px color-mix(in srgb, var(--loc-accent) 26%, transparent)",
+        boxShadow:
+          "0 24px 60px -15px rgba(0,0,0,0.4), 0 0 35px -8px color-mix(in srgb, var(--loc-accent) 26%, transparent)",
       }}
       className={cn(
-        "group/card relative w-full max-w-[320px] rounded-[28px] bg-gradient-to-b from-white via-zinc-50/80 to-zinc-100/50 dark:from-zinc-900/95 dark:via-zinc-950/98 dark:to-[#09090b] border border-zinc-200/90 dark:border-white/[0.08] p-5 flex flex-col items-center font-sans overflow-hidden transition-all duration-300 hover:shadow-[0_25px_60px_-12px_color-mix(in_srgb,var(--loc-accent)_38%,transparent)] hover:border-[color-mix(in_srgb,var(--loc-accent)_35%,transparent)] select-none",
+        "group/card relative w-full max-w-[310px] rounded-[32px] bg-gradient-to-b from-zinc-900/95 via-zinc-950/98 to-[#07080b] border border-white/[0.08] text-white p-5 flex flex-col items-center font-sans overflow-hidden transition-all duration-300 hover:shadow-[0_28px_70px_-12px_color-mix(in_srgb,var(--loc-accent)_38%,transparent)] hover:border-[color-mix(in_srgb,var(--loc-accent)_35%,transparent)] select-none",
         className
       )}
       {...props}
     >
       {/* Top Ambient Glow & Specular Line */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-52 h-36 blur-3xl pointer-events-none rounded-full opacity-60 dark:opacity-40" style={{ backgroundColor: "var(--loc-accent)" }} />
+      <div
+        className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 h-36 blur-3xl pointer-events-none rounded-full opacity-40"
+        style={{ backgroundColor: "var(--loc-accent)" }}
+      />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--loc-accent)] to-transparent opacity-60" />
 
-      {/* Radar Coordinate Grid Background */}
-      <svg viewBox="0 0 320 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 w-full h-full pointer-events-none transition-transform duration-700 ease-out group-hover/card:scale-105 opacity-35 dark:opacity-25">
-        <circle cx="160" cy="180" r="140" stroke="var(--loc-accent)" strokeWidth="0.8" strokeDasharray="3 5" opacity="0.3" />
-        <circle cx="160" cy="180" r="95" stroke="var(--loc-accent)" strokeWidth="0.8" opacity="0.4" />
-        <circle cx="160" cy="180" r="50" stroke="var(--loc-accent)" strokeWidth="0.8" strokeDasharray="2 4" opacity="0.3" />
-        <line x1="20" y1="180" x2="300" y2="180" stroke="var(--loc-accent)" strokeWidth="0.8" strokeDasharray="4 6" opacity="0.25" />
-        <line x1="160" y1="40" x2="160" y2="320" stroke="var(--loc-accent)" strokeWidth="0.8" strokeDasharray="4 6" opacity="0.25" />
-        <path d="M160 180 L290 120 A140 140 0 0 0 250 80 Z" fill="url(#radarSweep)" opacity="0.4" />
-        <defs>
-          <radialGradient id="radarSweep" cx="0%" cy="100%" r="100%">
-            <stop offset="0%" stopColor="var(--loc-accent)" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="var(--loc-accent)" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-      </svg>
+      {/* City Street Grid Background with Animated Connecting Light Waves */}
+      <LocationStreetGrid accent="var(--loc-accent)" />
 
-      {/* Location Header */}
+      {/* Header Bar */}
       <div className="w-full flex items-center justify-between pb-1 relative z-10">
-        <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
           <div
-            className="w-9 h-9 rounded-2xl border flex items-center justify-center shrink-0 shadow-xs"
+            className="w-7 h-7 rounded-xl border border-white/10 flex items-center justify-center shrink-0"
             style={{
-              borderColor: "color-mix(in srgb, var(--loc-accent) 32%, transparent)",
-              backgroundColor: "color-mix(in srgb, var(--loc-accent) 14%, transparent)",
+              backgroundColor: "color-mix(in srgb, var(--loc-accent) 15%, transparent)",
+              borderColor: "color-mix(in srgb, var(--loc-accent) 30%, transparent)",
             }}
           >
-            {activeHeaderIcon}
+            {headerIcon || <Radio className="w-3.5 h-3.5" style={{ color: "var(--loc-accent)" }} />}
           </div>
-          <div className="truncate">
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold tracking-tight text-zinc-900 dark:text-zinc-100 truncate">{title}</span>
-            </div>
-            <div className="text-[10px] text-zinc-500 dark:text-zinc-400 truncate font-medium">{subtitle}</div>
-          </div>
+          <span className="text-[11px] font-mono tracking-wider text-zinc-400 font-semibold uppercase truncate">
+            {badge}
+          </span>
         </div>
+
         <div
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider uppercase shrink-0 border"
+          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider uppercase shrink-0 border"
           style={{
             borderColor: "color-mix(in srgb, var(--loc-accent) 35%, transparent)",
-            backgroundColor: "color-mix(in srgb, var(--loc-accent) 12%, transparent)",
+            backgroundColor: "color-mix(in srgb, var(--loc-accent) 14%, transparent)",
             color: "var(--loc-accent)",
           }}
         >
-          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: "var(--loc-accent)" }} />
-          {badge}
+          <span
+            className="w-1.5 h-1.5 rounded-full animate-pulse shadow-xs"
+            style={{ backgroundColor: "var(--loc-accent)" }}
+          />
+          ACTIVE LOCK
         </div>
       </div>
 
       {/* Viewfinder QR Scanner Stage */}
-      <div className="relative my-3.5 p-4 rounded-2xl bg-white dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-white/[0.08] shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)] flex items-center justify-center group/stage z-10">
-        <span className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 rounded-tl-sm pointer-events-none transition-colors" style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 50%, transparent)" }} />
-        <span className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 rounded-tr-sm pointer-events-none transition-colors" style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 50%, transparent)" }} />
-        <span className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 rounded-bl-sm pointer-events-none transition-colors" style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 50%, transparent)" }} />
-        <span className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 rounded-br-sm pointer-events-none transition-colors" style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 50%, transparent)" }} />
-
-        <BarcodeSVG
-          value={value}
-          format={format}
-          size={size}
-          dotStyle={dotStyle}
-          color={color || "currentColor"}
-          centerIcon={activeCenterIcon}
-          showText={false}
-          copyable={copyable}
-          downloadable={downloadable}
+      <div className="relative my-3.5 p-4 rounded-2xl bg-zinc-950/80 border border-white/[0.08] shadow-[inset_0_2px_8px_rgba(0,0,0,0.6)] flex items-center justify-center group/stage z-10">
+        {/* Viewfinder Corner Crosshairs */}
+        <span
+          className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 rounded-tl-sm pointer-events-none transition-colors"
+          style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 55%, transparent)" }}
         />
+        <span
+          className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 rounded-tr-sm pointer-events-none transition-colors"
+          style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 55%, transparent)" }}
+        />
+        <span
+          className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 rounded-bl-sm pointer-events-none transition-colors"
+          style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 55%, transparent)" }}
+        />
+        <span
+          className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 rounded-br-sm pointer-events-none transition-colors"
+          style={{ borderColor: "color-mix(in srgb, var(--loc-accent) 55%, transparent)" }}
+        />
+
+        {/* Ambient Radial Backlight behind QR */}
+        <div
+          className="absolute inset-0 rounded-2xl pointer-events-none opacity-20 blur-xl"
+          style={{
+            background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`,
+          }}
+        />
+
+        {/* Dynamic Vector QR Code with Centered Beacon Pin and its Localized Ripple */}
+        <div className="relative z-10">
+          <BarcodeSVG
+            value={value}
+            format={format}
+            size={size}
+            dotStyle={dotStyle}
+            color={color || "currentColor"}
+            centerIcon={activeCenterIcon}
+            showText={false}
+            copyable={copyable}
+            downloadable={downloadable}
+          />
+        </div>
       </div>
 
-      {/* Interactive Coordinates / Actions Strip */}
-      <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/80 dark:bg-zinc-900/60 border border-zinc-200/70 dark:border-white/[0.06] text-[11px] relative z-10">
-        <div className="flex items-center gap-1.5 truncate text-zinc-600 dark:text-zinc-400 font-mono text-[10px]">
-          <LocateFixed className="w-3 h-3 animate-pulse shrink-0" style={{ color: "var(--loc-accent)" }} />
-          <span className="truncate">{coordinates}</span>
+      {/* Bottom Info: Bold Uppercase Location & Coordinates (Direct Pinterest Match) */}
+      <div className="w-full flex items-end justify-between gap-3 mt-1 relative z-10">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-base font-extrabold tracking-wide text-white uppercase truncate leading-tight">
+            {title}
+          </h3>
+          <p className="font-mono text-[11px] text-zinc-400 font-medium tracking-tight mt-0.5 truncate">
+            {coordinates}
+          </p>
+          {subtitle && (
+            <p className="text-[10px] text-zinc-500 truncate mt-0.5 font-medium">
+              {subtitle}
+            </p>
+          )}
         </div>
-        <div className="flex items-center gap-1 shrink-0">
+
+        {/* Interactive Action Pill Buttons */}
+        <div className="flex items-center gap-1.5 shrink-0 pb-0.5">
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:text-zinc-900 dark:hover:text-white border border-zinc-200 dark:border-zinc-700 font-medium text-[10px] transition-all active:scale-95 shadow-2xs cursor-pointer"
-            title="Copy Coordinates / Link"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 text-zinc-200 hover:text-white border border-white/10 font-medium text-[10px] transition-all active:scale-95 shadow-sm cursor-pointer"
+            title="Copy Coordinates"
           >
-            {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+            {copied ? (
+              <Check className="w-3 h-3 text-emerald-400" />
+            ) : (
+              <Copy className="w-3 h-3 text-zinc-400" />
+            )}
             <span>{copied ? "Copied" : "Copy"}</span>
           </button>
           <button
             type="button"
             onClick={handleOpenMaps}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-white font-medium text-[10px] transition-all active:scale-95 shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-zinc-950 font-semibold text-[10px] transition-all active:scale-95 shadow-sm cursor-pointer"
             style={{ backgroundColor: "var(--loc-accent)" }}
             title="Open in Maps"
           >
-            <ExternalLink className="w-3 h-3" />
+            <Navigation2 className="w-3 h-3 fill-current" />
             <span>Maps</span>
           </button>
         </div>
-      </div>
-
-      {/* Bottom Footer Spec */}
-      <div className="w-full mt-1 pt-2.5 border-t border-zinc-200/70 dark:border-white/[0.06] flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400 relative z-10">
-        <span className="flex items-center gap-1">
-          <QrCode className="w-3 h-3 text-zinc-400" />
-          WGS84 • GPS Check-in
-        </span>
-        <span className="font-mono text-[9px] uppercase tracking-wider font-semibold" style={{ color: "var(--loc-accent)" }}>
-          Scan to Navigate
-        </span>
       </div>
     </div>
   );

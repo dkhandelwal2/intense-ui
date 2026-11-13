@@ -22,7 +22,7 @@ export const BARCODE_EXAMPLES: BarcodeExample[] = [
     id: "location-card",
     label: "Location GPS Check-in",
     emoji: "📍",
-    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function LocationCardDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="https://maps.google.com/?q=40.7739,-73.9712"\n        format="qr"\n        variant="location-card"\n        dotStyle="dots"\n        accentColor="#10b981"\n        copyable\n        downloadable\n        metadata={{\n          title: "Bethesda Terrace",\n          subtitle: "Central Park, New York, NY",\n          coordinates: "40.7739° N, 73.9712° W",\n        }}\n      />\n    </div>\n  );\n}`,
+    code: `"use client";\n\nimport { Barcode } from "@/components/ui/barcode";\n\nexport default function LocationCardDemo() {\n  return (\n    <div className="flex items-center justify-center p-8">\n      <Barcode\n        value="https://maps.google.com/?q=40.6782,-73.9442"\n        format="qr"\n        variant="location-card"\n        dotStyle="dots"\n        accentColor="#38bdf8"\n        copyable\n        downloadable\n        metadata={{\n          title: "BROOKLYN",\n          subtitle: "New York, NY",\n          coordinates: "40.6782° N, 73.9442° W",\n        }}\n      />\n    </div>\n  );\n}`,
   },
   {
     id: "qr-standard",

@@ -41,6 +41,8 @@ export const EXTERNAL_LINKS = {
     FORECAST_API: "https://api.open-meteo.com/v1/forecast",
     REVERSE_GEOCODE_API: "https://api.bigdatacloud.net/data/reverse-geocode-client",
   },
+  GOOGLE_MAPS: "https://maps.google.com/?q=",
+  getGoogleMapsUrl: (query: string) => `https://maps.google.com/?q=${encodeURIComponent(query)}`,
   getGitHubApiUrl: (repo: string = GITHUB_REPO) => `https://api.github.com/repos/${repo}`,
 } as const;
 
@@ -174,6 +176,7 @@ export const siteConfig = {
     discussions: EXTERNAL_LINKS.GITHUB_DISCUSSIONS,
     discord: EXTERNAL_LINKS.DISCORD,
     email: EXTERNAL_LINKS.MAILTO,
+    googleMaps: EXTERNAL_LINKS.GOOGLE_MAPS,
   },
   routes: APP_ROUTES,
   registry: REGISTRY_CONFIG,

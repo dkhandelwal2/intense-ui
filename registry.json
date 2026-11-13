@@ -124,11 +124,6 @@
           "target": "components/ui/barcode/types.ts"
         },
         {
-          "path": "packages/registry/src/components/barcode/variants/airplane-icon.tsx",
-          "type": "registry:file",
-          "target": "components/ui/barcode/variants/airplane-icon.tsx"
-        },
-        {
           "path": "packages/registry/src/components/barcode/variants/boarding-pass.tsx",
           "type": "registry:file",
           "target": "components/ui/barcode/variants/boarding-pass.tsx"
@@ -142,11 +137,6 @@
           "path": "packages/registry/src/components/barcode/variants/cyber-scan.tsx",
           "type": "registry:file",
           "target": "components/ui/barcode/variants/cyber-scan.tsx"
-        },
-        {
-          "path": "packages/registry/src/components/barcode/variants/dotted-globe.tsx",
-          "type": "registry:file",
-          "target": "components/ui/barcode/variants/dotted-globe.tsx"
         },
         {
           "path": "packages/registry/src/components/barcode/variants/location-card.tsx",
@@ -169,9 +159,39 @@
           "target": "components/ui/barcode/variants/ticket-notch-divider.tsx"
         },
         {
-          "path": "packages/registry/src/components/barcode/variants/world-map-path.ts",
+          "path": "packages/registry/src/assets/svg/index.ts",
           "type": "registry:file",
-          "target": "components/ui/barcode/variants/world-map-path.ts"
+          "target": "assets/svg/index.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/dotted-globe.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/dotted-globe.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/world-map-path.ts",
+          "type": "registry:file",
+          "target": "assets/svg/world-map-path.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/airplane-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/airplane-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/gps-beacon-pin.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/gps-beacon-pin.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/location-street-grid.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/location-street-grid.tsx"
+        },
+        {
+          "path": "packages/registry/src/config/site.ts",
+          "type": "registry:file",
+          "target": "config/site.ts"
         }
       ]
     },
@@ -273,6 +293,16 @@
           "path": "packages/registry/src/components/button/types.ts",
           "type": "registry:file",
           "target": "components/ui/button/types.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/index.ts",
+          "type": "registry:file",
+          "target": "assets/svg/index.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/social-icons.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/social-icons.tsx"
         }
       ]
     },

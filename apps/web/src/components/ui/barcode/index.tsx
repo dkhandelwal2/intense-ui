@@ -19,7 +19,7 @@ export { ShippingLabelBarcode } from "./variants/shipping-label";
 export { CyberScanBarcode } from "./variants/cyber-scan";
 export { RetailTagBarcode } from "./variants/retail-tag";
 export { BrandCardBarcode } from "./variants/brand-card";
-export { LocationCardBarcode } from "./variants/location-card";
+export { LocationCardBarcode, GpsBeaconPin, LocationStreetGrid } from "./variants/location-card";
 
 /**
  * @title Barcode / QR Code
