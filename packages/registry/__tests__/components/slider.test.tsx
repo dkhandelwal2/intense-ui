@@ -64,4 +64,15 @@ describe("Slider Components", () => {
     const slider = screen.getByRole("slider");
     expect(slider).toBeDisabled();
   });
+
+  it("renders MultiSlider with multiple thumbs", () => {
+    const handleChange = vi.fn();
+    render(<MultiSlider values={[15, 45, 75]} min={0} max={100} onChange={handleChange} />);
+
+    const sliders = screen.getAllByRole("slider");
+    expect(sliders.length).toBe(3);
+    expect(sliders[0]).toHaveValue("15");
+    expect(sliders[1]).toHaveValue("45");
+    expect(sliders[2]).toHaveValue("75");
+  });
 });

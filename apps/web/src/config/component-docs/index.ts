@@ -11,6 +11,7 @@ import { accordionDoc } from "./accordion";
 import { navBarDoc } from "./nav-bar";
 import { stepCarouselDoc } from "./step-carousel";
 import { barcodeDoc } from "./barcode";
+import { progressDoc } from "./progress";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
@@ -26,6 +27,7 @@ export * from "./color-grid";
 export * from "./nav-bar";
 export * from "./step-carousel";
 export * from "./barcode";
+export * from "./progress";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
   "accordion": accordionDoc,
@@ -34,6 +36,7 @@ const DOCS_MAP: Record<string, ComponentDocData> = {
   "button": buttonDoc,
   "switch": switchDoc,
   "slider": sliderDoc,
+  "progress": progressDoc,
   "tooltip": tooltipDoc,
   "separator": separatorDoc,
   "breadcrumb": breadcrumbDoc,

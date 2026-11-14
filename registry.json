@@ -379,6 +379,63 @@
       ]
     },
     {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "A beautifully designed, accessible Progress component.",
+      "dependencies": [
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/progress/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/progress/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/progress/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-buffer.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-buffer.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-capsule.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-capsule.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-circular.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-circular.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-linear.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-linear.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-semicircle.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-semicircle.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/progress-shimmer.tsx",
+          "type": "registry:file",
+          "target": "components/ui/progress/progress-shimmer.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/progress/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/progress/types.ts"
+        }
+      ]
+    },
+    {
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",

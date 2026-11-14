@@ -45,6 +45,7 @@ import { colorGridShowcaseDefinition, DEFAULT_COLOR_GRID_PROPS, ColorGridCustomP
 import { separatorShowcaseDefinition, DEFAULT_SEPARATOR_PROPS, SeparatorCustomProps } from "@/components/showcases/separator";
 import { tooltipShowcaseDefinition, DEFAULT_TOOLTIP_PROPS, TooltipCustomProps } from "@/components/showcases/tooltip";
 import { barcodeShowcaseDefinition, DEFAULT_BARCODE_PROPS, BarcodeCustomProps } from "@/components/showcases/barcode";
+import { progressShowcaseDefinition } from "@/components/showcases/progress";
 
 import {
   GenericPlaygroundStudio,
@@ -145,6 +146,7 @@ export {
   separatorShowcaseDefinition,
   tooltipShowcaseDefinition,
   barcodeShowcaseDefinition,
+  progressShowcaseDefinition,
 };
 
 export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinition<GenericCustomProps> {
@@ -184,6 +186,7 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "separator": separatorShowcaseDefinition,
   "tooltip": tooltipShowcaseDefinition,
   "barcode": barcodeShowcaseDefinition,
+  "progress": progressShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {

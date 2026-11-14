@@ -36,6 +36,12 @@
     "enabled": true
   },
   {
+    "name": "progress",
+    "title": "Progress",
+    "description": "A beautifully designed, accessible Progress component.",
+    "enabled": true
+  },
+  {
     "name": "separator",
     "title": "Separator",
     "description": "Visual divider separating sections of content.",
