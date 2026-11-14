@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { NavbarFloatingProps } from "./types";
-import { FLOATING_SIZES, FLOATING_SIZE_CLASSES, FLOATING_ITEM_PADDING } from "./constants";
+import { FLOATING_SIZES } from "./constants";
 
 export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>(
   (
@@ -76,9 +76,9 @@ export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>
                   style={
                     activeColor
                       ? {
-                          backgroundColor: activeColor,
-                          boxShadow: `0 2px 10px ${activeColor}40`,
-                        }
+                        backgroundColor: activeColor,
+                        boxShadow: `0 2px 10px ${activeColor}40`,
+                      }
                       : undefined
                   }
                   className={cn(
