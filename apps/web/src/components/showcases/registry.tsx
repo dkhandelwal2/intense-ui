@@ -99,8 +99,12 @@ export const accordionShowcaseDefinition: ShowcaseDefinition<AccordionCustomProp
 export const navbarShowcaseDefinition: ShowcaseDefinition<CustomNavbarProps> = {
   slug: "nav-bar",
   defaultProps: NAVBAR_DEFAULT_CUSTOM_PROPS,
-  renderPreview: ({ activeTocId, customProps, isCustomizing, dynamicPreviewContent }) =>
-    isCustomizing ? (dynamicPreviewContent || <NavbarLivePreview customProps={customProps} />) : <NavbarVariantRenderer id={activeTocId} customProps={customProps} />,
+  renderPreview: ({ activeTocId, customProps, isCustomizing }) =>
+    isCustomizing ? (
+      <NavbarLivePreview customProps={customProps} />
+    ) : (
+      <NavbarVariantRenderer id={activeTocId} customProps={customProps} />
+    ),
   renderPlayground: ({ customProps, onChange, onViewCode, hidePreview = true }) => (
     <NavbarPlaygroundStudio customProps={customProps} onChange={onChange} hidePreview={hidePreview} className="w-full h-full flex-1 min-h-0 flex flex-col" onViewCode={onViewCode} />
   ),

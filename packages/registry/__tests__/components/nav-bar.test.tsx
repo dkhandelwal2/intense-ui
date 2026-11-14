@@ -52,6 +52,35 @@ describe("Navbar Components", () => {
     expect(handleSelect).toHaveBeenCalledWith("components");
   });
 
+  it("applies correct size classes for NavbarFloating sm, md, and lg", () => {
+    const { rerender } = render(
+      <NavbarFloating items={NAV_ITEMS} size="sm" aria-label="Floating Nav" />
+    );
+    let nav = screen.getByRole("navigation", { name: /floating nav/i });
+    expect(nav.className).toContain("h-9");
+
+    rerender(
+      <NavbarFloating items={NAV_ITEMS} size="md" aria-label="Floating Nav" />
+    );
+    nav = screen.getByRole("navigation", { name: /floating nav/i });
+    expect(nav.className).toContain("h-11");
+
+    rerender(
+      <NavbarFloating items={NAV_ITEMS} size="lg" aria-label="Floating Nav" />
+    );
+    nav = screen.getByRole("navigation", { name: /floating nav/i });
+    expect(nav.className).toContain("h-14");
+  });
+
+  it("renders NavbarFloating with icons and badges scaling", () => {
+    const itemsWithExtras = [
+      { id: "test", label: "Test", icon: <span data-testid="icon">★</span>, badge: "NEW" },
+    ];
+    render(<NavbarFloating items={itemsWithExtras} size="lg" />);
+    expect(screen.getByTestId("icon")).toBeInTheDocument();
+    expect(screen.getByText("NEW")).toBeInTheDocument();
+  });
+
   it("renders NavbarLink with correct href", () => {
     render(<NavbarLink href="/about">About Us</NavbarLink>);
     const link = screen.getByRole("link", { name: /about us/i });

@@ -35,8 +35,10 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
   return (
     <div
       className={cn(
-        "flex flex-col justify-between relative overflow-y-scroll select-none w-full p-4",
-        isDesktop ? "h-full rounded-3xl" : "px-2 h-[calc(100vh-180px)] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0",
+        "flex flex-col justify-between relative select-none w-full p-4",
+        isDesktop
+          ? "h-full rounded-3xl overflow-hidden"
+          : "px-2 h-[calc(100vh-180px)] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0 overflow-y-auto",
         className
       )}
     >
@@ -64,7 +66,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
 
       {/* Center Presentation Stage */}
       <div className="relative z-10 flex-1 min-h-[260px] flex flex-col items-center justify-center py-2">
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={isCustomizing ? "customization" : activeTocId}
             variants={animation ? STEP_CAROUSEL_ANIMATIONS[animation] : undefined}
@@ -78,8 +80,8 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
               className={cn(
                 "rounded-3xl transition-all duration-300 flex items-center justify-center",
                 isDesktop
-                  ? "w-[62%] h-full shadow-md backdrop-blur-xl p-2"
-                  : "w-full max-w-[620px] max-h-[250px] rounded-2xl shadow-xs backdrop-blur-xl"
+                  ? "w-full max-w-[680px] h-full shadow-md backdrop-blur-xl p-2"
+                  : "w-full max-w-[620px] max-h-[360px] rounded-2xl shadow-xs backdrop-blur-xl"
               )}
             >
               <div className="w-full h-full flex items-start justify-center overflow-y-auto no-scrollbar">

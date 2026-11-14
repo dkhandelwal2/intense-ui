@@ -48,3 +48,6 @@ export type { GpsBeaconPinProps } from "./gps-beacon-pin";
 
 export { LocationStreetGrid } from "./location-street-grid";
 export type { LocationStreetGridProps } from "./location-street-grid";
+
+export { LocationTrafficVehicles } from "./location-traffic-vehicles";
+export type { LocationTrafficVehiclesProps } from "./location-traffic-vehicles";

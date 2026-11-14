@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { NavbarFloatingProps } from "./types";
-import { FLOATING_SIZE_CLASSES, FLOATING_ITEM_PADDING } from "./constants";
+import { FLOATING_SIZES, FLOATING_SIZE_CLASSES, FLOATING_ITEM_PADDING } from "./constants";
 
 export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>(
   (
@@ -21,20 +21,26 @@ export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>
     },
     ref
   ) => {
-    const generatedId = React.useId();
+    const rawId = React.useId();
+    const safeId = React.useMemo(
+      () => rawId.replace(/[^a-zA-Z0-9_-]/g, "_"),
+      [rawId]
+    );
     const indicatorLayoutId =
-      layoutId || `navbar-floating-indicator-${generatedId}`;
+      layoutId || `navbar-floating-indicator-${safeId}`;
     const [internalActiveId, setInternalActiveId] = React.useState(
       defaultActiveId || items[0]?.id || ""
     );
     const activeId = controlledActiveId ?? internalActiveId;
+    const sizeConfig = FLOATING_SIZES[size] || FLOATING_SIZES.md;
 
     return (
       <nav
         ref={ref}
+        aria-label="Floating Navigation Bar"
         className={cn(
-          "relative inline-flex items-center rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/40",
-          FLOATING_SIZE_CLASSES[size],
+          "relative inline-flex items-center rounded-full border border-black/10 dark:border-white/15 bg-white/90 dark:bg-zinc-900/95 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/50 select-none",
+          sizeConfig.container,
           className
         )}
         {...props}
@@ -54,13 +60,13 @@ export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>
                 onSelect?.(item.id);
               }}
               className={cn(
-                "relative z-10 inline-flex items-center gap-1.5 rounded-full font-medium transition-colors cursor-pointer select-none",
-                FLOATING_ITEM_PADDING[size],
+                "relative z-10 inline-flex items-center justify-center rounded-full font-medium transition-colors cursor-pointer select-none leading-none",
+                sizeConfig.button,
                 isActive
                   ? activeColor
                     ? "text-white"
-                    : "text-zinc-950 dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100",
+                    : "text-zinc-950 dark:text-white font-semibold"
+                  : "text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white",
                 item.disabled && "opacity-50 cursor-not-allowed pointer-events-none"
               )}
             >
@@ -76,22 +82,28 @@ export const NavbarFloating = React.forwardRef<HTMLElement, NavbarFloatingProps>
                       : undefined
                   }
                   className={cn(
-                    "absolute inset-0 rounded-full border border-black/[0.04] dark:border-white/[0.06] shadow-xs",
-                    !activeColor && "bg-zinc-100 dark:bg-zinc-800"
+                    "absolute inset-0 rounded-full border border-black/[0.06] dark:border-white/15 shadow-xs",
+                    !activeColor && "bg-zinc-200/80 dark:bg-zinc-800"
                   )}
                   transition={{ type: "spring", stiffness: 450, damping: 32 }}
                 />
               )}
               {item.icon && (
-                <span className="relative z-10 shrink-0 text-sm [&>svg]:w-3.5 [&>svg]:h-3.5">
+                <span
+                  className={cn(
+                    "relative z-10 shrink-0 inline-flex items-center justify-center leading-none",
+                    sizeConfig.icon
+                  )}
+                >
                   {item.icon}
                 </span>
               )}
-              <span className="relative z-10">{item.label}</span>
+              <span className="relative z-10 leading-none">{item.label}</span>
               {item.badge && (
                 <span
                   className={cn(
-                    "relative z-10 ml-1 text-[10px] px-1.5 py-0.2 rounded-full font-mono font-semibold",
+                    "relative z-10 ml-1 rounded-full font-mono font-semibold leading-none",
+                    sizeConfig.badge,
                     isActive
                       ? activeColor
                         ? "bg-white/20 text-white"

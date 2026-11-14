@@ -76,4 +76,24 @@ describe("Barcode Component", () => {
     expect(screen.getByText(/915.00 MHz/)).toBeInTheDocument();
     expect(screen.getByText(/TRUE/)).toBeInTheDocument();
   });
+
+  it("renders Location Card variant with GPS coordinates and vehicle transit emojis", () => {
+    const { container } = render(
+      <Barcode
+        value="https://maps.google.com/?q=40.6782,-73.9442"
+        variant="location-card"
+        metadata={{
+          title: "BROOKLYN",
+          subtitle: "New York, NY",
+          coordinates: "40.6782° N, 73.9442° W",
+        }}
+      />
+    );
+    expect(screen.getByText("BROOKLYN")).toBeInTheDocument();
+    expect(screen.getByText("40.6782° N, 73.9442° W")).toBeInTheDocument();
+    expect(screen.getByText("New York, NY")).toBeInTheDocument();
+    expect(container.textContent).toContain("🚕");
+    expect(container.textContent).toContain("🚚");
+    expect(container.textContent).toContain("🚗");
+  });
 });

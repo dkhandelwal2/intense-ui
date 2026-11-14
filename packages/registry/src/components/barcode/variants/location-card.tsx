@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 import { EXTERNAL_LINKS } from "@/config/site";
 import { BarcodeSVG } from "../barcode-svg";
 import { BarcodeProps } from "../types";
-import { GpsBeaconPin, LocationStreetGrid } from "@/assets/svg";
+import { GpsBeaconPin, LocationStreetGrid, LocationTrafficVehicles } from "@/assets/svg";
 
-export { GpsBeaconPin, LocationStreetGrid } from "@/assets/svg";
+export { GpsBeaconPin, LocationStreetGrid, LocationTrafficVehicles } from "@/assets/svg";
 
 export interface LocationCardBarcodeProps extends BarcodeProps {
   accentColor?: string;
@@ -33,11 +33,11 @@ export function LocationCardBarcode({
   const [copied, setCopied] = useState(false);
 
   // Defaults aligned with Pinterest reference (Brooklyn GPS check-in)
-  const title = metadata?.title || (metadata as any)?.place || "BROOKLYN";
-  const subtitle = metadata?.subtitle || (metadata as any)?.address || "New York, NY";
-  const coordinates = (metadata as any)?.coordinates || "40.6782° N, 73.9442° W";
+  const title = metadata?.title || metadata?.place || "BROOKLYN";
+  const subtitle = metadata?.subtitle || metadata?.address || "New York, NY";
+  const coordinates = metadata?.coordinates || "40.6782° N, 73.9442° W";
   const badge = metadata?.badge || "GPS CHECK-IN";
-  const accent = accentColor || color || (metadata as any)?.accentColor || (metadata as any)?.color || "#38bdf8";
+  const accent = accentColor || color || metadata?.accentColor || metadata?.color || "#38bdf8";
 
   const defaultCenterIcon = <GpsBeaconPin accent={accent} size={36} />;
 
@@ -71,11 +71,13 @@ export function LocationCardBarcode({
 
   return (
     <div
-      style={{
-        ["--loc-accent" as any]: accent,
-        boxShadow:
-          "0 24px 60px -15px rgba(0,0,0,0.4), 0 0 35px -8px color-mix(in srgb, var(--loc-accent) 26%, transparent)",
-      }}
+      style={
+        {
+          "--loc-accent": accent,
+          boxShadow:
+            "0 24px 60px -15px rgba(0,0,0,0.4), 0 0 35px -8px color-mix(in srgb, var(--loc-accent) 26%, transparent)",
+        } as React.CSSProperties
+      }
       className={cn(
         "group/card relative w-full max-w-[310px] rounded-[32px] bg-gradient-to-b from-zinc-900/95 via-zinc-950/98 to-[#07080b] border border-white/[0.08] text-white p-5 flex flex-col items-center font-sans overflow-hidden transition-all duration-300 hover:shadow-[0_28px_70px_-12px_color-mix(in_srgb,var(--loc-accent)_38%,transparent)] hover:border-[color-mix(in_srgb,var(--loc-accent)_35%,transparent)] select-none",
         className
@@ -89,8 +91,11 @@ export function LocationCardBarcode({
       />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--loc-accent)] to-transparent opacity-60" />
 
-      {/* City Street Grid Background with Animated Connecting Light Waves */}
+      {/* City Street Grid Background */}
       <LocationStreetGrid accent="var(--loc-accent)" />
+
+      {/* Live City Traffic Layer: Dynamically Generated Tracks & Vehicles at z-[2] */}
+      <LocationTrafficVehicles accent="var(--loc-accent)" />
 
       {/* Header Bar */}
       <div className="w-full flex items-center justify-between pb-1 relative z-10">
@@ -212,6 +217,7 @@ export function LocationCardBarcode({
           </button>
         </div>
       </div>
+
     </div>
   );
 }

@@ -77,7 +77,7 @@ export function BarcodePreview({
           }}
         />
         <span className="text-xs font-mono text-muted-foreground text-center">
-          GPS location check-in card with concentric sonar pulse, live coordinates, and navigation pass
+          GPS location check-in card with live city traffic, coordinates, and navigation pass
         </span>
       </div>
     );

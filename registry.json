@@ -189,6 +189,11 @@
           "target": "assets/svg/location-street-grid.tsx"
         },
         {
+          "path": "packages/registry/src/assets/svg/location-traffic-vehicles.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/location-traffic-vehicles.tsx"
+        },
+        {
           "path": "packages/registry/src/config/site.ts",
           "type": "registry:file",
           "target": "config/site.ts"

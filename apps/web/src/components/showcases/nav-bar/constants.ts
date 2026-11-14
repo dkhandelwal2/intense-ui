@@ -124,11 +124,11 @@ export default function FloatingNavbarDemo() {
       title: "Scaling Specs",
       badge: "Responsive Tiers",
       summary:
-        "Available in 3 calibrated scale tiers: Small (h-8), Medium (h-10 to h-11), and Large (h-12).",
+        "Available in 3 calibrated scale tiers across both Fluid Gooey and Floating Capsule variants: Small (sm: 32-36px), Medium (md: 40-44px), and Large (lg: 48-56px).",
       specs: [
-        { label: "Small (sm)", value: "32px height, 12px text" },
+        { label: "Small (sm)", value: "32-36px height, 12px text" },
         { label: "Medium (md)", value: "40-44px height, 13-14px text" },
-        { label: "Large (lg)", value: "48px height, 15-16px text" },
+        { label: "Large (lg)", value: "48-56px height, 15-16px text" },
       ],
       tip: "Default to medium for web headers; use small for compact panel controllers.",
     },
