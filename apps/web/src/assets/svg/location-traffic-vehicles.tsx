@@ -258,7 +258,7 @@ function AutonomousVehicle({
             d={activeRoute.pathD}
             stroke={accent}
             strokeWidth="3.5"
-            strokeOpacity="0.08"
+            strokeOpacity="0.12"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -267,7 +267,7 @@ function AutonomousVehicle({
             d={activeRoute.pathD}
             stroke={accent}
             strokeWidth="1.2"
-            strokeOpacity="0.28"
+            strokeOpacity="0.45"
             strokeDasharray="4 4"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -280,7 +280,7 @@ function AutonomousVehicle({
               cy={pt.cy}
               r="2.2"
               fill={accent}
-              fillOpacity="0.5"
+              fillOpacity="0.7"
             />
           ))}
         </motion.g>
@@ -315,7 +315,7 @@ function AutonomousVehicle({
         >
           <motion.div
             className={cn(
-              "leading-none will-change-transform drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]",
+              "leading-none will-change-transform drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]",
               fontSize
             )}
             style={{ transformOrigin: "50% 85%" }}

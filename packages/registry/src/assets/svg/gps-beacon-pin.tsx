@@ -87,8 +87,8 @@ export function GpsBeaconPin({
         cy="18"
         r="6.5"
         fill={accent}
-        stroke="#090a0f"
         strokeWidth="2"
+        className="stroke-white dark:stroke-[#090a0f]"
       />
 
       {/* Bright Core Pinpoint Dot */}
