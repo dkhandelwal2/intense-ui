@@ -538,6 +538,144 @@
       ]
     },
     {
+      "name": "timer",
+      "type": "registry:ui",
+      "title": "Timer",
+      "description": "A beautifully designed, accessible Timer component.",
+      "dependencies": [
+        "lucide-react",
+        "framer-motion"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/timer/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/timer/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/timer/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-card-center.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-card-center.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-confirmation-button.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-confirmation-button.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-duration-picker.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-duration-picker.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-expandable-pill.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-expandable-pill.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-expandable.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-expandable.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-island-editor.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-island-editor.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-island.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-island.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-lap-carousel.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-lap-carousel.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-perimeter-card.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-perimeter-card.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-perimeter-contour.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-perimeter-contour.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-perimeter.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-perimeter.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-preset-chips.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-preset-chips.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-progress-ring.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-progress-ring.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-split-dial.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-split-dial.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-split-info.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-split-info.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-split.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-split.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer-stopwatch.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer-stopwatch.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/timer.tsx",
+          "type": "registry:file",
+          "target": "components/ui/timer/timer.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/timer/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/timer/types.ts"
+        },
+        {
+          "path": "packages/registry/src/config/timer.ts",
+          "type": "registry:file",
+          "target": "config/timer.ts"
+        },
+        {
+          "path": "packages/registry/src/hooks/use-timer.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-timer.ts"
+        },
+        {
+          "path": "packages/registry/src/hooks/use-stopwatch.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-stopwatch.ts"
+        },
+        {
+          "path": "packages/registry/src/hooks/use-duration-picker-state.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-duration-picker-state.ts"
+        }
+      ]
+    },
+    {
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",

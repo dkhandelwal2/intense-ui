@@ -12,6 +12,7 @@ import { navBarDoc } from "./nav-bar";
 import { stepCarouselDoc } from "./step-carousel";
 import { barcodeDoc } from "./barcode";
 import { progressDoc } from "./progress";
+import { timerDoc } from "./timer";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
@@ -28,6 +29,7 @@ export * from "./nav-bar";
 export * from "./step-carousel";
 export * from "./barcode";
 export * from "./progress";
+export * from "./timer";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
   "accordion": accordionDoc,
@@ -46,6 +48,8 @@ const DOCS_MAP: Record<string, ComponentDocData> = {
   "step-carousel": stepCarouselDoc,
   "step-player": stepCarouselDoc,
   "barcode": barcodeDoc,
+  "timer": timerDoc,
+  "stopwatch": timerDoc,
 };
 
 export function getComponentDocData(slug: string): ComponentDocData {

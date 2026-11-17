@@ -16,6 +16,7 @@ import {
   PlayCircle,
   Barcode as BarcodeIcon,
   CircleGauge,
+  Timer as TimerIcon,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -27,23 +28,25 @@ export type ComponentIconType = React.ComponentType<{ className?: string }>;
  * - Right sidebar inspector header title & mobile sheet
  */
 export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
-  accordion: LayoutList,
-  button: MousePointerClick,
-  switch: ToggleRight,
-  slider: SlidersHorizontal,
-  tooltip: MessageSquare,
-  separator: Minus,
-  breadcrumb: Route,
-  skeleton: SquareDashed,
+  "accordion": LayoutList,
+  "button": MousePointerClick,
+  "switch": ToggleRight,
+  "slider": SlidersHorizontal,
+  "tooltip": MessageSquare,
+  "separator": Minus,
+  "breadcrumb": Route,
+  "skeleton": SquareDashed,
   "color-grid": Palette,
   "nav-bar": Navigation,
-  navbar: Navigation,
+  "navbar": Navigation,
   "bento-grid": LayoutGrid,
   "magnetic-card": CreditCard,
   "step-carousel": PlayCircle,
   "step-player": PlayCircle,
-  barcode: BarcodeIcon,
-  progress: CircleGauge,
+  "barcode": BarcodeIcon,
+  "progress": CircleGauge,
+  "timer": TimerIcon,
+  "stopwatch": TimerIcon,
 };
 
 /**

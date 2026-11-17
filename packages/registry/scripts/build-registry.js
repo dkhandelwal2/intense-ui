@@ -4,8 +4,10 @@ const path = require('path');
 const ROOT_DIR = path.join(__dirname, '../../../');
 const COMPONENTS_DIR = path.join(ROOT_DIR, 'apps/web/src/components/ui');
 const ASSETS_DIR = path.join(ROOT_DIR, 'apps/web/src/assets/svg');
+const HOOKS_DIR = path.join(ROOT_DIR, 'apps/web/src/hooks');
 const SYNC_DIR = path.join(__dirname, '../src/components');
 const SYNC_ASSETS_DIR = path.join(__dirname, '../src/assets/svg');
+const SYNC_HOOKS_DIR = path.join(__dirname, '../src/hooks');
 const DIST_DIR = path.join(__dirname, '../dist');
 const CONFIG_PATH = path.join(__dirname, '../registry-config.json');
 const REGISTRY_CONFIG_DIR = path.join(__dirname, '../src/config');
@@ -125,10 +127,34 @@ function detectAssetDependencies(content) {
 
 function detectConfigDependencies(content) {
   const configs = new Set();
-  if (/from\s+["']@\/config\/site["']/.test(content)) {
-    configs.add('site.ts');
+  const regex = /from\s+["']@\/config\/([^"'/]+)["']/g;
+  let m;
+  while ((m = regex.exec(content)) !== null) {
+    const base = m[1];
+    for (const ext of ['.ts', '.tsx']) {
+      const fileName = base.endsWith(ext) ? base : base + ext;
+      if (fs.existsSync(path.join(ROOT_DIR, 'apps/web/src/config', fileName))) {
+        configs.add(fileName);
+      }
+    }
   }
   return Array.from(configs);
+}
+
+function detectHookDependencies(content) {
+  const hooks = new Set();
+  const regex = /from\s+["']@\/hooks\/([^"'/]+)["']/g;
+  let m;
+  while ((m = regex.exec(content)) !== null) {
+    const base = m[1];
+    for (const ext of ['.ts', '.tsx']) {
+      const fileName = base.endsWith(ext) ? base : base + ext;
+      if (fs.existsSync(path.join(HOOKS_DIR, fileName))) {
+        hooks.add(fileName);
+      }
+    }
+  }
+  return Array.from(hooks);
 }
 
 function getTitleAndDesc(name, content) {
@@ -177,6 +203,27 @@ function syncAssets() {
   }
 }
 
+function syncHooks() {
+  if (!fs.existsSync(HOOKS_DIR)) return;
+  ensureDir(SYNC_HOOKS_DIR);
+  for (const file of fs.readdirSync(HOOKS_DIR)) {
+    if (file.endsWith('.ts') || file.endsWith('.tsx')) {
+      fs.writeFileSync(path.join(SYNC_HOOKS_DIR, file), fs.readFileSync(path.join(HOOKS_DIR, file)));
+    }
+  }
+}
+
+function syncConfigs() {
+  const configDir = path.join(ROOT_DIR, 'apps/web/src/config');
+  if (!fs.existsSync(configDir)) return;
+  ensureDir(REGISTRY_CONFIG_DIR);
+  for (const file of fs.readdirSync(configDir)) {
+    if (file.endsWith('.ts') || file.endsWith('.tsx')) {
+      fs.writeFileSync(path.join(REGISTRY_CONFIG_DIR, file), fs.readFileSync(path.join(configDir, file)));
+    }
+  }
+}
+
 function buildRegistry() {
   const discovered = discoverComponents();
   const available = discovered.filter((c) => c.enabled);
@@ -186,6 +233,8 @@ function buildRegistry() {
   ensureDir(path.join(DIST_DIR, 'components'));
   ensureDir(SYNC_DIR);
   syncAssets();
+  syncHooks();
+  syncConfigs();
 
   const registryIndex = [];
 
@@ -193,6 +242,7 @@ function buildRegistry() {
     let deps = [], regDeps = [], files = [], indexFiles = [];
     const compAssetFiles = new Set();
     const compConfigFiles = new Set();
+    const compHookFiles = new Set();
 
     if (comp.isDir) {
       const dirPath = path.join(COMPONENTS_DIR, comp.name);
@@ -208,6 +258,7 @@ function buildRegistry() {
         regDeps = [...new Set([...regDeps, ...detectRegistryDependencies(fileContent)])];
         detectAssetDependencies(fileContent).forEach((af) => compAssetFiles.add(af));
         detectConfigDependencies(fileContent).forEach((cf) => compConfigFiles.add(cf));
+        detectHookDependencies(fileContent).forEach((hf) => compHookFiles.add(hf));
         const dest = path.join(targetSubDir, sf);
         ensureDir(path.dirname(dest));
         fs.writeFileSync(dest, fileContent);
@@ -220,6 +271,7 @@ function buildRegistry() {
       regDeps = detectRegistryDependencies(content);
       detectAssetDependencies(content).forEach((af) => compAssetFiles.add(af));
       detectConfigDependencies(content).forEach((cf) => compConfigFiles.add(cf));
+      detectHookDependencies(content).forEach((hf) => compHookFiles.add(hf));
       fs.writeFileSync(path.join(SYNC_DIR, `${comp.name}.tsx`), content);
       files.push({ name: `${comp.name}.tsx`, content, target: `components/ui/${comp.name}.tsx` });
       indexFiles.push({ path: `packages/registry/src/components/${comp.name}.tsx`, type: 'registry:file', target: `components/ui/${comp.name}.tsx` });
@@ -237,6 +289,12 @@ function buildRegistry() {
         files.push({ name: `config/${cf}`, content: configContent, target: `config/${cf}` });
         indexFiles.push({ path: `packages/registry/src/config/${cf}`, type: 'registry:file', target: `config/${cf}` });
       }
+    }
+
+    for (const hf of compHookFiles) {
+      const hookContent = fs.readFileSync(path.join(HOOKS_DIR, hf), 'utf8');
+      files.push({ name: `hooks/${hf}`, content: hookContent, target: `hooks/${hf}` });
+      indexFiles.push({ path: `packages/registry/src/hooks/${hf}`, type: 'registry:hook', target: `hooks/${hf}` });
     }
 
     regDeps = regDeps.filter((d) => d !== comp.name);

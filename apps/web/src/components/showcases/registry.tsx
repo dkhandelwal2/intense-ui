@@ -46,6 +46,7 @@ import { separatorShowcaseDefinition, DEFAULT_SEPARATOR_PROPS, SeparatorCustomPr
 import { tooltipShowcaseDefinition, DEFAULT_TOOLTIP_PROPS, TooltipCustomProps } from "@/components/showcases/tooltip";
 import { barcodeShowcaseDefinition, DEFAULT_BARCODE_PROPS, BarcodeCustomProps } from "@/components/showcases/barcode";
 import { progressShowcaseDefinition } from "@/components/showcases/progress";
+import { timerShowcaseDefinition } from "@/components/showcases/timer";
 
 import {
   GenericPlaygroundStudio,
@@ -147,6 +148,7 @@ export {
   tooltipShowcaseDefinition,
   barcodeShowcaseDefinition,
   progressShowcaseDefinition,
+  timerShowcaseDefinition,
 };
 
 export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinition<GenericCustomProps> {
@@ -187,6 +189,8 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "tooltip": tooltipShowcaseDefinition,
   "barcode": barcodeShowcaseDefinition,
   "progress": progressShowcaseDefinition,
+  "timer": timerShowcaseDefinition,
+  "stopwatch": timerShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {

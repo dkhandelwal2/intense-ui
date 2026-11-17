@@ -8,4 +8,5 @@ export * from "./components/progress";
 export * from "./components/slider";
 export * from "./components/step-carousel";
 export * from "./components/switch";
+export * from "./components/timer";
 export * from "./components/tooltip";

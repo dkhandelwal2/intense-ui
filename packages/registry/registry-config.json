@@ -72,6 +72,12 @@
     "enabled": true
   },
   {
+    "name": "timer",
+    "title": "Timer",
+    "description": "A beautifully designed, accessible Timer component.",
+    "enabled": true
+  },
+  {
     "name": "tooltip",
     "title": "Tooltip",
     "description": "A beautifully designed, accessible Tooltip component.",
