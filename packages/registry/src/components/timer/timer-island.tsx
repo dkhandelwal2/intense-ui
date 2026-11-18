@@ -8,7 +8,7 @@ import { TimerIslandProps } from "./types";
 import { TIMER_INTENTS } from "./constants";
 import { TIMER_ISLAND_CONFIG } from "@/config/timer";
 import { useTimer } from "@/hooks/use-timer";
-import { TimerProgressRing } from "./timer-progress-ring";
+import { TimerProgressRing } from "@/assets/svg";
 import { TimerIslandEditor } from "./timer-island-editor";
 
 export function TimerIsland({

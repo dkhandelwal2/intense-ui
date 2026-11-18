@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, X, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TimerPerimeterContour } from "./timer-perimeter-contour";
+import { TimerPerimeterContour } from "@/assets/svg";
 import { TimerCardCenter } from "./timer-card-center";
 import { TimerDurationPicker } from "./timer-duration-picker";
 import type { TimerPerimeterCardProps } from "./types";

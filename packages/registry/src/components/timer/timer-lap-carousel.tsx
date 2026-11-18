@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { TimerLap, TimerLapCarouselProps } from "./types";
+import { TimerLapCarouselProps } from "./types";
 import { formatCentiseconds } from "./constants";
 
 export function TimerLapCarousel({
@@ -29,11 +29,11 @@ export function TimerLapCarousel({
       style={
         laps.length >= 3
           ? {
-              maskImage:
-                "linear-gradient(to right, black calc(100% - 64px), transparent 100%)",
-              WebkitMaskImage:
-                "linear-gradient(to right, black calc(100% - 64px), transparent 100%)",
-            }
+            maskImage:
+              "linear-gradient(to right, black calc(100% - 64px), transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, black calc(100% - 64px), transparent 100%)",
+          }
           : undefined
       }
     >
@@ -65,8 +65,8 @@ export function TimerLapCarousel({
               ? `--:--:--${decimalSeparator}--`
               : `--:--${decimalSeparator}--`
             : shouldShowHours
-            ? "--:--:--"
-            : "--:--"}
+              ? "--:--:--"
+              : "--:--"}
         </div>
       )}
 

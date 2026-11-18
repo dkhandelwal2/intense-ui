@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Play, Pause, Maximize2 } from "lucide-react";
-import { TimerProgressRing } from "./timer-progress-ring";
+import { TimerProgressRing } from "@/assets/svg";
 import type { TimerExpandablePillProps } from "./types";
 
 export function TimerExpandablePill({

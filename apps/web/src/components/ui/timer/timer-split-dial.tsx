@@ -3,6 +3,7 @@
 import React from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TimerSplitRing } from "@/assets/svg";
 import type { TimerSplitDialProps } from "./types";
 
 export function TimerSplitDial({
@@ -17,10 +18,6 @@ export function TimerSplitDial({
   onReset,
   className,
 }: TimerSplitDialProps) {
-  const radius = 36;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = isCompleted ? 0 : circumference * (1 - remainingProgress);
-
   return (
     <div
       className={cn(
@@ -41,46 +38,13 @@ export function TimerSplitDial({
           : undefined
       }
     >
-      <svg
-        className="w-22 h-22 sm:w-[96px] sm:h-[96px] -rotate-90 transform"
-        viewBox="0 0 100 100"
-        aria-hidden="true"
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r={radius}
-          fill="none"
-          stroke={
-            isCompleted
-              ? "transparent"
-              : activeTrackColor || (effectiveRingColor ? `${effectiveRingColor}25` : "currentColor")
-          }
-          strokeWidth="7"
-          className={cn(
-            !activeTrackColor && !effectiveRingColor && "text-zinc-200 dark:text-[#081a27]"
-          )}
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r={radius}
-          fill="none"
-          stroke={isCompleted ? "#10b981" : effectiveRingColor}
-          strokeWidth="7"
-          strokeLinecap="round"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          className="transition-[stroke-dashoffset] duration-500 ease-linear"
-          style={{
-            filter: isCompleted
-              ? "drop-shadow(0 0 4px #10b981)"
-              : effectiveGlowColor
-              ? `drop-shadow(0 0 6px ${effectiveGlowColor})`
-              : undefined,
-          }}
-        />
-      </svg>
+      <TimerSplitRing
+        remainingProgress={remainingProgress}
+        effectiveRingColor={effectiveRingColor}
+        effectiveGlowColor={effectiveGlowColor}
+        activeTrackColor={activeTrackColor}
+        isCompleted={isCompleted}
+      />
 
       <button
         type="button"

@@ -2,7 +2,20 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import type { TimerProgressRingProps } from "./types";
+
+export interface TimerProgressRingProps {
+  progress: number;
+  size?: number;
+  trackColor?: string;
+  progressColor?: string;
+  glowColor?: string;
+  strokeWidth?: number;
+  isCompleted?: boolean;
+  isRunning?: boolean;
+  showPulse?: boolean;
+  pulseColor?: string;
+  className?: string;
+}
 
 export function TimerProgressRing({
   progress,

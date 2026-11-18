@@ -1,4 +1,6 @@
 import React from "react";
+import type { TimerPerimeterContourProps, TimerProgressRingProps, TimerSplitRingProps } from "@/assets/svg";
+export type { TimerPerimeterContourProps, TimerProgressRingProps, TimerSplitRingProps };
 
 export type TimerVariant = "perimeter" | "split" | "stopwatch" | "island" | "expandable";
 export type TimerIntent = "primary" | "amber" | "cyan" | "emerald" | "rose" | "purple";
@@ -62,11 +64,6 @@ export interface TimerIslandEditorProps {
   initialSeconds: number; onApply: (seconds: number) => void; onCancel: () => void;
 }
 
-export interface TimerProgressRingProps {
-  progress: number; size?: number; strokeWidth?: number;
-  trackColor?: string; progressColor?: string; glowColor?: string; pulseColor?: string;
-  isCompleted?: boolean; isRunning?: boolean; showPulse?: boolean; className?: string;
-}
 
 export interface TimerPresetChipsProps {
   presets: number[]; selectedDuration: number; isEditing?: boolean;
@@ -78,21 +75,15 @@ export interface TimerLapCarouselProps {
   decimalSeparator?: "," | "."; shouldShowHours?: boolean; shouldShowCentis?: boolean; className?: string;
 }
 
-export interface TimerPerimeterContourProps {
-  path: string; strokeDash: string; strokeColor: string; pathTotal?: number;
-  trackColor?: string; glowColor?: string; isCompleted?: boolean; remainingProgress: number;
-}
 
 export interface TimerExpandablePillProps {
   progress: number; progressColor: string; formattedTime: string; onToggle: (e?: React.MouseEvent) => void;
   trackColor?: string; glowColor?: string; isCompleted?: boolean; isRunning?: boolean; showHours?: boolean;
 }
 
-export interface TimerSplitDialProps {
-  remainingProgress: number; effectiveRingColor: string;
+export interface TimerSplitDialProps extends TimerSplitRingProps {
   onToggle: (e?: React.MouseEvent) => void; onReset: (e?: React.MouseEvent) => void;
-  effectiveGlowColor?: string; activeTrackColor?: string; isCompleted?: boolean;
-  isDanger?: boolean; isRunning?: boolean; className?: string;
+  isDanger?: boolean; isRunning?: boolean;
 }
 
 export interface TimerSplitInfoProps {

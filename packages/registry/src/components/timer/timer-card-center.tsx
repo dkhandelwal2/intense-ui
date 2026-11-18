@@ -3,7 +3,21 @@
 import React from "react";
 import { Bell, Check, Pencil, Minimize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { TimerCardCenterProps } from "./types";
+
+export interface TimerCardCenterProps {
+  formattedTime: string;
+  targetAlarm?: string;
+  showAlarmTime?: boolean;
+  label?: string;
+  isCompleted?: boolean;
+  isDanger?: boolean;
+  isRunning?: boolean;
+  allowCustomTime?: boolean;
+  isEditing?: boolean;
+  onStartEdit?: () => void;
+  onMinimize?: () => void;
+  className?: string;
+}
 
 export function TimerCardCenter({
   formattedTime,
@@ -69,8 +83,8 @@ export function TimerCardCenter({
             isCompleted
               ? "text-emerald-600 dark:text-emerald-400"
               : isDanger
-              ? "text-rose-500 dark:text-[#ff453a]"
-              : "text-zinc-900 dark:text-white",
+                ? "text-rose-500 dark:text-[#ff453a]"
+                : "text-zinc-900 dark:text-white",
             canEdit && "cursor-pointer hover:opacity-85 active:scale-98"
           )}
           title={canEdit ? "Click to edit timer" : undefined}

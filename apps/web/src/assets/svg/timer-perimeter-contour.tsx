@@ -2,7 +2,18 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { TimerPerimeterContourProps } from "./types";
+
+export interface TimerPerimeterContourProps {
+  path: string;
+  pathTotal?: number;
+  strokeDash: string;
+  trackColor?: string;
+  strokeColor: string;
+  glowColor?: string;
+  isCompleted?: boolean;
+  remainingProgress: number;
+  className?: string;
+}
 
 export function TimerPerimeterContour({
   path,
@@ -13,12 +24,13 @@ export function TimerPerimeterContour({
   glowColor,
   isCompleted = false,
   remainingProgress,
+  className,
 }: TimerPerimeterContourProps) {
   return (
     <svg
       viewBox="0 0 340 120"
       preserveAspectRatio="none"
-      className="absolute inset-0 w-full h-full pointer-events-none p-1.5"
+      className={cn("absolute inset-0 w-full h-full pointer-events-none p-1.5", className)}
       aria-hidden="true"
     >
       {/* Inactive Track Bed */}

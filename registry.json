@@ -604,11 +604,6 @@
           "target": "components/ui/timer/timer-perimeter-card.tsx"
         },
         {
-          "path": "packages/registry/src/components/timer/timer-perimeter-contour.tsx",
-          "type": "registry:file",
-          "target": "components/ui/timer/timer-perimeter-contour.tsx"
-        },
-        {
           "path": "packages/registry/src/components/timer/timer-perimeter.tsx",
           "type": "registry:file",
           "target": "components/ui/timer/timer-perimeter.tsx"
@@ -617,11 +612,6 @@
           "path": "packages/registry/src/components/timer/timer-preset-chips.tsx",
           "type": "registry:file",
           "target": "components/ui/timer/timer-preset-chips.tsx"
-        },
-        {
-          "path": "packages/registry/src/components/timer/timer-progress-ring.tsx",
-          "type": "registry:file",
-          "target": "components/ui/timer/timer-progress-ring.tsx"
         },
         {
           "path": "packages/registry/src/components/timer/timer-split-dial.tsx",
@@ -652,6 +642,26 @@
           "path": "packages/registry/src/components/timer/types.ts",
           "type": "registry:file",
           "target": "components/ui/timer/types.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/index.ts",
+          "type": "registry:file",
+          "target": "assets/svg/index.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/timer-progress-ring.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/timer-progress-ring.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/timer-perimeter-contour.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/timer-perimeter-contour.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/timer-split-ring.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/timer-split-ring.tsx"
         },
         {
           "path": "packages/registry/src/config/timer.ts",
