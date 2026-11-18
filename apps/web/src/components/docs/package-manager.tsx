@@ -117,9 +117,9 @@ export function PackageManagerDropdown({
           "inline-flex items-center justify-between gap-1 rounded-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-zinc-800 dark:text-zinc-200 font-mono font-medium transition-colors cursor-pointer select-none shrink-0",
           size === "sm" ? "h-7 w-[84px] px-2 text-[11px]" : "h-8 w-[90px] px-2.5 text-xs",
           isOpen &&
-            (coords.isFlipped
-              ? "rounded-t-none border-t-transparent ring-1 ring-[var(--theme-primary)]/40 border-[var(--theme-primary)]/40 bg-black/10 dark:bg-white/10"
-              : "rounded-b-none border-b-transparent ring-1 ring-[var(--theme-primary)]/40 border-[var(--theme-primary)]/40 bg-black/10 dark:bg-white/10"),
+          (coords.isFlipped
+            ? "rounded-t-none border-t-transparent ring-1 ring-[var(--theme-primary)]/40 border-[var(--theme-primary)]/40 bg-black/10 dark:bg-white/10"
+            : "rounded-b-none border-b-transparent ring-1 ring-[var(--theme-primary)]/40 border-[var(--theme-primary)]/40 bg-black/10 dark:bg-white/10"),
           className
         )}
         title="Select package manager"

@@ -42,7 +42,7 @@ export function TimerPerimeterCard({
       aria-label={`${label}: ${formattedTime}`}
       aria-live="polite"
       className={cn(
-        "group/timer relative w-full h-[120px] rounded-[32px] p-4 sm:p-5 select-none overflow-hidden transition-colors duration-200",
+        "group/timer relative w-full h-[150px] rounded-[32px] p-4 sm:p-5 select-none overflow-hidden transition-colors duration-200",
         "bg-white border border-zinc-200 text-zinc-900 shadow-xl",
         "dark:bg-black dark:border-white/10 dark:text-white",
         className
@@ -123,7 +123,7 @@ export function TimerPerimeterCard({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="absolute inset-0 z-30 flex items-center justify-center rounded-[32px] bg-white/75 dark:bg-black/80 backdrop-blur-md p-3"
+            className="absolute inset-0 z-30 flex items-center justify-center rounded-[32px] bg-white/75 dark:bg-black/80 backdrop-blur-xs p-3"
             onClick={(e) => e.stopPropagation()}
           >
             <TimerDurationPicker

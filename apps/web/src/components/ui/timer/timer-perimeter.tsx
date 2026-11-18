@@ -116,7 +116,7 @@ export function TimerPerimeter({
     <div
       className={cn(
         "flex flex-col items-center justify-center gap-2.5 w-full max-w-[340px] sm:max-w-[360px]",
-        showPresets ? "min-h-[156px]" : "h-[120px]",
+        showPresets ? "min-h-[156px]" : "h-[150px]",
         className
       )}
       {...props}

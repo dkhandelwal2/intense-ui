@@ -137,7 +137,7 @@ export function TimerSplit({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="absolute inset-0 z-30 flex items-center justify-center rounded-[28px] bg-white/75 dark:bg-black/80 backdrop-blur-md p-3"
+              className="absolute z-30 flex items-center justify-center rounded-[28px] backdrop-blur-[2px] p-3"
               onClick={(e) => e.stopPropagation()}
             >
               <TimerDurationPicker

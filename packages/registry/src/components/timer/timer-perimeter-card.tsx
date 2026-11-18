@@ -42,7 +42,7 @@ export function TimerPerimeterCard({
       aria-label={`${label}: ${formattedTime}`}
       aria-live="polite"
       className={cn(
-        "group/timer relative w-full h-[120px] rounded-[32px] p-4 sm:p-5 select-none overflow-hidden transition-colors duration-200",
+        "group/timer relative w-full h-[150px] rounded-[32px] p-4 sm:p-5 select-none overflow-hidden transition-colors duration-200",
         "bg-white border border-zinc-200 text-zinc-900 shadow-xl",
         "dark:bg-black dark:border-white/10 dark:text-white",
         className

@@ -113,7 +113,7 @@ export function TimerExpandable({
     <div
       className={cn(
         "flex flex-col items-center justify-center gap-2.5 w-full max-w-[340px] sm:max-w-[360px]",
-        showPresets && isExpanded ? "min-h-[156px]" : "h-[120px]",
+        showPresets && isExpanded ? "min-h-[156px]" : "h-[150px]",
         className
       )}
     >
@@ -143,7 +143,7 @@ export function TimerExpandable({
           "relative select-none transition-colors duration-200 border shadow-xl",
           !isExpanded
             ? "group/island inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full cursor-pointer bg-zinc-900 text-white border-zinc-800 hover:border-zinc-700 dark:bg-black dark:border-white/15 dark:hover:border-white/30"
-            : "w-full max-w-[340px] sm:max-w-[360px] h-[120px] rounded-[32px] overflow-hidden"
+            : "w-full max-w-[340px] sm:max-w-[360px] h-[150px] rounded-[32px] overflow-hidden"
         )}
         style={{ "--timer-accent": isCompleted ? "#10b981" : effectiveColor } as React.CSSProperties}
         {...props}
