@@ -81,7 +81,7 @@ export function TimerStopwatch({
       aria-label={`${label}: ${formattedTime}`}
       aria-live="polite"
       className={cn(
-        "group/stopwatch relative overflow-hidden w-full max-w-[360px] rounded-[20`px] p-4 select-none shadow-xl border transition-colors duration-200",
+        "group/stopwatch relative overflow-hidden w-full max-w-[360px] rounded-[20px] p-4 select-none shadow-xl border transition-colors duration-200",
         "bg-white border-zinc-200 text-zinc-900",
         "dark:bg-black dark:border-white/10 dark:text-white",
         className
