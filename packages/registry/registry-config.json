@@ -30,6 +30,12 @@
     "enabled": true
   },
   {
+    "name": "github-activity",
+    "title": "Github Activity",
+    "description": "A beautifully designed, accessible Github Activity component.",
+    "enabled": true
+  },
+  {
     "name": "nav-bar",
     "title": "Nav Bar",
     "description": "A beautifully designed, accessible Nav Bar component.",

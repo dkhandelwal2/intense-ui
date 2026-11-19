@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Bell, Check, Pencil, Minimize2 } from "lucide-react";
+import { Check, Pencil, Minimize2, Watch } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface TimerCardCenterProps {
@@ -38,7 +38,7 @@ export function TimerCardCenter({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-between py-1.5 sm:py-2 text-center min-w-0 flex-1 h-full px-1",
+        "flex flex-col items-center justify-between text-center min-w-0 flex-1 h-full px-1",
         className
       )}
     >
@@ -49,7 +49,7 @@ export function TimerCardCenter({
             title="Target alarm completion"
             className="flex items-center gap-1.5 text-[11px] sm:text-xs font-sans font-medium text-zinc-500 dark:text-zinc-400 select-none"
           >
-            <Bell className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-400" />
+            <Watch className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-400" />
             <span suppressHydrationWarning>{targetAlarm}</span>
           </div>
         )}
@@ -63,7 +63,7 @@ export function TimerCardCenter({
       </div>
 
       {/* Middle Row: Digital Display with ample vertical breathing space */}
-      <div className="flex items-center justify-center py-0.5">
+      <div className="flex items-center justify-center">
         <div
           onClick={() => {
             if (canEdit) onStartEdit?.();
@@ -102,7 +102,7 @@ export function TimerCardCenter({
       </div>
 
       {/* Bottom Row: Subtitle / Status with optional minimize button */}
-      <div className="h-4 flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         <span className="text-[11px] sm:text-xs font-sans text-zinc-400 dark:text-zinc-400 font-medium select-none">
           {label}
         </span>

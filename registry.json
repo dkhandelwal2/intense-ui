@@ -342,6 +342,119 @@
       ]
     },
     {
+      "name": "github-activity",
+      "type": "registry:ui",
+      "title": "Github Activity",
+      "description": "A beautifully designed, accessible Github Activity component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/github-activity/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-curtain.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-curtain.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-event-item.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-event-item.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-header.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-header.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-heatmap.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-heatmap.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-helpers.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-helpers.ts"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-legend.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-legend.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-stats-cards.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-stats-cards.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-stats.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-stats.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-timeline-filter.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-timeline-filter.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-timeline.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-timeline.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-year-select.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-year-select.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/types.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/index.ts",
+          "type": "registry:file",
+          "target": "assets/svg/index.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/github-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/github-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/config/site.ts",
+          "type": "registry:file",
+          "target": "config/site.ts"
+        },
+        {
+          "path": "packages/registry/src/config/github-activity.ts",
+          "type": "registry:file",
+          "target": "config/github-activity.ts"
+        },
+        {
+          "path": "packages/registry/src/hooks/use-github-activity.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-github-activity.ts"
+        }
+      ]
+    },
+    {
       "name": "nav-bar",
       "type": "registry:ui",
       "title": "Nav Bar",

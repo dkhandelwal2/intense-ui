@@ -23,7 +23,7 @@ export function TimerLapCarousel({
       aria-label="Recorded lap times"
       tabIndex={0}
       className={cn(
-        "flex items-center gap-2 mt-3 -mx-4 sm:-mx-5 px-4 sm:px-5 overflow-x-auto subtle-scrollbar py-1 scroll-smooth outline-none snap-x snap-mandatory",
+        "flex items-center gap-2 overflow-x-auto scroll-smooth outline-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
         className
       )}
       style={
@@ -38,23 +38,23 @@ export function TimerLapCarousel({
       }
     >
       {displayedLaps.map((lap, idx) => (
-        <div
-          key={lap.id}
-          className={cn(
-            "px-3.5 py-1.5 rounded-2xl font-mono text-xs sm:text-sm font-semibold shrink-0 transition-all shadow-2xs snap-start",
-            idx === 0
-              ? "bg-zinc-100 dark:bg-[#242426] text-zinc-900 dark:text-white border border-zinc-200 dark:border-white/10"
-              : "bg-zinc-50 dark:bg-[#1c1c1e] text-zinc-500 dark:text-zinc-400 border border-transparent"
-          )}
-        >
-          <span>
-            {formatCentiseconds(
-              lap.lapTime,
-              decimalSeparator,
-              shouldShowHours,
-              shouldShowCentis
+        <div key={lap.id}>
+          <span className="w-4 h-4 rounded-full text-[10px] inline-flex items-center justify-center mx-1">#{lap.lapNumber}</span>
+          <div
+            className={cn(
+              "px-3.5 py-1.5 rounded-lg font-mono text-sm font-semibold shrink-0 transition-all shadow-2xs snap-start bg-zinc-200 dark:bg-[#1c1c1e] text-zinc-500 dark:text-zinc-400"
             )}
-          </span>
+          >
+
+            <span>
+              {formatCentiseconds(
+                lap.lapTime,
+                decimalSeparator,
+                shouldShowHours,
+                shouldShowCentis
+              )}
+            </span>
+          </div>
         </div>
       ))}
 

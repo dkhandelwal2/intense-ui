@@ -126,14 +126,17 @@ export function TimerIsland({
             }}
             title={allowCustomTime && !isRunning ? "Click to edit duration" : undefined}
             className={cn(
-              "inline-flex items-center gap-1 font-mono font-bold text-xs sm:text-sm tracking-tight tabular-nums transition-colors",
+              "inline-flex items-center gap-2 font-mono font-bold text-xs sm:text-sm tracking-tight tabular-nums transition-colors",
               isCompleted ? "text-emerald-400" : isDanger ? "text-rose-400" : "text-white",
               allowCustomTime && !isRunning && "cursor-pointer hover:text-zinc-200"
             )}
           >
             <span>{isCompleted ? "00:00" : formattedTime}</span>
             {allowCustomTime && !isRunning && !isCompleted && (
-              <Pencil className="w-3 h-3 text-zinc-400 group-hover/island:text-white transition-colors shrink-0" />
+              <span className={cn(
+                "w-[24px] h-[24px] flex items-center justify-center rounded-full transition-transform active:scale-90 cursor-pointer shadow-xs bg-white/10 hover:bg-white/20 text-white")}>
+                <Pencil className="w-3 h-3 text-zinc-400 group-hover/island:text-white transition-colors shrink-0" />
+              </span>
             )}
           </div>
 
@@ -144,7 +147,7 @@ export function TimerIsland({
               isCompleted ? "Reset timer" : isRunning ? "Pause timer" : "Start timer"
             }
             className={cn(
-              "p-1 rounded-full transition-transform active:scale-90 cursor-pointer shadow-xs",
+              "w-[24px] h-[24px] flex items-center justify-center rounded-full transition-transform active:scale-90 cursor-pointer shadow-xs",
               isCompleted
                 ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
                 : "bg-white/10 hover:bg-white/20 text-white"
@@ -165,7 +168,8 @@ export function TimerIsland({
           onApply={handleApplyDuration}
           onCancel={() => setIsEditing(false)}
         />
-      )}
-    </motion.div>
+      )
+      }
+    </motion.div >
   );
 }

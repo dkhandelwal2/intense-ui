@@ -13,6 +13,7 @@ import { stepCarouselDoc } from "./step-carousel";
 import { barcodeDoc } from "./barcode";
 import { progressDoc } from "./progress";
 import { timerDoc } from "./timer";
+import { githubActivityDoc } from "./github-activity";
 import { getFallbackDoc } from "./fallback";
 
 export * from "./types";
@@ -30,6 +31,7 @@ export * from "./step-carousel";
 export * from "./barcode";
 export * from "./progress";
 export * from "./timer";
+export * from "./github-activity";
 
 const DOCS_MAP: Record<string, ComponentDocData> = {
   "accordion": accordionDoc,
@@ -50,6 +52,7 @@ const DOCS_MAP: Record<string, ComponentDocData> = {
   "barcode": barcodeDoc,
   "timer": timerDoc,
   "stopwatch": timerDoc,
+  "github-activity": githubActivityDoc,
 };
 
 export function getComponentDocData(slug: string): ComponentDocData {

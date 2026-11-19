@@ -60,3 +60,6 @@ export type { TimerProgressRingProps } from "./timer-progress-ring";
 
 export { TimerSplitRing } from "./timer-split-ring";
 export type { TimerSplitRingProps } from "./timer-split-ring";
+
+export { GithubIcon } from "./github-icon";
+export type { GithubIconProps } from "./github-icon";

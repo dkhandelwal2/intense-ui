@@ -80,7 +80,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
               className={cn(
                 "rounded-3xl transition-all duration-300 flex items-center justify-center",
                 isDesktop
-                  ? "w-full max-w-[680px] h-full shadow-md backdrop-blur-xl p-2"
+                  ? "w-full max-w-[890px] h-full shadow-md backdrop-blur-xl p-2"
                   : "w-full max-w-[620px] max-h-[360px] rounded-2xl shadow-xs backdrop-blur-xl"
               )}
             >

@@ -18,6 +18,7 @@ import {
 
 export function ColorGrid({
   colors = DEFAULT_COLORS,
+  labels,
   value = "",
   defaultValue,
   onChange,
@@ -62,7 +63,7 @@ export function ColorGrid({
       )}
 
       {colors.map((color, index) => (
-        <Tooltip key={`${color}-${index}`} content={getDisplayColor(color)} position={tooltipPos} bgColor={color}>
+        <Tooltip key={`${color}-${index}`} content={labels?.[color] || getDisplayColor(color)} position={tooltipPos} bgColor={color}>
           <motion.button
             type="button"
             layout

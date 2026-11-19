@@ -10,7 +10,6 @@ import {
   ContactCard,
 } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
-import { ScrollMotionSection as SidebarMotionSection } from "@/components/layout/scroll-motion-section";
 
 export interface PreviewTabContentProps {
   description?: React.ReactNode;
@@ -27,39 +26,39 @@ export function PreviewTabContent({
     <div className="flex flex-col gap-5">
       {/* Description */}
       {description && (
-        <SidebarMotionSection className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <div className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 font-normal mt-1">
             {description}
           </div>
-        </SidebarMotionSection>
+        </div>
       )}
 
       {/* Separator */}
       <Separator className="my-1" />
 
       {/* Component Dependencies */}
-      <SidebarMotionSection delay={0.04}>
+      <div>
         <RuntimeDependencies
           variant="compact"
           dependencies={dependencies}
           showInstallCommand={false}
           subtitle="Required packages for this component"
         />
-      </SidebarMotionSection>
+      </div>
 
       {/* Component Props */}
       {propsTable && (
         <>
           <Separator className="my-1" />
           <div className="flex flex-col gap-3">
-            <SidebarMotionSection>
+            <div>
               <SectionHeader
                 icon={Gem}
                 colorScheme="purple"
                 title="Props"
                 subtitle="Component API and property reference"
               />
-            </SidebarMotionSection>
+            </div>
             <div className="text-sm text-zinc-600 dark:text-zinc-400">
               {propsTable}
             </div>
@@ -71,25 +70,25 @@ export function PreviewTabContent({
       <Separator className="my-1" />
 
       {/* Open Source */}
-      <SidebarMotionSection delay={0.04}>
+      <div>
         <OpenSourceCard />
-      </SidebarMotionSection>
+      </div>
 
       {/* Separator */}
       <Separator className="my-1" />
 
       {/* License: MIT */}
-      <SidebarMotionSection delay={0.04}>
+      <div>
         <LicenseCard />
-      </SidebarMotionSection>
+      </div>
 
       {/* Separator */}
       <Separator className="my-1" />
 
       {/* Contact Us */}
-      <SidebarMotionSection delay={0.04}>
+      <div>
         <ContactCard />
-      </SidebarMotionSection>
+      </div>
     </div>
   );
 }

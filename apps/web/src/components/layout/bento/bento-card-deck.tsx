@@ -135,7 +135,7 @@ export const BentoCardDeck = React.memo(function BentoCardDeck({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.2 }}
-                  className={cn("mt-2 pt-2 border-t border-border flex-1 min-h-0 flex flex-col pr-1", card.id === 6 ? "overflow-hidden" : "overflow-y-auto")}
+                  className={cn("mt-2 pt-2 border-t border-border flex-1 min-h-0 flex flex-col pr-1", card.id === 6 ? "overflow-hidden" : "overflow-y-auto subtle-scrollbar")}
                   onClick={(e) => {
                     e.stopPropagation();
                     card.onClickFront?.();

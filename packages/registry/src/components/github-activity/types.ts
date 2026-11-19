@@ -1,0 +1,186 @@
+import React from "react";
+
+export type GithubActivityVariant = "heatmap" | "timeline" | "stats" | "compact";
+export type GithubActivityTheme = "github" | "emerald" | "cyan" | "amber" | "rose" | "purple" | "monochrome";
+export type GithubContributionLevel = 0 | 1 | 2 | 3 | 4;
+export type GithubEventType = "commit" | "pull_request" | "issue" | "release" | "star";
+export type GithubEventStatus = "merged" | "open" | "closed";
+export type GithubActivityDotSize = "sm" | "md" | "lg";
+
+export interface GithubContributionDay {
+  date: string;
+  count: number;
+  level: GithubContributionLevel;
+  isFuture?: boolean;
+}
+
+export interface GithubActivityEvent {
+  id: string;
+  type: GithubEventType;
+  repo: string;
+  message: string;
+  timestamp: string;
+  sha?: string;
+  branch?: string;
+  status?: GithubEventStatus;
+  prNumber?: number;
+  issueNumber?: number;
+  additions?: number;
+  deletions?: number;
+  url?: string;
+}
+
+export interface GithubActivityStatsData {
+  totalContributions: number;
+  currentStreak: number;
+  longestStreak: number;
+  commitsCount: number;
+  prsCount: number;
+  issuesCount: number;
+  reviewsCount: number;
+  activeDaysCount?: number;
+}
+
+export type GithubActivityStatsModel = GithubActivityStatsData;
+
+export interface GithubUserProfile {
+  username: string;
+  name?: string;
+  avatarUrl?: string;
+  bio?: string;
+  profileUrl?: string;
+  followers?: number;
+  following?: number;
+  publicRepos?: number;
+  createdAt?: string;
+}
+
+export interface GithubActivityHeatmapProps {
+  contributions?: GithubContributionDay[];
+  username?: string;
+  theme?: GithubActivityTheme;
+  weeksCount?: number;
+  year?: number;
+  years?: number[];
+  onYearChange?: (year: number) => void;
+  showFullYear?: boolean;
+  showYearSelector?: boolean;
+  showMonthLabels?: boolean;
+  showDayLabels?: boolean;
+  dotSize?: GithubActivityDotSize;
+  showLegend?: boolean;
+  showTotalCount?: boolean;
+  isLoading?: boolean;
+  onDayClick?: (day: GithubContributionDay) => void;
+  className?: string;
+}
+
+export interface GithubActivityTimelineProps {
+  events?: GithubActivityEvent[];
+  username?: string;
+  maxEvents?: number;
+  showFilter?: boolean;
+  defaultFilterOpen?: boolean;
+  showCopySha?: boolean;
+  isLoading?: boolean;
+  className?: string;
+}
+
+export interface GithubActivityTimelineFilterProps {
+  activeFilter: "all" | GithubEventType;
+  onFilterChange: (filter: "all" | GithubEventType) => void;
+  events?: GithubActivityEvent[];
+  defaultOpen?: boolean;
+  className?: string;
+}
+
+export interface GithubActivityStatsProps {
+  stats?: GithubActivityStatsData;
+  username?: string;
+  showBreakdown?: boolean;
+  showStreaks?: boolean;
+  theme?: GithubActivityTheme;
+  isLoading?: boolean;
+  className?: string;
+}
+
+export interface GithubActivityLegendProps {
+  theme?: GithubActivityTheme;
+  totalCount?: number;
+  yearLabel?: string;
+  className?: string;
+}
+
+export interface GithubActivityEventItemProps {
+  event: GithubActivityEvent;
+  showCopySha?: boolean;
+  className?: string;
+}
+
+export interface GithubActivityHeaderProps {
+  user: GithubUserProfile;
+  stats?: GithubActivityStatsData;
+  activeVariant?: GithubActivityVariant;
+  onVariantChange?: (variant: GithubActivityVariant) => void;
+  showTabs?: boolean;
+  showStreaks?: boolean;
+  isLoading?: boolean;
+  className?: string;
+}
+
+export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: GithubActivityVariant;
+  username?: string;
+  theme?: GithubActivityTheme;
+  year?: number;
+  years?: number[];
+  onYearChange?: (year: number) => void;
+  showFullYear?: boolean;
+  showYearSelector?: boolean;
+  isLoading?: boolean;
+  data?: {
+    contributions?: GithubContributionDay[];
+    events?: GithubActivityEvent[];
+    stats?: GithubActivityStatsData;
+    user?: GithubUserProfile;
+  };
+  weeksCount?: number;
+  dotSize?: GithubActivityDotSize;
+  maxEvents?: number;
+  showHeader?: boolean;
+  showTabs?: boolean;
+  showStreaks?: boolean;
+  onDayClick?: (day: GithubContributionDay) => void;
+}
+
+export interface UseGithubActivityOptions {
+  username?: string;
+  year?: number;
+  showFullYear?: boolean;
+  initialData?: {
+    contributions?: GithubContributionDay[];
+    events?: GithubActivityEvent[];
+    stats?: GithubActivityStatsData;
+    user?: GithubUserProfile;
+  };
+  weeksCount?: number;
+  autoFetch?: boolean;
+}
+
+export interface UseGithubActivityResult {
+  contributions: GithubContributionDay[];
+  events: GithubActivityEvent[];
+  stats: GithubActivityStatsData;
+  user: GithubUserProfile;
+  isLoading: boolean;
+  error: string | null;
+  refetch: () => Promise<void>;
+  selectedYear: number;
+  setSelectedYear: (year: number) => void;
+  availableYears: number[];
+}
+
+export interface GithubActivityHeatmapConfig { theme: GithubActivityTheme; weeksCount: number; dotSize?: GithubActivityDotSize; showFullYear?: boolean; showMonthLabels: boolean; showDayLabels: boolean; showLegend: boolean; showTotalCount: boolean; }
+export interface GithubActivityTimelineConfig { maxEvents: number; showFilter: boolean; showCopySha: boolean; }
+export interface GithubActivityStatsConfig { showBreakdown: boolean; showStreaks: boolean; theme: GithubActivityTheme; }
+export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; }

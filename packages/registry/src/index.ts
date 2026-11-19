@@ -3,6 +3,7 @@ export * from "./components/barcode";
 export * from "./components/breadcrumb";
 export * from "./components/button";
 export * from "./components/color-grid";
+export * from "./components/github-activity";
 export * from "./components/nav-bar";
 export * from "./components/progress";
 export * from "./components/slider";

@@ -41,10 +41,23 @@ export const EXTERNAL_LINKS = {
     FORECAST_API: "https://api.open-meteo.com/v1/forecast",
     REVERSE_GEOCODE_API: "https://api.bigdatacloud.net/data/reverse-geocode-client",
   },
+  GITHUB_ACTIVITY: {
+    AVATARS_API: "https://avatars.githubusercontent.com",
+    USERS_API: "https://api.github.com/users",
+    CONTRIBUTIONS_API: "https://github-contributions-api.jogruber.de/v4",
+    getUserAvatarUrl: (username: string) => `https://avatars.githubusercontent.com/${encodeURIComponent(username)}`,
+    getUserProfileUrl: (username: string) => `https://github.com/${encodeURIComponent(username)}`,
+    getUserApiUrl: (username: string) => `https://api.github.com/users/${encodeURIComponent(username)}`,
+    getUserEventsUrl: (username: string, perPage = 30) => `https://api.github.com/users/${encodeURIComponent(username)}/events?per_page=${perPage}`,
+    getUserContributionsUrl: (username: string, year?: number) =>
+      `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}${year ? `?y=${year}` : "?y=last"}`,
+  },
   GOOGLE_MAPS: "https://maps.google.com/?q=",
   getGoogleMapsUrl: (query: string) => `https://maps.google.com/?q=${encodeURIComponent(query)}`,
   getGitHubApiUrl: (repo: string = GITHUB_REPO) => `https://api.github.com/repos/${repo}`,
 } as const;
+
+export const GITHUB_ENDPOINTS = EXTERNAL_LINKS.GITHUB_ACTIVITY;
 
 export const REGISTRY_CONFIG = {
   NAME: GITHUB_REPO,
@@ -102,52 +115,17 @@ export const HEADER_NAV_ITEMS: readonly HeaderNavItem[] = [
 ] as const;
 
 export const HEADER_CONFIG = {
-  /**
-   * Navigation links displayed in the header pill and mobile menu overlay.
-   * Fully configurable: reorder, add, or customize links here.
-   */
   navItems: HEADER_NAV_ITEMS,
-  /**
-   * Scroll distance (in pixels) over which the header dynamic island collapses.
-   * Header uses 80px for responsive compacting.
-   */
   scrollDistance: 80,
 } as const;
 
 export const SIDEBAR_CONFIG = {
-  /**
-   * Whether manual open/close sidebar toggle button is enabled.
-   * Disabled as of now via config.
-   */
   enableManualToggle: false,
-  /**
-   * Whether the sidebar collapses on scroll.
-   */
   collapseOnScroll: false,
-  /**
-   * Whether scroll collapse is restricted to component documentation pages only.
-   * When true, pages like /docs and /docs/installation stay expanded on scroll.
-   */
   collapseOnlyOnComponentPages: true,
-  /**
-   * Scroll distance (in pixels) over which the sidebar collapses smoothly.
-   * At 0px: fully expanded (250px). At scrollDistance: fully compact (68px).
-   * Direct 1:1 scrubbed tracking with scroll position.
-   * 180px provides a comfortable, smooth and gradual pacing.
-   */
   scrollDistance: 250,
-  /**
-   * Whether the collapsed sidebar expands on hover.
-   */
   expandOnHover: true,
-  /**
-   * Whether component status badges (e.g. "New", "Hot") are shown in the sidebar.
-   * Configurable: currently disabled (removed as of now). Set to true to re-enable.
-   */
   showBadges: false,
-  /**
-   * Configurable component badges mapping (slug -> { badge, color }).
-   */
   componentBadges: {
     accordion: { badge: "Hot", color: "rose" },
     button: { badge: "New", color: "emerald" },

@@ -1,5 +1,6 @@
 export interface ColorGridProps {
   colors?: string[];
+  labels?: Record<string, string>;
   value?: string;
   defaultValue?: string;
   onChange?: (color: string) => void;

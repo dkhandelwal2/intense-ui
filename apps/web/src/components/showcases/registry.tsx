@@ -47,6 +47,7 @@ import { tooltipShowcaseDefinition, DEFAULT_TOOLTIP_PROPS, TooltipCustomProps } 
 import { barcodeShowcaseDefinition, DEFAULT_BARCODE_PROPS, BarcodeCustomProps } from "@/components/showcases/barcode";
 import { progressShowcaseDefinition } from "@/components/showcases/progress";
 import { timerShowcaseDefinition } from "@/components/showcases/timer";
+import { githubActivityShowcaseDefinition } from "@/components/showcases/github-activity";
 
 import {
   GenericPlaygroundStudio,
@@ -149,6 +150,7 @@ export {
   barcodeShowcaseDefinition,
   progressShowcaseDefinition,
   timerShowcaseDefinition,
+  githubActivityShowcaseDefinition,
 };
 
 export function createGenericShowcaseDefinition(slug: string): ShowcaseDefinition<GenericCustomProps> {
@@ -191,6 +193,7 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "progress": progressShowcaseDefinition,
   "timer": timerShowcaseDefinition,
   "stopwatch": timerShowcaseDefinition,
+  "github-activity": githubActivityShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {

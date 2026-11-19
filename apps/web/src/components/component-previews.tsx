@@ -26,6 +26,7 @@ import { ColorGrid } from "@/components/ui/color-grid";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Tooltip } from "@/components/ui/tooltip";
+import { GithubActivityHeatmap } from "@/components/ui/github-activity";
 
 // ---------------------------------------------------------------------------
 // Compact mini-card previews (used in index grid / listing cards)
@@ -141,6 +142,12 @@ const NavBarCardPreview = (
   />
 );
 
+const GithubActivityCardPreview = (
+  <div className="w-full max-w-[280px] scale-90 flex items-center justify-center pointer-events-none">
+    <GithubActivityHeatmap weeksCount={14} showLegend={false} showMonthLabels={false} />
+  </div>
+);
+
 // ---------------------------------------------------------------------------
 // Card-grid mini previews — keyed by both title-case name and slug
 // ---------------------------------------------------------------------------
@@ -158,6 +165,8 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "Color Palette": ColorGridCardPreview,
   "Nav Bar": NavBarCardPreview,
   "Navbar": NavBarCardPreview,
+  "Github Activity": GithubActivityCardPreview,
+  "GitHub Activity": GithubActivityCardPreview,
   // Slug-cased
   "accordion": AccordionMiniCardPreview,
   "button": ButtonCardPreview,
@@ -171,6 +180,7 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "color-palette": ColorGridCardPreview,
   "nav-bar": NavBarCardPreview,
   "navbar": NavBarCardPreview,
+  "github-activity": GithubActivityCardPreview,
 };
 
 // ---------------------------------------------------------------------------

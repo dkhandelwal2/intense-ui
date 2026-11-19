@@ -11,7 +11,6 @@ import {
 } from "@/components/docs";
 import { Separator } from "@/components/ui/separator";
 import { getComponentAddCommand } from "@/config/site";
-import { ScrollMotionSection as SidebarMotionSection } from "@/components/layout/scroll-motion-section";
 import type { CliInstallationCardProps } from "./types";
 
 export function CliInstallationCard({
@@ -25,7 +24,7 @@ export function CliInstallationCard({
   return (
     <div className="flex flex-col gap-6">
       {/* Installation Overview / Guidance Box */}
-      <SidebarMotionSection className="flex flex-col gap-2.5 mt-2">
+      <div className="flex flex-col gap-2.5 mt-2">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-200">Installation</h3>
           <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
@@ -46,7 +45,7 @@ export function CliInstallationCard({
             </p>
           </div>
         </div>
-      </SidebarMotionSection>
+      </div>
 
       <div className="text-zinc-800 dark:text-zinc-300">
         {installContent || (slug ? (
@@ -55,7 +54,7 @@ export function CliInstallationCard({
             <Separator className="my-1" />
 
             {/* Component npx shadcn CLI Command */}
-            <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               <SectionHeader
                 icon={Terminal}
                 colorScheme="emerald"
@@ -70,7 +69,7 @@ export function CliInstallationCard({
                 packageManager={packageManager}
                 onPackageManagerChange={onPackageManagerChange}
               />
-            </SidebarMotionSection>
+            </div>
 
             {/* Usage */}
             {usageCode && (
@@ -92,7 +91,7 @@ export function CliInstallationCard({
             <Separator className="my-1" />
 
             {/* Component Dependencies */}
-            <SidebarMotionSection delay={0.04}>
+            <div>
               <RuntimeDependencies
                 variant="compact"
                 dependencies={dependencies}
@@ -100,23 +99,23 @@ export function CliInstallationCard({
                 onPackageManagerChange={onPackageManagerChange}
                 subtitle="Installed automatically by CLI, or manually below"
               />
-            </SidebarMotionSection>
+            </div>
 
             {/* Separator */}
             <Separator className="my-1" />
 
             {/* Troubleshooting Diagnostic Center */}
-            <SidebarMotionSection delay={0.04}>
+            <div>
               <TroubleshootingSection variant="compact" className="border-t-0 pt-0" />
-            </SidebarMotionSection>
+            </div>
 
             {/* Separator */}
             <Separator className="my-1" />
 
             {/* Need Help? Support & Community */}
-            <SidebarMotionSection delay={0.04}>
+            <div>
               <SupportSection variant="compact" className="border-t-0 pt-0" />
-            </SidebarMotionSection>
+            </div>
           </div>
         ) : (
           <div className="text-sm text-zinc-500">No installation steps provided.</div>

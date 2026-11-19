@@ -17,6 +17,7 @@ import {
   Barcode as BarcodeIcon,
   CircleGauge,
   Timer as TimerIcon,
+  Activity,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -47,6 +48,7 @@ export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   "progress": CircleGauge,
   "timer": TimerIcon,
   "stopwatch": TimerIcon,
+  "github-activity": Activity,
 };
 
 /**
