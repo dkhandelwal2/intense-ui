@@ -78,15 +78,13 @@ export function CliInstallationCard({
                 {/* Separator */}
                 <Separator className="my-1" />
 
-                <SidebarMotionSection delay={0.04} className="flex flex-col gap-3">
-                  <SectionHeader
-                    icon={Code}
-                    colorScheme="blue"
-                    title="Usage"
-                    subtitle="Import and render the component in your layout"
-                  />
-                  <CodeBlock code={usageCode} language="tsx" />
-                </SidebarMotionSection>
+                <SectionHeader
+                  icon={Code}
+                  colorScheme="blue"
+                  title="Usage"
+                  subtitle="Import and render the component in your layout"
+                />
+                <CodeBlock code={usageCode} language="tsx" />
               </>
             )}
 

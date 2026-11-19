@@ -132,7 +132,7 @@ export function PackageManagerDropdown({
             colored={true}
             className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"}
           />
-          <span className="capitalize">{value}</span>
+          <span>{value}</span>
         </div>
         <ChevronDown
           className={cn(
@@ -192,7 +192,7 @@ export function PackageManagerDropdown({
                           colored={true}
                           className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"}
                         />
-                        <span className="capitalize">{pm}</span>
+                        <span>{pm}</span>
                       </div>
                       {isSelected && (
                         <Check className="w-3 h-3 text-[var(--theme-primary)] shrink-0" />

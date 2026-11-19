@@ -38,15 +38,11 @@ export function TimerLapCarousel({
       }
     >
       {displayedLaps.map((lap, idx) => (
-        <>
+        <div key={lap.id}>
           <span className="w-4 h-4 rounded-full text-[10px] inline-flex items-center justify-center mx-1">#{lap.lapNumber}</span>
           <div
-            key={lap.id}
             className={cn(
-              "px-3.5 py-1.5 rounded-lg font-mono text-xs sm:text-sm font-semibold shrink-0 transition-all shadow-2xs snap-start",
-              idx === 0
-                ? "bg-zinc-100 dark:bg-[#242426] text-zinc-900 dark:text-white "
-                : "bg-zinc-50 dark:bg-[#1c1c1e] text-zinc-500 dark:text-zinc-400 "
+              "px-3.5 py-1.5 rounded-lg font-mono text-sm font-semibold shrink-0 transition-all shadow-2xs snap-start bg-zinc-200 dark:bg-[#1c1c1e] text-zinc-500 dark:text-zinc-400"
             )}
           >
 
@@ -59,7 +55,7 @@ export function TimerLapCarousel({
               )}
             </span>
           </div>
-        </>
+        </div>
       ))}
 
       {laps.length === 0 && (
