@@ -1,1 +1,12 @@
-npm run typecheck && npm run check:imports
+#!/bin/sh
+set -e
+
+# Auto-sync components to registry and rebuild registry.json
+node packages/registry/scripts/build-registry.js
+
+# Stage updated registry files into the current commit
+git add packages/registry registry.json
+
+# Quality & integrity gates
+npm run typecheck
+npm run check:imports

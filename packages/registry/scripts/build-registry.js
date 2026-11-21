@@ -252,6 +252,13 @@ function buildRegistry() {
       const oldFlat = path.join(SYNC_DIR, `${comp.name}.tsx`);
       if (fs.existsSync(oldFlat)) fs.unlinkSync(oldFlat);
 
+      const existingInTarget = fs.existsSync(targetSubDir) ? getFiles(targetSubDir) : [];
+      for (const ef of existingInTarget) {
+        if (!subFiles.includes(ef)) {
+          try { fs.unlinkSync(path.join(targetSubDir, ef)); } catch {}
+        }
+      }
+
       for (const sf of subFiles) {
         const fileContent = fs.readFileSync(path.join(dirPath, sf), 'utf8');
         deps = [...new Set([...deps, ...detectDependencies(fileContent)])];

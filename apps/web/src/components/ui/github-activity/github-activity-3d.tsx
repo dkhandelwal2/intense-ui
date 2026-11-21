@@ -147,7 +147,7 @@ export function GithubActivity3D({
       onDayClick?.(hovered.day);
     }
     isDraggingRef.current = false;
-    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch {}
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { }
   };
 
   const handleDoubleClick = () => {
@@ -177,8 +177,8 @@ export function GithubActivity3D({
         onDoubleClick={handleDoubleClick}
         className="w-full h-[178px] cursor-grab active:cursor-grabbing touch-none block"
       />
-      <div className="text-[11px] text-zinc-400 dark:text-zinc-500 font-normal tracking-tight pb-0.5 pointer-events-none select-none text-center">
-        Drag to orbit · double-click to reset
+      <div className="text-[9px] text-zinc-400 dark:text-zinc-500 font-normal tracking-tight pb-0.5 pointer-events-none select-none text-center absolute left-0 bottom-0 uppercase font-mono">
+        Drag to surface • tap twice to reset
       </div>
     </div>
   );

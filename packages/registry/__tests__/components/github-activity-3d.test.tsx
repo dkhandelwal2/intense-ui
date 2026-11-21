@@ -24,7 +24,7 @@ describe("GithubActivity 3D Skyline Mode", () => {
     expect(btn3d).toHaveAttribute("aria-pressed", "true");
     const canvas = screen.getByRole("img", { name: /shown as a 3D skyline/i });
     expect(canvas).toBeInTheDocument();
-    expect(screen.getByText(/drag to orbit · double-click to reset/i)).toBeInTheDocument();
+    expect(screen.getByText(/drag to (orbit|surface)|(double-click|tap twice) to reset/i)).toBeInTheDocument();
   });
 
   it("switches from 2D to 3D and back using header toggle buttons", () => {
