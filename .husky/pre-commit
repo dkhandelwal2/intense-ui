@@ -1,12 +1,20 @@
 #!/bin/sh
 set -e
 
-# Auto-sync components to registry and rebuild registry.json
+# 1. Auto-sync components to registry and rebuild registry.json
 node packages/registry/scripts/build-registry.js
 
-# Stage updated registry files into the current commit
-git add packages/registry registry.json
+# 2. Ensure registry and web are in 100% parity and staged
+if ! git diff --quiet packages/registry/src/components registry.json; then
+  echo ""
+  echo "🔄 Auto-synced packages/registry from apps/web to maintain 100% parity."
+  echo "👉 Please stage the synced files: git add packages/registry registry.json"
+  echo "   Then re-run your commit."
+  echo ""
+  exit 1
+fi
 
-# Quality & integrity gates
+# 3. Quality & integrity gates
 npm run typecheck
 npm run check:imports
+npm test

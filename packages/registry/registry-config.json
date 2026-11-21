@@ -3,105 +3,90 @@
     "name": "accordion",
     "title": "Accordion",
     "description": "A beautifully designed, accessible Accordion component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "barcode",
     "title": "Barcode / QR Code",
     "description": "Barcode / QR Code: Zero-dependency, 100% dynamic vector barcode component. Supports 1D (Code 128, Code 39, EAN-13, UPC-A) & 2D square matrix (QR Code, Data Matrix). Renders via single-path SVG with real-world variants (Brand Connect Card, Boarding Pass, Shipping Label, Cyber Scan, Retail Tag).",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "breadcrumb",
     "title": "Breadcrumb",
     "description": "A beautifully designed, accessible Breadcrumb component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "button",
     "title": "Button",
     "description": "A beautifully designed, accessible Button component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "color-grid",
     "title": "Color Grid",
     "description": "A beautifully designed, accessible Color Grid component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "github-activity",
     "title": "Github Activity",
     "description": "A beautifully designed, accessible Github Activity component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "nav-bar",
     "title": "Nav Bar",
     "description": "A beautifully designed, accessible Nav Bar component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "progress",
     "title": "Progress",
     "description": "A beautifully designed, accessible Progress component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "separator",
     "title": "Separator",
     "description": "Visual divider separating sections of content.",
-    "enabled": false,
-    "isDir": true
+    "enabled": false
   },
   {
     "name": "skeleton",
     "title": "Skeleton",
     "description": "Visual placeholder while content is loading.",
-    "enabled": false,
-    "isDir": true
+    "enabled": false
   },
   {
     "name": "slider",
     "title": "Slider",
     "description": "A beautifully designed, accessible Slider component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "step-carousel",
     "title": "Step Carousel",
     "description": "A beautifully designed, accessible Step Carousel component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "switch",
     "title": "Switch",
     "description": "A beautifully designed, accessible Switch component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "timer",
     "title": "Timer",
     "description": "A beautifully designed, accessible Timer component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   },
   {
     "name": "tooltip",
     "title": "Tooltip",
     "description": "A beautifully designed, accessible Tooltip component.",
-    "enabled": true,
-    "isDir": true
+    "enabled": true
   }
 ]
