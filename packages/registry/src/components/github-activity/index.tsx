@@ -2,6 +2,8 @@
 
 export { GithubActivity } from "./github-activity";
 export { GithubActivityHeatmap } from "./github-activity-heatmap";
+export { GithubActivity3D } from "./github-activity-3d";
+export { GithubActivity2DMatrix } from "./github-activity-2d-matrix";
 export { GithubActivityTimeline } from "./github-activity-timeline";
 export { GithubActivityStats } from "./github-activity-stats";
 export { GithubActivityStatsCards } from "./github-activity-stats-cards";

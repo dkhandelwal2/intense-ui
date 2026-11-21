@@ -2,6 +2,7 @@ import React from "react";
 
 export type GithubActivityVariant = "heatmap" | "timeline" | "stats" | "compact";
 export type GithubActivityTheme = "github" | "emerald" | "cyan" | "amber" | "rose" | "purple" | "monochrome";
+export type GithubActivityMode = "2d" | "3d";
 export type GithubContributionLevel = 0 | 1 | 2 | 3 | 4;
 export type GithubEventType = "commit" | "pull_request" | "issue" | "release" | "star";
 export type GithubEventStatus = "merged" | "open" | "closed";
@@ -59,6 +60,7 @@ export interface GithubActivityHeatmapProps {
   contributions?: GithubContributionDay[];
   username?: string;
   theme?: GithubActivityTheme;
+  mode?: GithubActivityMode;
   weeksCount?: number;
   year?: number;
   years?: number[];
@@ -132,6 +134,7 @@ export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement
   variant?: GithubActivityVariant;
   username?: string;
   theme?: GithubActivityTheme;
+  mode?: GithubActivityMode;
   year?: number;
   years?: number[];
   onYearChange?: (year: number) => void;

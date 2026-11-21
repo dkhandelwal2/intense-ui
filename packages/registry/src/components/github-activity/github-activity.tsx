@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useGithubActivity } from "@/hooks/use-github-activity";
 import { GITHUB_ACTIVITY_CONFIG } from "@/config/github-activity";
@@ -16,6 +15,7 @@ export function GithubActivity({
   variant = GITHUB_ACTIVITY_CONFIG.variant,
   username = GITHUB_ACTIVITY_CONFIG.username,
   theme = GITHUB_ACTIVITY_CONFIG.theme,
+  mode = "2d",
   year,
   years,
   onYearChange,
@@ -100,6 +100,7 @@ export function GithubActivity({
               contributions={contributions}
               username={username}
               theme={theme}
+              mode={mode}
               weeksCount={weeksCount}
               year={selectedYear}
               years={years || availableYears}

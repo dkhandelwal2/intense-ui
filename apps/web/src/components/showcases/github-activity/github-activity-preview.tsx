@@ -44,6 +44,7 @@ export function GithubActivityPreview({
         key={`preview-${customProps.username || "default"}`}
         variant={effectiveVariant}
         theme={customProps.theme}
+        mode={customProps.mode}
         username={customProps.username || "octocat"}
         year={selectedYear}
         onYearChange={setSelectedYear}

@@ -18,11 +18,7 @@ export interface GithubActivityPlaygroundStudioProps {
 }
 
 export function GithubActivityPlaygroundStudio({
-  customProps,
-  onChange,
-  className,
-  hidePreview = true,
-  onViewCode,
+  customProps, onChange, className, hidePreview = true, onViewCode,
 }: GithubActivityPlaygroundStudioProps) {
   const [customInputVal, setCustomInputVal] = React.useState<string>(String(customProps.weeksCount));
   React.useEffect(() => { setCustomInputVal(String(customProps.weeksCount)); }, [customProps.weeksCount]);
@@ -75,7 +71,7 @@ export function GithubActivityPlaygroundStudio({
       colorGradient: "bg-gradient-to-br from-[#8b5cf6] via-[#7c3aed] to-[#6d28d9]",
       icon: <SlidersHorizontal className="w-3.5 h-3.5" />, headerTitle: "Controls", headerSubtitle: "year & options", headerEmoji: "⚙️",
       customRightContent: (
-        <div className="flex flex-col gap-3 py-1">
+        <div className="flex flex-col gap-2.5 py-1">
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Year</span>
             <div className="relative">
@@ -109,8 +105,7 @@ export function GithubActivityPlaygroundStudio({
               <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium shrink-0" title="Custom Weeks">Custom:</span>
               <div className="relative flex-1">
                 <input
-                  type="number" min={1} max={52} placeholder="1 – 52"
-                  value={customInputVal}
+                  type="number" min={1} max={52} placeholder="1 – 52" value={customInputVal}
                   onChange={(e) => {
                     const raw = e.target.value; setCustomInputVal(raw);
                     if (raw && !Number.isNaN(Number(raw))) onChange((prev) => ({ ...prev, weeksCount: Math.max(1, Math.min(52, Number(raw))) }));
@@ -127,10 +122,21 @@ export function GithubActivityPlaygroundStudio({
           </div>
 
           <div className="flex flex-col gap-1">
+            <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">View Mode</span>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(["2d", "3d"] as const).map((m) => (
+                <button key={m} type="button" onClick={() => onChange((prev) => ({ ...prev, mode: m }))} className={cn("py-1.5 px-2 rounded-lg border text-xs font-semibold transition-all cursor-pointer text-center", (customProps.mode || "2d") === m ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30" : "border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800")}>
+                  {m === "2d" ? "2D Flat" : "3D Skyline"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dot Size</span>
             <div className="grid grid-cols-3 gap-1.5">
               {(["sm", "md", "lg"] as const).map((s) => (
-                <button key={s} type="button" onClick={() => onChange((prev) => ({ ...prev, dotSize: s }))} className={cn("py-1 px-1.5 rounded-lg border text-xs font-semibold uppercase transition-all cursor-pointer text-center", (customProps.dotSize || "md") === s ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800")}>
+                <button key={s} type="button" onClick={() => onChange((prev) => ({ ...prev, dotSize: s }))} className={cn("py-1.5 px-2 rounded-lg border text-xs font-semibold uppercase transition-all cursor-pointer text-center", (customProps.dotSize || "md") === s ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30" : "border-zinc-200/80 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800")}>
                   {s}
                 </button>
               ))}
@@ -139,18 +145,14 @@ export function GithubActivityPlaygroundStudio({
 
           <div className="flex flex-col gap-1.5 pt-1.5 border-t border-zinc-100 dark:border-zinc-800">
             {([
-              { key: "showYearSelector", label: "Year Selector" }, { key: "showFullYear", label: "Full Year (1st Jan - 31st Dec)" },
-              { key: "showHeader", label: "User Header" }, { key: "showTabs", label: "View Switcher Tabs" },
-              { key: "showStreaks", label: "Streak Badges" },
-            ] as const).map(({ key, label }) => {
-              const disabled = key === "showFullYear" && customProps.weeksCount !== 52;
-              return (
-                <label key={key} className={cn("flex items-center justify-between text-xs select-none", disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer")}>
-                  <span className="text-zinc-700 dark:text-zinc-300 font-medium">{label}</span>
-                  <input type="checkbox" disabled={disabled} checked={disabled ? false : Boolean(customProps[key])} onChange={(e) => onChange((prev) => ({ ...prev, [key]: e.target.checked }))} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 disabled:opacity-40 disabled:cursor-not-allowed" />
-                </label>
-              );
-            })}
+              { key: "showYearSelector", label: "Year Selector" }, { key: "showFullYear", label: "Full Year (Jan - Dec)" },
+              { key: "showHeader", label: "User Header" }, { key: "showTabs", label: "View Switcher Tabs" }, { key: "showStreaks", label: "Streak Badges" },
+            ] as const).map(({ key, label }) => (
+              <label key={key} className={cn("flex items-center justify-between text-xs select-none", key === "showFullYear" && customProps.weeksCount !== 52 ? "opacity-40 cursor-not-allowed" : "cursor-pointer")}>
+                <span className="text-zinc-700 dark:text-zinc-300 font-medium">{label}</span>
+                <input type="checkbox" disabled={key === "showFullYear" && customProps.weeksCount !== 52} checked={key === "showFullYear" && customProps.weeksCount !== 52 ? false : Boolean(customProps[key])} onChange={(e) => onChange((prev) => ({ ...prev, [key]: e.target.checked }))} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 disabled:opacity-40 disabled:cursor-not-allowed" />
+              </label>
+            ))}
           </div>
         </div>
       ),

@@ -105,6 +105,7 @@ export const githubActivityDoc: ComponentDocData = {
       props: [
         { prop: "username", type: "string", defaultValue: '"octocat"', description: "GitHub username to fetch public activity and events from." },
         { prop: "variant", type: '"compact" | "heatmap" | "timeline" | "stats"', defaultValue: '"compact"', description: "Visual display mode of the activity widget." },
+        { prop: "mode", type: '"2d" | "3d"', defaultValue: '"2d"', description: "Heatmap visualization mode: 2D flat matrix or interactive 3D skyline canvas with orbit drag." },
         { prop: "theme", type: '"github" | "emerald" | "cyan" | "amber" | "purple" | "rose" | "monochrome"', defaultValue: '"github"', description: "Color theme for activity levels and accent indicators." },
         { prop: "year", type: "number", defaultValue: "2026", description: "Target year for contribution query (e.g. 2026, 2025, 2024)." },
         { prop: "showFullYear", type: "boolean", defaultValue: "false", description: "Displays full calendar year (Jan 1 to Dec 31) with visible future dots instead of rolling past year." },
@@ -126,6 +127,7 @@ export const githubActivityDoc: ComponentDocData = {
       title: "GithubActivityHeatmap Props",
       props: [
         { prop: "username", type: "string", defaultValue: '"octocat"', description: "GitHub username for data fetching fallback." },
+        { prop: "mode", type: '"2d" | "3d"', defaultValue: '"2d"', description: "2D flat heat map matrix or 3D skyline isometric canvas." },
         { prop: "weeksCount", type: "number", defaultValue: "52", description: "Number of weeks displayed." },
         { prop: "showFullYear", type: "boolean", defaultValue: "false", description: "Displays full calendar year (Jan 1 to Dec 31) with visible empty dots through Dec 31." },
         { prop: "dotSize", type: '"sm" | "md" | "lg"', defaultValue: '"md"', description: "Contribution square size and aligned day label height." },

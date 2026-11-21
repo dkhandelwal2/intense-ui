@@ -358,6 +358,21 @@
           "target": "components/ui/github-activity/constants.ts"
         },
         {
+          "path": "packages/registry/src/components/github-activity/github-activity-2d-matrix.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-2d-matrix.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-3d-helpers.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-3d-helpers.ts"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-3d.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-3d.tsx"
+        },
+        {
           "path": "packages/registry/src/components/github-activity/github-activity-curtain.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-curtain.tsx"

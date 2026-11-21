@@ -11,6 +11,10 @@ export function generateGithubActivityCode(props: GithubActivityCustomProps): st
     parts.push(`  theme="${props.theme}"`);
   }
 
+  if (props.mode === "3d") {
+    parts.push(`  mode="3d"`);
+  }
+
   if (props.username && props.username !== "octocat") {
     parts.push(`  username="${props.username}"`);
   }

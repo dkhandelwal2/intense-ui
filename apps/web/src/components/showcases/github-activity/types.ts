@@ -1,11 +1,13 @@
 import {
   GithubActivityVariant,
   GithubActivityTheme,
+  GithubActivityMode,
 } from "@/components/ui/github-activity";
 
 export interface GithubActivityCustomProps {
   variant: GithubActivityVariant;
   theme: GithubActivityTheme;
+  mode?: GithubActivityMode;
   username: string;
   year: number;
   dotSize?: "sm" | "md" | "lg";
@@ -23,6 +25,7 @@ export interface GithubActivityCustomProps {
 export const DEFAULT_GITHUB_ACTIVITY_PROPS: GithubActivityCustomProps = {
   variant: "compact",
   theme: "github",
+  mode: "2d",
   username: "octocat",
   year: 2026,
   dotSize: "md",
