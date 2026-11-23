@@ -48,4 +48,5 @@ export const GITHUB_ACTIVITY_CONFIG: GithubActivityConfig = {
   maxEvents: 8,
   showHeader: true,
   showTabs: true,
+  showModeToggle: true,
 };

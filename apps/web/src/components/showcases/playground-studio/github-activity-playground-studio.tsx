@@ -12,9 +12,7 @@ import { GITHUB_ACTIVITY_VARIANTS, GITHUB_THEME_COLORS, GITHUB_THEME_LABELS, WEE
 export interface GithubActivityPlaygroundStudioProps {
   customProps: GithubActivityCustomProps;
   onChange: React.Dispatch<React.SetStateAction<GithubActivityCustomProps>>;
-  className?: string;
-  hidePreview?: boolean;
-  onViewCode?: () => void;
+  className?: string; hidePreview?: boolean; onViewCode?: () => void;
 }
 
 export function GithubActivityPlaygroundStudio({
@@ -146,13 +144,17 @@ export function GithubActivityPlaygroundStudio({
           <div className="flex flex-col gap-1.5 pt-1.5 border-t border-zinc-100 dark:border-zinc-800">
             {([
               { key: "showYearSelector", label: "Year Selector" }, { key: "showFullYear", label: "Full Year (Jan - Dec)" },
-              { key: "showHeader", label: "User Header" }, { key: "showTabs", label: "View Switcher Tabs" }, { key: "showStreaks", label: "Streak Badges" },
-            ] as const).map(({ key, label }) => (
-              <label key={key} className={cn("flex items-center justify-between text-xs select-none", key === "showFullYear" && customProps.weeksCount !== 52 ? "opacity-40 cursor-not-allowed" : "cursor-pointer")}>
-                <span className="text-zinc-700 dark:text-zinc-300 font-medium">{label}</span>
-                <input type="checkbox" disabled={key === "showFullYear" && customProps.weeksCount !== 52} checked={key === "showFullYear" && customProps.weeksCount !== 52 ? false : Boolean(customProps[key])} onChange={(e) => onChange((prev) => ({ ...prev, [key]: e.target.checked }))} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 disabled:opacity-40 disabled:cursor-not-allowed" />
-              </label>
-            ))}
+              { key: "showHeader", label: "User Header" }, { key: "showTabs", label: "View Switcher Tabs" },
+              { key: "showModeToggle", label: "2D / 3D Toggle" }, { key: "showStreaks", label: "Streak Badges" },
+            ] as const).map(({ key, label }) => {
+              const disabled = (key === "showFullYear" && customProps.weeksCount !== 52) || ((key === "showTabs" || key === "showModeToggle") && !customProps.showHeader);
+              return (
+                <label key={key} className={cn("flex items-center justify-between text-xs select-none", disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer")}>
+                  <span className="text-zinc-700 dark:text-zinc-300 font-medium">{label}</span>
+                  <input type="checkbox" disabled={disabled} checked={disabled ? false : Boolean(customProps[key])} onChange={(e) => onChange((prev) => ({ ...prev, [key]: e.target.checked }))} className="rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 w-4 h-4 disabled:opacity-40 disabled:cursor-not-allowed" />
+                </label>
+              );
+            })}
           </div>
         </div>
       ),
@@ -190,9 +192,6 @@ export function GithubActivityPlaygroundStudio({
   ];
 
   return (
-    <PlaygroundStudio
-      steps={steps} onReset={() => onChange(DEFAULT_GITHUB_ACTIVITY_PROPS)}
-      onViewCode={onViewCode} hidePreview={hidePreview} className={className}
-    />
+    <PlaygroundStudio steps={steps} onReset={() => onChange(DEFAULT_GITHUB_ACTIVITY_PROPS)} onViewCode={onViewCode} hidePreview={hidePreview} className={className} />
   );
 }

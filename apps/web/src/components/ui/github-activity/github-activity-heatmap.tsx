@@ -5,7 +5,6 @@ import { Grid2X2, Box } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DOT_SIZES, THEME_LEVEL_CLASSES, generateMockContributions } from "./constants";
 import { GithubActivityLegend } from "./github-activity-legend";
-import { GithubActivityYearSelect } from "./github-activity-year-select";
 import { GithubActivity2DMatrix } from "./github-activity-2d-matrix";
 import { GithubActivity3D } from "./github-activity-3d";
 import { generateUserYears, buildContributionMatrix } from "./github-activity-helpers";
@@ -24,10 +23,14 @@ export function GithubActivityHeatmap({
   onYearChange,
   showFullYear,
   showYearSelector = true,
+  showControls = true,
+  showModeToggle = true,
   showMonthLabels = true,
   showDayLabels = true,
   showLegend = true,
   showTotalCount = true,
+  showStreaks = true,
+  stats,
   isLoading = false,
   onDayClick,
   className,
@@ -51,7 +54,6 @@ export function GithubActivityHeatmap({
   const isFullYear = safeWeeksCount >= 52 && (effectiveYear < currentYear ? true : Boolean(showFullYear));
 
   const handleYearSelect = useCallback((y: number) => { setSwitchedYear(y); onYearChange?.(y); }, [onYearChange]);
-
   const effectiveDotSize = dotSize ? (dotSize === "md" && isMobile ? "sm" : dotSize) : (isMobile ? "sm" : "md");
   const sizeConfig = DOT_SIZES[effectiveDotSize] || DOT_SIZES.md;
   const activeYears = useMemo(() => (years && years.length > 0 ? years : generateUserYears()), [years]);
@@ -59,11 +61,7 @@ export function GithubActivityHeatmap({
 
   useEffect(() => {
     if (!matrixContainerRef.current) return;
-    if (isFullYear && effectiveYear < currentYear) {
-      matrixContainerRef.current.scrollLeft = 0;
-    } else {
-      matrixContainerRef.current.scrollLeft = matrixContainerRef.current.scrollWidth;
-    }
+    matrixContainerRef.current.scrollLeft = isFullYear && effectiveYear < currentYear ? 0 : matrixContainerRef.current.scrollWidth;
   }, [weeksCount, effectiveYear, isFullYear, currentYear, viewMode]);
 
   const themeClasses = THEME_LEVEL_CLASSES[theme] || THEME_LEVEL_CLASSES.github;
@@ -85,79 +83,82 @@ export function GithubActivityHeatmap({
   }, [monthPositions]);
 
   return (
-    <div className={cn("flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
-      {/* Top Header */}
-      <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-zinc-100 dark:border-zinc-800/60 shrink-0">
-        <div className="text-xs text-zinc-600 dark:text-zinc-300 font-medium select-none min-h-[22px] flex items-center min-w-0">
-          {showTotalCount && (isLoading ? (
-            <div className="h-4 w-36 rounded bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
-          ) : (
-            <span className="truncate">
-              <strong className="text-zinc-900 dark:text-white font-bold">{totalContributions.toLocaleString()}</strong>{" "}
-              <span className="hidden xs:inline sm:inline">contributions {isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")}</span>
-              <span className="xs:hidden sm:hidden">{isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `last ${safeWeeksCount}W` : "past year")}</span>
-            </span>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-1.5 shrink-0">
-          {/* 2D / 3D Skyline View Toggle */}
-          <div role="group" aria-label="Chart view" className="flex items-center p-0.5 rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/70 dark:bg-zinc-800/60">
-            <button
-              type="button"
-              aria-label="Flat heat map"
-              title="Flat heat map"
-              aria-pressed={viewMode === "2d"}
-              onClick={() => { setViewMode("2d"); onModeChange?.("2d"); }}
-              className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "2d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
-            >
-              <Grid2X2 className="size-3.5" />
-            </button>
-            <button
-              type="button"
-              aria-label="3D skyline"
-              title="3D skyline"
-              aria-pressed={viewMode === "3d"}
-              onClick={() => { setViewMode("3d"); onModeChange?.("3d"); }}
-              className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "3d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
-            >
-              <Box className="size-3.5" />
-            </button>
+    <div className={cn("flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
+      {/* Standalone controls header when used outside full container */}
+      {showControls && (
+        <div className="flex items-center justify-between gap-2 p-3 py-1 border-b border-zinc-100 dark:border-zinc-800/60 shrink-0">
+          <div className="text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+            {showTotalCount && (
+              <span>
+                <strong className="text-zinc-900 dark:text-white font-bold">{totalContributions.toLocaleString()}</strong>{" "}
+                contributions {isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")}
+              </span>
+            )}
           </div>
-
-          {showYearSelector && activeYears && activeYears.length > 0 && (
-            <GithubActivityYearSelect year={effectiveYear} years={activeYears} onYearChange={handleYearSelect} />
+          {showModeToggle && (
+            <div role="group" aria-label="Chart view" className="flex items-center p-0.5 rounded-lg border border-zinc-200/80 dark:border-zinc-800 bg-zinc-100/70 dark:bg-zinc-800/60">
+              <button
+                type="button" aria-label="Flat heat map" title="Flat heat map" aria-pressed={viewMode === "2d"}
+                onClick={() => { setViewMode("2d"); onModeChange?.("2d"); }}
+                className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "2d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
+              >
+                <Grid2X2 className="size-3.5" />
+              </button>
+              <button
+                type="button" aria-label="3D skyline" title="3D skyline" aria-pressed={viewMode === "3d"}
+                onClick={() => { setViewMode("3d"); onModeChange?.("3d"); }}
+                className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "3d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
+              >
+                <Box className="size-3.5" />
+              </button>
+            </div>
           )}
         </div>
-      </div>
-
-      {/* Main Heatmap: 2D Matrix or 3D Skyline Canvas */}
-      {viewMode === "3d" ? (
-        <GithubActivity3D
-          weeks={weeks}
-          monthPositions={monthPositions}
-          theme={theme}
-          dotSize={effectiveDotSize}
-          isLoading={isLoading}
-          onDayClick={onDayClick}
-        />
-      ) : (
-        <GithubActivity2DMatrix
-          weeks={weeks} monthMap={monthMap} sizeConfig={sizeConfig} themeClasses={themeClasses}
-          isJustifyBetween={isJustifyBetween} showMonthLabels={showMonthLabels} showDayLabels={showDayLabels}
-          isLoading={isLoading} safeWeeksCount={safeWeeksCount} matrixContainerRef={matrixContainerRef} onDayClick={onDayClick}
-        />
       )}
+
+      {/* Main Heatmap Area & GitHub-style Right Side Years List */}
+      <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3 flex-1 min-w-0">
+        <div className="flex-1 min-w-0 flex flex-col justify-center p-2 sm:p-4">
+          {viewMode === "3d" ? (
+            <GithubActivity3D weeks={weeks} monthPositions={monthPositions} theme={theme} dotSize={effectiveDotSize} isLoading={isLoading} onDayClick={onDayClick} />
+          ) : (
+            <GithubActivity2DMatrix
+              weeks={weeks} monthMap={monthMap} sizeConfig={sizeConfig} themeClasses={themeClasses}
+              isJustifyBetween={isJustifyBetween} showMonthLabels={showMonthLabels} showDayLabels={showDayLabels}
+              isLoading={isLoading} safeWeeksCount={safeWeeksCount} matrixContainerRef={matrixContainerRef} onDayClick={onDayClick}
+            />
+          )}
+        </div>
+
+        {/* GitHub-Style Vertical Year Selector on the Right */}
+        {showYearSelector && activeYears && activeYears.length > 0 && (
+          <div role="group" aria-label="Filter by year" className="flex flex-row sm:flex-col gap-1 shrink-0 overflow-x-auto sm:overflow-y-auto sm:max-h-[250px] border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800/80 sm:p-2 sm:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-lg">
+            <h4 className="sticky top-0 left-0 w-full font-mono text-xs font-semibold text-center sm:text-left transition-all select-none bg-white dark:bg-zinc-900 p-2">Year(s)</h4>
+            {activeYears.map((yr) => (
+              <button
+                key={yr} type="button" aria-pressed={effectiveYear === yr} onClick={() => handleYearSelect(yr)}
+                className={cn("px-2.5 py-1 rounded-md text-xs font-semibold text-center sm:text-left transition-all cursor-pointer select-none", effectiveYear === yr ? "bg-[var(--theme-primary)] text-white shadow-xs" : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/60")}
+              >
+                {yr}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Legend footer */}
       {showLegend && (isLoading ? (
-        <div className="flex items-center justify-between pt-1 shrink-0">
+        <div className="flex items-center justify-between pt-1 shrink-0 px-4 pb-4">
           <div className="h-3 w-20 rounded bg-zinc-200/60 dark:bg-zinc-800/60 animate-pulse" />
           <div className="h-3 w-24 rounded bg-zinc-200/60 dark:bg-zinc-800/60 animate-pulse" />
         </div>
       ) : (
-        <div className="shrink-0">
-          <GithubActivityLegend theme={theme} totalCount={showTotalCount ? totalContributions : undefined} yearLabel={isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")} />
+        <div className="h-[34px] shrink-0 px-4 border-t border-zinc-100 dark:border-zinc-800/80">
+          <GithubActivityLegend
+            theme={theme} totalCount={showTotalCount ? totalContributions : undefined}
+            yearLabel={isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")}
+            showStreaks={showStreaks} streakCount={stats?.currentStreak}
+          />
         </div>
       ))}
     </div>

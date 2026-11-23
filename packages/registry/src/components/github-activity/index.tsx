@@ -10,6 +10,7 @@ export { GithubActivityStatsCards } from "./github-activity-stats-cards";
 export { GithubActivityLegend } from "./github-activity-legend";
 export { GithubActivityEventItem } from "./github-activity-event-item";
 export { GithubActivityHeader } from "./github-activity-header";
+export { GithubActivityHeaderNav } from "./github-activity-header-nav";
 export { GithubActivityYearSelect } from "./github-activity-year-select";
 export { GithubActivityTimelineFilter } from "./github-activity-timeline-filter";
 export { GithubActivityCurtain } from "./github-activity-curtain";

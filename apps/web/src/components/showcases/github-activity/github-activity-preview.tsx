@@ -50,13 +50,14 @@ export function GithubActivityPreview({
         onYearChange={setSelectedYear}
         showFullYear={customProps.showFullYear}
         showYearSelector={customProps.showYearSelector}
+        showModeToggle={customProps.showModeToggle}
         dotSize={customProps.dotSize}
         weeksCount={customProps.weeksCount}
         maxEvents={isFullSuite ? 4 : (customProps.maxEvents || 6)}
         showHeader={isFullSuite ? customProps.showHeader : false}
         showTabs={isFullSuite ? customProps.showTabs : false}
         showStreaks={customProps.showStreaks}
-        className="w-full shadow-lg"
+        className="w-full"
       />
       <span className="text-xs font-mono text-muted-foreground text-center pt-2 px-2 line-clamp-2 sm:line-clamp-none">
         {isCustomizing

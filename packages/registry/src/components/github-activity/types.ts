@@ -41,7 +41,6 @@ export interface GithubActivityStatsData {
   reviewsCount: number;
   activeDaysCount?: number;
 }
-
 export type GithubActivityStatsModel = GithubActivityStatsData;
 
 export interface GithubUserProfile {
@@ -68,11 +67,15 @@ export interface GithubActivityHeatmapProps {
   onYearChange?: (year: number) => void;
   showFullYear?: boolean;
   showYearSelector?: boolean;
+  showControls?: boolean;
+  showModeToggle?: boolean;
   showMonthLabels?: boolean;
   showDayLabels?: boolean;
   dotSize?: GithubActivityDotSize;
   showLegend?: boolean;
   showTotalCount?: boolean;
+  showStreaks?: boolean;
+  stats?: GithubActivityStatsData;
   isLoading?: boolean;
   onDayClick?: (day: GithubContributionDay) => void;
   className?: string;
@@ -107,26 +110,24 @@ export interface GithubActivityStatsProps {
   className?: string;
 }
 
-export interface GithubActivityLegendProps {
-  theme?: GithubActivityTheme;
-  totalCount?: number;
-  yearLabel?: string;
-  className?: string;
-}
-
-export interface GithubActivityEventItemProps {
-  event: GithubActivityEvent;
-  showCopySha?: boolean;
-  className?: string;
-}
+export interface GithubActivityLegendProps { theme?: GithubActivityTheme; totalCount?: number; yearLabel?: string; showStreaks?: boolean; streakCount?: number; className?: string; }
+export interface GithubActivityEventItemProps { event: GithubActivityEvent; showCopySha?: boolean; className?: string; }
 
 export interface GithubActivityHeaderProps {
   user: GithubUserProfile;
   stats?: GithubActivityStatsData;
+  totalContributions?: number;
   activeVariant?: GithubActivityVariant;
   onVariantChange?: (variant: GithubActivityVariant) => void;
   showTabs?: boolean;
   showStreaks?: boolean;
+  mode?: GithubActivityMode;
+  onModeChange?: (mode: GithubActivityMode) => void;
+  showModeToggle?: boolean;
+  year?: number;
+  years?: number[];
+  onYearChange?: (year: number) => void;
+  showYearSelector?: boolean;
   isLoading?: boolean;
   className?: string;
 }
@@ -136,6 +137,7 @@ export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement
   username?: string;
   theme?: GithubActivityTheme;
   mode?: GithubActivityMode;
+  showModeToggle?: boolean;
   year?: number;
   years?: number[];
   onYearChange?: (year: number) => void;
@@ -147,12 +149,13 @@ export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement
     events?: GithubActivityEvent[];
     stats?: GithubActivityStatsData;
     user?: GithubUserProfile;
+    availableYears?: number[];
   };
   weeksCount?: number;
   dotSize?: GithubActivityDotSize;
   maxEvents?: number;
-  showHeader?: boolean;
   showTabs?: boolean;
+  showHeader?: boolean;
   showStreaks?: boolean;
   onDayClick?: (day: GithubContributionDay) => void;
 }
@@ -187,4 +190,4 @@ export interface UseGithubActivityResult {
 export interface GithubActivityHeatmapConfig { theme: GithubActivityTheme; weeksCount: number; dotSize?: GithubActivityDotSize; showFullYear?: boolean; showMonthLabels: boolean; showDayLabels: boolean; showLegend: boolean; showTotalCount: boolean; }
 export interface GithubActivityTimelineConfig { maxEvents: number; showFilter: boolean; showCopySha: boolean; }
 export interface GithubActivityStatsConfig { showBreakdown: boolean; showStreaks: boolean; theme: GithubActivityTheme; }
-export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; }
+export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; showModeToggle?: boolean; }

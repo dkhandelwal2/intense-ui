@@ -383,6 +383,16 @@
           "target": "components/ui/github-activity/github-activity-event-item.tsx"
         },
         {
+          "path": "packages/registry/src/components/github-activity/github-activity-header-nav-badge.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-header-nav-badge.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-header-nav.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-header-nav.tsx"
+        },
+        {
           "path": "packages/registry/src/components/github-activity/github-activity-header.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-header.tsx"

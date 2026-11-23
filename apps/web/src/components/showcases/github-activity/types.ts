@@ -17,6 +17,7 @@ export interface GithubActivityCustomProps {
   showTabs: boolean;
   showLegend: boolean;
   showYearSelector: boolean;
+  showModeToggle: boolean;
   showStreaks: boolean;
   showBreakdown: boolean;
   showFullYear?: boolean;
@@ -35,6 +36,7 @@ export const DEFAULT_GITHUB_ACTIVITY_PROPS: GithubActivityCustomProps = {
   showTabs: true,
   showLegend: true,
   showYearSelector: true,
+  showModeToggle: true,
   showStreaks: true,
   showBreakdown: true,
   showFullYear: false,

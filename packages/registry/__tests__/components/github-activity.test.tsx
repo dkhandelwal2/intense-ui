@@ -135,7 +135,7 @@ describe("GithubActivity Component Suite", () => {
     expect(screen.queryByText("fix: resolve memory leak in pipeline")).not.toBeInTheDocument();
   });
 
-  it("renders year selector dropdown and triggers onYearChange", () => {
+  it("renders year selector buttons on the right side and triggers onYearChange", () => {
     const handleYearChange = vi.fn();
     render(
       <GithubActivityHeatmap
@@ -146,13 +146,9 @@ describe("GithubActivity Component Suite", () => {
       />
     );
 
-    const trigger = screen.getByRole("button", { name: /select year/i });
-    expect(trigger).toBeInTheDocument();
-    fireEvent.click(trigger);
-
-    const option2025 = screen.getByRole("option", { name: /2025/i });
-    expect(option2025).toBeInTheDocument();
-    fireEvent.click(option2025);
+    const button2025 = screen.getByRole("button", { name: "2025" });
+    expect(button2025).toBeInTheDocument();
+    fireEvent.click(button2025);
     expect(handleYearChange).toHaveBeenCalledWith(2025);
   });
 
@@ -291,10 +287,7 @@ describe("GithubActivity Component Suite", () => {
     render(<GithubActivityHeatmap />);
     expect(screen.getAllByText(/contributions in the past year/i)[0]).toBeInTheDocument();
 
-    const yearButton = screen.getByRole("button", { name: /Select year/i });
-    fireEvent.click(yearButton);
-
-    const year2025 = screen.getByRole("option", { name: "2025" });
+    const year2025 = screen.getByRole("button", { name: "2025" });
     fireEvent.click(year2025);
 
     expect(screen.getAllByText(/contributions in 2025/i)[0]).toBeInTheDocument();

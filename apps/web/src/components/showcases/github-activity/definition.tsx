@@ -31,10 +31,7 @@ export const githubActivityShowcaseDefinition: ShowcaseDefinition<GithubActivity
       />
     );
   },
-  generateCode: ({ customProps, contextCode }) => {
-    if (contextCode) return contextCode;
-    return generateGithubActivityCode(customProps);
-  },
+  generateCode: ({ customProps }) => generateGithubActivityCode(customProps),
   getMeta: (props) => ({
     activeScale: `${props.weeksCount || 52}W`,
     activeColor: props.theme,
