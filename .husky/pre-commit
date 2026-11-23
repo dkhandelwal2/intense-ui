@@ -1,11 +1,17 @@
 #!/bin/sh
 set -e
 
+# Prevent Git commands from acquiring optional index locks during commit
+export GIT_OPTIONAL_LOCKS=0
+
 # 1. Auto-sync components to registry and rebuild registry.json
 node packages/registry/scripts/build-registry.js
 
-# 2. Ensure registry and web are in 100% parity and staged
-if ! git diff --quiet packages/registry/src/components registry.json; then
+# 2. Auto-stage synced registry files so user changes in apps/web automatically sync
+git --no-optional-locks add packages/registry/src/components registry.json 2>/dev/null || true
+
+# 3. Ensure registry and web are in 100% parity
+if ! git --no-optional-locks diff --quiet packages/registry/src/components registry.json; then
   echo ""
   echo "🔄 Auto-synced packages/registry from apps/web to maintain 100% parity."
   echo "👉 Please stage the synced files: git add packages/registry registry.json"
@@ -14,7 +20,7 @@ if ! git diff --quiet packages/registry/src/components registry.json; then
   exit 1
 fi
 
-# 3. Quality & integrity gates
+# 4. Quality & integrity gates
 npm run typecheck
 npm run check:imports
 npm test

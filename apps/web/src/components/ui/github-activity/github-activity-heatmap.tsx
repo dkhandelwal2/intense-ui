@@ -16,6 +16,7 @@ export function GithubActivityHeatmap({
   username,
   theme = "github",
   mode = "2d",
+  onModeChange,
   weeksCount = 52,
   dotSize,
   year: propYear,
@@ -84,7 +85,7 @@ export function GithubActivityHeatmap({
   }, [monthPositions]);
 
   return (
-    <div className={cn("flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm min-h-[285px] sm:h-[285px]", className)}>
+    <div className={cn("flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
       {/* Top Header */}
       <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-zinc-100 dark:border-zinc-800/60 shrink-0">
         <div className="text-xs text-zinc-600 dark:text-zinc-300 font-medium select-none min-h-[22px] flex items-center min-w-0">
@@ -107,7 +108,7 @@ export function GithubActivityHeatmap({
               aria-label="Flat heat map"
               title="Flat heat map"
               aria-pressed={viewMode === "2d"}
-              onClick={() => setViewMode("2d")}
+              onClick={() => { setViewMode("2d"); onModeChange?.("2d"); }}
               className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "2d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
             >
               <Grid2X2 className="size-3.5" />
@@ -117,7 +118,7 @@ export function GithubActivityHeatmap({
               aria-label="3D skyline"
               title="3D skyline"
               aria-pressed={viewMode === "3d"}
-              onClick={() => setViewMode("3d")}
+              onClick={() => { setViewMode("3d"); onModeChange?.("3d"); }}
               className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "3d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
             >
               <Box className="size-3.5" />

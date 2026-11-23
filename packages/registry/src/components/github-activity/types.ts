@@ -61,6 +61,7 @@ export interface GithubActivityHeatmapProps {
   username?: string;
   theme?: GithubActivityTheme;
   mode?: GithubActivityMode;
+  onModeChange?: (mode: GithubActivityMode) => void;
   weeksCount?: number;
   year?: number;
   years?: number[];

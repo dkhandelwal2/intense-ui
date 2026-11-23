@@ -9,7 +9,7 @@ import { GithubActivityHeatmap } from "./github-activity-heatmap";
 import { GithubActivityTimeline } from "./github-activity-timeline";
 import { GithubActivityStats } from "./github-activity-stats";
 import { GithubActivityCurtain } from "./github-activity-curtain";
-import type { GithubActivityProps, GithubActivityVariant } from "./types";
+import type { GithubActivityProps, GithubActivityVariant, GithubActivityMode } from "./types";
 
 export function GithubActivity({
   variant = GITHUB_ACTIVITY_CONFIG.variant,
@@ -44,6 +44,8 @@ export function GithubActivity({
   }, [variant]);
 
   const [switchedYear, setSwitchedYear] = useState<number | null>(null);
+  const [currentMode, setCurrentMode] = useState<GithubActivityMode>(mode);
+  useEffect(() => { if (mode) setCurrentMode(mode); }, [mode]);
 
   const {
     contributions,
@@ -93,7 +95,7 @@ export function GithubActivity({
       )}
 
       {/* Main Variant Content with Smooth Transition */}
-      <div className="w-full relative min-h-[285px] sm:h-[285px]">
+      <div className={cn("w-full relative transition-[min-height,height] duration-300", activeView === "heatmap" && currentMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]")}>
         <GithubActivityCurtain activeKey={activeView}>
           {activeView === "heatmap" && (
             <GithubActivityHeatmap
@@ -101,6 +103,7 @@ export function GithubActivity({
               username={username}
               theme={theme}
               mode={mode}
+              onModeChange={setCurrentMode}
               weeksCount={weeksCount}
               year={selectedYear}
               years={years || availableYears}

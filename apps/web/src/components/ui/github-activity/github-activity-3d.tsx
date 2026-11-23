@@ -40,17 +40,16 @@ export function GithubActivity3D({
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
-    const rect = container.getBoundingClientRect();
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const w = rect.width;
     const h = rect.height;
     if (w <= 0 || h <= 0) return;
 
-    if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
     }
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -72,10 +71,14 @@ export function GithubActivity3D({
     const barSize = dotSize === "sm" ? 2.4 : dotSize === "lg" ? 4.5 : 3.6;
     const cx = ((numCols - 1) * spacing) / 2;
     const cz = ((numRows - 1) * spacing) / 2;
-    const totalSpan = (numCols * spacing + numRows * spacing) * 0.72;
-    const scale = Math.min((w - 45) / Math.max(110, totalSpan), (h - 45) / 55);
+    const cosY = Math.cos(yaw); const sinY = Math.sin(yaw);
+    const cosP = Math.cos(pitch); const sinP = Math.sin(pitch);
+    const groundHalfH = (cx * Math.abs(sinY) + cz * Math.abs(cosY)) * sinP;
+    const spanX = 2 * (cx * Math.abs(cosY) + cz * Math.abs(sinY)) + barSize + 2;
+    const spanY = 2 * groundHalfH + 42 * cosP + barSize + 8;
+    const scale = Math.min((w - 18) / Math.max(80, spanX), (h - 18) / Math.max(60, spanY));
     const ox = w / 2;
-    const oy = h / 2 - 10;
+    const oy = h - 14 - (groundHalfH + 2.5 * cosP) * scale;
 
     drawBasePlatform(ctx, cx, cz, numCols, numRows, spacing, yaw, pitch, scale, ox, oy, isDark);
     drawMonthLabels(ctx, monthPositions || [], cx, cz, numRows, spacing, yaw, pitch, scale, ox, oy, isDark);
@@ -157,7 +160,7 @@ export function GithubActivity3D({
   };
 
   return (
-    <div ref={containerRef} className={cn("relative w-full h-[200px] flex flex-col items-center justify-between overflow-hidden select-none", className)}>
+    <div ref={containerRef} className={cn("relative w-full h-[200px] sm:h-[380px] flex flex-col items-center justify-between overflow-hidden select-none", className)}>
       {hovered && (
         <div
           className="absolute z-20 pointer-events-none px-2.5 py-1 rounded-md text-[11px] font-medium bg-zinc-900/90 dark:bg-zinc-100/90 text-white dark:text-zinc-900 shadow-md backdrop-blur-xs transition-all duration-75"
@@ -175,10 +178,10 @@ export function GithubActivity3D({
         onPointerUp={handlePointerUp}
         onPointerLeave={() => { isDraggingRef.current = false; setHovered(null); }}
         onDoubleClick={handleDoubleClick}
-        className="w-full h-[178px] cursor-grab active:cursor-grabbing touch-none block"
+        className="w-full flex-1 min-h-0 cursor-grab active:cursor-grabbing touch-none block"
       />
-      <div className="text-[9px] text-zinc-400 dark:text-zinc-500 font-normal tracking-tight pb-0.5 pointer-events-none select-none text-center absolute left-0 bottom-0 uppercase font-mono">
-        Drag to surface • tap twice to reset
+      <div className="shrink-0 h-4 flex items-center justify-center text-[10px] text-zinc-400 dark:text-zinc-500 font-mono tracking-tight pointer-events-none select-none text-center">
+        Drag to orbit · double-click to reset
       </div>
     </div>
   );

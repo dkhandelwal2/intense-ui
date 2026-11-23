@@ -182,7 +182,7 @@ export function drawMonthLabels(
 
   let lastX = -Infinity;
   let lastY = -Infinity;
-  const minDistance = 18;
+  const minDistance = 14;
 
   for (const m of monthPositions) {
     const p = project3D(m.weekIndex * spacing, 0, zFront, cx, cz, yaw, pitch, scale, ox, oy);
