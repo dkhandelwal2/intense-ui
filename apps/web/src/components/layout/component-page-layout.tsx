@@ -233,8 +233,9 @@ function ComponentPageLayoutInner({
         isCustomizing,
         dynamicPreviewContent,
         children,
+        onChange: handleCustomPropsChange,
       }),
-    [showcaseDef, activeTocId, customProps, isCustomizing, dynamicPreviewContent, children]
+    [showcaseDef, activeTocId, customProps, isCustomizing, dynamicPreviewContent, children, handleCustomPropsChange]
   );
 
   // Clean playground studio delegate via showcase definition

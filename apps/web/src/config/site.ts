@@ -51,6 +51,8 @@ export const EXTERNAL_LINKS = {
     getUserEventsUrl: (username: string, perPage = 30) => `https://api.github.com/users/${encodeURIComponent(username)}/events?per_page=${perPage}`,
     getUserContributionsUrl: (username: string, year?: number) =>
       `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}${year ? `?y=${year}` : "?y=last"}`,
+    getRepoCommitsUrl: (repo: string, author?: string, perPage = 15) =>
+      `https://api.github.com/repos/${repo}/commits?${author ? `author=${encodeURIComponent(author)}&` : ""}per_page=${perPage}`,
   },
   GOOGLE_MAPS: "https://maps.google.com/?q=",
   getGoogleMapsUrl: (query: string) => `https://maps.google.com/?q=${encodeURIComponent(query)}`,

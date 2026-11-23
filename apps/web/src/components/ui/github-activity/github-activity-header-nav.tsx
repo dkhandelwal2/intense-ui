@@ -23,6 +23,7 @@ export interface GithubActivityHeaderNavProps {
   stats?: GithubActivityStatsData;
   totalContributions?: number;
   label?: string;
+  staticIcons?: boolean;
   className?: string;
 }
 
@@ -32,6 +33,7 @@ export function GithubActivityHeaderNav({
   stats,
   totalContributions,
   label = "Switch view:",
+  staticIcons = false,
   className,
 }: GithubActivityHeaderNavProps) {
   const [open, setOpen] = useState(false);
@@ -59,7 +61,7 @@ export function GithubActivityHeaderNav({
   }, [open, handleClickOutside]);
 
   return (
-    <div ref={containerRef} className={cn("relative inline-flex items-center shrink-0 h-8 w-[108px]", className)}>
+    <div ref={containerRef} className={cn("relative inline-flex items-center shrink-0 h-8 w-[110px]", className)}>
       {/* Morphing Card / Pill Container with RareUI Spring Transition */}
       <motion.div
         layout
@@ -67,16 +69,16 @@ export function GithubActivityHeaderNav({
         data-slot="github-activity-panel"
         data-state={open ? "open" : "closed"}
         className={cn(
-          "absolute right-0 top-0 overflow-hidden border border-zinc-200/80 dark:border-zinc-800 shadow-sm",
+          "absolute right-0 top-0 overflow-hidden shadow-sm flex items-center justify-between flex-col",
           open
-            ? "w-[272px] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50"
-            : "w-[108px] bg-zinc-100/80 dark:bg-zinc-800/70 p-0.5 z-10"
+            ? "w-[272px] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50 border border-zinc-200/80 dark:border-zinc-800"
+            : "w-[110px] h-8 bg-zinc-100/80 dark:bg-zinc-800/70 p-0.5 pr-1 z-10 border border-zinc-200/80 dark:border-zinc-800"
         )}
         style={{ borderRadius: open ? 18 : 9999 }}
         transition={SPRING}
       >
         {/* Header Bar */}
-        <motion.div layout="position" transition={HEADER_SPRING} className="flex items-center justify-between w-full min-h-7">
+        <motion.div layout="position" transition={HEADER_SPRING} className="flex items-center justify-between w-full h-full min-h-[32px]">
           {open ? (
             <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 select-none pl-1 truncate">
               {label}
@@ -91,6 +93,7 @@ export function GithubActivityHeaderNav({
                   transition={SPRING}
                   asButton
                   isSelected={activeVariant === item.value}
+                  staticIcons={staticIcons}
                   onClick={() => onVariantChange?.(item.value)}
                   className="-ml-1.5 first:ml-0"
                   style={{ zIndex: getNavZIndex(index, activeIndex) }}
@@ -105,7 +108,7 @@ export function GithubActivityHeaderNav({
             aria-expanded={open}
             aria-controls={`${uid}-panel`}
             aria-label={open ? "Hide activity views" : "Show activity views"}
-            className="grid size-7 shrink-0 place-items-center rounded-full ml-1 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-700/60 transition-colors cursor-pointer"
+            className="grid size-6 shrink-0 place-items-center rounded-full text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-zinc-700/60 transition-colors cursor-pointer"
           >
             <Chevron open={open} transition={SPRING} />
           </button>
@@ -140,7 +143,7 @@ export function GithubActivityHeaderNav({
                       )}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <NavAvatar item={item} layoutId={`${uid}-${item.value}`} transition={SPRING} asButton={false} isSelected={isSelected} />
+                        <NavAvatar item={item} layoutId={`${uid}-${item.value}`} transition={SPRING} asButton={false} isSelected={isSelected} staticIcons={staticIcons} />
                         <div className="flex flex-col min-w-0">
                           <span className={cn("text-xs font-semibold truncate", isSelected ? "text-zinc-900 dark:text-white" : "text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white")}>
                             {item.label}
@@ -152,10 +155,10 @@ export function GithubActivityHeaderNav({
                       </div>
 
                       <div className="flex items-center gap-2 pl-2 shrink-0">
+                        {isSelected && <Check className="size-3.5 text-[var(--theme-primary)] shrink-0" />}
                         <span className="text-xs font-mono font-medium text-zinc-500 dark:text-zinc-400">
                           {getNavMetric(item.value, stats, totalContributions)}
                         </span>
-                        {isSelected && <Check className="size-3.5 text-emerald-500 shrink-0" />}
                       </div>
                     </button>
                   </li>

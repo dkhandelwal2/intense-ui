@@ -413,6 +413,11 @@
           "target": "components/ui/github-activity/github-activity-legend.tsx"
         },
         {
+          "path": "packages/registry/src/components/github-activity/github-activity-matrix.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-matrix.ts"
+        },
+        {
           "path": "packages/registry/src/components/github-activity/github-activity-stats-cards.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-stats-cards.tsx"
@@ -426,6 +431,11 @@
           "path": "packages/registry/src/components/github-activity/github-activity-timeline-filter.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-timeline-filter.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-timeline-search.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-timeline-search.tsx"
         },
         {
           "path": "packages/registry/src/components/github-activity/github-activity-timeline.tsx",
@@ -458,9 +468,49 @@
           "target": "assets/svg/index.ts"
         },
         {
-          "path": "packages/registry/src/assets/svg/github-icon.tsx",
+          "path": "packages/registry/src/assets/svg/animated-calendar-icon.tsx",
           "type": "registry:file",
-          "target": "assets/svg/github-icon.tsx"
+          "target": "assets/svg/animated-calendar-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/github-activity-pulse-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/github-activity-pulse-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-trending-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-trending-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-github-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-github-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-sidebar-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-sidebar-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-box-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-box-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-droplet-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-droplet-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-filter-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-filter-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-search-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-search-icon.tsx"
         },
         {
           "path": "packages/registry/src/config/site.ts",

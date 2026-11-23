@@ -135,6 +135,78 @@ describe("GithubActivity Component Suite", () => {
     expect(screen.queryByText("fix: resolve memory leak in pipeline")).not.toBeInTheDocument();
   });
 
+  it("searches recent activity items in real-time and clears search query", () => {
+    render(
+      <GithubActivityTimeline
+        events={mockEvents}
+        showFilter
+        showSearch
+      />
+    );
+
+    const searchInput = screen.getByRole("textbox", { name: /search recent activity/i });
+    expect(searchInput).toBeInTheDocument();
+
+    // Type "memory leak"
+    fireEvent.change(searchInput, { target: { value: "memory leak" } });
+    expect(screen.getByText("memory leak")).toBeInTheDocument();
+    expect(screen.getByText("memory leak").tagName.toLowerCase()).toBe("mark");
+    expect(screen.queryByText("feat: add super cool feature")).not.toBeInTheDocument();
+
+    // Type query with no match
+    fireEvent.change(searchInput, { target: { value: "nonexistent-query-xyz" } });
+    expect(screen.getByText(/no activity found matching/i)).toBeInTheDocument();
+
+    // Click "Clear search" button
+    const clearBtns = screen.getAllByRole("button", { name: /clear search/i });
+    expect(clearBtns.length).toBeGreaterThanOrEqual(1);
+    fireEvent.click(clearBtns[0]);
+    expect(screen.getByText("feat: add super cool feature")).toBeInTheDocument();
+    expect(screen.getByText("fix: resolve memory leak in pipeline")).toBeInTheDocument();
+  });
+
+  it("sorts recent activity items by latest / oldest inside filter dropdown", () => {
+    const { container } = render(
+      <GithubActivityTimeline
+        events={mockEvents}
+        showSort
+        showFilter
+      />
+    );
+
+    // Initial default: Latest first (evt-1 before evt-2)
+    const getEventTitles = () =>
+      Array.from(container.querySelectorAll("p")).map((el) => el.textContent?.trim());
+
+    expect(getEventTitles()).toEqual([
+      "feat: add super cool feature",
+      "fix: resolve memory leak in pipeline",
+    ]);
+
+    // Open filter dropdown
+    const filterBtn = screen.getByRole("button", { name: /filter activity/i });
+    fireEvent.click(filterBtn);
+
+    // Click "Oldest" sort button inside filter dropdown
+    const oldestBtn = screen.getByRole("button", { name: /oldest/i });
+    expect(oldestBtn).toBeInTheDocument();
+    fireEvent.click(oldestBtn);
+
+    // Now evt-2 ("1 day ago") should come before evt-1 ("2 hours ago")
+    expect(getEventTitles()).toEqual([
+      "fix: resolve memory leak in pipeline",
+      "feat: add super cool feature",
+    ]);
+
+    // Click "Latest" sort button inside filter dropdown
+    const latestBtn = screen.getByRole("button", { name: /latest/i });
+    fireEvent.click(latestBtn);
+    expect(getEventTitles()).toEqual([
+      "feat: add super cool feature",
+      "fix: resolve memory leak in pipeline",
+    ]);
+  });
+
   it("renders year selector buttons on the right side and triggers onYearChange", () => {
     const handleYearChange = vi.fn();
     render(
@@ -291,5 +363,33 @@ describe("GithubActivity Component Suite", () => {
     fireEvent.click(year2025);
 
     expect(screen.getAllByText(/contributions in 2025/i)[0]).toBeInTheDocument();
+  });
+
+  it("supports staticIcons and animatedIcons props to disable continuous icon animations", () => {
+    const { container: staticContainer } = render(
+      <GithubActivity
+        username="octocat"
+        data={{
+          contributions: mockDays,
+          events: mockEvents,
+          stats: mockStats,
+        }}
+        staticIcons={true}
+      />
+    );
+    expect(staticContainer.querySelector("svg")).toBeInTheDocument();
+
+    const { container: nonAnimatedContainer } = render(
+      <GithubActivity
+        username="octocat"
+        data={{
+          contributions: mockDays,
+          events: mockEvents,
+          stats: mockStats,
+        }}
+        animatedIcons={false}
+      />
+    );
+    expect(nonAnimatedContainer.querySelector("svg")).toBeInTheDocument();
   });
 });

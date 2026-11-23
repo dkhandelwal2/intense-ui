@@ -8,13 +8,14 @@ import { GithubActivityPlaygroundStudio } from "../playground-studio/github-acti
 export const githubActivityShowcaseDefinition: ShowcaseDefinition<GithubActivityCustomProps> = {
   slug: "github-activity",
   defaultProps: DEFAULT_GITHUB_ACTIVITY_PROPS,
-  renderPreview: ({ customProps, activeTocId, isCustomizing, dynamicPreviewContent }) => {
+  renderPreview: ({ customProps, activeTocId, isCustomizing, dynamicPreviewContent, onChange }) => {
     if (dynamicPreviewContent) return dynamicPreviewContent;
     return (
       <GithubActivityPreview
         customProps={customProps}
         activeTocId={activeTocId}
         isCustomizing={isCustomizing}
+        onChange={onChange}
       />
     );
   },

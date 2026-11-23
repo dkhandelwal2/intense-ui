@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Grid2X2, Box } from "lucide-react";
-import { GithubIcon } from "@/assets/svg";
+import { AnimatedGithubIcon, AnimatedSidebarIcon, AnimatedBoxIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import { GithubActivityHeaderNav } from "./github-activity-header-nav";
 import type { GithubActivityHeaderProps } from "./types";
@@ -18,6 +17,7 @@ export function GithubActivityHeader({
   onModeChange,
   showModeToggle = true,
   isLoading = false,
+  staticIcons = false,
   className,
 }: GithubActivityHeaderProps) {
   const isHeatmap = activeVariant === "heatmap";
@@ -36,7 +36,7 @@ export function GithubActivityHeader({
           />
         ) : (
           <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 ring-2 ring-zinc-200/60 dark:ring-zinc-700/60 flex items-center justify-center shrink-0">
-            <GithubIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+            <AnimatedGithubIcon className="w-5 h-5 text-zinc-600 dark:text-zinc-400" animate={!staticIcons} />
           </div>
         )}
 
@@ -65,12 +65,12 @@ export function GithubActivityHeader({
                   title="View GitHub profile"
                   aria-label="View GitHub profile"
                 >
-                  <GithubIcon size={14} className="size-3.5" />
+                  <AnimatedGithubIcon size={18} className="size-4.5" animate={!staticIcons} />
                 </a>
               )}
             </div>
             {user?.bio && (
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs sm:max-w-md hidden sm:block">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-[200px] sm:max-w-md">
                 {user.bio}
               </p>
             )}
@@ -100,7 +100,7 @@ export function GithubActivityHeader({
                   : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
               )}
             >
-              <Grid2X2 className="size-3.5" />
+              <AnimatedSidebarIcon className="size-3.5" animate={!staticIcons && mode === "3d"} />
             </button>
             <button
               type="button"
@@ -115,7 +115,7 @@ export function GithubActivityHeader({
                   : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
               )}
             >
-              <Box className="size-3.5" />
+              <AnimatedBoxIcon className="size-3.5" animate={!staticIcons && mode === "2d"} />
             </button>
           </div>
         )}
@@ -127,6 +127,7 @@ export function GithubActivityHeader({
             onVariantChange={onVariantChange}
             stats={stats}
             totalContributions={totalContributions}
+            staticIcons={staticIcons}
           />
         )}
       </div>

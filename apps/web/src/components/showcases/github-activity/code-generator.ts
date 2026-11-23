@@ -55,7 +55,23 @@ export function generateGithubActivityCode(props: GithubActivityCustomProps): st
     parts.push(`  showStreaks={false}`);
   }
 
-  if (props.maxEvents && props.maxEvents !== 6 && (props.variant === "timeline" || props.variant === "compact")) {
+  if (props.showSearch === false) {
+    parts.push(`  showSearch={false}`);
+  }
+
+  if (props.showFilter === false) {
+    parts.push(`  showFilter={false}`);
+  }
+
+  if (props.showSort === false) {
+    parts.push(`  showSort={false}`);
+  }
+
+  if (props.staticIcons) {
+    parts.push(`  staticIcons`);
+  }
+
+  if (props.maxEvents && (props.variant === "timeline" || props.variant === "compact")) {
     parts.push(`  maxEvents={${props.maxEvents}}`);
   }
 

@@ -24,6 +24,8 @@ export const GITHUB_ACTIVITY_HEATMAP_CONFIG: GithubActivityHeatmapConfig = {
 export const GITHUB_ACTIVITY_TIMELINE_CONFIG: GithubActivityTimelineConfig = {
   maxEvents: 8,
   showFilter: true,
+  showSearch: true,
+  showSort: true,
   showCopySha: true,
 };
 
@@ -49,4 +51,7 @@ export const GITHUB_ACTIVITY_CONFIG: GithubActivityConfig = {
   showHeader: true,
   showTabs: true,
   showModeToggle: true,
+  showFilter: true,
+  showSearch: true,
+  showSort: true,
 };

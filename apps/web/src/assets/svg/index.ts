@@ -63,3 +63,31 @@ export type { TimerSplitRingProps } from "./timer-split-ring";
 
 export { GithubIcon } from "./github-icon";
 export type { GithubIconProps } from "./github-icon";
+
+export { GithubActivityPulseIcon, GithubActivityPulseIcon as AnimatedRecentIcon, GithubActivityPulseIcon as AnimatedActivityIcon } from "./github-activity-pulse-icon";
+export type { GithubActivityPulseIconProps } from "./github-activity-pulse-icon";
+
+export { AnimatedFilterIcon } from "./animated-filter-icon";
+export type { AnimatedFilterIconProps } from "./animated-filter-icon";
+
+export { AnimatedSearchIcon } from "./animated-search-icon";
+export type { AnimatedSearchIconProps } from "./animated-search-icon";
+
+export { AnimatedGithubIcon } from "./animated-github-icon";
+export type { AnimatedGithubIconProps } from "./animated-github-icon";
+
+export { AnimatedBoxIcon } from "./animated-box-icon";
+export type { AnimatedBoxIconProps } from "./animated-box-icon";
+
+export { AnimatedSidebarIcon } from "./animated-sidebar-icon";
+export type { AnimatedSidebarIconProps } from "./animated-sidebar-icon";
+
+export { AnimatedDropletIcon } from "./animated-droplet-icon";
+export type { AnimatedDropletIconProps } from "./animated-droplet-icon";
+
+export { AnimatedTrendingIcon } from "./animated-trending-icon";
+export type { AnimatedTrendingIconProps } from "./animated-trending-icon";
+
+export { AnimatedCalendarIcon } from "./animated-calendar-icon";
+export type { AnimatedCalendarIconProps } from "./animated-calendar-icon";
+

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Flame } from "lucide-react";
+import { AnimatedDropletIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import { THEME_LEVEL_CLASSES } from "./constants";
 import type { GithubActivityLegendProps, GithubContributionLevel } from "./types";
@@ -13,6 +13,7 @@ export function GithubActivityLegend({
   yearLabel,
   showStreaks = true,
   streakCount,
+  staticIcons = false,
   className,
 }: GithubActivityLegendProps) {
   const [isStreakExpanded, setIsStreakExpanded] = useState(false);
@@ -37,7 +38,7 @@ export function GithubActivityLegend({
             title={isStreakExpanded ? "Collapse streak" : `${streakCount} day streak - Click to view`}
             className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-semibold shrink-0 shadow-2xs cursor-pointer hover:bg-amber-500/15 active:scale-95 transition-colors focus:outline-none focus:ring-1 focus:ring-amber-500/40 select-none overflow-hidden"
           >
-            <Flame className="w-3.5 h-3.5 fill-amber-500 text-amber-500 animate-pulse shrink-0" />
+            <AnimatedDropletIcon className="w-3.5 h-3.5 fill-amber-500 text-amber-500 shrink-0" animate={!staticIcons} />
             <motion.span
               initial={false}
               animate={{

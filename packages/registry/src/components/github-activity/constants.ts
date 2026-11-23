@@ -4,10 +4,7 @@ import type {
 } from "./types";
 
 export const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-export const FULL_MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
+export const FULL_MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export function getOrdinalDay(day: number): string {
   if (day >= 11 && day <= 13) return `${day}th`;
@@ -39,12 +36,17 @@ export const THEME_LEVEL_CLASSES: Record<GithubActivityTheme, Record<0 | 1 | 2 |
   monochrome: { 0: "bg-zinc-100 dark:bg-zinc-800/70 border-zinc-200/40 dark:border-zinc-700/40", 1: "bg-zinc-300 dark:bg-zinc-700 border-zinc-400 dark:border-zinc-600", 2: "bg-zinc-400 dark:bg-zinc-500 border-zinc-500 dark:border-zinc-400", 3: "bg-zinc-600 dark:bg-zinc-400 border-zinc-700 dark:border-zinc-300", 4: "bg-zinc-900 dark:bg-zinc-100 border-zinc-950 dark:border-white" },
 };
 
+export const KNOWN_USER_PROFILES: Record<string, Partial<GithubUserProfile>> = {
+  octocat: { username: "octocat", name: "The Octocat", avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4", bio: "GitHub mascot & open source champion • San Francisco", company: "@github", location: "San Francisco", followers: 18500, publicRepos: 8 },
+  dkhandelwal2: { username: "dkhandelwal2", name: "Deepak Khandelwal", avatarUrl: "https://avatars.githubusercontent.com/dkhandelwal2", bio: "Sr. Frontend Engineer", location: "India", followers: 42, publicRepos: 18 },
+  shadcn: { username: "shadcn", name: "shadcn", avatarUrl: "https://avatars.githubusercontent.com/shadcn", bio: "I own a computer.", location: "San Francisco, CA", followers: 125000, publicRepos: 24 },
+  torvalds: { username: "torvalds", name: "Linus Torvalds", avatarUrl: "https://avatars.githubusercontent.com/torvalds", bio: "Creator of Linux & Git • Linux Foundation", company: "Linux Foundation", location: "Portland, OR", followers: 240000, publicRepos: 6 },
+};
+
 export const DEFAULT_MOCK_USER: GithubUserProfile = {
-  username: "octocat", name: "The Octocat",
-  avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4",
-  bio: "GitHub's mascot and official open-source demo profile.",
-  profileUrl: "https://github.com/octocat",
-  followers: 18500, following: 9, publicRepos: 8, createdAt: "2011-01-25T00:00:00Z",
+  username: "octocat", name: "The Octocat", avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4",
+  bio: "GitHub mascot & open source champion • San Francisco", company: "@github", location: "San Francisco",
+  profileUrl: "https://github.com/octocat", followers: 18500, following: 9, publicRepos: 8, createdAt: "2011-01-25T00:00:00Z",
 };
 
 export const DEFAULT_MOCK_STATS: GithubActivityStatsData = {

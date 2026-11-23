@@ -12,7 +12,7 @@ export interface GithubActivityCustomProps {
   year: number;
   dotSize?: "sm" | "md" | "lg";
   weeksCount: number;
-  maxEvents: number;
+  maxEvents?: number;
   showHeader: boolean;
   showTabs: boolean;
   showLegend: boolean;
@@ -20,7 +20,12 @@ export interface GithubActivityCustomProps {
   showModeToggle: boolean;
   showStreaks: boolean;
   showBreakdown: boolean;
+  showSearch?: boolean;
+  showFilter?: boolean;
+  showSort?: boolean;
   showFullYear?: boolean;
+  staticIcons?: boolean;
+  activeTab?: GithubActivityVariant;
 }
 
 export const DEFAULT_GITHUB_ACTIVITY_PROPS: GithubActivityCustomProps = {
@@ -31,7 +36,6 @@ export const DEFAULT_GITHUB_ACTIVITY_PROPS: GithubActivityCustomProps = {
   year: 2026,
   dotSize: "md",
   weeksCount: 52,
-  maxEvents: 6,
   showHeader: true,
   showTabs: true,
   showLegend: true,
@@ -39,5 +43,10 @@ export const DEFAULT_GITHUB_ACTIVITY_PROPS: GithubActivityCustomProps = {
   showModeToggle: true,
   showStreaks: true,
   showBreakdown: true,
+  showSearch: true,
+  showFilter: true,
+  showSort: true,
   showFullYear: false,
+  staticIcons: false,
+  activeTab: "heatmap",
 };

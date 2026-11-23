@@ -15,30 +15,17 @@ import type {
 } from "./types";
 
 export function GithubActivity({
-  username,
-  variant = "compact",
-  data,
-  theme = "github",
-  mode = "2d",
-  showModeToggle = true,
-  weeksCount = 52,
-  year,
-  years,
-  onYearChange,
-  showFullYear,
-  showTabs = true,
-  showYearSelector = true,
-  showHeader = true,
-  showStreaks = true,
-  dotSize,
-  maxEvents = 15,
-  isLoading: propIsLoading,
-  onDayClick,
-  className,
-  ...props
+  username, repo, variant = "compact", activeVariant, onVariantChange,
+  data, theme = "github", mode = "2d", showModeToggle = true,
+  weeksCount = 52, year, years, onYearChange, showFullYear,
+  showTabs = true, showYearSelector = true, showHeader = true, showStreaks = true,
+  showFilter = true, showSearch = true, showSort = true, defaultSort = "desc",
+  staticIcons = false, animatedIcons,
+  dotSize, maxEvents, isLoading: propIsLoading, onDayClick, className, ...props
 }: GithubActivityProps) {
-  const [selectedVariant, setSelectedVariant] = useState<GithubActivityVariant>(
-    variant === "compact" ? "heatmap" : variant
+  const isStatic = staticIcons || animatedIcons === false;
+  const [internalVariant, setInternalVariant] = useState<GithubActivityVariant>(
+    activeVariant ?? (variant === "compact" ? "heatmap" : variant)
   );
   const [currentMode, setCurrentMode] = useState<GithubActivityMode>(mode);
   const [switchedYear, setSwitchedYear] = useState<number | null>(null);
@@ -48,10 +35,24 @@ export function GithubActivity({
   }, [mode]);
 
   useEffect(() => {
-    if (variant) {
-      setSelectedVariant(variant === "compact" ? "heatmap" : variant);
+    if (activeVariant !== undefined) {
+      setInternalVariant(activeVariant);
     }
-  }, [variant]);
+  }, [activeVariant]);
+
+  useEffect(() => {
+    if (variant && activeVariant === undefined) {
+      setInternalVariant(variant === "compact" ? "heatmap" : variant);
+    }
+  }, [variant, activeVariant]);
+
+  const handleVariantChange = useCallback(
+    (newVariant: GithubActivityVariant) => {
+      setInternalVariant(newVariant);
+      onVariantChange?.(newVariant);
+    },
+    [onVariantChange]
+  );
 
   const {
     contributions,
@@ -64,6 +65,7 @@ export function GithubActivity({
     availableYears,
   } = useGithubActivity({
     username,
+    repo,
     year,
     showFullYear,
     initialData: data,
@@ -89,7 +91,8 @@ export function GithubActivity({
     safeWeeksCount >= 52 &&
     (effectiveYear < currentYear ? true : (showFullYear !== undefined ? showFullYear : (switchedYear !== null || (year !== undefined && year !== currentYear))));
 
-  const activeView = variant === "compact" ? selectedVariant : variant;
+  const currentVariant = activeVariant ?? internalVariant;
+  const activeView = variant === "compact" ? currentVariant : variant;
 
   return (
     <div
@@ -105,13 +108,14 @@ export function GithubActivity({
           user={user}
           stats={stats}
           totalContributions={stats?.totalContributions}
-          activeVariant={selectedVariant}
-          onVariantChange={setSelectedVariant}
+          activeVariant={activeView}
+          onVariantChange={handleVariantChange}
           mode={currentMode}
           onModeChange={setCurrentMode}
           showModeToggle={showModeToggle}
           showTabs={showTabs}
           isLoading={isLoading}
+          staticIcons={isStatic}
           className="border-0 border-b border-zinc-100 dark:border-zinc-800/80 rounded-none bg-transparent shadow-none p-3 sm:p-3.5"
         />
       )}
@@ -146,6 +150,7 @@ export function GithubActivity({
               showStreaks={showStreaks}
               stats={stats}
               isLoading={isLoading}
+              staticIcons={isStatic}
               onDayClick={onDayClick}
               className="h-full border-0 rounded-none bg-transparent shadow-none"
             />
@@ -156,7 +161,12 @@ export function GithubActivity({
               events={events}
               username={username}
               maxEvents={maxEvents}
+              showFilter={showFilter}
+              showSearch={showSearch}
+              showSort={showSort}
+              defaultSort={defaultSort}
               isLoading={isLoading}
+              staticIcons={isStatic}
               className="h-full border-0 rounded-none bg-transparent shadow-none"
             />
           )}
@@ -167,6 +177,7 @@ export function GithubActivity({
               theme={theme}
               showStreaks={showStreaks}
               isLoading={isLoading}
+              staticIcons={isStatic}
               className="h-full border-0 rounded-none bg-transparent shadow-none"
             />
           )}

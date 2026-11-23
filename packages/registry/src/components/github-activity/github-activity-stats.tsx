@@ -13,6 +13,7 @@ export function GithubActivityStats({
   showBreakdown = true,
   showStreaks = true,
   isLoading = false,
+  staticIcons = false,
   className,
 }: GithubActivityStatsProps) {
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
@@ -50,6 +51,7 @@ export function GithubActivityStats({
         setHoveredCat={setHoveredCat}
         showStreaks={showStreaks}
         isLoading={isLoading}
+        staticIcons={staticIcons}
       />
 
       {/* Interactive Contribution Breakdown Section */}

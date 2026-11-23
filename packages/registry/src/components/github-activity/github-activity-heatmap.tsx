@@ -32,6 +32,7 @@ export function GithubActivityHeatmap({
   showStreaks = true,
   stats,
   isLoading = false,
+  staticIcons = false,
   onDayClick,
   className,
 }: GithubActivityHeatmapProps) {
@@ -158,6 +159,7 @@ export function GithubActivityHeatmap({
             theme={theme} totalCount={showTotalCount ? totalContributions : undefined}
             yearLabel={isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")}
             showStreaks={showStreaks} streakCount={stats?.currentStreak}
+            staticIcons={staticIcons}
           />
         </div>
       ))}

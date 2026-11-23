@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, type Transition } from "framer-motion";
-import { Calendar, Activity, TrendingUp } from "lucide-react";
+import { AnimatedCalendarIcon, GithubActivityPulseIcon, AnimatedTrendingIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import type { GithubActivityVariant, GithubActivityStatsData } from "./types";
 
@@ -38,10 +38,18 @@ export function getNavZIndex(index: number, activeIndex: number): number {
   return 10;
 }
 
-export function NavItemIcon({ icon, className }: { icon: "heatmap" | "timeline" | "stats"; className?: string }) {
-  if (icon === "heatmap") return <Calendar className={cn("size-3.5", className)} />;
-  if (icon === "timeline") return <Activity className={cn("size-3.5", className)} />;
-  return <TrendingUp className={cn("size-3.5", className)} />;
+export function NavItemIcon({
+  icon,
+  className,
+  isActive = false,
+}: {
+  icon: "heatmap" | "timeline" | "stats";
+  className?: string;
+  isActive?: boolean;
+}) {
+  if (icon === "heatmap") return <AnimatedCalendarIcon className={cn("size-3.5", className)} animate={isActive} />;
+  if (icon === "timeline") return <GithubActivityPulseIcon className={cn("size-3.5", className)} animate={isActive} />;
+  return <AnimatedTrendingIcon className={cn("size-3.5", className)} animate={isActive} />;
 }
 
 export const NavAvatar = ({
@@ -52,6 +60,7 @@ export const NavAvatar = ({
   style,
   asButton = false,
   isSelected = false,
+  staticIcons = false,
   onClick,
 }: {
   item: NavItemConfig;
@@ -61,6 +70,7 @@ export const NavAvatar = ({
   style?: React.CSSProperties;
   asButton?: boolean;
   isSelected?: boolean;
+  staticIcons?: boolean;
   onClick?: () => void;
 }) => {
   const Component = asButton ? motion.button : motion.span;
@@ -77,7 +87,7 @@ export const NavAvatar = ({
       )}
       style={{ backgroundColor: item.bgColor, color: item.color, ...style }}
     >
-      <NavItemIcon icon={item.icon} />
+      <NavItemIcon icon={item.icon} isActive={!staticIcons && isSelected} />
     </Component>
   );
 };
@@ -85,7 +95,7 @@ export const NavAvatar = ({
 export const Chevron = ({ open, transition = SPRING }: { open: boolean; transition?: Transition }) => (
   <motion.svg
     viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden
-    className="size-5 text-zinc-500 dark:text-zinc-400" initial={false}
+    className="size-4 text-zinc-500 dark:text-zinc-400" initial={false}
     animate={{ rotate: open ? 180 : 0 }} transition={transition}
   >
     <circle cx="12" cy="12" r="10" />

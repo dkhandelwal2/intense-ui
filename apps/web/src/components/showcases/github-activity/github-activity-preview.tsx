@@ -10,6 +10,7 @@ export interface GithubActivityPreviewProps {
   activeTocId?: string;
   isCustomizing?: boolean;
   className?: string;
+  onChange?: React.Dispatch<React.SetStateAction<GithubActivityCustomProps>>;
 }
 
 export function GithubActivityPreview({
@@ -17,6 +18,7 @@ export function GithubActivityPreview({
   activeTocId = "suite",
   isCustomizing = false,
   className,
+  onChange,
 }: GithubActivityPreviewProps) {
   const [selectedYear, setSelectedYear] = React.useState<number | undefined>(customProps.year);
 
@@ -43,9 +45,14 @@ export function GithubActivityPreview({
       <GithubActivity
         key={`preview-${customProps.username || "default"}`}
         variant={effectiveVariant}
+        activeVariant={isFullSuite ? (customProps.activeTab || "heatmap") : undefined}
+        onVariantChange={(v) => {
+          onChange?.((prev) => ({ ...prev, activeTab: v }));
+        }}
         theme={customProps.theme}
         mode={customProps.mode}
         username={customProps.username || "octocat"}
+        repo={customProps.username?.toLowerCase() === "dkhandelwal2" ? "dkhandelwal2/intense-ui" : undefined}
         year={selectedYear}
         onYearChange={setSelectedYear}
         showFullYear={customProps.showFullYear}
@@ -53,10 +60,14 @@ export function GithubActivityPreview({
         showModeToggle={customProps.showModeToggle}
         dotSize={customProps.dotSize}
         weeksCount={customProps.weeksCount}
-        maxEvents={isFullSuite ? 4 : (customProps.maxEvents || 6)}
+        maxEvents={customProps.maxEvents}
         showHeader={isFullSuite ? customProps.showHeader : false}
         showTabs={isFullSuite ? customProps.showTabs : false}
         showStreaks={customProps.showStreaks}
+        showSearch={customProps.showSearch}
+        showFilter={customProps.showFilter}
+        showSort={customProps.showSort}
+        staticIcons={customProps.staticIcons}
         className="w-full"
       />
       <span className="text-xs font-mono text-muted-foreground text-center pt-2 px-2 line-clamp-2 sm:line-clamp-none">
@@ -68,7 +79,7 @@ export function GithubActivityPreview({
               ? "Live event activity stream with commit SHAs, PR badges, and filter tabs"
               : effectiveVariant === "stats"
                 ? "Metric statistics card showing active streaks, longest records, and contribution distribution"
-                : "Full Suite Bento with profile header, contribution matrix, and interactive view switching"}
+                : `Full Suite Bento for @${customProps.username || "octocat"} with profile header & contribution matrix`}
       </span>
     </div>
   );

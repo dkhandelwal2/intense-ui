@@ -6,6 +6,7 @@ export interface ShowcasePreviewParams<TProps = any> {
   isCustomizing: boolean;
   dynamicPreviewContent?: React.ReactNode;
   children?: React.ReactNode;
+  onChange?: React.Dispatch<React.SetStateAction<TProps>>;
 }
 
 export interface ShowcasePlaygroundParams<TProps = any> {

@@ -1,6 +1,8 @@
 import { GITHUB_ENDPOINTS } from "@/config/site";
-import type { GithubActivityEvent, GithubUserProfile, GithubEventStatus, GithubContributionDay } from "./types";
-import { DEFAULT_MOCK_USER, MONTH_LABELS } from "./constants";
+import type { GithubActivityEvent, GithubUserProfile, GithubEventStatus } from "./types";
+import { DEFAULT_MOCK_USER, KNOWN_USER_PROFILES } from "./constants";
+
+export { buildContributionMatrix } from "./github-activity-matrix";
 
 export function formatRelativeTime(dateStr?: string): string {
   if (!dateStr) return "recently";
@@ -14,25 +16,42 @@ export function formatRelativeTime(dateStr?: string): string {
 }
 
 export function generateUserYears(createdAt?: string, currentYear = new Date().getFullYear()): number[] {
-  const startYear = createdAt ? new Date(createdAt).getFullYear() : currentYear - 5;
-  const validStart = Math.min(startYear, currentYear);
-  const years: number[] = [];
-  for (let y = currentYear; y >= validStart; y--) {
-    years.push(y);
+  const start = Math.min(createdAt ? new Date(createdAt).getFullYear() : currentYear - 5, currentYear);
+  return Array.from({ length: currentYear - start + 1 }, (_, i) => currentYear - i);
+}
+
+export function resolveUserBio(u: {
+  bio?: string | null; company?: string | null; location?: string | null;
+  publicRepos?: number; public_repos?: number; followers?: number; username?: string; login?: string;
+}): string {
+  if (u.bio && u.bio.trim()) return u.bio.trim().replace(/\r?\n+/g, " ");
+  const parts = [u.company?.trim().replace(/^@/, ""), u.location?.trim()].filter(Boolean) as string[];
+  if (parts.length > 0) return parts.join(" • ");
+  const repos = u.publicRepos ?? u.public_repos;
+  if (repos !== undefined && repos > 0) {
+    return `${repos} public repo${repos === 1 ? "" : "s"}${u.followers ? ` • ${u.followers.toLocaleString()} followers` : ""}`;
   }
-  return years;
+  const handle = u.username || u.login;
+  return handle ? `@${handle} on GitHub` : "Open source contributor";
 }
 
 export function resolveUserInitial(username?: string): GithubUserProfile {
   const resolved = (username || DEFAULT_MOCK_USER.username).trim();
+  const lower = resolved.toLowerCase();
+  const known = KNOWN_USER_PROFILES[lower];
+  if (known) {
+    return {
+      ...DEFAULT_MOCK_USER, ...known, username: resolved,
+      profileUrl: GITHUB_ENDPOINTS.getUserProfileUrl(resolved),
+    } as GithubUserProfile;
+  }
   const isMock = !username || resolved === DEFAULT_MOCK_USER.username;
   return {
     ...DEFAULT_MOCK_USER,
-    username: resolved,
-    name: isMock ? DEFAULT_MOCK_USER.name : resolved,
+    username: resolved, name: isMock ? DEFAULT_MOCK_USER.name : resolved,
     avatarUrl: isMock ? DEFAULT_MOCK_USER.avatarUrl : GITHUB_ENDPOINTS.getUserAvatarUrl(resolved),
     profileUrl: GITHUB_ENDPOINTS.getUserProfileUrl(resolved),
-    bio: isMock ? DEFAULT_MOCK_USER.bio : `GitHub contributor @${resolved}`,
+    bio: isMock ? DEFAULT_MOCK_USER.bio : `@${resolved} on GitHub`,
     createdAt: isMock ? DEFAULT_MOCK_USER.createdAt : undefined,
   };
 }
@@ -45,46 +64,73 @@ export function parseRawEvents(rawList: unknown[]): {
   reviews: number;
 } {
   let commits = 0; let prs = 0; let issues = 0; let reviews = 0;
-  for (const item of rawList) {
+  for (const item of (Array.isArray(rawList) ? rawList : [])) {
     if (!item || typeof item !== "object") continue;
     const t = String((item as Record<string, any>).type || "");
-    if (t === "PushEvent") commits++;
-    else if (t === "PullRequestEvent") prs++;
+    const payload = (item as Record<string, any>).payload || {};
+    if (t === "PushEvent") {
+      commits += Array.isArray(payload.commits) && payload.commits.length > 0 ? payload.commits.length : Number(payload.size || 1);
+    } else if (t === "PullRequestEvent") prs++;
     else if (t === "IssuesEvent" || t === "IssueCommentEvent") issues++;
     else if (t === "PullRequestReviewEvent" || t === "PullRequestReviewCommentEvent") reviews++;
   }
 
-  const events: GithubActivityEvent[] = rawList.slice(0, 15).map((item, idx) => {
-    const ev = (item && typeof item === "object") ? (item as Record<string, any>) : {};
-    const t = String(ev.type || "");
-    const payload = ev.payload || {};
-    const repoName = String(ev.repo?.name || "github/repo");
-    const seed = Math.abs(Number(ev.id) || idx + 1);
+  const sortedRawList = Array.isArray(rawList)
+    ? [...rawList].sort((a: any, b: any) => (b?.created_at ? new Date(b.created_at).getTime() : 0) - (a?.created_at ? new Date(a.created_at).getTime() : 0))
+    : [];
+
+  const events: GithubActivityEvent[] = [];
+
+  for (let idx = 0; idx < sortedRawList.length; idx++) {
+    const ev = (sortedRawList[idx] && typeof sortedRawList[idx] === "object") ? (sortedRawList[idx] as Record<string, any>) : {};
+    const t = String(ev.type || ""); const payload = ev.payload || {};
+    const repoName = String(ev.repo?.name || "github/repo"); const seed = Math.abs(Number(ev.id) || idx + 1);
+
+    if (t === "PushEvent") {
+      const branch = payload.ref ? String(payload.ref).replace(/^refs\/(heads|tags)\//, "") : "main";
+      const rawCommits = Array.isArray(payload.commits) ? payload.commits : [];
+      if (rawCommits.length > 0) {
+        for (let cIdx = rawCommits.length - 1; cIdx >= 0; cIdx--) {
+          const c = rawCommits[cIdx];
+          const cSha = c?.sha ? String(c.sha).substring(0, 7) : undefined;
+          const additions = ((seed + cIdx) % 42) + 14;
+          events.push({
+            id: `ev-${ev.id || idx}-${cSha || cIdx}`, type: "commit", repo: repoName,
+            message: c?.message ? String(c.message).split("\n")[0] : `Pushed changes to ${branch}`,
+            timestamp: formatRelativeTime(ev.created_at), createdAt: ev.created_at, sha: cSha, branch,
+            additions, deletions: Math.round(additions * 0.22) + ((seed + cIdx) % 5),
+            url: cSha ? `https://github.com/${repoName}/commit/${cSha}` : undefined,
+          });
+        }
+      } else {
+        const rawSha = payload.head;
+        const sha = rawSha ? String(rawSha).substring(0, 7) : (seed * 17).toString(16).slice(0, 7).padStart(7, "0");
+        const size = Number(payload.size || 1);
+        const additions = size * ((seed % 42) + 14);
+        events.push({
+          id: String(ev.id || `ev-${idx}`), type: "commit", repo: repoName,
+          message: `Pushed ${size > 1 ? `${size} commits` : "changes"} to ${branch}`,
+          timestamp: formatRelativeTime(ev.created_at), createdAt: ev.created_at, sha, branch,
+          additions, deletions: Math.round(additions * 0.22) + (seed % 5),
+          url: sha ? `https://github.com/${repoName}/commit/${sha}` : undefined,
+        });
+      }
+      continue;
+    }
 
     let type: GithubActivityEvent["type"] = "commit";
-    let sha: string | undefined; let branch: string | undefined;
-    let status: GithubEventStatus | undefined;
+    let branch: string | undefined; let status: GithubEventStatus | undefined;
     let prNumber: number | undefined; let issueNumber: number | undefined;
     let additions: number | undefined; let deletions: number | undefined;
 
-    if (t === "PushEvent") {
-      type = "commit";
-      branch = payload.ref ? String(payload.ref).replace(/^refs\/(heads|tags)\//, "") : "main";
-      const rawSha = (payload.commits || [])[0]?.sha || payload.head;
-      sha = rawSha ? String(rawSha).substring(0, 7) : (seed * 17).toString(16).slice(0, 7).padStart(7, "0");
-      const size = Number(payload.size || (payload.commits?.length) || 1);
-      additions = size * ((seed % 42) + 14);
-      deletions = Math.round(additions * 0.22) + (seed % 5);
-    } else if (t === "PullRequestEvent") {
-      type = "pull_request";
-      branch = payload.pull_request?.head?.ref || "main";
+    if (t === "PullRequestEvent") {
+      type = "pull_request"; branch = payload.pull_request?.head?.ref || "main";
       status = payload.pull_request?.merged ? "merged" : (payload.pull_request?.state === "closed" ? "closed" : "open");
       prNumber = payload.pull_request?.number ? Number(payload.pull_request.number) : undefined;
       additions = payload.pull_request?.additions ?? ((seed % 140) + 25);
       deletions = payload.pull_request?.deletions ?? ((seed % 35) + 6);
     } else if (t === "IssuesEvent") {
-      type = "issue";
-      status = payload.issue?.state === "closed" ? "closed" : "open";
+      type = "issue"; status = payload.issue?.state === "closed" ? "closed" : "open";
       issueNumber = payload.issue?.number ? Number(payload.issue.number) : undefined;
     } else if (t === "ReleaseEvent") {
       type = "release"; branch = payload.release?.tag_name || "v1.0.0";
@@ -92,105 +138,60 @@ export function parseRawEvents(rawList: unknown[]): {
       type = "star";
     }
 
-    const commitMsg = (payload.commits || [])[0]?.message;
-    const message = t === "PushEvent"
-      ? (commitMsg || (branch ? `Pushed ${payload.size ? `${payload.size} commit${payload.size > 1 ? "s" : ""}` : "changes"} to ${branch}` : `Pushed to ${repoName}`))
-      : t === "PullRequestEvent" ? String(payload.pull_request?.title || `PR #${prNumber || ""}`)
+    const message = t === "PullRequestEvent" ? String(payload.pull_request?.title || `PR #${prNumber || ""}`)
       : t === "IssuesEvent" ? String(payload.issue?.title || `Issue #${issueNumber || ""}`)
       : t === "ReleaseEvent" ? String(payload.release?.name || payload.release?.tag_name || `Release in ${repoName}`)
       : t === "WatchEvent" ? `Starred ${repoName}` : `Activity in ${repoName}`;
 
-    return {
+    events.push({
       id: String(ev.id || `ev-${idx}`), type, repo: repoName, message,
-      timestamp: formatRelativeTime(ev.created_at), sha, branch, status,
-      prNumber, issueNumber, additions, deletions,
-      url: payload.pull_request?.html_url || (repoName && sha ? `https://github.com/${repoName}/commit/${sha}` : undefined),
-    };
-  });
+      timestamp: formatRelativeTime(ev.created_at), createdAt: ev.created_at,
+      branch, status, prNumber, issueNumber, additions, deletions,
+      url: payload.pull_request?.html_url || undefined,
+    });
+  }
 
-  return { events, commits, prs, issues, reviews };
+  return { events: events.slice(0, 30), commits, prs, issues, reviews };
 }
 
-export function buildContributionMatrix(
-  contributions: GithubContributionDay[],
-  isFullYear: boolean,
-  effectiveYear: number,
-  weeksCount: number,
-  showMonthLabels = true
-): {
-  weeks: GithubContributionDay[][];
-  monthPositions: { label: string; weekIndex: number }[];
-  totalContributions: number;
-} {
-  if (!isFullYear && contributions.length > 0 && contributions.length <= 7) {
-    const sum = contributions.reduce((acc, d) => acc + (d.count || 0), 0);
-    const m = contributions[0]?.date ? parseInt(contributions[0].date.slice(5, 7), 10) - 1 : -1;
-    return { weeks: [contributions], monthPositions: showMonthLabels && m >= 0 ? [{ label: MONTH_LABELS[m], weekIndex: 0 }] : [], totalContributions: sum };
+export function parseDirectCommits(rawCommits: unknown[], repoName: string): GithubActivityEvent[] {
+  if (!Array.isArray(rawCommits)) return [];
+  return rawCommits.filter(Boolean).map((c: any, idx: number) => {
+    const rawSha = String(c.sha || "");
+    const sha = rawSha ? rawSha.substring(0, 7) : `commit-${idx}`;
+    const dateStr = c.commit?.author?.date || c.commit?.committer?.date;
+    const msg = (c.commit?.message || "Commit").split("\n")[0];
+    const seed = Math.abs(parseInt(sha, 16) || idx + 1);
+    const additions = (seed % 45) + 15;
+    return {
+      id: `commit-${sha}`, type: "commit" as const, repo: repoName, message: msg,
+      timestamp: formatRelativeTime(dateStr), createdAt: dateStr, sha, branch: "main",
+      additions, deletions: Math.round(additions * 0.25) + (seed % 6),
+      url: c.html_url || `https://github.com/${repoName}/commit/${sha}`,
+    };
+  });
+}
+
+export function mergeGithubEvents(
+  directCommits: GithubActivityEvent[],
+  parsedEvents: GithubActivityEvent[]
+): GithubActivityEvent[] {
+  const seenShas = new Set<string>();
+  const merged: GithubActivityEvent[] = [];
+
+  for (const c of directCommits) {
+    if (c.sha) seenShas.add(c.sha.toLowerCase());
+    merged.push(c);
   }
 
-  const dayMap = new Map<string, GithubContributionDay>();
-  for (const d of contributions) if (d.date) dayMap.set(d.date, d);
-
-  const now = new Date(), currentYear = now.getFullYear(), isPastYear = effectiveYear < currentYear;
-  const safeWeeks = typeof weeksCount === "number" && !Number.isNaN(weeksCount) ? Math.max(1, Math.min(52, weeksCount)) : 52;
-  const shouldRenderFullYear = isFullYear || (isPastYear && safeWeeks >= 52);
-  const todayStr = `${currentYear}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-
-  let startSun: Date, endSat: Date, numWeeks: number;
-
-  if (shouldRenderFullYear) {
-    const jan1 = new Date(effectiveYear, 0, 1), dec31 = new Date(effectiveYear, 11, 31);
-    startSun = new Date(effectiveYear, 0, 1 - jan1.getDay());
-    endSat = new Date(effectiveYear, 11, 31 + (6 - dec31.getDay()));
-    numWeeks = Math.ceil((endSat.getTime() - startSun.getTime()) / (86400000 * 7));
-  } else if (isPastYear) {
-    const dec31 = new Date(effectiveYear, 11, 31);
-    endSat = new Date(effectiveYear, 11, 31 + (6 - dec31.getDay()));
-    numWeeks = safeWeeks;
-    startSun = new Date(endSat.getFullYear(), endSat.getMonth(), endSat.getDate() - (numWeeks * 7 - 1));
-  } else {
-    endSat = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
-    startSun = new Date(endSat.getFullYear(), endSat.getMonth(), endSat.getDate() - (safeWeeks * 7 - 1));
-    numWeeks = safeWeeks;
+  for (const ev of parsedEvents) {
+    if (ev.sha && seenShas.has(ev.sha.toLowerCase())) continue;
+    merged.push(ev);
   }
 
-  const resultWeeks: GithubContributionDay[][] = [];
-  const months: { label: string; weekIndex: number }[] = [];
-  let lastMonth = -1; let lastMonthWeek = -99;
-  let sum = 0;
-
-  for (let w = 0; w < numWeeks; w++) {
-    const weekDays: GithubContributionDay[] = [];
-    for (let r = 0; r < 7; r++) {
-      const d = new Date(startSun.getFullYear(), startSun.getMonth(), startSun.getDate() + (w * 7 + r));
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const dt = String(d.getDate()).padStart(2, "0");
-      const dateStr = `${y}-${m}-${dt}`;
-
-      const existing = dayMap.get(dateStr);
-      const isOutOfYear = shouldRenderFullYear && y !== effectiveYear;
-      const isFuture = shouldRenderFullYear ? isOutOfYear : dateStr > todayStr;
-      const count = existing ? existing.count : 0;
-      const level = existing ? existing.level : 0;
-
-      if (!isFuture && !isOutOfYear) sum += count;
-      weekDays.push({ date: dateStr, count, level, isFuture: isFuture || isOutOfYear || undefined });
-    }
-
-    resultWeeks.push(weekDays);
-
-    if (showMonthLabels) {
-      const validDay = weekDays.find((d) => (shouldRenderFullYear ? d.date.startsWith(String(effectiveYear)) : true)) || weekDays[0];
-      if (validDay?.date) {
-        const m = parseInt(validDay.date.slice(5, 7), 10) - 1;
-        if (m >= 0 && m < 12 && m !== lastMonth && (w - lastMonthWeek >= 2)) {
-          months.push({ label: MONTH_LABELS[m], weekIndex: w });
-          lastMonth = m; lastMonthWeek = w;
-        }
-      }
-    }
-  }
-
-  return { weeks: resultWeeks, monthPositions: months, totalContributions: sum };
+  return merged.sort((a, b) => {
+    const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    return timeB - timeA;
+  });
 }

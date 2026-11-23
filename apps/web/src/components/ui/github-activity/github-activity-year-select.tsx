@@ -61,14 +61,14 @@ export const GithubActivityYearSelect = React.memo(function GithubActivityYearSe
         aria-label={`Select year, current year ${selectedYear}`}
         className={cn(
           "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 transition-all cursor-pointer shadow-2xs active:scale-95 touch-manipulation disabled:opacity-50 disabled:pointer-events-none",
-          isOpen && "ring-1 ring-emerald-500/50 border-emerald-500/50 bg-white dark:bg-zinc-800"
+          isOpen && "ring-1 ring-[var(--theme-primary)]/50 border-[var(--theme-primary)]/50 bg-white dark:bg-zinc-800"
         )}
       >
         <span>{selectedYear}</span>
         <ChevronDown
           className={cn(
             "w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 transition-transform duration-200 shrink-0",
-            isOpen && "rotate-180 text-emerald-500"
+            isOpen && "rotate-180 text-[var(--theme-primary)]"
           )}
         />
       </button>
@@ -94,12 +94,12 @@ export const GithubActivityYearSelect = React.memo(function GithubActivityYearSe
                 className={cn(
                   "flex items-center justify-between w-full px-2.5 py-1.5 text-xs font-medium rounded-lg text-left transition-colors cursor-pointer",
                   isSelected
-                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold"
+                    ? "bg-[var(--theme-primary)]/10 text-[var(--theme-primary)] font-semibold"
                     : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/80"
                 )}
               >
                 <span>{y}</span>
-                {isSelected && <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 ml-2" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0 ml-2" />}
               </button>
             );
           })}

@@ -13,7 +13,9 @@ export { GithubActivityHeader } from "./github-activity-header";
 export { GithubActivityHeaderNav } from "./github-activity-header-nav";
 export { GithubActivityYearSelect } from "./github-activity-year-select";
 export { GithubActivityTimelineFilter } from "./github-activity-timeline-filter";
+export { GithubActivityTimelineSearch } from "./github-activity-timeline-search";
 export { GithubActivityCurtain } from "./github-activity-curtain";
+export { GithubActivityPulseIcon } from "@/assets/svg";
 
 // Semantic Aliases
 export { GithubActivityHeatmap as GithubHeatmap } from "./github-activity-heatmap";

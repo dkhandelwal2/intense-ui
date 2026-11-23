@@ -21,6 +21,7 @@ export interface GithubActivityEvent {
   repo: string;
   message: string;
   timestamp: string;
+  createdAt?: string;
   sha?: string;
   branch?: string;
   status?: GithubEventStatus;
@@ -32,27 +33,15 @@ export interface GithubActivityEvent {
 }
 
 export interface GithubActivityStatsData {
-  totalContributions: number;
-  currentStreak: number;
-  longestStreak: number;
-  commitsCount: number;
-  prsCount: number;
-  issuesCount: number;
-  reviewsCount: number;
-  activeDaysCount?: number;
+  totalContributions: number; currentStreak: number; longestStreak: number;
+  commitsCount: number; prsCount: number; issuesCount: number; reviewsCount: number; activeDaysCount?: number;
 }
 export type GithubActivityStatsModel = GithubActivityStatsData;
 
 export interface GithubUserProfile {
-  username: string;
-  name?: string;
-  avatarUrl?: string;
-  bio?: string;
-  profileUrl?: string;
-  followers?: number;
-  following?: number;
-  publicRepos?: number;
-  createdAt?: string;
+  username: string; name?: string; avatarUrl?: string; bio?: string;
+  company?: string; location?: string; profileUrl?: string;
+  followers?: number; following?: number; publicRepos?: number; createdAt?: string;
 }
 
 export interface GithubActivityHeatmapProps {
@@ -77,26 +66,39 @@ export interface GithubActivityHeatmapProps {
   showStreaks?: boolean;
   stats?: GithubActivityStatsData;
   isLoading?: boolean;
+  staticIcons?: boolean;
   onDayClick?: (day: GithubContributionDay) => void;
   className?: string;
 }
+
+export type GithubActivitySortOrder = "desc" | "asc";
 
 export interface GithubActivityTimelineProps {
   events?: GithubActivityEvent[];
   username?: string;
   maxEvents?: number;
   showFilter?: boolean;
+  showSearch?: boolean;
+  showSort?: boolean;
+  defaultSort?: GithubActivitySortOrder;
   defaultFilterOpen?: boolean;
   showCopySha?: boolean;
   isLoading?: boolean;
+  staticIcons?: boolean;
   className?: string;
 }
+
+export interface GithubActivityTimelineSearchProps { value: string; onChange: (value: string) => void; placeholder?: string; staticIcons?: boolean; className?: string; }
 
 export interface GithubActivityTimelineFilterProps {
   activeFilter: "all" | GithubEventType;
   onFilterChange: (filter: "all" | GithubEventType) => void;
+  showSort?: boolean; sortOrder?: GithubActivitySortOrder;
+  onSortOrderChange?: (order: GithubActivitySortOrder) => void;
+  onOpenChange?: (open: boolean) => void;
   events?: GithubActivityEvent[];
   defaultOpen?: boolean;
+  staticIcons?: boolean;
   className?: string;
 }
 
@@ -107,11 +109,12 @@ export interface GithubActivityStatsProps {
   showStreaks?: boolean;
   theme?: GithubActivityTheme;
   isLoading?: boolean;
+  staticIcons?: boolean;
   className?: string;
 }
 
-export interface GithubActivityLegendProps { theme?: GithubActivityTheme; totalCount?: number; yearLabel?: string; showStreaks?: boolean; streakCount?: number; className?: string; }
-export interface GithubActivityEventItemProps { event: GithubActivityEvent; showCopySha?: boolean; className?: string; }
+export interface GithubActivityLegendProps { theme?: GithubActivityTheme; totalCount?: number; yearLabel?: string; showStreaks?: boolean; streakCount?: number; staticIcons?: boolean; className?: string; }
+export interface GithubActivityEventItemProps { event: GithubActivityEvent; showCopySha?: boolean; searchQuery?: string; className?: string; }
 
 export interface GithubActivityHeaderProps {
   user: GithubUserProfile;
@@ -129,12 +132,16 @@ export interface GithubActivityHeaderProps {
   onYearChange?: (year: number) => void;
   showYearSelector?: boolean;
   isLoading?: boolean;
+  staticIcons?: boolean;
   className?: string;
 }
 
 export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: GithubActivityVariant;
+  activeVariant?: GithubActivityVariant;
+  onVariantChange?: (variant: GithubActivityVariant) => void;
   username?: string;
+  repo?: string;
   theme?: GithubActivityTheme;
   mode?: GithubActivityMode;
   showModeToggle?: boolean;
@@ -144,34 +151,26 @@ export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement
   showFullYear?: boolean;
   showYearSelector?: boolean;
   isLoading?: boolean;
-  data?: {
-    contributions?: GithubContributionDay[];
-    events?: GithubActivityEvent[];
-    stats?: GithubActivityStatsData;
-    user?: GithubUserProfile;
-    availableYears?: number[];
-  };
+  data?: { contributions?: GithubContributionDay[]; events?: GithubActivityEvent[]; stats?: GithubActivityStatsData; user?: GithubUserProfile; availableYears?: number[]; };
   weeksCount?: number;
   dotSize?: GithubActivityDotSize;
   maxEvents?: number;
   showTabs?: boolean;
   showHeader?: boolean;
   showStreaks?: boolean;
+  showFilter?: boolean;
+  showSearch?: boolean;
+  showSort?: boolean;
+  defaultSort?: GithubActivitySortOrder;
+  staticIcons?: boolean;
+  animatedIcons?: boolean;
   onDayClick?: (day: GithubContributionDay) => void;
 }
 
 export interface UseGithubActivityOptions {
-  username?: string;
-  year?: number;
-  showFullYear?: boolean;
-  initialData?: {
-    contributions?: GithubContributionDay[];
-    events?: GithubActivityEvent[];
-    stats?: GithubActivityStatsData;
-    user?: GithubUserProfile;
-  };
-  weeksCount?: number;
-  autoFetch?: boolean;
+  username?: string; repo?: string; year?: number; showFullYear?: boolean;
+  initialData?: { contributions?: GithubContributionDay[]; events?: GithubActivityEvent[]; stats?: GithubActivityStatsData; user?: GithubUserProfile; };
+  weeksCount?: number; autoFetch?: boolean;
 }
 
 export interface UseGithubActivityResult {
@@ -188,6 +187,6 @@ export interface UseGithubActivityResult {
 }
 
 export interface GithubActivityHeatmapConfig { theme: GithubActivityTheme; weeksCount: number; dotSize?: GithubActivityDotSize; showFullYear?: boolean; showMonthLabels: boolean; showDayLabels: boolean; showLegend: boolean; showTotalCount: boolean; }
-export interface GithubActivityTimelineConfig { maxEvents: number; showFilter: boolean; showCopySha: boolean; }
+export interface GithubActivityTimelineConfig { maxEvents: number; showFilter: boolean; showSearch?: boolean; showSort?: boolean; showCopySha: boolean; }
 export interface GithubActivityStatsConfig { showBreakdown: boolean; showStreaks: boolean; theme: GithubActivityTheme; }
-export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; showModeToggle?: boolean; }
+export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; showModeToggle?: boolean; showFilter?: boolean; showSearch?: boolean; showSort?: boolean; }

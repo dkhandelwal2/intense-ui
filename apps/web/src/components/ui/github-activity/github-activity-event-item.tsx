@@ -30,9 +30,33 @@ const EVENT_COLOR_CLASSES: Record<GithubEventType, string> = {
   star: "text-yellow-500 bg-yellow-500/10 border-yellow-500/20",
 };
 
+function highlightMatch(text?: string, query?: string): React.ReactNode {
+  if (!text) return null;
+  if (!query || !query.trim()) return text;
+  const q = query.trim();
+  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const parts = text.split(new RegExp(`(${escaped})`, "gi"));
+  if (parts.length <= 1) return text;
+
+  const lowerQ = q.toLowerCase();
+  return parts.map((part, i) =>
+    part.toLowerCase() === lowerQ ? (
+      <mark
+        key={i}
+        className="bg-emerald-500/25 text-emerald-900 dark:text-emerald-200 dark:bg-emerald-500/35 rounded-[2px] px-0.5 font-semibold"
+      >
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+}
+
 export function GithubActivityEventItem({
   event,
   showCopySha = true,
+  searchQuery,
   className,
 }: GithubActivityEventItemProps) {
   const [copied, setCopied] = useState(false);
@@ -59,12 +83,12 @@ export function GithubActivityEventItem({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">
-              {event.repo}
+              {highlightMatch(event.repo, searchQuery)}
             </span>
             {event.branch && (
               <span className="inline-flex items-center gap-0.5 text-[10px] font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-700/50">
                 <GitBranch className="w-2.5 h-2.5" />
-                {event.branch}
+                {highlightMatch(event.branch, searchQuery)}
               </span>
             )}
             {event.status && (
@@ -86,7 +110,7 @@ export function GithubActivityEventItem({
 
         {/* Message body */}
         <p className="text-xs text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed">
-          {event.message}
+          {highlightMatch(event.message, searchQuery)}
         </p>
 
         {/* Footer meta: SHA copy and diff stats */}
@@ -98,7 +122,7 @@ export function GithubActivityEventItem({
               className="inline-flex items-center gap-1 font-mono text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded cursor-pointer transition-colors"
               title="Copy commit hash"
             >
-              <span>{event.sha}</span>
+              <span>{highlightMatch(event.sha, searchQuery)}</span>
               {copied ? <Check className="w-2.5 h-2.5 text-emerald-500" /> : <Copy className="w-2.5 h-2.5" />}
             </button>
           )}
