@@ -94,3 +94,15 @@ export type { AnimatedTrendingIconProps } from "./animated-trending-icon";
 export { AnimatedCalendarIcon } from "./animated-calendar-icon";
 export type { AnimatedCalendarIconProps } from "./animated-calendar-icon";
 
+export { AnimatedCommitIcon } from "./animated-commit-icon";
+export type { AnimatedCommitIconProps } from "./animated-commit-icon";
+
+export { AnimatedPullRequestIcon } from "./animated-pull-request-icon";
+export type { AnimatedPullRequestIconProps } from "./animated-pull-request-icon";
+
+export { AnimatedAlertCircleIcon } from "./animated-alert-circle-icon";
+export type { AnimatedAlertCircleIconProps } from "./animated-alert-circle-icon";
+
+export { AnimatedEyeIcon } from "./animated-eye-icon";
+export type { AnimatedEyeIconProps } from "./animated-eye-icon";
+

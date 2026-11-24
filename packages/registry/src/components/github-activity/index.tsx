@@ -7,6 +7,8 @@ export { GithubActivity2DMatrix } from "./github-activity-2d-matrix";
 export { GithubActivityTimeline } from "./github-activity-timeline";
 export { GithubActivityStats } from "./github-activity-stats";
 export { GithubActivityStatsCards } from "./github-activity-stats-cards";
+export { GithubActivityStatsHero } from "./github-activity-stats-hero";
+export { GithubActivityInfoTooltip } from "./github-activity-info-tooltip";
 export { GithubActivityLegend } from "./github-activity-legend";
 export { GithubActivityEventItem } from "./github-activity-event-item";
 export { GithubActivityHeader } from "./github-activity-header";

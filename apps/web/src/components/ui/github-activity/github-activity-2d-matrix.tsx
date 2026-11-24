@@ -1,23 +1,9 @@
 "use client";
 
-import React, { RefObject } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { DAY_LABELS, formatContributionDate } from "./constants";
-import type { GithubContributionDay } from "./types";
-
-export interface GithubActivity2DMatrixProps {
-  weeks: GithubContributionDay[][];
-  monthMap: Map<number, string>;
-  sizeConfig: { box: string; label: string; rounded: string };
-  themeClasses: Record<0 | 1 | 2 | 3 | 4, string>;
-  isJustifyBetween: boolean;
-  showMonthLabels: boolean;
-  showDayLabels: boolean;
-  isLoading: boolean;
-  safeWeeksCount: number;
-  matrixContainerRef: RefObject<HTMLDivElement | null>;
-  onDayClick?: (day: GithubContributionDay) => void;
-}
+import type { GithubActivity2DMatrixProps } from "./types";
 
 export function GithubActivity2DMatrix({
   weeks,

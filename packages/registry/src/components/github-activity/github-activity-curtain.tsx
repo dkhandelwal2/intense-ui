@@ -21,7 +21,7 @@ export function GithubActivityCurtain({
   className,
 }: GithubActivityCurtainProps) {
   return (
-    <div className={cn("relative w-full h-full overflow-hidden rounded-2xl", className)}>
+    <div className={cn("relative w-full h-full rounded-2xl", activeKey === "stats" ? "overflow-visible" : "overflow-hidden", className)}>
       <motion.div
         key={activeKey}
         initial={{ opacity: 0, y: 6 }}

@@ -15,17 +15,7 @@ import {
   getNavMetric,
   getNavZIndex,
 } from "./github-activity-header-nav-badge";
-import type { GithubActivityVariant, GithubActivityStatsData } from "./types";
-
-export interface GithubActivityHeaderNavProps {
-  activeVariant?: GithubActivityVariant;
-  onVariantChange?: (variant: GithubActivityVariant) => void;
-  stats?: GithubActivityStatsData;
-  totalContributions?: number;
-  label?: string;
-  staticIcons?: boolean;
-  className?: string;
-}
+import type { GithubActivityHeaderNavProps } from "./types";
 
 export function GithubActivityHeaderNav({
   activeVariant = "heatmap",

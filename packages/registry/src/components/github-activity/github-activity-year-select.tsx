@@ -3,14 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-export interface GithubActivityYearSelectProps {
-  year?: number;
-  years: number[];
-  onYearChange?: (year: number) => void;
-  className?: string;
-  disabled?: boolean;
-}
+import type { GithubActivityYearSelectProps } from "./types";
 
 export const GithubActivityYearSelect = React.memo(function GithubActivityYearSelect({
   year,

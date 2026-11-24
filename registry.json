@@ -408,6 +408,11 @@
           "target": "components/ui/github-activity/github-activity-helpers.ts"
         },
         {
+          "path": "packages/registry/src/components/github-activity/github-activity-info-tooltip.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-info-tooltip.tsx"
+        },
+        {
           "path": "packages/registry/src/components/github-activity/github-activity-legend.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-legend.tsx"
@@ -421,6 +426,11 @@
           "path": "packages/registry/src/components/github-activity/github-activity-stats-cards.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-stats-cards.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/github-activity/github-activity-stats-hero.tsx",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-stats-hero.tsx"
         },
         {
           "path": "packages/registry/src/components/github-activity/github-activity-stats.tsx",
@@ -468,6 +478,21 @@
           "target": "assets/svg/index.ts"
         },
         {
+          "path": "packages/registry/src/assets/svg/animated-commit-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-commit-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-pull-request-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-pull-request-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-alert-circle-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-alert-circle-icon.tsx"
+        },
+        {
           "path": "packages/registry/src/assets/svg/animated-calendar-icon.tsx",
           "type": "registry:file",
           "target": "assets/svg/animated-calendar-icon.tsx"
@@ -501,6 +526,11 @@
           "path": "packages/registry/src/assets/svg/animated-droplet-icon.tsx",
           "type": "registry:file",
           "target": "assets/svg/animated-droplet-icon.tsx"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/animated-eye-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/animated-eye-icon.tsx"
         },
         {
           "path": "packages/registry/src/assets/svg/animated-filter-icon.tsx",

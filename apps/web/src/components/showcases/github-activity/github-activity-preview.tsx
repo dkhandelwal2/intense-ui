@@ -84,7 +84,7 @@ export function GithubActivityPreview({
         className="w-full"
       />
       {!is3DActive && (
-        <span className="text-xs font-mono text-muted-foreground text-center pt-2 px-2 line-clamp-2 sm:line-clamp-none">
+        <span className="hidden sm:block text-xs font-mono text-muted-foreground text-center pt-2 px-2 line-clamp-2 sm:line-clamp-none">
           {isCustomizing
             ? `Live sync for @${customProps.username || "user"} (${effectiveVariant})`
             : effectiveVariant === "heatmap"

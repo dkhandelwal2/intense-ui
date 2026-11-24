@@ -4,16 +4,7 @@ import React from "react";
 import { motion, type Transition } from "framer-motion";
 import { AnimatedCalendarIcon, GithubActivityPulseIcon, AnimatedTrendingIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
-import type { GithubActivityVariant, GithubActivityStatsData } from "./types";
-
-export interface NavItemConfig {
-  value: GithubActivityVariant;
-  label: string;
-  sublabel: string;
-  bgColor: string;
-  color: string;
-  icon: "heatmap" | "timeline" | "stats";
-}
+import type { GithubActivityVariant, GithubActivityStatsData, NavItemConfig } from "./types";
 
 export const NAV_ITEMS: NavItemConfig[] = [
   { value: "heatmap", label: "Heatmap", sublabel: "Contribution calendar", bgColor: "#10b981", color: "#ffffff", icon: "heatmap" },

@@ -38,7 +38,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
         "flex flex-col justify-between relative select-none w-full p-4",
         isDesktop
           ? "h-full rounded-3xl overflow-hidden"
-          : "px-2 h-[calc(100vh-180px)] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-4 shrink-0 overflow-y-auto",
+          : "px-2 h-[calc(100vh-180px)] rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-2 sm:gap-4 shrink-0 overflow-y-auto sm-container",
         className
       )}
     >
@@ -65,7 +65,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
       </div>
 
       {/* Center Presentation Stage */}
-      <div className="relative z-10 flex-1 min-h-[260px] flex flex-col items-center justify-center py-2">
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center py-1 sm:py-2">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={isCustomizing ? "customization" : activeTocId}
@@ -74,14 +74,14 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
             animate={animation ? "animate" : { opacity: 1, scale: 1, y: 0 }}
             exit={animation ? "exit" : { opacity: 0, scale: 0.94, y: -8 }}
             transition={animation ? { type: "spring", stiffness: 320, damping: 26 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-center justify-center w-full"
+            className="flex flex-col items-center justify-center w-full my-auto"
           >
             <div
               className={cn(
                 "rounded-3xl transition-all duration-300 flex items-center justify-center",
                 isDesktop
                   ? "w-full max-w-[890px] h-full shadow-md backdrop-blur-xl p-2"
-                  : "w-full max-w-[620px] max-h-[360px] rounded-2xl shadow-xs backdrop-blur-xl"
+                  : "w-full max-w-[620px] rounded-2xl shadow-xs backdrop-blur-xl"
               )}
             >
               <div className="w-full h-full flex items-start justify-center overflow-y-auto no-scrollbar">
@@ -90,7 +90,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
             </div>
 
             {/* Live Feedback Status Pill */}
-            <div className="mt-3 flex items-center gap-2 px-3 py-1 rounded-full bg-muted/80 border border-border text-[10.5px] font-mono text-muted-foreground">
+            <div className="mt-2.5 sm:mt-3 flex items-center gap-2 px-3 py-1 rounded-full bg-muted/80 border border-border text-[10.5px] font-mono text-muted-foreground shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>Variant:</span>
               <strong className="text-foreground capitalize">{activeVariantName}</strong>
@@ -103,7 +103,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
       </div>
 
       {/* Quick Action Controls */}
-      <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 pt-1">
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 pt-1 shrink-0">
         {isCustomizing && (
           <button type="button" onClick={() => setIsCustomizing(false)} className="px-3.5 py-1.5 rounded-xl bg-zinc-900/90 text-white hover:bg-zinc-800 text-xs font-mono border border-zinc-700 shadow-md transition-all cursor-pointer">
             Exit to {displayLabel}

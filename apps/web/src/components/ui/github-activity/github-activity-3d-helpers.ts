@@ -87,7 +87,7 @@ export function buildRenderBars(
   cx: number, cz: number,
   yaw: number, pitch: number,
   scale: number, ox: number, oy: number,
-  spacing = 4.8, barSize = 3.6
+  spacing = 4.8, barSize = 3.6, heightScale = 1
 ): RenderBar[] {
   const bars: RenderBar[] = [];
   const cosY = Math.cos(yaw); const sinY = Math.sin(yaw);
@@ -97,7 +97,7 @@ export function buildRenderBars(
       if (day.isFuture) continue;
       const x0 = c * spacing - barSize / 2; const x1 = c * spacing + barSize / 2;
       const z0 = r * spacing - barSize / 2; const z1 = r * spacing + barSize / 2;
-      const barH = getBarHeight(day.level, day.count);
+      const barH = getBarHeight(day.level, day.count) * heightScale;
       const pTop0 = project3D(x0, barH, z0, cx, cz, yaw, pitch, scale, ox, oy);
       const pTop1 = project3D(x1, barH, z0, cx, cz, yaw, pitch, scale, ox, oy);
       const pTop2 = project3D(x1, barH, z1, cx, cz, yaw, pitch, scale, ox, oy);

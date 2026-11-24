@@ -7,17 +7,7 @@ import {
   THEME_3D_COLORS, buildRenderBars, drawBasePlatform, drawSkylineBars,
   drawMonthLabels, isPointInPolygon, RenderBar,
 } from "./github-activity-3d-helpers";
-import type { GithubContributionDay, GithubActivityTheme, GithubActivityDotSize } from "./types";
-
-export interface GithubActivity3DProps {
-  weeks: GithubContributionDay[][];
-  monthPositions?: { weekIndex: number; label: string }[];
-  theme?: GithubActivityTheme;
-  dotSize?: GithubActivityDotSize;
-  isLoading?: boolean;
-  onDayClick?: (day: GithubContributionDay) => void;
-  className?: string;
-}
+import type { GithubContributionDay, GithubActivity3DProps } from "./types";
 
 export function GithubActivity3D({
   weeks,
@@ -36,7 +26,21 @@ export function GithubActivity3D({
   const dragDistRef = useRef(0);
   const lastPosRef = useRef({ x: 0, y: 0 });
   const [hovered, setHovered] = useState<{ day: GithubContributionDay; x: number; y: number } | null>(null);
+  const [growProgress, setGrowProgress] = useState(0);
   const renderBarsRef = useRef<RenderBar[]>([]);
+
+  useEffect(() => {
+    let start: number | null = null;
+    let rafId: number;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const t = Math.min(1, (ts - start) / 360);
+      setGrowProgress(1 - Math.pow(1 - t, 3));
+      if (t < 1) rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -82,17 +86,21 @@ export function GithubActivity3D({
 
     drawBasePlatform(ctx, cx, cz, numCols, numRows, spacing, yaw, pitch, scale, ox, oy, isDark);
     drawMonthLabels(ctx, monthPositions || [], cx, cz, numRows, spacing, yaw, pitch, scale, ox, oy, isDark);
-    const bars = buildRenderBars(weeks, cx, cz, yaw, pitch, scale, ox, oy, spacing, barSize);
+    const bars = buildRenderBars(weeks, cx, cz, yaw, pitch, scale, ox, oy, spacing, barSize, growProgress);
     renderBarsRef.current = bars;
     drawSkylineBars(ctx, bars, colors, hovered?.day?.date, isDark);
-  }, [weeks, monthPositions, theme, dotSize, hovered]);
+  }, [weeks, monthPositions, theme, dotSize, hovered, growProgress]);
 
   useEffect(() => { draw(); }, [draw]);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => draw()) : null;
+    let rafId: number;
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => draw());
+    }) : null;
     ro?.observe(el);
     const mo = typeof MutationObserver !== "undefined" ? new MutationObserver(() => draw()) : null;
     if (typeof document !== "undefined") {
@@ -105,6 +113,7 @@ export function GithubActivity3D({
     const onMediaChange = () => draw();
     mq?.addEventListener?.("change", onMediaChange);
     return () => {
+      cancelAnimationFrame(rafId);
       ro?.disconnect();
       mo?.disconnect();
       mq?.removeEventListener?.("change", onMediaChange);

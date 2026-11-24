@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
 import { AnimatedGridIcon, AnimatedBoxIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import { DOT_SIZES, THEME_LEVEL_CLASSES, generateMockContributions } from "./constants";
@@ -84,7 +85,7 @@ export function GithubActivityHeatmap({
   }, [monthPositions]);
 
   return (
-    <div className={cn("flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm overflow-hidden transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
+    <div className={cn("flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm overflow-hidden transition-[min-height,height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
       {/* Standalone controls header when used outside full container */}
       {showControls && (
         <div className="flex items-center justify-between gap-2 p-3 py-1 border-b border-zinc-100 dark:border-zinc-800/60 shrink-0">
@@ -120,15 +121,23 @@ export function GithubActivityHeatmap({
       {/* Main Heatmap Area & GitHub-style Right Side Years List */}
       <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3 flex-1 min-w-0">
         <div className="flex-1 min-w-0 flex flex-col justify-center p-2 sm:p-4">
-          {viewMode === "3d" ? (
-            <GithubActivity3D weeks={weeks} monthPositions={monthPositions} theme={theme} dotSize={effectiveDotSize} isLoading={isLoading} onDayClick={onDayClick} />
-          ) : (
-            <GithubActivity2DMatrix
-              weeks={weeks} monthMap={monthMap} sizeConfig={sizeConfig} themeClasses={themeClasses}
-              isJustifyBetween={isJustifyBetween} showMonthLabels={showMonthLabels} showDayLabels={showDayLabels}
-              isLoading={isLoading} safeWeeksCount={safeWeeksCount} matrixContainerRef={matrixContainerRef} onDayClick={onDayClick}
-            />
-          )}
+          <motion.div
+            key={viewMode}
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full flex-1 flex flex-col justify-center"
+          >
+            {viewMode === "3d" ? (
+              <GithubActivity3D weeks={weeks} monthPositions={monthPositions} theme={theme} dotSize={effectiveDotSize} isLoading={isLoading} onDayClick={onDayClick} />
+            ) : (
+              <GithubActivity2DMatrix
+                weeks={weeks} monthMap={monthMap} sizeConfig={sizeConfig} themeClasses={themeClasses}
+                isJustifyBetween={isJustifyBetween} showMonthLabels={showMonthLabels} showDayLabels={showDayLabels}
+                isLoading={isLoading} safeWeeksCount={safeWeeksCount} matrixContainerRef={matrixContainerRef} onDayClick={onDayClick}
+              />
+            )}
+          </motion.div>
         </div>
 
         {/* GitHub-Style Vertical Year Selector on the Right */}
@@ -137,8 +146,8 @@ export function GithubActivityHeatmap({
             role="group"
             aria-label="Filter by year"
             className={cn(
-              "flex flex-row sm:flex-col gap-1 shrink-0 overflow-x-auto sm:overflow-y-auto border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800/80 sm:p-2 sm:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-lg my-auto",
-              viewMode === "3d" ? "sm:h-[380px] sm:max-h-[380px] my-0" : "sm:max-h-[210px]"
+              "flex flex-row sm:flex-col gap-1 shrink-0 overflow-x-auto sm:overflow-y-auto border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800/80 sm:p-2 sm:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-lg transition-[height,max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              viewMode === "3d" ? "sm:h-[446px] sm:max-h-[446px]" : "sm:h-[250px] sm:max-h-[250px]"
             )}
           >
             <h4 className="sticky top-0 left-0 w-full font-mono text-xs font-semibold text-center sm:text-left transition-all select-none bg-white dark:bg-zinc-900 p-2 z-10">Year(s)</h4>

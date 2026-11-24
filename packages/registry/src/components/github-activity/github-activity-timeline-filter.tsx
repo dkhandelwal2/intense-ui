@@ -2,20 +2,18 @@
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { Check, ChevronDown, Layers, GitCommit, GitPullRequest, AlertCircle, Tag, ArrowDownWideNarrow, ArrowUpWideNarrow, RotateCcw } from "lucide-react";
-import { AnimatedFilterIcon } from "@/assets/svg";
+import { Check, ChevronDown, Layers, Tag, ArrowDownWideNarrow, ArrowUpWideNarrow, RotateCcw } from "lucide-react";
+import {
+  AnimatedFilterIcon, AnimatedCommitIcon, AnimatedPullRequestIcon, AnimatedAlertCircleIcon,
+} from "@/assets/svg";
 import { cn } from "@/lib/utils";
-import type { GithubEventType, GithubActivityEvent, GithubActivitySortOrder } from "./types";
-
-export interface TimelineFilterOption {
-  label: string;
-  value: "all" | GithubEventType;
-  icon: React.ComponentType<{ className?: string }>;
-}
+import type { GithubEventType, GithubActivityEvent, GithubActivitySortOrder, TimelineFilterOption } from "./types";
 
 export const TIMELINE_FILTER_OPTIONS: TimelineFilterOption[] = [
-  { label: "All", value: "all", icon: Layers }, { label: "Commits", value: "commit", icon: GitCommit },
-  { label: "Pull Requests", value: "pull_request", icon: GitPullRequest }, { label: "Issues", value: "issue", icon: AlertCircle },
+  { label: "All", value: "all", icon: Layers },
+  { label: "Commits", value: "commit", icon: AnimatedCommitIcon },
+  { label: "Pull Requests", value: "pull_request", icon: AnimatedPullRequestIcon },
+  { label: "Issues", value: "issue", icon: AnimatedAlertCircleIcon },
   { label: "Releases", value: "release", icon: Tag },
 ];
 
@@ -177,7 +175,11 @@ export function GithubActivityTimelineFilter({
                     )}
                   >
                     <div className="flex items-center gap-2 min-w-0">
-                      <Icon className={cn("w-3.5 h-3.5 shrink-0", isSelected ? "text-[var(--theme-primary)]" : "text-zinc-400")} />
+                      {Icon === AnimatedCommitIcon || Icon === AnimatedPullRequestIcon || Icon === AnimatedAlertCircleIcon ? (
+                        <Icon className={cn("w-3.5 h-3.5 shrink-0", isSelected ? "text-[var(--theme-primary)]" : "text-zinc-400")} animate={!staticIcons} />
+                      ) : (
+                        <Icon className={cn("w-3.5 h-3.5 shrink-0", isSelected ? "text-[var(--theme-primary)]" : "text-zinc-400")} />
+                      )}
                       <span className="truncate text-[11px]">{opt.label}</span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">

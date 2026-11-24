@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useMemo, useRef } from "react";
-import { cn } from "@/lib/utils";
-import { GithubActivityPulseIcon } from "@/assets/svg";
+import React, { useState, useMemo } from "react";
 import { GithubActivityEventItem } from "./github-activity-event-item";
 import { GithubActivityTimelineFilter } from "./github-activity-timeline-filter";
 import { GithubActivityTimelineSearch } from "./github-activity-timeline-search";
+import { GithubActivityPulseIcon } from "@/assets/svg";
+import { cn } from "@/lib/utils";
+import type { GithubActivityTimelineProps, GithubEventType, GithubActivitySortOrder, GithubActivityEvent } from "./types";
 import { generateUserEvents } from "./constants";
-import type { GithubActivityTimelineProps, GithubEventType, GithubActivityEvent, GithubActivitySortOrder } from "./types";
 
 const TIME_MULTS: Record<string, number> = { m: 60000, h: 3600000, d: 86400000, w: 604800000, mo: 2592000000, y: 31536000000 };
 
@@ -29,7 +29,7 @@ function parseEventTime(ev: GithubActivityEvent): number {
 export function GithubActivityTimeline({
   events,
   username,
-  maxEvents,
+  maxEvents = 10,
   showFilter = true,
   showSearch = true,
   showSort = true,
@@ -43,9 +43,6 @@ export function GithubActivityTimeline({
   const [activeFilter, setActiveFilter] = useState<"all" | GithubEventType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<GithubActivitySortOrder>(defaultSort);
-  const [headerVisible, setHeaderVisible] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(defaultFilterOpen);
-  const lastScrollTopRef = useRef(0);
 
   const activeEvents = useMemo(() => {
     if (events && events.length > 0) return events;
@@ -83,69 +80,44 @@ export function GithubActivityTimeline({
 
   const displayedEvents = maxEvents ? sortedEvents.slice(0, maxEvents) : sortedEvents;
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const currentScrollTop = e.currentTarget.scrollTop;
-    const diff = currentScrollTop - lastScrollTopRef.current;
-    if (currentScrollTop <= 10 || isFilterOpen || searchQuery.trim().length > 0) {
-      setHeaderVisible(true);
-      lastScrollTopRef.current = currentScrollTop;
-      return;
-    }
-    if (Math.abs(diff) > 6) {
-      setHeaderVisible(diff < 0);
-      lastScrollTopRef.current = currentScrollTop;
-    }
-  };
-
   return (
-    <div className={cn("relative flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm min-h-[285px] sm:h-[285px] overflow-hidden", className)}>
-      {/* Auto-collapsing Header: scrolls up on scroll down, shows on scroll up */}
-      <div
-        className={cn(
-          "absolute top-0 inset-x-0 z-30 transition-all duration-300 ease-out border-b border-zinc-100 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-t-2xl",
-          headerVisible
-            ? "translate-y-0 opacity-100 shadow-xs"
-            : "-translate-y-full opacity-0 pointer-events-none"
-        )}
-      >
-        <div className="flex items-center justify-between gap-2 p-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <GithubActivityPulseIcon className="w-4 h-4 text-[var(--theme-primary)] shrink-0" animate={!staticIcons} />
-            <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">Recent Activity</h4>
-            {isLoading ? (
-              <div className="w-6 h-4 rounded-full bg-zinc-200/70 dark:bg-zinc-800/70 animate-pulse shrink-0" />
-            ) : (
-              <span className="text-[10px] font-semibold text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full shrink-0">
-                {filteredEvents.length}
-              </span>
-            )}
-          </div>
+    <div className={cn("relative flex flex-col rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm h-[320px] sm:h-[285px] overflow-hidden", className)}>
+      {/* Sticky Top Header: Always visible with Title, Search & Filter */}
+      <div className="shrink-0 flex items-center justify-between gap-2 p-3 border-b border-zinc-100 dark:border-zinc-800/80 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md rounded-t-2xl z-20">
+        <div className="flex items-center gap-2 min-w-0">
+          <GithubActivityPulseIcon className="w-4 h-4 text-[var(--theme-primary)] shrink-0" animate={!staticIcons} />
+          <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">Recent Activity</h4>
+          {isLoading ? (
+            <div className="w-6 h-4 rounded-full bg-zinc-200/70 dark:bg-zinc-800/70 animate-pulse shrink-0" />
+          ) : (
+            <span className="text-[10px] font-semibold text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full shrink-0">
+              {filteredEvents.length}
+            </span>
+          )}
+        </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
-            {showSearch && (
-              <GithubActivityTimelineSearch value={searchQuery} onChange={setSearchQuery} staticIcons={staticIcons} />
-            )}
-            {showFilter && (
-              <GithubActivityTimelineFilter
-                activeFilter={activeFilter}
-                onFilterChange={setActiveFilter}
-                showSort={showSort}
-                sortOrder={sortOrder}
-                onSortOrderChange={setSortOrder}
-                onOpenChange={setIsFilterOpen}
-                events={activeEvents}
-                defaultOpen={defaultFilterOpen}
-                staticIcons={staticIcons}
-              />
-            )}
-          </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {showSearch && (
+            <GithubActivityTimelineSearch value={searchQuery} onChange={setSearchQuery} staticIcons={staticIcons} />
+          )}
+          {showFilter && (
+            <GithubActivityTimelineFilter
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+              showSort={showSort}
+              sortOrder={sortOrder}
+              onSortOrderChange={setSortOrder}
+              events={activeEvents}
+              defaultOpen={defaultFilterOpen}
+              staticIcons={staticIcons}
+            />
+          )}
         </div>
       </div>
 
       {/* Events List */}
       <div
-        onScroll={handleScroll}
-        className="flex-1 min-h-0 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/60 [scrollbar-gutter:stable] subtle-scrollbar px-2 pt-14 pb-2"
+        className="flex-1 min-h-0 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/60 [scrollbar-gutter:stable] subtle-scrollbar px-2 py-1"
       >
         {isLoading ? (
           Array.from({ length: 3 }).map((_, idx) => (

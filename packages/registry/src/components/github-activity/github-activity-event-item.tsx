@@ -2,22 +2,24 @@
 
 import React, { useState } from "react";
 import {
-  GitCommit,
-  GitPullRequest,
-  AlertCircle,
   Tag,
   Star,
   Copy,
   Check,
   GitBranch,
 } from "lucide-react";
+import {
+  AnimatedCommitIcon,
+  AnimatedPullRequestIcon,
+  AnimatedAlertCircleIcon,
+} from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import type { GithubActivityEventItemProps, GithubEventType } from "./types";
 
 const EVENT_ICONS: Record<GithubEventType, React.ComponentType<{ className?: string }>> = {
-  commit: GitCommit,
-  pull_request: GitPullRequest,
-  issue: AlertCircle,
+  commit: AnimatedCommitIcon,
+  pull_request: AnimatedPullRequestIcon,
+  issue: AnimatedAlertCircleIcon,
   release: Tag,
   star: Star,
 };
@@ -60,7 +62,7 @@ export function GithubActivityEventItem({
   className,
 }: GithubActivityEventItemProps) {
   const [copied, setCopied] = useState(false);
-  const Icon = EVENT_ICONS[event.type] || GitCommit;
+  const Icon = EVENT_ICONS[event.type] || AnimatedCommitIcon;
   const iconStyle = EVENT_COLOR_CLASSES[event.type] || EVENT_COLOR_CLASSES.commit;
 
   const handleCopySha = (e: React.MouseEvent) => {

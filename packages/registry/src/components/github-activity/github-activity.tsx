@@ -8,11 +8,7 @@ import { GithubActivityHeatmap } from "./github-activity-heatmap";
 import { GithubActivityTimeline } from "./github-activity-timeline";
 import { GithubActivityStats } from "./github-activity-stats";
 import { GithubActivityCurtain } from "./github-activity-curtain";
-import type {
-  GithubActivityProps,
-  GithubActivityVariant,
-  GithubActivityMode,
-} from "./types";
+import type { GithubActivityProps, GithubActivityVariant, GithubActivityMode } from "./types";
 
 export function GithubActivity({
   username, repo, variant = "compact", activeVariant, onVariantChange,
@@ -105,7 +101,8 @@ export function GithubActivity({
   return (
     <div
       className={cn(
-        "w-full flex flex-col rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm overflow-hidden",
+        "w-full flex flex-col rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm",
+        activeView === "stats" ? "overflow-visible" : "overflow-hidden",
         className
       )}
       {...props}
@@ -131,10 +128,12 @@ export function GithubActivity({
       {/* Main Variant Content with Smooth Transition inside container */}
       <div
         className={cn(
-          "w-full relative transition-[min-height,height] duration-300",
+          "w-full relative transition-[min-height,height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
           activeView === "heatmap" && currentMode === "3d"
             ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]"
-            : "min-h-[285px] sm:h-[285px]"
+            : activeView === "timeline"
+              ? "h-[320px] sm:h-[285px]"
+              : "min-h-[285px] sm:h-[285px]"
         )}
       >
         <GithubActivityCurtain activeKey={activeView}>
@@ -182,6 +181,7 @@ export function GithubActivity({
           {activeView === "stats" && (
             <GithubActivityStats
               stats={stats}
+              contributions={contributions}
               theme={theme}
               showStreaks={showStreaks}
               isLoading={isLoading}
