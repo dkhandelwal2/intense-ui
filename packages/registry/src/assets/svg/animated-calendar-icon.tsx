@@ -11,6 +11,12 @@ export interface AnimatedCalendarIconProps {
   animate?: boolean;
 }
 
+const CHEVRON_KEYFRAMES = [
+  "M 9 14.5 L 12 17.5 L 15 14.5",
+  "M 9 16.5 L 12 19.5 L 15 16.5",
+  "M 9 14.5 L 12 17.5 L 15 14.5",
+];
+
 export function AnimatedCalendarIcon({
   className,
   size = 16,
@@ -42,22 +48,38 @@ export function AnimatedCalendarIcon({
       <line x1="16" y1="2" x2="16" y2="6" />
       {/* Calendar body outline */}
       <rect x="3" y="4" width="18" height="18" rx="2" />
-      {/* Header dividing line with subtle flip */}
+      {/* Header dividing line and chevron */}
       {shouldAnimate ? (
         <>
           <motion.line
-            x1="3"
-            y1="10"
-            x2="21"
-            y2="10"
-            animate={{ y: [0, -1, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
+            x1={3}
+            x2={21}
+            y1={10}
+            y2={10}
+            animate={{
+              y1: [10, 8.8, 10],
+              y2: [10, 8.8, 10],
+            }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 0.4,
+            }}
           />
           <motion.path
-            d="M 9 15 L 12 18 L 15 15"
+            d={CHEVRON_KEYFRAMES[0]}
             strokeWidth={1.5}
-            animate={{ opacity: [1, 1, 1], y: [0, 1.5, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
+            animate={{
+              d: CHEVRON_KEYFRAMES,
+              opacity: [0.7, 1, 0.7],
+            }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 0.4,
+            }}
           />
         </>
       ) : (

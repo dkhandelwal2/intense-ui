@@ -181,7 +181,7 @@ export function GithubActivity3D({
         className="w-full flex-1 min-h-0 cursor-grab active:cursor-grabbing touch-none block"
       />
       <div className="shrink-0 h-4 flex items-center justify-center text-[10px] text-zinc-400 dark:text-zinc-500 font-mono tracking-tight pointer-events-none select-none text-center">
-        Drag to orbit · double-click to reset
+        Drag to surface · tap twice to reset
       </div>
     </div>
   );

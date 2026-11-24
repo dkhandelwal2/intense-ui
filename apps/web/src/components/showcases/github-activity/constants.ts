@@ -41,7 +41,7 @@ export const WEEKS_PRESETS = [13, 26, 52];
 
 export const GITHUB_USER_PRESETS = [
   { username: "octocat", label: "The Octocat" },
-  { username: "dkhandelwal2", label: "dkhandelwal2" },
+  { username: "dkhandelwal2", label: "Deepak K." },
   { username: "shadcn", label: "shadcn" },
   { username: "torvalds", label: "Linus Torvalds" },
 ];

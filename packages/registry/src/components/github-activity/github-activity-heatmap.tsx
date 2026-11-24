@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useRef, useCallback } from "react";
-import { Grid2X2, Box } from "lucide-react";
+import { AnimatedGridIcon, AnimatedBoxIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import { DOT_SIZES, THEME_LEVEL_CLASSES, generateMockContributions } from "./constants";
 import { GithubActivityLegend } from "./github-activity-legend";
@@ -84,7 +84,7 @@ export function GithubActivityHeatmap({
   }, [monthPositions]);
 
   return (
-    <div className={cn("flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
+    <div className={cn("flex flex-col justify-between rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm overflow-hidden transition-[min-height,height] duration-300", viewMode === "3d" ? "min-h-[285px] sm:min-h-[480px] sm:h-[480px]" : "min-h-[285px] sm:h-[285px]", className)}>
       {/* Standalone controls header when used outside full container */}
       {showControls && (
         <div className="flex items-center justify-between gap-2 p-3 py-1 border-b border-zinc-100 dark:border-zinc-800/60 shrink-0">
@@ -103,14 +103,14 @@ export function GithubActivityHeatmap({
                 onClick={() => { setViewMode("2d"); onModeChange?.("2d"); }}
                 className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "2d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
               >
-                <Grid2X2 className="size-3.5" />
+                <AnimatedGridIcon className="size-3.5" animate={!staticIcons && viewMode === "3d"} />
               </button>
               <button
                 type="button" aria-label="3D skyline" title="3D skyline" aria-pressed={viewMode === "3d"}
                 onClick={() => { setViewMode("3d"); onModeChange?.("3d"); }}
                 className={cn("p-1 rounded-md transition-all cursor-pointer", viewMode === "3d" ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-2xs" : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200")}
               >
-                <Box className="size-3.5" />
+                <AnimatedBoxIcon className="size-3.5" animate={!staticIcons && viewMode === "2d"} />
               </button>
             </div>
           )}
@@ -154,7 +154,7 @@ export function GithubActivityHeatmap({
           <div className="h-3 w-24 rounded bg-zinc-200/60 dark:bg-zinc-800/60 animate-pulse" />
         </div>
       ) : (
-        <div className="h-[34px] shrink-0 px-4 border-t border-zinc-100 dark:border-zinc-800/80">
+        <div className="h-[34px] shrink-0 px-4 border-t border-zinc-100 dark:border-zinc-800/80 rounded-b-2xl">
           <GithubActivityLegend
             theme={theme} totalCount={showTotalCount ? totalContributions : undefined}
             yearLabel={isFullYear ? `in ${effectiveYear}` : (safeWeeksCount < 52 ? `in the last ${safeWeeksCount} week${safeWeeksCount === 1 ? "" : "s"}` : "in the past year")}

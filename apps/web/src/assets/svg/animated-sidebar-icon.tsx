@@ -39,15 +39,16 @@ export function AnimatedSidebarIcon({
     >
       {/* Outer rounded window container */}
       <rect x="3" y="3" width="18" height="18" rx="3" />
-      {/* Sliding sidebar separator panel from sidebar.json */}
+      {/* Sliding sidebar separator panel matching sidebar.json keyframes */}
       {shouldAnimate ? (
         <motion.line
-          x1="9"
-          y1="3"
-          x2="9"
-          y2="21"
+          x1={9}
+          y1={3}
+          x2={9}
+          y2={21}
           animate={{
-            x: [0, -1, 5, 5, 0],
+            x1: [9, 8, 14, 14, 9],
+            x2: [9, 8, 14, 14, 9],
           }}
           transition={{
             duration: 1.4,

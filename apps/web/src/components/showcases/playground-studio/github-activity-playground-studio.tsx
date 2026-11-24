@@ -146,22 +146,29 @@ export function GithubActivityPlaygroundStudio({
           <div className="flex flex-col gap-1.5 pt-0.5">
             <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">Presets</span>
             <div className="grid grid-cols-2 gap-2">
-              {GITHUB_USER_PRESETS.map((p) => (
-                <button
-                  key={p.username}
-                  type="button"
-                  onClick={() => onChange((prev) => ({ ...prev, username: p.username }))}
-                  className={cn(
-                    "flex flex-col items-start p-2 rounded-xl border text-left transition-all cursor-pointer",
-                    customProps.username?.toLowerCase() === p.username.toLowerCase()
-                      ? "border-[var(--theme-primary)] bg-[var(--theme-primary)]/10 text-zinc-900 dark:text-zinc-100 ring-1 ring-[var(--theme-primary)]/30"
-                      : "border-zinc-200/80 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-                  )}
-                >
-                  <span className="text-xs font-semibold">{p.label}</span>
-                  <span className="text-[10px] font-mono text-zinc-400">{p.username}</span>
-                </button>
-              ))}
+              {GITHUB_USER_PRESETS.map((p) => {
+                const isSelected = customProps.username?.toLowerCase() === p.username.toLowerCase();
+                return (
+                  <button
+                    key={p.username}
+                    type="button"
+                    onClick={() => onChange((prev) => ({ ...prev, username: p.username }))}
+                    className={cn(
+                      "flex flex-col items-start justify-center p-2 rounded-xl border text-left transition-all cursor-pointer min-w-0 w-full min-h-[58px] overflow-hidden",
+                      isSelected
+                        ? "border-[var(--theme-primary)] bg-[var(--theme-primary)]/10 text-zinc-900 dark:text-zinc-100 ring-1 ring-[var(--theme-primary)]/30"
+                        : "border-zinc-200/80 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                    )}
+                  >
+                    <span className="text-xs font-semibold truncate w-full block leading-snug" title={p.label}>
+                      {p.label}
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-400 truncate w-full block" title={p.username}>
+                      {p.username}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>

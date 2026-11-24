@@ -40,13 +40,14 @@ export function AnimatedFilterIcon({
       <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
       {shouldAnimate ? (
         <motion.line
-          x1="10"
-          y1="13"
-          x2="14"
-          y2="13"
+          x1={10}
+          y1={13}
+          x2={14}
+          y2={13}
           strokeWidth={2}
           animate={{
-            y: [0, 5, 0],
+            y1: [13, 18, 13],
+            y2: [13, 18, 13],
             opacity: [0.3, 1, 0.3],
           }}
           transition={{

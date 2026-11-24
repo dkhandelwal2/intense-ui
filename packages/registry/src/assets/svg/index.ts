@@ -82,6 +82,9 @@ export type { AnimatedBoxIconProps } from "./animated-box-icon";
 export { AnimatedSidebarIcon } from "./animated-sidebar-icon";
 export type { AnimatedSidebarIconProps } from "./animated-sidebar-icon";
 
+export { AnimatedGridIcon } from "./animated-grid-icon";
+export type { AnimatedGridIconProps } from "./animated-grid-icon";
+
 export { AnimatedDropletIcon } from "./animated-droplet-icon";
 export type { AnimatedDropletIconProps } from "./animated-droplet-icon";
 

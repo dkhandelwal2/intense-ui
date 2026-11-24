@@ -14,10 +14,8 @@ export interface TimelineFilterOption {
 }
 
 export const TIMELINE_FILTER_OPTIONS: TimelineFilterOption[] = [
-  { label: "All", value: "all", icon: Layers },
-  { label: "Commits", value: "commit", icon: GitCommit },
-  { label: "Pull Requests", value: "pull_request", icon: GitPullRequest },
-  { label: "Issues", value: "issue", icon: AlertCircle },
+  { label: "All", value: "all", icon: Layers }, { label: "Commits", value: "commit", icon: GitCommit },
+  { label: "Pull Requests", value: "pull_request", icon: GitPullRequest }, { label: "Issues", value: "issue", icon: AlertCircle },
   { label: "Releases", value: "release", icon: Tag },
 ];
 
@@ -26,7 +24,6 @@ const curtainVariants: Variants = {
   visible: { opacity: 1, y: 0, scaleY: 1, filter: "blur(0px)", transition: { type: "spring", damping: 24, stiffness: 280, staggerChildren: 0.035 } },
   exit: { opacity: 0, y: -8, scale: 0.94, filter: "blur(4px)", transition: { duration: 0.16 } },
 };
-
 const itemVariants: Variants = {
   hidden: { opacity: 0, x: -8 },
   visible: { opacity: 1, x: 0, transition: { type: "spring", damping: 20, stiffness: 300 } },
@@ -116,49 +113,10 @@ export function GithubActivityTimelineFilter({
         {isOpen && (
           <motion.div
             variants={curtainVariants} initial="hidden" animate="visible" exit="exit"
-            className="absolute right-0 top-full mt-1.5 z-40 min-w-[200px] p-1.5 rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/95 dark:bg-zinc-900/95 shadow-xl shadow-zinc-950/10 dark:shadow-black/50 backdrop-blur-md"
+            className="absolute right-0 top-full mt-1.5 z-50 min-w-[200px] max-h-[220px] overflow-y-auto p-1.5 rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/95 dark:bg-zinc-900/95 shadow-xl shadow-zinc-950/10 dark:shadow-black/50 backdrop-blur-md subtle-scrollbar"
           >
-            <div className="px-2 py-1 mb-1 border-b border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Filter Events</span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-medium text-zinc-400">{events.length} total</span>
-                {hasActiveModifiers && (
-                  <button type="button" onClick={handleReset} className="text-[10px] font-semibold text-[var(--theme-primary)] hover:underline cursor-pointer flex items-center gap-0.5">
-                    <RotateCcw className="w-2.5 h-2.5" />
-                    <span>Reset</span>
-                  </button>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col gap-0.5">
-              {TIMELINE_FILTER_OPTIONS.map((opt) => {
-                const Icon = opt.icon;
-                const isSelected = activeFilter === opt.value;
-                const count = counts[opt.value] ?? 0;
-                return (
-                  <motion.button
-                    key={opt.value} variants={itemVariants} type="button"
-                    onClick={() => { onFilterChange(opt.value); setIsOpen(false); }}
-                    className={cn(
-                      "flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer text-left w-full",
-                      isSelected ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold" : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100"
-                    )}
-                  >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Icon className={cn("w-3.5 h-3.5 shrink-0", isSelected ? "text-[var(--theme-primary)]" : "text-zinc-400")} />
-                      <span className="truncate text-[11px]">{opt.label}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      {isSelected && <Check className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0" />}
-                      <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-200/50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">{count}</span>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-
             {showSort && onSortOrderChange && (
-              <div className="pt-1.5 mt-1 border-t border-zinc-100 dark:border-zinc-800/60">
+              <div className="pb-1.5 mb-1 border-b border-zinc-100 dark:border-zinc-800/60">
                 <div className="px-2 py-0.5 mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Sort Order</div>
                 <div className="grid grid-cols-2 gap-1 px-1">
                   {(["desc", "asc"] as const).map((order) => (
@@ -177,17 +135,44 @@ export function GithubActivityTimelineFilter({
               </div>
             )}
 
-            <div className="pt-1.5 mt-1 border-t border-zinc-100 dark:border-zinc-800/60">
-              <button
-                type="button" disabled={!hasActiveModifiers} onClick={handleReset}
-                className={cn(
-                  "w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded-lg text-[11px] font-medium transition-colors cursor-pointer select-none",
-                  hasActiveModifiers ? "text-[var(--theme-primary)] hover:bg-[var(--theme-primary)]/10 font-semibold" : "text-zinc-400 dark:text-zinc-600 opacity-40 cursor-not-allowed"
+            <div className="px-2 py-1 mb-1 border-b border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Filter Events</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-medium text-zinc-400">{events.length} total</span>
+                {hasActiveModifiers && (
+                  <button type="button" onClick={handleReset} className="text-[10px] font-semibold text-[var(--theme-primary)] hover:underline cursor-pointer flex items-center gap-0.5">
+                    <RotateCcw className="w-2.5 h-2.5" />
+                    <span>Reset</span>
+                  </button>
                 )}
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset filters</span>
-              </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              {TIMELINE_FILTER_OPTIONS.map((opt) => {
+                const Icon = opt.icon;
+                const isSelected = activeFilter === opt.value;
+                const count = counts[opt.value] ?? 0;
+                return (
+                  <motion.button
+                    key={opt.value} variants={itemVariants} type="button"
+                    onClick={() => { onFilterChange(opt.value); setIsOpen(false); }}
+                    className={cn(
+                      "flex items-center justify-between gap-2 px-2 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer text-left w-full",
+                      isSelected ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold" : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Icon className={cn("w-3.5 h-3.5 shrink-0", isSelected ? "text-[var(--theme-primary)]" : "text-zinc-400")} />
+                      <span className="truncate text-[11px]">{opt.label}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {isSelected && <Check className="w-3.5 h-3.5 text-[var(--theme-primary)] shrink-0" />}
+                      <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-200/50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">{count}</span>
+                    </div>
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
         )}

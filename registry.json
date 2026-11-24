@@ -488,9 +488,9 @@
           "target": "assets/svg/animated-github-icon.tsx"
         },
         {
-          "path": "packages/registry/src/assets/svg/animated-sidebar-icon.tsx",
+          "path": "packages/registry/src/assets/svg/animated-grid-icon.tsx",
           "type": "registry:file",
-          "target": "assets/svg/animated-sidebar-icon.tsx"
+          "target": "assets/svg/animated-grid-icon.tsx"
         },
         {
           "path": "packages/registry/src/assets/svg/animated-box-icon.tsx",

@@ -42,7 +42,7 @@ export function GithubActivityStats({
   const handleToggle = (id: string) => setSelectedCat((prev) => (prev === id ? null : id));
 
   return (
-    <div className={cn("flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm min-h-[285px] sm:h-[285px]", className)}>
+    <div className={cn("flex flex-col justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-sm min-h-[285px] sm:h-[285px] overflow-hidden", className)}>
       <GithubActivityStatsCards
         stats={activeStats}
         activeCategory={activeCategory}

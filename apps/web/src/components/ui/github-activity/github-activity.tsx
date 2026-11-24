@@ -152,7 +152,7 @@ export function GithubActivity({
               isLoading={isLoading}
               staticIcons={isStatic}
               onDayClick={onDayClick}
-              className="h-full border-0 rounded-none bg-transparent shadow-none"
+              className="h-full border-0 rounded-none bg-transparent dark:bg-transparent shadow-none"
             />
           )}
 
@@ -167,7 +167,7 @@ export function GithubActivity({
               defaultSort={defaultSort}
               isLoading={isLoading}
               staticIcons={isStatic}
-              className="h-full border-0 rounded-none bg-transparent shadow-none"
+              className="h-full border-0 rounded-none bg-transparent dark:bg-transparent shadow-none"
             />
           )}
 
@@ -178,7 +178,7 @@ export function GithubActivity({
               showStreaks={showStreaks}
               isLoading={isLoading}
               staticIcons={isStatic}
-              className="h-full border-0 rounded-none bg-transparent shadow-none"
+              className="h-full border-0 rounded-none bg-transparent dark:bg-transparent shadow-none"
             />
           )}
         </GithubActivityCurtain>

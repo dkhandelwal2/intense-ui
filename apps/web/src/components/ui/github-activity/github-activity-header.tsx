@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AnimatedGithubIcon, AnimatedSidebarIcon, AnimatedBoxIcon } from "@/assets/svg";
+import { AnimatedGithubIcon, AnimatedGridIcon, AnimatedBoxIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
 import { GithubActivityHeaderNav } from "./github-activity-header-nav";
 import type { GithubActivityHeaderProps } from "./types";
@@ -100,7 +100,7 @@ export function GithubActivityHeader({
                   : "text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
               )}
             >
-              <AnimatedSidebarIcon className="size-3.5" animate={!staticIcons && mode === "3d"} />
+              <AnimatedGridIcon className="size-3.5" animate={!staticIcons && mode === "3d"} />
             </button>
             <button
               type="button"

@@ -43,7 +43,7 @@ export function AnimatedSearchIcon({
           cy="11"
           r="8"
           animate={{
-            scale: [1, 1.08, 1],
+            r: [8, 8.8, 8],
           }}
           transition={{
             duration: 1.6,
@@ -51,7 +51,6 @@ export function AnimatedSearchIcon({
             ease: "easeInOut",
             repeatDelay: 0.3,
           }}
-          style={{ originX: "11px", originY: "11px", transformBox: "fill-box" }}
         />
       ) : (
         <circle cx="11" cy="11" r="8" />
