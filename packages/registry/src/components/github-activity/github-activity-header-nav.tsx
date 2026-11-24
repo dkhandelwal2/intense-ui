@@ -69,16 +69,16 @@ export function GithubActivityHeaderNav({
         data-slot="github-activity-panel"
         data-state={open ? "open" : "closed"}
         className={cn(
-          "absolute right-0 top-0 overflow-hidden shadow-sm flex items-center justify-between flex-col",
+          "absolute right-0 top-0 shadow-sm flex items-center justify-between flex-col border border-zinc-200/80 dark:border-zinc-800",
           open
-            ? "w-[272px] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50 border border-zinc-200/80 dark:border-zinc-800"
-            : "w-[110px] h-8 bg-zinc-100/80 dark:bg-zinc-800/70 p-0.5 pr-1 z-10 border border-zinc-200/80 dark:border-zinc-800"
+            ? "w-[272px] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50 "
+            : "w-[110px] h-8 bg-zinc-100/80 dark:bg-zinc-800/70 p-0.5 pr-1 z-10"
         )}
         style={{ borderRadius: open ? 18 : 9999 }}
         transition={SPRING}
       >
         {/* Header Bar */}
-        <motion.div layout="position" transition={HEADER_SPRING} className="flex items-center justify-between w-full h-full min-h-[32px]">
+        <motion.div layout="position" transition={HEADER_SPRING} className="flex items-center justify-between w-full h-full">
           {open ? (
             <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 select-none pl-1 truncate">
               {label}
