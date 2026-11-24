@@ -54,12 +54,17 @@ export function GithubActivityTimelineFilter({
   staticIcons = false,
   className,
 }: GithubActivityTimelineFilterProps) {
-  const [isOpen, setIsOpenState] = useState(defaultOpen);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isInitialMount = useRef(true);
 
-  const setIsOpen = (val: boolean | ((prev: boolean) => boolean)) => {
-    setIsOpenState((prev) => { const next = typeof val === "function" ? val(prev) : val; onOpenChange?.(next); return next; });
-  };
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    onOpenChange?.(isOpen);
+  }, [isOpen, onOpenChange]);
 
   useEffect(() => {
     if (!isOpen) return;
