@@ -16,7 +16,7 @@ import type {
 
 export function GithubActivity({
   username, repo, variant = "compact", activeVariant, onVariantChange,
-  data, theme = "github", mode = "2d", showModeToggle = true,
+  data, theme = "github", mode = "2d", onModeChange, showModeToggle = true,
   weeksCount = 52, year, years, onYearChange, showFullYear,
   showTabs = true, showYearSelector = true, showHeader = true, showStreaks = true,
   showFilter = true, showSearch = true, showSort = true, defaultSort = "desc",
@@ -33,6 +33,14 @@ export function GithubActivity({
   useEffect(() => {
     if (mode) setCurrentMode(mode);
   }, [mode]);
+
+  const handleModeChange = useCallback(
+    (newMode: GithubActivityMode) => {
+      setCurrentMode(newMode);
+      onModeChange?.(newMode);
+    },
+    [onModeChange]
+  );
 
   useEffect(() => {
     if (activeVariant !== undefined) {
@@ -111,7 +119,7 @@ export function GithubActivity({
           activeVariant={activeView}
           onVariantChange={handleVariantChange}
           mode={currentMode}
-          onModeChange={setCurrentMode}
+          onModeChange={handleModeChange}
           showModeToggle={showModeToggle}
           showTabs={showTabs}
           isLoading={isLoading}
@@ -136,7 +144,7 @@ export function GithubActivity({
               username={username}
               theme={theme}
               mode={currentMode}
-              onModeChange={setCurrentMode}
+              onModeChange={handleModeChange}
               weeksCount={weeksCount}
               year={effectiveYear}
               years={years || availableYears}

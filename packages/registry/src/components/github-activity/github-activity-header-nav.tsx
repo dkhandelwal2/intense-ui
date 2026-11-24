@@ -71,7 +71,7 @@ export function GithubActivityHeaderNav({
         className={cn(
           "absolute right-0 top-0 shadow-sm flex items-center justify-between flex-col border border-zinc-200/80 dark:border-zinc-800",
           open
-            ? "w-[272px] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50 "
+            ? "w-[272px] max-w-[calc(100vw-2.5rem)] bg-white/95 dark:bg-zinc-900/95 shadow-xl backdrop-blur-xl p-2.5 z-50"
             : "w-[110px] h-8 bg-zinc-100/80 dark:bg-zinc-800/70 p-0.5 pr-1 z-10"
         )}
         style={{ borderRadius: open ? 18 : 9999 }}

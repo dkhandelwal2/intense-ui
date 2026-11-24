@@ -20,9 +20,18 @@ export const TIMELINE_FILTER_OPTIONS: TimelineFilterOption[] = [
 ];
 
 const curtainVariants: Variants = {
-  hidden: { opacity: 0, y: -10, scaleY: 0.82, filter: "blur(8px)", transition: { duration: 0.18 } },
-  visible: { opacity: 1, y: 0, scaleY: 1, filter: "blur(0px)", transition: { type: "spring", damping: 24, stiffness: 280, staggerChildren: 0.035 } },
-  exit: { opacity: 0, y: -8, scale: 0.94, filter: "blur(4px)", transition: { duration: 0.16 } },
+  hidden: { opacity: 0, y: -8, scaleY: 0.86, filter: "blur(6px)", transition: { duration: 0.18, ease: "easeOut" } },
+  visible: {
+    opacity: 1, y: 0, scaleY: 1, filter: "blur(0px)",
+    transition: {
+      y: { type: "spring", damping: 26, stiffness: 320 },
+      scaleY: { type: "spring", damping: 26, stiffness: 320 },
+      opacity: { duration: 0.18, ease: "easeOut" },
+      filter: { duration: 0.18, ease: "easeOut" },
+      staggerChildren: 0.035,
+    },
+  },
+  exit: { opacity: 0, y: -6, scale: 0.95, filter: "blur(4px)", transition: { duration: 0.15, ease: "easeIn" } },
 };
 const itemVariants: Variants = {
   hidden: { opacity: 0, x: -8 },

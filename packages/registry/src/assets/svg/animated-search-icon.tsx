@@ -42,8 +42,9 @@ export function AnimatedSearchIcon({
           cx="11"
           cy="11"
           r="8"
+          style={{ transformOrigin: "11px 11px" }}
           animate={{
-            r: [8, 8.8, 8],
+            scale: [1, 1.08, 1],
           }}
           transition={{
             duration: 1.6,

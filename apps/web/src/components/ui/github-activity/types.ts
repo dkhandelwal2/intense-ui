@@ -144,6 +144,7 @@ export interface GithubActivityProps extends React.HTMLAttributes<HTMLDivElement
   repo?: string;
   theme?: GithubActivityTheme;
   mode?: GithubActivityMode;
+  onModeChange?: (mode: GithubActivityMode) => void;
   showModeToggle?: boolean;
   year?: number;
   years?: number[];

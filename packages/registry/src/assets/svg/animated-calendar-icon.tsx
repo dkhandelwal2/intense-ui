@@ -11,12 +11,6 @@ export interface AnimatedCalendarIconProps {
   animate?: boolean;
 }
 
-const CHEVRON_KEYFRAMES = [
-  "M 9 14.5 L 12 17.5 L 15 14.5",
-  "M 9 16.5 L 12 19.5 L 15 16.5",
-  "M 9 14.5 L 12 17.5 L 15 14.5",
-];
-
 export function AnimatedCalendarIcon({
   className,
   size = 16,
@@ -57,8 +51,7 @@ export function AnimatedCalendarIcon({
             y1={10}
             y2={10}
             animate={{
-              y1: [10, 8.8, 10],
-              y2: [10, 8.8, 10],
+              y: [0, -1.2, 0],
             }}
             transition={{
               duration: 1.2,
@@ -68,10 +61,10 @@ export function AnimatedCalendarIcon({
             }}
           />
           <motion.path
-            d={CHEVRON_KEYFRAMES[0]}
+            d="M 9 14.5 L 12 17.5 L 15 14.5"
             strokeWidth={1.5}
             animate={{
-              d: CHEVRON_KEYFRAMES,
+              y: [0, 2, 0],
               opacity: [0.7, 1, 0.7],
             }}
             transition={{

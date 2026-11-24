@@ -52,6 +52,7 @@ export function AnimatedDropletIcon({
       {shouldAnimate ? (
         <motion.path
           d={DROPLET_KEYFRAMES[0]}
+          initial={{ d: DROPLET_KEYFRAMES[0] }}
           animate={{
             d: DROPLET_KEYFRAMES,
           }}

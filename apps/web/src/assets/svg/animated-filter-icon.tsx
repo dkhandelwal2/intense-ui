@@ -46,8 +46,7 @@ export function AnimatedFilterIcon({
           y2={13}
           strokeWidth={2}
           animate={{
-            y1: [13, 18, 13],
-            y2: [13, 18, 13],
+            y: [0, 5, 0],
             opacity: [0.3, 1, 0.3],
           }}
           transition={{

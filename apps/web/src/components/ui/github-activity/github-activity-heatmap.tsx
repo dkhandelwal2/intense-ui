@@ -133,8 +133,15 @@ export function GithubActivityHeatmap({
 
         {/* GitHub-Style Vertical Year Selector on the Right */}
         {showYearSelector && activeYears && activeYears.length > 0 && (
-          <div role="group" aria-label="Filter by year" className="flex flex-row sm:flex-col gap-1 shrink-0 overflow-x-auto sm:overflow-y-auto sm:max-h-[250px] border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800/80 sm:p-2 sm:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-lg">
-            <h4 className="sticky top-0 left-0 w-full font-mono text-xs font-semibold text-center sm:text-left transition-all select-none bg-white dark:bg-zinc-900 p-2">Year(s)</h4>
+          <div
+            role="group"
+            aria-label="Filter by year"
+            className={cn(
+              "flex flex-row sm:flex-col gap-1 shrink-0 overflow-x-auto sm:overflow-y-auto border-t sm:border-t-0 sm:border-l border-zinc-100 dark:border-zinc-800/80 sm:p-2 sm:pt-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] rounded-lg my-auto",
+              viewMode === "3d" ? "sm:h-[380px] sm:max-h-[380px] my-0" : "sm:max-h-[210px]"
+            )}
+          >
+            <h4 className="sticky top-0 left-0 w-full font-mono text-xs font-semibold text-center sm:text-left transition-all select-none bg-white dark:bg-zinc-900 p-2 z-10">Year(s)</h4>
             {activeYears.map((yr) => (
               <button
                 key={yr} type="button" aria-pressed={effectiveYear === yr} onClick={() => handleYearSelect(yr)}

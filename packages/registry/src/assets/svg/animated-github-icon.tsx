@@ -64,6 +64,7 @@ export function AnimatedGithubIcon({
       {shouldAnimate ? (
         <motion.path
           d={ARM_KEYFRAMES[0]}
+          initial={{ d: ARM_KEYFRAMES[0] }}
           animate={{ d: ARM_KEYFRAMES }}
           transition={{
             duration: 1.0,
