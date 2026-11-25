@@ -438,6 +438,11 @@
           "target": "components/ui/github-activity/github-activity-stats.tsx"
         },
         {
+          "path": "packages/registry/src/components/github-activity/github-activity-theme-helpers.ts",
+          "type": "registry:file",
+          "target": "components/ui/github-activity/github-activity-theme-helpers.ts"
+        },
+        {
           "path": "packages/registry/src/components/github-activity/github-activity-timeline-filter.tsx",
           "type": "registry:file",
           "target": "components/ui/github-activity/github-activity-timeline-filter.tsx"

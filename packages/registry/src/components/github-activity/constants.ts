@@ -1,5 +1,5 @@
 import type {
-  GithubActivityTheme, GithubContributionDay, GithubActivityEvent,
+  GithubActivityPresetTheme, GithubContributionDay, GithubActivityEvent,
   GithubActivityStatsData, GithubUserProfile,
 } from "./types";
 
@@ -26,7 +26,7 @@ export const DOT_SIZES = {
   lg: { box: "w-4 h-4 sm:w-4 sm:h-4", label: "h-4 sm:h-4", rounded: "rounded-[3px] sm:rounded-[3.5px]" },
 } as const;
 
-export const THEME_LEVEL_CLASSES: Record<GithubActivityTheme, Record<0 | 1 | 2 | 3 | 4, string>> = {
+export const THEME_LEVEL_CLASSES: Record<GithubActivityPresetTheme, Record<0 | 1 | 2 | 3 | 4, string>> = {
   github: { 0: "bg-zinc-100 dark:bg-zinc-800/70 border-zinc-200/40 dark:border-zinc-700/40", 1: "bg-emerald-200 dark:bg-[#0e4429] border-emerald-300 dark:border-[#0e4429]", 2: "bg-emerald-400 dark:bg-[#006d32] border-emerald-500 dark:border-[#006d32]", 3: "bg-emerald-500 dark:bg-[#26a641] border-emerald-600 dark:border-[#26a641]", 4: "bg-emerald-600 dark:bg-[#39d353] border-emerald-700 dark:border-[#39d353]" },
   emerald: { 0: "bg-zinc-100 dark:bg-zinc-800/70 border-zinc-200/40 dark:border-zinc-700/40", 1: "bg-emerald-200 dark:bg-emerald-950/80 border-emerald-300 dark:border-emerald-900", 2: "bg-emerald-400 dark:bg-emerald-800 border-emerald-500 dark:border-emerald-700", 3: "bg-emerald-500 dark:bg-emerald-600 border-emerald-600 dark:border-emerald-500", 4: "bg-emerald-600 dark:bg-emerald-400 border-emerald-700 dark:border-emerald-300" },
   cyan: { 0: "bg-zinc-100 dark:bg-zinc-800/70 border-zinc-200/40 dark:border-zinc-700/40", 1: "bg-cyan-200 dark:bg-cyan-950/80 border-cyan-300 dark:border-cyan-900", 2: "bg-cyan-400 dark:bg-cyan-800 border-cyan-500 dark:border-cyan-700", 3: "bg-cyan-500 dark:bg-cyan-600 border-cyan-600 dark:border-cyan-500", 4: "bg-cyan-600 dark:bg-cyan-400 border-cyan-700 dark:border-cyan-300" },

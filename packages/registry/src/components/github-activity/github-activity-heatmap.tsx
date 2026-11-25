@@ -4,7 +4,8 @@ import React, { useMemo, useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion";
 import { AnimatedGridIcon, AnimatedBoxIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
-import { DOT_SIZES, THEME_LEVEL_CLASSES, generateMockContributions } from "./constants";
+import { DOT_SIZES, generateMockContributions } from "./constants";
+import { resolveGithubTheme } from "./github-activity-theme-helpers";
 import { GithubActivityLegend } from "./github-activity-legend";
 import { GithubActivity2DMatrix } from "./github-activity-2d-matrix";
 import { GithubActivity3D } from "./github-activity-3d";
@@ -66,7 +67,7 @@ export function GithubActivityHeatmap({
     matrixContainerRef.current.scrollLeft = isFullYear && effectiveYear < currentYear ? 0 : matrixContainerRef.current.scrollWidth;
   }, [weeksCount, effectiveYear, isFullYear, currentYear, viewMode]);
 
-  const themeClasses = THEME_LEVEL_CLASSES[theme] || THEME_LEVEL_CLASSES.github;
+  const { themeClasses, themeStyle } = useMemo(() => resolveGithubTheme(theme), [theme]);
   const activeContributions = useMemo(() => {
     if (contributions && contributions.length > 0) return contributions;
     return generateMockContributions(safeWeeksCount, username || "octocat", effectiveYear, isFullYear);
@@ -133,6 +134,7 @@ export function GithubActivityHeatmap({
             ) : (
               <GithubActivity2DMatrix
                 weeks={weeks} monthMap={monthMap} sizeConfig={sizeConfig} themeClasses={themeClasses}
+                themeStyle={themeStyle}
                 isJustifyBetween={isJustifyBetween} showMonthLabels={showMonthLabels} showDayLabels={showDayLabels}
                 isLoading={isLoading} safeWeeksCount={safeWeeksCount} matrixContainerRef={matrixContainerRef} onDayClick={onDayClick}
               />

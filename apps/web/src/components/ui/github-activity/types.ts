@@ -1,7 +1,8 @@
 import React, { RefObject } from "react";
 
 export type GithubActivityVariant = "heatmap" | "timeline" | "stats" | "compact";
-export type GithubActivityTheme = "github" | "emerald" | "cyan" | "amber" | "rose" | "purple" | "monochrome";
+export type GithubActivityPresetTheme = "github" | "emerald" | "cyan" | "amber" | "rose" | "purple" | "monochrome";
+export type GithubActivityTheme = GithubActivityPresetTheme | (string & {});
 export type GithubActivityMode = "2d" | "3d";
 export type GithubContributionLevel = 0 | 1 | 2 | 3 | 4;
 export type GithubEventType = "commit" | "pull_request" | "issue" | "release" | "star";
@@ -96,7 +97,7 @@ export interface GithubActivityStatsConfig { showBreakdown: boolean; showStreaks
 export interface GithubActivityConfig { variant: GithubActivityVariant; theme: GithubActivityTheme; username: string; dotSize?: GithubActivityDotSize; weeksCount: number; maxEvents: number; showFullYear?: boolean; showHeader: boolean; showTabs: boolean; showModeToggle?: boolean; showFilter?: boolean; showSearch?: boolean; showSort?: boolean; }
 
 export interface GithubActivity3DProps { weeks: GithubContributionDay[][]; monthPositions?: { weekIndex: number; label: string }[]; theme?: GithubActivityTheme; dotSize?: GithubActivityDotSize; isLoading?: boolean; onDayClick?: (day: GithubContributionDay) => void; className?: string; }
-export interface GithubActivity2DMatrixProps { weeks: GithubContributionDay[][]; monthMap: Map<number, string>; sizeConfig: { box: string; label: string; rounded: string }; themeClasses: Record<0 | 1 | 2 | 3 | 4, string>; isJustifyBetween: boolean; showMonthLabels: boolean; showDayLabels: boolean; isLoading: boolean; safeWeeksCount: number; matrixContainerRef: RefObject<HTMLDivElement | null>; onDayClick?: (day: GithubContributionDay) => void; }
+export interface GithubActivity2DMatrixProps { weeks: GithubContributionDay[][]; monthMap: Map<number, string>; sizeConfig: { box: string; label: string; rounded: string }; themeClasses: Record<0 | 1 | 2 | 3 | 4, string>; themeStyle?: React.CSSProperties; isJustifyBetween: boolean; showMonthLabels: boolean; showDayLabels: boolean; isLoading: boolean; safeWeeksCount: number; matrixContainerRef: RefObject<HTMLDivElement | null>; onDayClick?: (day: GithubContributionDay) => void; }
 export interface GithubActivityYearSelectProps { year?: number; years: number[]; onYearChange?: (year: number) => void; className?: string; disabled?: boolean; }
 export interface GithubActivityHeaderNavProps { activeVariant?: GithubActivityVariant; onVariantChange?: (variant: GithubActivityVariant) => void; stats?: GithubActivityStatsData; totalContributions?: number; label?: string; staticIcons?: boolean; className?: string; }
 export interface TimelineFilterOption { label: string; value: "all" | GithubEventType; icon: React.ComponentType<{ className?: string; animate?: boolean }>; }

@@ -107,7 +107,7 @@ export function ComponentBottomSheet({
           animate={{ y: 0 }}
           exit={{ y: "100%", pointerEvents: "none" }}
           transition={{ type: "spring", damping: 28, stiffness: 300 }}
-          className="fixed bottom-0 left-0 right-0 md:left-[68px] z-[71] h-[96dvh] sm:h-[88dvh] max-h-[96dvh] rounded-t-[32px] sm:rounded-t-[36px] bg-background/95 dark:bg-[#0c0c0e]/98 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden will-change-transform xl:hidden"
+          className="fixed bottom-0 left-0 right-0 md:left-[68px] z-[71] h-[70dvh] sm:h-[88dvh] max-h-[70dvh] rounded-t-[32px] sm:rounded-t-[36px] bg-background/95 dark:bg-[#0c0c0e]/98 backdrop-blur-2xl border-t border-black/10 dark:border-white/10 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden will-change-transform xl:hidden"
         >
           {/* Grab handle indicator zone (drag trigger) */}
           <div

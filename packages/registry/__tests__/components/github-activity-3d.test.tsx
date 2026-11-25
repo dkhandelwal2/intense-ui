@@ -7,6 +7,8 @@ import {
   GithubActivityHeatmap,
   GithubActivity3D,
 } from "../../src/components/github-activity";
+import { resolveGithubTheme } from "../../src/components/github-activity/github-activity-theme-helpers";
+import { resolve3DThemeColors } from "../../src/components/github-activity/github-activity-3d-helpers";
 
 describe("GithubActivity 3D Skyline Mode", () => {
   it("defaults to 2d mode with 2D toggle button pressed", () => {
@@ -82,5 +84,17 @@ describe("GithubActivity 3D Skyline Mode", () => {
 
     rerender(<GithubActivity3D weeks={mockWeeks} dotSize="lg" />);
     expect(screen.getByRole("img", { name: /shown as a 3D skyline/i })).toBeInTheDocument();
+  });
+
+  it("supports custom hex theme colors in both 2D CSS vars and 3D palettes", () => {
+    const resolved2D = resolveGithubTheme("#ff0084");
+    expect(resolved2D.themeStyle).toBeDefined();
+    expect((resolved2D.themeStyle as Record<string, string>)["--gh-d4"]).toBe("#ff0084");
+
+    const colors3DLight = resolve3DThemeColors("#ff0084", false);
+    const colors3DDark = resolve3DThemeColors("#ff0084", true);
+    expect(colors3DLight).toHaveLength(5);
+    expect(colors3DDark).toHaveLength(5);
+    expect(colors3DDark[4]).toBe("#ff0084");
   });
 });

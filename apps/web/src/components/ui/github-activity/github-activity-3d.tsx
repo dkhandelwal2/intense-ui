@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { formatContributionDate } from "./constants";
 import {
-  THEME_3D_COLORS, buildRenderBars, drawBasePlatform, drawSkylineBars,
+  resolve3DThemeColors, buildRenderBars, drawBasePlatform, drawSkylineBars,
   drawMonthLabels, isPointInPolygon, RenderBar,
 } from "./github-activity-3d-helpers";
 import type { GithubContributionDay, GithubActivity3DProps } from "./types";
@@ -66,7 +66,7 @@ export function GithubActivity3D({
       (document.documentElement.classList.contains("dark") ||
         (!document.documentElement.classList.contains("light") &&
           Boolean(window.matchMedia?.("(prefers-color-scheme: dark)").matches)));
-    const colors = (THEME_3D_COLORS[theme] || THEME_3D_COLORS.github)[isDark ? "dark" : "light"];
+    const colors = resolve3DThemeColors(theme, isDark);
     const yaw = yawRef.current;
     const pitch = pitchRef.current;
     const numCols = Math.max(1, weeks.length);

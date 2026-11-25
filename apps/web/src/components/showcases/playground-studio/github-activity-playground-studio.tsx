@@ -83,7 +83,7 @@ export function GithubActivityPlaygroundStudio({
             <div className="flex items-center justify-between pb-1">
               <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Theme</span>
               <span className={cn("text-[11px] font-mono font-semibold", isHeatmap ? "text-[var(--theme-primary)]" : "text-zinc-400")}>
-                {GITHUB_THEME_COLORS.find((t) => t.id === customProps.theme)?.label || "GitHub Green"}
+                {GITHUB_THEME_COLORS.find((t) => t.id === customProps.theme)?.label || (customProps.theme ? customProps.theme.toUpperCase() : "GitHub Green")}
               </span>
             </div>
             <ColorGrid
@@ -91,13 +91,18 @@ export function GithubActivityPlaygroundStudio({
               columns={4}
               colors={GITHUB_THEME_COLORS.map((t) => t.color)}
               labels={GITHUB_THEME_LABELS}
-              value={GITHUB_THEME_COLORS.find((t) => t.id === customProps.theme)?.color || "#10b981"}
+              value={GITHUB_THEME_COLORS.find((t) => t.id === customProps.theme)?.color || customProps.theme || "#10b981"}
+              defaultValue="#10b981"
+              showCustomPicker={true}
               onChange={(hex) => {
                 if (!isHeatmap) return;
                 const found = GITHUB_THEME_COLORS.find((t) => t.color.toLowerCase() === hex.toLowerCase());
-                if (found) onChange((prev) => ({ ...prev, theme: found.id }));
+                onChange((prev) => ({ ...prev, theme: found ? found.id : hex }));
               }}
-              showCustomPicker={false}
+              onClear={() => {
+                if (!isHeatmap) return;
+                onChange((prev) => ({ ...prev, theme: "github" }));
+              }}
               className="p-3.5 gap-3.5 place-items-center border border-zinc-200/80 dark:border-zinc-800 rounded-xl shadow-xs"
             />
           </div>

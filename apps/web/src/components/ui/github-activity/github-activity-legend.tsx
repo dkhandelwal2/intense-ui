@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { AnimatedDropletIcon } from "@/assets/svg";
 import { cn } from "@/lib/utils";
-import { THEME_LEVEL_CLASSES } from "./constants";
+import { resolveGithubTheme } from "./github-activity-theme-helpers";
 import type { GithubActivityLegendProps, GithubContributionLevel } from "./types";
 
 export function GithubActivityLegend({
@@ -17,7 +17,7 @@ export function GithubActivityLegend({
   className,
 }: GithubActivityLegendProps) {
   const [isStreakExpanded, setIsStreakExpanded] = useState(false);
-  const themeClasses = THEME_LEVEL_CLASSES[theme] || THEME_LEVEL_CLASSES.github;
+  const { themeClasses, themeStyle } = useMemo(() => resolveGithubTheme(theme), [theme]);
 
   return (
     <div className={cn("flex items-center justify-between gap-2.5 text-xs text-zinc-500 dark:text-zinc-400 select-none h-full", className)}>
@@ -61,7 +61,7 @@ export function GithubActivityLegend({
 
       <div className="flex items-center gap-1.5 shrink-0 ml-auto">
         <span className="text-[10px] text-zinc-400">Less</span>
-        <div className="flex items-center gap-[3px]">
+        <div className="flex items-center gap-[3px]" style={themeStyle}>
           {([0, 1, 2, 3, 4] as GithubContributionLevel[]).map((level) => (
             <div
               key={level}

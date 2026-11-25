@@ -10,6 +10,7 @@ export function GithubActivity2DMatrix({
   monthMap,
   sizeConfig,
   themeClasses,
+  themeStyle,
   isJustifyBetween,
   showMonthLabels,
   showDayLabels,
@@ -19,7 +20,7 @@ export function GithubActivity2DMatrix({
   onDayClick,
 }: GithubActivity2DMatrixProps) {
   return (
-    <div ref={matrixContainerRef} className="w-full overflow-x-auto scrollbar-none touch-pan-x py-0.5 my-auto">
+    <div ref={matrixContainerRef} style={themeStyle} className="w-full overflow-x-auto scrollbar-none touch-pan-x py-0.5 my-auto">
       <div className="flex flex-col w-full min-w-max">
         {showMonthLabels && (
           <div className="flex text-[10px] font-medium text-zinc-400 dark:text-zinc-500 mb-1 select-none w-full min-w-max">

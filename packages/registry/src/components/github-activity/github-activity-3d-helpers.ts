@@ -1,6 +1,7 @@
-import type { GithubActivityTheme, GithubContributionLevel, GithubContributionDay } from "./types";
+import { buildCustomThemeScale } from "./github-activity-theme-helpers";
+import type { GithubActivityPresetTheme, GithubActivityTheme, GithubContributionLevel, GithubContributionDay } from "./types";
 
-export const THEME_3D_COLORS: Record<GithubActivityTheme, { dark: string[]; light: string[] }> = {
+export const THEME_3D_COLORS: Record<GithubActivityPresetTheme, { dark: string[]; light: string[] }> = {
   github: {
     dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
     light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
@@ -30,6 +31,15 @@ export const THEME_3D_COLORS: Record<GithubActivityTheme, { dark: string[]; ligh
     light: ["#f4f4f5", "#d4d4d8", "#a1a1aa", "#52525b", "#18181b"],
   },
 };
+
+export function resolve3DThemeColors(theme: GithubActivityTheme, isDark: boolean): string[] {
+  const mode = isDark ? "dark" : "light";
+  if (theme in THEME_3D_COLORS) {
+    return THEME_3D_COLORS[theme as GithubActivityPresetTheme][mode];
+  }
+  const custom = buildCustomThemeScale(theme);
+  return custom ? custom[mode] : THEME_3D_COLORS.github[mode];
+}
 
 export function adjustBrightness(hex: string, factor: number): string {
   const clean = hex.replace("#", "");
