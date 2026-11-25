@@ -12,7 +12,7 @@ export const PlaygroundStudioOptionsPanel = React.memo(function PlaygroundStudio
   activeGradient,
 }: PlaygroundStudioOptionsPanelProps) {
   return (
-    <div className="relative flex flex-col justify-start pt-10 sm:pt-11 pb-2 pr-4 pl-2 sm:pr-5 sm:pl-3 overflow-y-auto subtle-scrollbar h-full min-h-0 select-none z-10">
+    <div className="relative flex flex-col justify-start pt-10 sm:pt-11 pb-2 pr-3 pl-1.5 sm:pr-4 sm:pl-2.5 overflow-y-auto subtle-scrollbar h-full min-h-0 select-none z-10">
       <div className="w-full">
         {/* Table Column Headers (Clean without duplicate heading/subheading) */}
         <div className="flex items-center justify-between text-[8px] 2xl:text-[8.5px] font-mono font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase pt-0.5 pb-1 border-b border-zinc-200/60 dark:border-zinc-800/80 mb-1">

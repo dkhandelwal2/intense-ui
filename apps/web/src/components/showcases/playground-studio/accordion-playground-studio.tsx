@@ -30,7 +30,7 @@ export const AccordionLivePreview = React.memo(function AccordionLivePreview({
   customProps: CustomProps;
 }) {
   return (
-    <div className="w-full flex items-center justify-center py-2 px-1">
+    <div className="w-full h-full flex items-center justify-center py-2 px-1 my-auto">
       <div className="w-full">
         <AccordionVariantRenderer id="customization" customProps={customProps} />
       </div>

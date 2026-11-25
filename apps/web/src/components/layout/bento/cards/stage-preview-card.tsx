@@ -9,6 +9,7 @@ import { PlaygroundReorderIcon } from "@/components/showcases/common";
 import { StagePreviewCardProps } from "../types";
 import { AnimatedCodeIcon, AnimatedTerminalIcon } from "@/assets/icons";
 import { STEP_CAROUSEL_ANIMATIONS } from "@/components/ui/step-carousel";
+import { WidgetCapsule } from "../widgets";
 
 export const StagePreviewCard = React.memo(function StagePreviewCard({
   slug,
@@ -38,10 +39,17 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
         "flex flex-col justify-between relative select-none w-full p-4",
         isDesktop
           ? "h-full rounded-3xl overflow-visible"
-          : "px-2 min-h-[calc(100vh-180px)] h-auto rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-2 sm:gap-4 shrink-0 sm-container",
+          : "px-2 pt-11 sm:pt-12 min-h-[calc(100vh-180px)] h-auto rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 shadow-sm gap-2 sm:gap-4 shrink-0 sm-container overflow-visible",
         className
       )}
     >
+      {/* Dynamic Island Notch on top of the larger card (Responsive Mode) */}
+      {!isDesktop && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
+          <WidgetCapsule variant="island" />
+        </div>
+      )}
+
       {/* Background Dot Grid for Mobile Mode */}
       {!isDesktop && (
         <div aria-hidden="true" className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none [background-image:radial-gradient(currentColor_1px,transparent_1px)] [background-size:16px_16px]" />

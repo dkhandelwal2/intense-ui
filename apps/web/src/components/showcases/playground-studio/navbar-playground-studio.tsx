@@ -40,8 +40,8 @@ export function NavbarLivePreview({
   customProps: CustomNavbarProps;
 }) {
   return (
-    <div className="w-full flex items-center justify-center origin-center overflow-x-auto py-2">
-      <div className="scale-95 sm:scale-100 origin-center shrink-0 transition-transform duration-200">
+    <div className="w-full h-full flex items-center justify-center origin-center overflow-x-auto py-2 my-auto">
+      <div className="scale-[0.80] xs:scale-[0.84] sm:scale-95 md:scale-100 origin-center shrink-0 transition-transform duration-200">
         <NavbarVariantRenderer id="customization" customProps={customProps} />
       </div>
     </div>

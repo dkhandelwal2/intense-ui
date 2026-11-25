@@ -52,7 +52,7 @@ export const BreadcrumbLivePreview = React.memo(function BreadcrumbLivePreview({
   customProps: CustomProps;
 }) {
   return (
-    <div className="w-full flex items-center justify-center origin-center">
+    <div className="w-full h-full flex items-center justify-center origin-center my-auto">
       <BreadcrumbVariantRenderer id="customization" customProps={customProps} />
     </div>
   );

@@ -4,6 +4,7 @@ import React from "react";
 import { Compass, Palette } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { TooltipCustomProps, DEFAULT_TOOLTIP_PROPS } from "@/components/showcases/tooltip/types";
+import { Tooltip } from "@/components/ui/tooltip";
 
 export interface TooltipPlaygroundStudioProps {
   customProps: TooltipCustomProps;
@@ -12,6 +13,32 @@ export interface TooltipPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const TooltipLivePreview = React.memo(function TooltipLivePreview({
+  customProps,
+}: {
+  customProps: TooltipCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-3 p-6">
+      <Tooltip
+        content={customProps.content}
+        position={customProps.position}
+        bgColor={customProps.bgColor || undefined}
+      >
+        <button
+          type="button"
+          className="px-4 py-2 rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium text-xs shadow-md hover:scale-105 transition-transform"
+        >
+          Hover / Tap Target
+        </button>
+      </Tooltip>
+      <span className="text-[10px] font-mono text-muted-foreground">
+        Position: {customProps.position.toUpperCase()} • {customProps.bgColor || "Default Dark"}
+      </span>
+    </div>
+  );
+});
 
 const TOOLTIP_POSITIONS = [
   { id: "top" as const, label: "Top Placement", spec: "Floating above with downward arrow pointer", badge: "TOP" },
@@ -88,6 +115,8 @@ export function TooltipPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <TooltipLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your tooltip bubble in real time."
       onReset={() => onChange(DEFAULT_TOOLTIP_PROPS)}
       onViewCode={onViewCode}
       hidePreview={hidePreview}

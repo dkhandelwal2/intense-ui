@@ -13,13 +13,39 @@ import {
   GENERIC_SPRING_OPTIONS,
 } from "./constants";
 
+export const GenericLivePreview = React.memo(function GenericLivePreview({
+  title,
+  customProps,
+}: {
+  title: string;
+  customProps: GenericCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex items-center justify-center p-4">
+      <div
+        className="px-6 py-3 rounded-2xl border flex items-center gap-2 font-medium transition-all duration-300"
+        style={{
+          borderColor: customProps.color || "#EC4899",
+          backgroundColor: `${customProps.color || "#EC4899"}15`,
+          color: customProps.color || "#EC4899",
+          boxShadow: customProps.glow ? `0 0 24px ${customProps.color || "#EC4899"}66` : undefined,
+          transform: customProps.size === "sm" ? "scale(0.9)" : customProps.size === "lg" ? "scale(1.1)" : "scale(1)",
+        }}
+      >
+        <span>✨</span>
+        <span>{title} Preview</span>
+      </div>
+    </div>
+  );
+});
+
 export function GenericPlaygroundStudio({
   title,
   customProps,
   onChange,
   onViewCode,
   className,
-  hidePreview = true,
+  hidePreview = false,
 }: GenericPlaygroundStudioProps) {
   const steps: PlaygroundStudioStepData[] = useMemo(
     () => [
@@ -129,6 +155,7 @@ export function GenericPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <GenericLivePreview title={title} customProps={customProps} />}
       hidePreview={hidePreview}
       description={`Interact with props below to customize your ${title.toLowerCase()} in real time.`}
       onViewCode={onViewCode}

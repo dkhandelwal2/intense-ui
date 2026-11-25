@@ -17,8 +17,8 @@ export const PlaygroundStudioHeader = React.memo(function PlaygroundStudioHeader
   description,
 }: PlaygroundStudioHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-1 py-0.5 shrink-0 select-none">
-      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-normal leading-tight truncate">
+    <div className="flex items-center justify-between px-1 py-0.5 shrink-0 select-none gap-2">
+      <p className="text-[10.5px] sm:text-[11px] text-zinc-500 dark:text-zinc-400 font-normal leading-tight truncate hidden xs:block">
         {description || "Interact with props below to customize variants in real time."}
       </p>
 

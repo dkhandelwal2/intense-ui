@@ -3,6 +3,7 @@ export { ScrollMotionSection as SidebarMotionSection } from "../scroll-motion-se
 export { ComponentMoreMenu } from "./component-more-menu";
 export { ComponentTabControls } from "./component-tab-controls";
 export type { ComponentTabControlsProps } from "./component-tab-controls";
+export { TabSpotlightIndicator } from "./tab-spotlight-indicator";
 export { ComponentTitleBadge } from "./component-title-badge";
 export type { ComponentTitleBadgeProps } from "./component-title-badge";
 export { ComponentSidebarHeader } from "./component-sidebar-header";

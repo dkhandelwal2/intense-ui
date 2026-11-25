@@ -9,6 +9,7 @@ import {
   SignaturePadCustomProps,
   DEFAULT_SIGNATURE_PAD_PROPS,
 } from "@/components/showcases/signature-pad/types";
+import { SignaturePadPreview } from "@/components/showcases/signature-pad/signature-pad-preview";
 
 export interface SignaturePadPlaygroundStudioProps {
   customProps: SignaturePadCustomProps;
@@ -17,6 +18,20 @@ export interface SignaturePadPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const SignaturePadLivePreview = React.memo(function SignaturePadLivePreview({
+  customProps,
+}: {
+  customProps: SignaturePadCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex items-center justify-center p-2 overflow-auto scrollbar-none">
+      <div className="scale-70 sm:scale-80 origin-center">
+        <SignaturePadPreview customProps={customProps} isCustomizing={true} />
+      </div>
+    </div>
+  );
+});
 
 const PAD_DIMENSIONS = [
   { width: 280, height: 340, label: "Compact Mobile", badge: "SM", spec: "280 × 340 tight modal footprint" },
@@ -156,6 +171,8 @@ export function SignaturePadPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <SignaturePadLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your signature pad in real time."
       onReset={() => onChange(DEFAULT_SIGNATURE_PAD_PROPS)}
       onViewCode={onViewCode}
       hidePreview={hidePreview}

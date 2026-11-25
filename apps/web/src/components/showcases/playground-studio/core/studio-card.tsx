@@ -169,7 +169,7 @@ export const PlaygroundStudioCard = React.memo(function PlaygroundStudioCard({
             animate="center"
             exit="exit"
             style={{ transformStyle: "preserve-3d" }}
-            className="w-full h-full grid grid-cols-[115px_1fr] sm:grid-cols-[135px_1fr] 2xl:grid-cols-[160px_1fr] gap-0"
+            className="w-full h-full grid grid-cols-[128px_1fr] sm:grid-cols-[140px_1fr] 2xl:grid-cols-[165px_1fr] gap-0"
           >
             {/* Left Hero Card with Bottom-Aligned Content */}
             <PlaygroundStudioHeroCard

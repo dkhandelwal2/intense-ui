@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  WidgetCapsule,
   DependenciesCard,
   SupportCard,
 } from "./index";
@@ -82,9 +81,6 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
           className="w-full h-full rounded-xl shrink-0"
         />
       </div>
-
-      {/* 3. Ambient Status Capsule (placed at bottom of content stream) */}
-      <WidgetCapsule className="w-full shrink-0" />
     </div>
   );
 });

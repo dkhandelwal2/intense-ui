@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Settings2, Palette, Sliders, Eye, Hash, Volume2, Ban } from "lucide-react";
+import { Sparkles, Settings2, Palette, Sliders, Eye, Hash, Volume1, Volume2, Ban } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { SliderCustomProps, DEFAULT_SLIDER_PROPS } from "@/components/showcases/slider/types";
+import { Slider, RangeSlider } from "@/components/ui/slider";
 
 export interface SliderPlaygroundStudioProps {
   customProps: SliderCustomProps;
@@ -12,6 +13,61 @@ export interface SliderPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const SliderLivePreview = React.memo(function SliderLivePreview({
+  customProps,
+  onChange,
+}: {
+  customProps: SliderCustomProps;
+  onChange?: React.Dispatch<React.SetStateAction<SliderCustomProps>>;
+}) {
+  return (
+    <div className="w-full h-full max-w-xs flex flex-col items-center justify-center gap-4 py-6 px-4 my-auto">
+      {customProps.isRange ? (
+        <div className="w-full space-y-3 pt-6">
+          <div className="flex justify-between text-[11px] font-mono text-muted-foreground">
+            <span>Range: {customProps.rangeValue[0]} - {customProps.rangeValue[1]}</span>
+          </div>
+          <RangeSlider
+            value={customProps.rangeValue}
+            min={customProps.min}
+            max={customProps.max}
+            step={customProps.step}
+            onChange={(val) => onChange?.((p) => ({ ...p, rangeValue: val }))}
+            variant={customProps.variant}
+            fillColor={customProps.fillColor}
+            tooltip={customProps.tooltip}
+            disabled={customProps.disabled}
+          />
+        </div>
+      ) : (
+        <div className="w-full flex items-center justify-center pt-6">
+          <Slider
+            value={customProps.value}
+            min={customProps.min}
+            max={customProps.max}
+            step={customProps.step}
+            onChange={(val) => onChange?.((p) => ({ ...p, value: val }))}
+            disabled={customProps.disabled}
+            orientation={customProps.orientation}
+            variant={customProps.variant}
+            fillColor={customProps.fillColor}
+            thumbAnimation={customProps.thumbAnimation}
+            tooltip={customProps.tooltip}
+            showInput={customProps.showInput}
+            leftIcon={customProps.withIcons ? <Volume1 className="w-4 h-4" /> : undefined}
+            rightIcon={customProps.withIcons ? <Volume2 className="w-4 h-4" /> : undefined}
+          />
+        </div>
+      )}
+      <span className="text-[11px] font-mono text-muted-foreground text-center">
+        {customProps.isRange
+          ? `${customProps.rangeValue[0]} – ${customProps.rangeValue[1]}`
+          : `Value: ${customProps.value}% • ${customProps.variant || "primary"}`}
+      </span>
+    </div>
+  );
+});
 
 const COLOR_OPTIONS = [
   { id: "primary" as const, label: "Theme Primary", hex: undefined, color: "bg-[var(--theme-primary)]" },
@@ -109,6 +165,8 @@ export function SliderPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <SliderLivePreview customProps={customProps} onChange={onChange} />}
+      description="Interact with props below to customize your slider in real time."
       onReset={() => onChange(DEFAULT_SLIDER_PROPS)}
       onViewCode={onViewCode}
       className={className}

@@ -4,6 +4,7 @@ import React from "react";
 import { Maximize2, Sliders, Layers } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { SwitchCustomProps, DEFAULT_SWITCH_PROPS } from "@/components/showcases/switch/types";
+import { Switch } from "@/components/ui/switch";
 
 export interface SwitchPlaygroundStudioProps {
   customProps: SwitchCustomProps;
@@ -12,6 +13,32 @@ export interface SwitchPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const SwitchLivePreview = React.memo(function SwitchLivePreview({
+  customProps,
+  onChange,
+}: {
+  customProps: SwitchCustomProps;
+  onChange?: React.Dispatch<React.SetStateAction<SwitchCustomProps>>;
+}) {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-3 py-2">
+      <Switch
+        checked={customProps.checked}
+        onChange={(c) => onChange?.((p) => ({ ...p, checked: c }))}
+        disabled={customProps.disabled}
+        variant={customProps.variant}
+        size={customProps.size}
+        sliderText={customProps.sliderText}
+        showDotIcon={customProps.showDotIcon}
+        shadowColor={customProps.shadowColor}
+      />
+      <span className="text-[11px] font-mono text-muted-foreground uppercase">
+        Variant: {customProps.variant} • Size: {customProps.size} • {customProps.checked ? "ON" : "OFF"}
+      </span>
+    </div>
+  );
+});
 
 const SWITCH_VARIANTS = [
   { id: "rocker" as const, label: "3D Rocker", badge: "3D", spec: "3D physical origami rocker with crease tilt" },
@@ -147,6 +174,8 @@ export function SwitchPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <SwitchLivePreview customProps={customProps} onChange={onChange} />}
+      description="Interact with props below to customize your switch in real time."
       onReset={() => onChange(DEFAULT_SWITCH_PROPS)}
       onViewCode={onViewCode}
       className={className}

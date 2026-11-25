@@ -4,12 +4,25 @@ import React from "react";
 import { Maximize2, Palette, Sliders } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { ButtonCustomProps, DEFAULT_BUTTON_PROPS } from "@/components/showcases/button/types";
+import { ButtonPreview } from "@/components/showcases/button/button-preview";
 
 export interface ButtonPlaygroundStudioProps {
   customProps: ButtonCustomProps;
   onChange: React.Dispatch<React.SetStateAction<ButtonCustomProps>>;
   className?: string; hidePreview?: boolean; onViewCode?: () => void;
 }
+
+export const ButtonLivePreview = React.memo(function ButtonLivePreview({
+  customProps,
+}: {
+  customProps: ButtonCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex items-center justify-center origin-center py-2">
+      <ButtonPreview customProps={customProps} isCustomizing={true} />
+    </div>
+  );
+});
 
 const BUTTON_SIZES = [
   { id: "sm" as const, label: "Small", badge: "SM", spec: "px-3 py-1.5 compact typography" },
@@ -147,5 +160,15 @@ export function ButtonPlaygroundStudio({ customProps, onChange, className, hideP
     },
   ];
 
-  return <PlaygroundStudio steps={steps} onReset={() => onChange(DEFAULT_BUTTON_PROPS)} onViewCode={onViewCode} className={className} hidePreview={hidePreview} />;
+  return (
+    <PlaygroundStudio
+      steps={steps}
+      preview={hidePreview ? undefined : <ButtonLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your button in real time."
+      onReset={() => onChange(DEFAULT_BUTTON_PROPS)}
+      onViewCode={onViewCode}
+      className={className}
+      hidePreview={hidePreview}
+    />
+  );
 }

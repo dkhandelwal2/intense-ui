@@ -122,7 +122,7 @@ export const PlaygroundStudio = React.memo(function PlaygroundStudio({
                 WebkitMaskImage: "radial-gradient(ellipse at center, black 50%, transparent 95%)",
               }}
             />
-            <div className="relative z-10 w-full h-full flex items-start justify-center overflow-auto scrollbar-none ">
+            <div className="relative z-10 w-full h-full flex items-center justify-center overflow-auto scrollbar-none">
               {effectivePreview}
             </div>
           </div>

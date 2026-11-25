@@ -32,7 +32,7 @@ export function RetailTagBarcode({
       </div>
 
       {/* Brand & Item Heading */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-3">
         <div className="flex items-center justify-center gap-1.5 text-zinc-600 dark:text-zinc-400 text-xs uppercase tracking-widest font-semibold">
           <Tag className="w-3 h-3 text-rose-500 dark:text-rose-400" /> {title}
         </div>
@@ -42,7 +42,7 @@ export function RetailTagBarcode({
       </div>
 
       {/* Price Badge */}
-      <div className="w-full py-2 px-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-center mb-5">
+      <div className="w-full py-1.5 px-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-center mb-4">
         <div className="text-[9px] font-mono text-zinc-500 uppercase">Suggested Retail</div>
         <div className="text-xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">{price}</div>
       </div>
@@ -53,7 +53,7 @@ export function RetailTagBarcode({
           value={value}
           format={format}
           height={60}
-          size={size || 120}
+          size={size || (format === "qr" || format === "data-matrix" ? 115 : 120)}
           dotStyle={dotStyle}
           barWidth={1.8}
           color={color || "currentColor"}
@@ -64,7 +64,7 @@ export function RetailTagBarcode({
       </div>
 
       {/* Bottom Serial */}
-      <div className="mt-3 text-[9px] font-mono text-zinc-400 dark:text-zinc-500">
+      <div className="mt-2 text-[9px] font-mono text-zinc-400 dark:text-zinc-500">
         SKU: INT-2026-FW
       </div>
     </div>

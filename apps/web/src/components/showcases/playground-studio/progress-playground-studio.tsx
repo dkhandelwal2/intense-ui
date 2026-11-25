@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { ProgressCustomProps, DEFAULT_PROGRESS_PROPS } from "@/components/showcases/progress/types";
+import { ProgressPreview } from "@/components/showcases/progress/progress-preview";
 
 export interface ProgressPlaygroundStudioProps {
   customProps: ProgressCustomProps;
@@ -18,6 +19,20 @@ export interface ProgressPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const ProgressLivePreview = React.memo(function ProgressLivePreview({
+  customProps,
+}: {
+  customProps: ProgressCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex items-center justify-center p-2">
+      <div className="scale-90 sm:scale-100 origin-center w-full max-w-xs">
+        <ProgressPreview customProps={customProps} isCustomizing={true} />
+      </div>
+    </div>
+  );
+});
 
 const PROGRESS_TYPES: Array<{
   id: ProgressCustomProps["type"];
@@ -161,6 +176,8 @@ export function ProgressPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <ProgressLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your progress indicator in real time."
       onReset={() => onChange(DEFAULT_PROGRESS_PROPS)}
       onViewCode={onViewCode}
       className={className}

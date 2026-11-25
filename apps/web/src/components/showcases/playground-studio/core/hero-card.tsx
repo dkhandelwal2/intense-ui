@@ -30,7 +30,7 @@ export const PlaygroundStudioHeroCard = React.memo(function PlaygroundStudioHero
       >
         <defs>
           <clipPath id={clipId} clipPathUnits="objectBoundingBox">
-            <path d="M 0 0.08 C 0 0.03, 0.03 0, 0.12 0 L 0.65 0 C 0.78 0, 0.92 0.08, 0.98 0.22 C 1.02 0.32, 1.02 0.42, 0.98 0.50 C 0.93 0.62, 0.85 0.76, 0.76 0.87 C 0.68 0.96, 0.60 1.0, 0.52 1.0 L 0.12 1.0 C 0.03 1.0, 0 0.97, 0 0.92 Z" />
+            <path d="M 0 0.08 C 0 0.03, 0.03 0, 0.12 0 L 0.70 0 C 0.82 0, 0.94 0.08, 0.98 0.22 C 1.02 0.32, 1.02 0.42, 0.99 0.50 C 0.96 0.62, 0.92 0.74, 0.88 0.85 C 0.84 0.93, 0.80 1.0, 0.76 1.0 L 0.12 1.0 C 0.03 1.0, 0 0.97, 0 0.92 Z" />
           </clipPath>
         </defs>
       </svg>
@@ -68,11 +68,11 @@ export const PlaygroundStudioHeroCard = React.memo(function PlaygroundStudioHero
 
         {/* Bottom-Aligned Content Stack matching reference design */}
         <div className="relative z-10 mt-auto pt-4 flex flex-col justify-end">
-          <div className="text-[13px] sm:text-sm 2xl:text-base font-black tracking-tight leading-tight text-white drop-shadow-xs">
+          <div className="text-[12px] xs:text-[13px] sm:text-sm 2xl:text-base font-black tracking-tight leading-tight text-white drop-shadow-xs whitespace-nowrap">
             {step.titleLine1}
           </div>
           {step.titleLine2 && (
-            <div className="text-[13px] sm:text-sm 2xl:text-base font-black tracking-tight leading-tight text-white/90 drop-shadow-xs">
+            <div className="text-[12px] xs:text-[13px] sm:text-sm 2xl:text-base font-black tracking-tight leading-tight text-white/90 drop-shadow-xs whitespace-nowrap">
               {step.titleLine2}
             </div>
           )}

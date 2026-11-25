@@ -193,7 +193,10 @@ export function BarcodeSVG({
       {showText && (
         <span
           className={cn(
-            "font-mono text-xs tracking-[0.25em] mt-2 select-text font-medium text-center max-w-[200px] truncate",
+            "font-mono text-xs mt-2 select-text font-medium text-center max-w-[260px] truncate px-1",
+            encoded.is2D || (encoded.text && encoded.text.length > 14)
+              ? "tracking-normal"
+              : "tracking-[0.25em]",
             !textColor && (!color || color === "currentColor") ? "text-foreground/80" : ""
           )}
           style={{ color: textColor || (color && color !== "currentColor" ? color : undefined) }}

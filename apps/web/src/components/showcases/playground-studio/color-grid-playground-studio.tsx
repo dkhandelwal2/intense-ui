@@ -4,6 +4,7 @@ import React from "react";
 import { Maximize2, LayoutGrid, Pipette, Move } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { ColorGridCustomProps, DEFAULT_COLOR_GRID_PROPS } from "@/components/showcases/color-grid/types";
+import { ColorGrid } from "@/components/ui/color-grid";
 
 export interface ColorGridPlaygroundStudioProps {
   customProps: ColorGridCustomProps;
@@ -12,6 +13,38 @@ export interface ColorGridPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const ColorGridLivePreview = React.memo(function ColorGridLivePreview({
+  customProps,
+  onChange,
+}: {
+  customProps: ColorGridCustomProps;
+  onChange?: React.Dispatch<React.SetStateAction<ColorGridCustomProps>>;
+}) {
+  const value = customProps.value || "var(--theme-primary)";
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-3 py-2 px-2">
+      <ColorGrid
+        value={value}
+        onChange={(val) => onChange?.((p) => ({ ...p, value: val }))}
+        defaultValue="var(--theme-primary)"
+        onClear={() => onChange?.((p) => ({ ...p, value: "" }))}
+        size={customProps.size}
+        orientation={customProps.orientation}
+        showCustomPicker={customProps.showCustomPicker}
+        draggable={customProps.draggable}
+        columns={customProps.columns}
+      />
+      <div className="flex items-center gap-2">
+        <div
+          className="w-10 h-5 rounded-md border border-border/80 shadow-inner transition-colors duration-200"
+          style={{ backgroundColor: value }}
+        />
+        <span className="text-[11px] font-mono text-muted-foreground">{value}</span>
+      </div>
+    </div>
+  );
+});
 
 const COLOR_GRID_SIZES = [
   { id: "sm" as const, label: "Small", badge: "SM", spec: "w-5 h-5 compact swatches" },
@@ -109,6 +142,8 @@ export function ColorGridPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <ColorGridLivePreview customProps={customProps} onChange={onChange} />}
+      description="Interact with props below to customize your color swatches in real time."
       onReset={() => onChange(DEFAULT_COLOR_GRID_PROPS)}
       onViewCode={onViewCode}
       hidePreview={hidePreview}

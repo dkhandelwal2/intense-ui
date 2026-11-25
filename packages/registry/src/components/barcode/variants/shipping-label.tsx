@@ -61,9 +61,8 @@ export function ShippingLabelBarcode({
     >
       {/* Top Section */}
       <div className="relative overflow-hidden rounded-t-2xl [--card-bg:#ffffff] dark:[--card-bg:#09090b]" style={TOP_NOTCH_STYLE}>
-        <div className="absolute top-0 inset-x-0 h-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
-        <div className="absolute left-0 top-0 bottom-[14px] w-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-[14px] w-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
+        {/* Top Border with rounded corners stopping 14px above divider at notch */}
+        <div className="absolute inset-x-0 top-0 bottom-[14px] border-t border-l border-r border-zinc-200 dark:border-zinc-800 rounded-t-2xl pointer-events-none z-10" />
 
         <div
           className="h-1.5 w-full opacity-80"
@@ -141,10 +140,9 @@ export function ShippingLabelBarcode({
       <TicketNotchDivider />
 
       {/* Bottom Section */}
-      <div className="relative overflow-hidden rounded-b-2xl px-5 pt-3 pb-4 flex flex-col [--card-bg:#ffffff] dark:[--card-bg:#09090b]" style={BOTTOM_NOTCH_STYLE}>
-        <div className="absolute left-0 top-[14px] bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
-        <div className="absolute right-0 top-[14px] bottom-0 w-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
-        <div className="absolute bottom-0 inset-x-0 h-px bg-zinc-200 dark:bg-zinc-800 pointer-events-none" />
+      <div className="relative rounded-b-2xl px-5 pt-3 pb-4 flex flex-col [--card-bg:#ffffff] dark:[--card-bg:#09090b]" style={BOTTOM_NOTCH_STYLE}>
+        {/* Bottom Border with rounded corners starting 14px below divider at notch */}
+        <div className="absolute inset-x-0 top-[14px] bottom-0 border-b border-l border-r border-zinc-200 dark:border-zinc-800 rounded-b-2xl pointer-events-none z-10" />
 
         {/* Tracking Header */}
         <div className="flex items-center justify-between text-[9.5px] mb-2 px-1">

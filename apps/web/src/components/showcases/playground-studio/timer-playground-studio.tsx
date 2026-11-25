@@ -16,6 +16,7 @@ import {
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { TimerCustomProps, DEFAULT_TIMER_PROPS } from "@/components/showcases/timer/types";
 import { TimerVariant, TimerIntent, TimerStripeOrigin, formatSeconds } from "@/components/ui/timer";
+import { TimerPreview } from "@/components/showcases/timer/timer-preview";
 
 export interface TimerPlaygroundStudioProps {
   customProps: TimerCustomProps;
@@ -24,6 +25,20 @@ export interface TimerPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const TimerLivePreview = React.memo(function TimerLivePreview({
+  customProps,
+}: {
+  customProps: TimerCustomProps;
+}) {
+  return (
+    <div className="w-full h-full flex items-center justify-center p-2">
+      <div className="scale-80 sm:scale-90 origin-center">
+        <TimerPreview customProps={customProps} isCustomizing={true} />
+      </div>
+    </div>
+  );
+});
 
 const TIMER_VARIANTS: Array<{
   id: TimerVariant;
@@ -269,6 +284,8 @@ export function TimerPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <TimerLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your countdown timer in real time."
       onReset={() => onChange(DEFAULT_TIMER_PROPS)}
       onViewCode={onViewCode}
       className={className}

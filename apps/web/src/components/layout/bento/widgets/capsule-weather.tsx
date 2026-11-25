@@ -51,7 +51,10 @@ export const CapsuleWeather = React.memo(function CapsuleWeather({
     return (
       <button
         type="button"
-        onClick={onFetchWeather}
+        onClick={(e) => {
+          e.stopPropagation();
+          onFetchWeather();
+        }}
         className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-muted/40 border border-border text-[10px] font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer h-full"
         title="Location permission denied. Click to retry."
       >
@@ -64,7 +67,10 @@ export const CapsuleWeather = React.memo(function CapsuleWeather({
   return (
     <button
       type="button"
-      onClick={onFetchWeather}
+      onClick={(e) => {
+        e.stopPropagation();
+        onFetchWeather();
+      }}
       className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/60 hover:bg-muted text-[10.5px] font-mono text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-xs group h-full"
       title="Click to allow location for live weather"
     >

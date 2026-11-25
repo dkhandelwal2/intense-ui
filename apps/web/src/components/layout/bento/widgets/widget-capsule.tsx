@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { getGreeting } from "./weather-helpers";
-import { CapsuleClock } from "./capsule-clock";
-import { CapsuleWeather } from "./capsule-weather";
+import { CapsuleScreensaver } from "./capsule-screensaver";
+import { CapsuleDefaultView } from "./capsule-default-view";
+import { CapsuleIslandView } from "./capsule-island-view";
+import { DynamicIslandNotch } from "./dynamic-island-notch";
+import { useIdleScreensaver } from "./use-idle-screensaver";
+import { DEFAULT_IDLE_TIMEOUT_MS } from "@/config/screensaver";
 import { useLiveWeather } from "@/hooks/use-live-weather";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -16,16 +18,32 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
 });
 
-interface WidgetCapsuleProps {
+export interface WidgetCapsuleProps {
   className?: string;
+  variant?: "default" | "island";
+  idleTimeoutMs?: number | null;
+  enableIdleScreensaver?: boolean;
 }
 
-export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: WidgetCapsuleProps) {
+export const WidgetCapsule = React.memo(function WidgetCapsule({
+  className,
+  variant = "default",
+  idleTimeoutMs = DEFAULT_IDLE_TIMEOUT_MS,
+  enableIdleScreensaver = true,
+}: WidgetCapsuleProps) {
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState<Date>(() => new Date(0));
   const [showGreeting, setShowGreeting] = useState(true);
+  const [isScreensaverOpen, setIsScreensaverOpen] = useState(false);
 
   const { weather, fetchLiveWeather } = useLiveWeather();
+
+  useIdleScreensaver({
+    enabled: enableIdleScreensaver,
+    timeoutMs: idleTimeoutMs,
+    onIdle: () => setIsScreensaverOpen(true),
+    isScreensaverOpen,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -46,6 +64,16 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
   }, []);
 
   if (!mounted) {
+    if (variant === "island") {
+      return (
+        <div
+          className={cn(
+            "w-[236px] h-9 rounded-b-xl bg-black/90 dark:bg-zinc-950/90 animate-pulse",
+            className
+          )}
+        />
+      );
+    }
     return (
       <div
         className={cn(
@@ -68,71 +96,57 @@ export const WidgetCapsule = React.memo(function WidgetCapsule({ className }: Wi
     );
   }
 
-  const hours = currentTime.getHours();
   const fullDateStr = DATE_FORMATTER.format(currentTime);
-  const greeting = getGreeting(currentTime);
-  const GreetingIcon = greeting.icon;
 
   return (
-    <div
-      className={cn(
-        "h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-3.5 shadow-sm flex items-center justify-between overflow-hidden relative select-none",
-        className
+    <>
+      {variant === "island" ? (
+        <DynamicIslandNotch
+          onClick={() => setIsScreensaverOpen(true)}
+          className={className}
+        >
+          <CapsuleIslandView
+            currentTime={currentTime}
+            weather={weather}
+            onFetchWeather={fetchLiveWeather}
+          />
+        </DynamicIslandNotch>
+      ) : (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsScreensaverOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setIsScreensaverOpen(true);
+            }
+          }}
+          aria-label="Click to open fullscreen screensaver"
+          title="Click to open fullscreen screensaver"
+          className={cn(
+            "h-[54px] shrink-0 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-3.5 shadow-sm flex items-center justify-between overflow-hidden relative select-none",
+            "cursor-pointer hover:border-[var(--theme-primary)]/40 hover:shadow-md active:scale-[0.99] transition-all duration-200",
+            className
+          )}
+        >
+          <CapsuleDefaultView
+            showGreeting={showGreeting}
+            currentTime={currentTime}
+            fullDateStr={fullDateStr}
+            weather={weather}
+            onFetchWeather={fetchLiveWeather}
+          />
+        </div>
       )}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        {showGreeting ? (
-          <motion.div
-            key="greeting"
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="w-full h-full flex items-center justify-between gap-2"
-          >
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-muted/80 border border-border flex items-center justify-center shrink-0 shadow-xs">
-                <GreetingIcon className={cn("w-4 h-4 animate-pulse", greeting.color)} />
-              </div>
-              <div className="flex flex-col min-w-0 leading-tight">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-foreground tracking-tight truncate">
-                    {greeting.title}
-                  </span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                </div>
-                <span
-                  suppressHydrationWarning
-                  className="text-[10px] font-mono text-muted-foreground truncate"
-                >
-                  {fullDateStr}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="clock-weather"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="w-full h-full flex items-center justify-between gap-2"
-          >
-            {/* Clock & Date Sub-Component */}
-            <CapsuleClock currentTime={currentTime} dateStr={fullDateStr} />
 
-            {/* Weather & Location Sub-Component */}
-            <div className="flex items-center gap-1.5 shrink-0 h-full">
-              <CapsuleWeather
-                weather={weather}
-                hours={hours}
-                onFetchWeather={fetchLiveWeather}
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      <CapsuleScreensaver
+        isOpen={isScreensaverOpen}
+        onClose={() => setIsScreensaverOpen(false)}
+        currentTime={currentTime}
+        weather={weather}
+        onFetchWeather={fetchLiveWeather}
+      />
+    </>
   );
 });

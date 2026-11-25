@@ -13,6 +13,7 @@ export * from "./color-grid-playground-studio";
 export * from "./separator-playground-studio";
 export * from "./tooltip-playground-studio";
 export * from "./barcode-playground-studio";
+export * from "./progress-playground-studio";
 export * from "./timer-playground-studio";
 export * from "./github-activity-playground-studio";
 export * from "./signature-pad-playground-studio";

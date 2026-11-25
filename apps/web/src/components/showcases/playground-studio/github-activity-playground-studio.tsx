@@ -8,6 +8,7 @@ import { ColorGrid } from "@/components/ui/color-grid";
 import { GithubActivityOptionsStep } from "./github-activity-options-step";
 import { GithubActivityCustomProps, DEFAULT_GITHUB_ACTIVITY_PROPS } from "@/components/showcases/github-activity/types";
 import { GITHUB_ACTIVITY_VARIANTS, GITHUB_THEME_COLORS, GITHUB_THEME_LABELS, GITHUB_USER_PRESETS } from "@/components/showcases/github-activity/constants";
+import { GithubActivityPreview } from "@/components/showcases/github-activity/github-activity-preview";
 
 export interface GithubActivityPlaygroundStudioProps {
   customProps: GithubActivityCustomProps;
@@ -17,11 +18,31 @@ export interface GithubActivityPlaygroundStudioProps {
   onViewCode?: () => void;
 }
 
+export const GithubActivityLivePreview = React.memo(function GithubActivityLivePreview({
+  customProps,
+  onChange,
+}: {
+  customProps: GithubActivityCustomProps;
+  onChange?: React.Dispatch<React.SetStateAction<GithubActivityCustomProps>>;
+}) {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center p-1 sm:p-2 overflow-auto scrollbar-none">
+      <div className="scale-[0.63] xs:scale-[0.67] sm:scale-80 md:scale-90 origin-center shrink-0 my-auto w-full">
+        <GithubActivityPreview
+          customProps={customProps}
+          isCustomizing={true}
+          onChange={onChange}
+        />
+      </div>
+    </div>
+  );
+});
+
 export function GithubActivityPlaygroundStudio({
   customProps,
   onChange,
   className,
-  hidePreview = true,
+  hidePreview = false,
   onViewCode,
 }: GithubActivityPlaygroundStudioProps) {
   const activeTab = customProps.variant === "compact" ? (customProps.activeTab || "heatmap") : customProps.variant;
@@ -184,6 +205,8 @@ export function GithubActivityPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <GithubActivityLivePreview customProps={customProps} onChange={onChange} />}
+      description="Interact with props below to customize contribution graphs in real time."
       onReset={() => onChange(DEFAULT_GITHUB_ACTIVITY_PROPS)}
       onViewCode={onViewCode}
       className={className}

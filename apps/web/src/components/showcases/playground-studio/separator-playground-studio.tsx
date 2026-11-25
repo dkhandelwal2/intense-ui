@@ -4,6 +4,7 @@ import React from "react";
 import { Sparkles, Compass, SplitSquareVertical } from "lucide-react";
 import { PlaygroundStudio, PlaygroundStudioStepData } from "./core";
 import { SeparatorCustomProps, DEFAULT_SEPARATOR_PROPS } from "@/components/showcases/separator/types";
+import { Separator } from "@/components/ui/separator";
 
 export interface SeparatorPlaygroundStudioProps {
   customProps: SeparatorCustomProps;
@@ -12,6 +13,52 @@ export interface SeparatorPlaygroundStudioProps {
   hidePreview?: boolean;
   onViewCode?: () => void;
 }
+
+export const SeparatorLivePreview = React.memo(function SeparatorLivePreview({
+  customProps,
+}: {
+  customProps: SeparatorCustomProps;
+}) {
+  if (customProps.orientation === "vertical") {
+    return (
+      <div className="flex items-center justify-center gap-4 h-24 p-4">
+        <span className="text-xs font-medium">Docs</span>
+        <Separator
+          orientation="vertical"
+          variant={customProps.variant}
+          glow={customProps.glow}
+          className="h-10"
+        />
+        <span className="text-xs font-medium">Components</span>
+        <Separator
+          orientation="vertical"
+          variant={customProps.variant}
+          glow={customProps.glow}
+          className="h-10"
+        />
+        <span className="text-xs font-medium">Studio</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-xs space-y-3 p-4">
+      <div>
+        <h4 className="text-xs font-semibold">Preview Block</h4>
+        <p className="text-[10px] text-muted-foreground">Modular UI component system</p>
+      </div>
+      <Separator
+        orientation="horizontal"
+        variant={customProps.variant}
+        glow={customProps.glow}
+      />
+      <div className="flex justify-between text-[10px] font-mono text-muted-foreground">
+        <span>{customProps.variant.toUpperCase()}</span>
+        <span>{customProps.glow ? "GLOW ON" : "STANDARD"}</span>
+      </div>
+    </div>
+  );
+});
 
 const SEPARATOR_VARIANTS = [
   { id: "gradient" as const, label: "Gradient Hairline", spec: "Fades at both edges via theme primary" },
@@ -95,6 +142,8 @@ export function SeparatorPlaygroundStudio({
   return (
     <PlaygroundStudio
       steps={steps}
+      preview={hidePreview ? undefined : <SeparatorLivePreview customProps={customProps} />}
+      description="Interact with props below to customize your separator in real time."
       onReset={() => onChange(DEFAULT_SEPARATOR_PROPS)}
       onViewCode={onViewCode}
       hidePreview={hidePreview}
