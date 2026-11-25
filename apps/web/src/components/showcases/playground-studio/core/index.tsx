@@ -108,7 +108,7 @@ export const PlaygroundStudio = React.memo(function PlaygroundStudio({
       {/* Dynamic 2-Block Layout: Equal 50/50 CSS Grid Split (Preview on top + Studio Card below) */}
       <div className={cn("w-full flex-1 min-h-0 gap-2.5", effectivePreview ? "grid grid-rows-2" : "flex flex-col")}>
         {effectivePreview && (
-          <div className="relative w-full h-full min-h-0 overflow-hidden rounded-[24px] bg-[#fafafc] dark:bg-[#0a0a0e] border border-zinc-200/80 dark:border-zinc-800/80 shadow-md flex items-center justify-center p-3">
+          <div className="relative w-full h-full min-h-0 overflow-hidden rounded-[16px] bg-[#fafafc] dark:bg-[#0a0a0e] border border-zinc-200/80 dark:border-zinc-800/80 shadow-md flex items-center justify-center">
             <div
               aria-hidden="true"
               className="absolute inset-0 pointer-events-none opacity-[0.4] dark:opacity-[0.2]"
