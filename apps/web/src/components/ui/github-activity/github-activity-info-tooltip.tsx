@@ -11,6 +11,7 @@ export function GithubActivityInfoTooltip({
   description,
   className,
   iconClassName,
+  titleClassName,
   align = "left",
   position = "top",
 }: GithubActivityInfoTooltipProps) {
@@ -27,9 +28,9 @@ export function GithubActivityInfoTooltip({
     }
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      if (position === "top" && rect.top < 125) {
+      if (position === "top" && rect.top < 85) {
         setEffectivePosition("bottom");
-      } else if (position === "bottom" && window.innerHeight - rect.bottom < 125 && rect.top >= 125) {
+      } else if (position === "bottom" && window.innerHeight - rect.bottom < 85 && rect.top >= 85) {
         setEffectivePosition("top");
       } else {
         setEffectivePosition(position);
@@ -39,6 +40,10 @@ export function GithubActivityInfoTooltip({
         setEffectiveAlign("right");
       } else if (align === "right" && rect.right - 192 < 16) {
         setEffectiveAlign("left");
+      } else if (align === "center") {
+        if (rect.left - 96 < 16) setEffectiveAlign("left");
+        else if (rect.right + 96 > window.innerWidth - 16) setEffectiveAlign("right");
+        else setEffectiveAlign("center");
       } else {
         setEffectiveAlign(align);
       }
@@ -121,7 +126,7 @@ export function GithubActivityInfoTooltip({
             )}
           >
             <div className="flex items-center justify-between gap-1 mb-0.5">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400 font-mono text-[9px] uppercase tracking-wider">
+              <span className={cn("font-semibold font-mono text-[9px] uppercase tracking-wider", titleClassName || "text-emerald-600 dark:text-emerald-400")}>
                 {title}
               </span>
               <button

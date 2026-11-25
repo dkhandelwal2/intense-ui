@@ -54,6 +54,12 @@
     "enabled": false
   },
   {
+    "name": "signature-pad",
+    "title": "Signature Pad",
+    "description": "A beautifully designed, accessible Signature Pad component.",
+    "enabled": true
+  },
+  {
     "name": "skeleton",
     "title": "Skeleton",
     "description": "Visual placeholder while content is loading.",

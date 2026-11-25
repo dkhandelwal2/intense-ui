@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Tooltip } from "@/components/ui/tooltip";
 import { GithubActivityHeatmap } from "@/components/ui/github-activity";
+import { SignaturePad } from "@/components/ui/signature-pad";
 
 // ---------------------------------------------------------------------------
 // Compact mini-card previews (used in index grid / listing cards)
@@ -148,6 +149,12 @@ const GithubActivityCardPreview = (
   </div>
 );
 
+const SignaturePadCardPreview = (
+  <div className="scale-95 flex items-center justify-center">
+    <SignaturePad buttonLabel="Start Signing" />
+  </div>
+);
+
 // ---------------------------------------------------------------------------
 // Card-grid mini previews — keyed by both title-case name and slug
 // ---------------------------------------------------------------------------
@@ -181,6 +188,8 @@ export const componentPreviews: Record<string, React.ReactNode> = {
   "nav-bar": NavBarCardPreview,
   "navbar": NavBarCardPreview,
   "github-activity": GithubActivityCardPreview,
+  "Signature Pad": SignaturePadCardPreview,
+  "signature-pad": SignaturePadCardPreview,
 };
 
 // ---------------------------------------------------------------------------

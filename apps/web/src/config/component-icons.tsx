@@ -18,6 +18,7 @@ import {
   CircleGauge,
   Timer as TimerIcon,
   Activity,
+  PenTool,
 } from "lucide-react";
 
 export type ComponentIconType = React.ComponentType<{ className?: string }>;
@@ -49,6 +50,7 @@ export const COMPONENT_ICONS: Record<string, ComponentIconType> = {
   "timer": TimerIcon,
   "stopwatch": TimerIcon,
   "github-activity": Activity,
+  "signature-pad": PenTool,
 };
 
 /**

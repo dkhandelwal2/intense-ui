@@ -15,3 +15,5 @@ export * from "./tooltip-playground-studio";
 export * from "./barcode-playground-studio";
 export * from "./timer-playground-studio";
 export * from "./github-activity-playground-studio";
+export * from "./signature-pad-playground-studio";
+export * from "./signature-pad-color-step";

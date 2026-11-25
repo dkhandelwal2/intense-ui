@@ -34,7 +34,10 @@ export function ColorGrid({
   const tooltipPos = isVertical ? "right" : "top";
   const swatchSize = COLOR_GRID_SIZE_MAP[size] || COLOR_GRID_SIZE_MAP.md;
   const isGrid = typeof columns === "number" && columns > 0;
-  const showReset = Boolean(onClear) && Boolean(value) && value !== (defaultValue ?? "");
+  const isSameAsDefault = (value || "").toLowerCase() === (defaultValue ?? "").toLowerCase();
+  const showReset = Boolean(onClear) && Boolean(value) && !isSameAsDefault;
+  const isPreset = colors.some((c) => c.toLowerCase() === (value || "").toLowerCase());
+  const isCustom = Boolean(value && !isPreset);
 
   const Content = (
     <motion.div
@@ -62,27 +65,30 @@ export function ColorGrid({
         </motion.div>
       )}
 
-      {colors.map((color, index) => (
-        <Tooltip key={`${color}-${index}`} content={labels?.[color] || getDisplayColor(color)} position={tooltipPos} bgColor={color}>
-          <motion.button
-            type="button"
-            layout
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => onChange?.(color)}
-            className={cn(
-              "rounded-full transition-shadow shrink-0 cursor-pointer",
-              swatchSize,
-              value === color ? "ring-2 ring-zinc-950 dark:ring-white ring-offset-1 ring-offset-white dark:ring-offset-zinc-950" : ""
-            )}
-            style={{ backgroundColor: color }}
-            aria-label={`Select color ${getDisplayColor(color)}`}
-          />
-        </Tooltip>
-      ))}
+      {colors.map((color, index) => {
+        const isSelected = (value || "").toLowerCase() === color.toLowerCase();
+        return (
+          <Tooltip key={`${color}-${index}`} content={labels?.[color] || getDisplayColor(color)} position={tooltipPos} bgColor={color}>
+            <motion.button
+              type="button"
+              layout
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => onChange?.(color)}
+              className={cn(
+                "rounded-full transition-shadow shrink-0 cursor-pointer",
+                swatchSize,
+                isSelected ? "ring-2 ring-zinc-950 dark:ring-white ring-offset-1 ring-offset-white dark:ring-offset-zinc-950" : ""
+              )}
+              style={{ backgroundColor: color }}
+              aria-label={`Select color ${getDisplayColor(color)}`}
+            />
+          </Tooltip>
+        );
+      })}
 
       {showCustomPicker && (
-        <Tooltip content="Custom" position={tooltipPos} bgColor={value && !colors.includes(value) ? value : undefined}>
+        <Tooltip content="Custom" position={tooltipPos} bgColor={isCustom ? value : undefined}>
           <motion.div layout className="relative shrink-0">
             <motion.label
               whileHover={{ scale: 1.15 }}
@@ -90,11 +96,11 @@ export function ColorGrid({
               className={cn(
                 "flex items-center justify-center rounded-full border-2 border-dashed border-zinc-300 dark:border-zinc-700 cursor-pointer overflow-hidden transition-colors hover:border-zinc-400 dark:hover:border-zinc-500",
                 swatchSize,
-                value && !colors.includes(value) ? "ring-2 ring-zinc-950 dark:ring-white ring-offset-1 ring-offset-white dark:ring-offset-zinc-950 border-transparent" : ""
+                isCustom ? "ring-2 ring-zinc-950 dark:ring-white ring-offset-1 ring-offset-white dark:ring-offset-zinc-950 border-transparent" : ""
               )}
-              style={{ backgroundColor: value && !colors.includes(value) ? value : "transparent" }}
+              style={{ backgroundColor: isCustom ? value : "transparent" }}
             >
-              {(!value || colors.includes(value)) && <Plus className={cn("text-zinc-400 dark:text-zinc-500", size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5")} />}
+              {!isCustom && <Plus className={cn("text-zinc-400 dark:text-zinc-500", size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5")} />}
               <input
                 type="color"
                 value={resolveToHex(value)}

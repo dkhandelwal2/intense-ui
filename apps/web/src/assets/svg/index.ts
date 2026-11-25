@@ -106,3 +106,13 @@ export type { AnimatedAlertCircleIconProps } from "./animated-alert-circle-icon"
 export { AnimatedEyeIcon } from "./animated-eye-icon";
 export type { AnimatedEyeIconProps } from "./animated-eye-icon";
 
+export {
+  PenSquiggleIcon,
+  AnimatedPenSquiggleIcon,
+  AnimatedPenIcon,
+} from "./pen-squiggle-icon";
+export type {
+  PenSquiggleIconProps,
+  AnimatedPenSquiggleIconProps,
+} from "./pen-squiggle-icon";
+

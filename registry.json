@@ -654,6 +654,69 @@
       ]
     },
     {
+      "name": "signature-pad",
+      "type": "registry:ui",
+      "title": "Signature Pad",
+      "description": "A beautifully designed, accessible Signature Pad component.",
+      "dependencies": [
+        "framer-motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "packages/registry/src/components/signature-pad/constants.ts",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/constants.ts"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/index.tsx",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/index.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/signature-pad-button.tsx",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/signature-pad-button.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/signature-pad-canvas.tsx",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/signature-pad-canvas.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/signature-pad-header.tsx",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/signature-pad-header.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/signature-pad-helpers.ts",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/signature-pad-helpers.ts"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/signature-pad.tsx",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/signature-pad.tsx"
+        },
+        {
+          "path": "packages/registry/src/components/signature-pad/types.ts",
+          "type": "registry:file",
+          "target": "components/ui/signature-pad/types.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/index.ts",
+          "type": "registry:file",
+          "target": "assets/svg/index.ts"
+        },
+        {
+          "path": "packages/registry/src/assets/svg/pen-squiggle-icon.tsx",
+          "type": "registry:file",
+          "target": "assets/svg/pen-squiggle-icon.tsx"
+        }
+      ]
+    },
+    {
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",

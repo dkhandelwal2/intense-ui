@@ -6,6 +6,7 @@ export * from "./components/color-grid";
 export * from "./components/github-activity";
 export * from "./components/nav-bar";
 export * from "./components/progress";
+export * from "./components/signature-pad";
 export * from "./components/slider";
 export * from "./components/step-carousel";
 export * from "./components/switch";

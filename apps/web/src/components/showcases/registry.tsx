@@ -48,6 +48,11 @@ import { barcodeShowcaseDefinition, DEFAULT_BARCODE_PROPS, BarcodeCustomProps } 
 import { progressShowcaseDefinition } from "@/components/showcases/progress";
 import { timerShowcaseDefinition } from "@/components/showcases/timer";
 import { githubActivityShowcaseDefinition } from "@/components/showcases/github-activity";
+import {
+  signaturePadShowcaseDefinition,
+  DEFAULT_SIGNATURE_PAD_PROPS,
+  SignaturePadCustomProps,
+} from "@/components/showcases/signature-pad";
 
 import {
   GenericPlaygroundStudio,
@@ -69,6 +74,7 @@ export {
   DEFAULT_SEPARATOR_PROPS,
   DEFAULT_TOOLTIP_PROPS,
   DEFAULT_BARCODE_PROPS,
+  DEFAULT_SIGNATURE_PAD_PROPS,
   DEFAULT_GENERIC_PROPS,
 };
 export type {
@@ -83,6 +89,7 @@ export type {
   SeparatorCustomProps,
   TooltipCustomProps,
   BarcodeCustomProps,
+  SignaturePadCustomProps,
   GenericCustomProps,
 };
 
@@ -194,6 +201,7 @@ export const SHOWCASE_REGISTRY: Record<string, ShowcaseDefinition> = {
   "timer": timerShowcaseDefinition,
   "stopwatch": timerShowcaseDefinition,
   "github-activity": githubActivityShowcaseDefinition,
+  "signature-pad": signaturePadShowcaseDefinition,
 };
 
 export function getShowcaseDefinition(slug: string): ShowcaseDefinition {
