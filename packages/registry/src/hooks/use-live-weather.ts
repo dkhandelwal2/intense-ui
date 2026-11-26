@@ -10,6 +10,8 @@ export interface WeatherState {
   condition: string | null;
   city: string | null;
   code: number | null;
+  latitude: number | null;
+  longitude: number | null;
   status: WeatherStatus;
 }
 
@@ -18,6 +20,8 @@ const DEFAULT_WEATHER_STATE: WeatherState = {
   condition: null,
   city: null,
   code: null,
+  latitude: null,
+  longitude: null,
   status: "idle",
 };
 
@@ -73,6 +77,8 @@ export function useLiveWeather() {
             code,
             condition: getWeatherDescription(code),
             city: resolvedCity,
+            latitude,
+            longitude,
             status: "success",
           });
         } catch {

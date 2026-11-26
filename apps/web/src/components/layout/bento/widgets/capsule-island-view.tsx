@@ -47,22 +47,19 @@ export const CapsuleIslandView = React.memo(function CapsuleIslandView({
       </div>
 
       {/* Right: Weather Temp & Icon */}
-      <button
-        type="button"
-        onClick={(e) => {
-          if (weather.status !== "success") {
-            e.stopPropagation();
-            onFetchWeather();
-          }
-        }}
-        className="flex items-center gap-1 cursor-pointer hover:opacity-90 transition-opacity shrink-0"
-        title={weather.status !== "success" ? "Click to fetch live weather" : weather.condition || "Weather"}
+      <span
+        className="flex items-center gap-1 shrink-0 select-none"
+        title={
+          weather.status === "success"
+            ? `${weather.condition || "Weather"} • ${weather.city || ""}`
+            : "Click to open fullscreen screensaver & weather"
+        }
       >
         <span className="font-mono font-semibold text-[11px] text-zinc-200">
           {weather.temp !== null ? `${weather.temp}°` : "--°"}
         </span>
         <WeatherIcon className="size-3.5 text-sky-400 shrink-0" />
-      </button>
+      </span>
     </div>
   );
 });

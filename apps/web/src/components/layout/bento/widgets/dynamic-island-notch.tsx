@@ -69,10 +69,10 @@ export const DynamicIslandNotch = React.memo(function DynamicIslandNotch({
       aria-label="Click to open fullscreen screensaver"
       title="Click to open fullscreen screensaver"
       className={cn(
-        "relative flex items-center justify-center select-none cursor-pointer transition-transform active:scale-[0.98]",
+        "relative flex items-start justify-center select-none cursor-pointer transition-transform active:scale-[0.98] min-h-[48px]",
         className
       )}
-      style={{ width, height }}
+      style={{ width, minHeight: 48 }}
     >
       {/* SVG Notch Backing with Concave Ears */}
       <svg
@@ -97,7 +97,10 @@ export const DynamicIslandNotch = React.memo(function DynamicIslandNotch({
       </svg>
 
       {/* Island Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-between px-3.5 text-white">
+      <div
+        className="relative z-10 w-full flex items-center justify-between px-3.5 text-white"
+        style={{ height }}
+      >
         {children}
       </div>
     </div>
