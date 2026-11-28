@@ -17,16 +17,19 @@ import { cn } from "@/lib/utils";
 
 export function DocsHolodeckStage() {
   const runwayRef = useRef<HTMLDivElement>(null);
+  const cooldownRef = useRef(false);
 
-  // Track scroll position through the 300vh Holodeck runway
+  // Track scroll position through the Holodeck runway
   const { scrollYProgress } = useScroll({
     target: runwayRef,
     offset: ["start start", "end end"],
   });
 
+  // Weighted, buttery spring physics matching the Pillars component for a slow, premium feel
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 110,
-    damping: 24,
+    stiffness: 65,
+    damping: 26,
+    mass: 0.8,
     restDelta: 0.001,
   });
 
@@ -35,6 +38,68 @@ export function DocsHolodeckStage() {
   const [signatureProgress, setSignatureProgress] = useState(0);
   const [tactileSliderVal, setTactileSliderVal] = useState(30);
   const [hapticSwitch, setHapticSwitch] = useState(false);
+
+  // Step-Lock Controller: arrests high-velocity trackpad flings so each holodeck chapter locks sequentially
+  useEffect(() => {
+    const node = runwayRef.current;
+    if (!node) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (window.innerWidth < 768) return;
+      if (Math.abs(e.deltaY) < 12) return;
+
+      const rect = node.getBoundingClientRect();
+      const totalTravel = node.offsetHeight - window.innerHeight;
+      if (totalTravel <= 0) return;
+
+      // Only engage when the sticky holodeck is actively pinned in viewport
+      const isPinned = rect.top <= 30 && rect.bottom >= window.innerHeight - 30;
+      if (!isPinned) return;
+
+      const runwayTop = window.scrollY + rect.top;
+      const progress = Math.max(0, Math.min(1, -rect.top / totalTravel));
+
+      let activeStep = 0;
+      if (progress >= 0.78) activeStep = 3;
+      else if (progress >= 0.46) activeStep = 2;
+      else if (progress >= 0.16) activeStep = 1;
+
+      // Downward scroll
+      if (e.deltaY > 0) {
+        if (activeStep < 3) {
+          e.preventDefault();
+          if (cooldownRef.current) return;
+          cooldownRef.current = true;
+          setTimeout(() => {
+            cooldownRef.current = false;
+          }, 650);
+
+          const nextStep = activeStep + 1;
+          const targetY = runwayTop + (nextStep / 3) * totalTravel;
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+      } else {
+        // Upward scroll
+        if (activeStep > 0) {
+          e.preventDefault();
+          if (cooldownRef.current) return;
+          cooldownRef.current = true;
+          setTimeout(() => {
+            cooldownRef.current = false;
+          }, 650);
+
+          const prevStep = activeStep - 1;
+          const targetY = runwayTop + (prevStep / 3) * totalTravel;
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   useEffect(() => {
     return smoothProgress.on("change", (v) => {
@@ -69,7 +134,7 @@ export function DocsHolodeckStage() {
   };
 
   return (
-    <section ref={runwayRef} className="relative w-full h-[340vh] select-none">
+    <section ref={runwayRef} className="relative w-full h-[480vh] select-none">
       {/* Sticky Holodeck Viewport pinned to viewport as user scrolls */}
       <div className="sticky top-20 sm:top-24 z-20 flex flex-col items-center w-full">
         {/* Floating Holodeck Badge */}

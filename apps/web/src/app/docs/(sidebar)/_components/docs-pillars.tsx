@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   useScroll,
   useSpring,
@@ -16,13 +16,15 @@ import { DocsPillarCard } from "./docs-pillar-card";
  * DocsPillars - Apple & Linear Style Stacking Cards
  *
  * Architecture:
- * - HUD and Card Deck share a single sticky wrapper pinned at `top-20 md:top-24`.
+ * - HUD and Card Deck share a single sticky wrapper pinned at `top-0 min-h-screen`.
+ * - Gesture Step-Lock Controller: catches high-velocity trackpad scrolling so each card locks sequentially.
  * - Cards remain 100% opaque at all times to completely eliminate text bleed-through.
  * - Depth is achieved via subtle scale down (1.0 -> 0.96 -> 0.92) and a darkening overlay.
  * - Entire assembly unpins simultaneously as one solid block into the FAQ section.
  */
 export function DocsPillars() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const cooldownRef = useRef(false);
   const [lockedCount, setLockedCount] = useState(1);
   const [alignPct, setAlignPct] = useState(25);
 
@@ -32,46 +34,108 @@ export function DocsPillars() {
     offset: ["start start", "end end"],
   });
 
-  // Spring physics for buttery-smooth 60+ FPS motion
+  // Step-Lock Controller: arrests high-velocity trackpad flings so each pillar locks sequentially
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (window.innerWidth < 768) return;
+      if (Math.abs(e.deltaY) < 12) return;
+
+      const rect = node.getBoundingClientRect();
+      const totalTravel = node.offsetHeight - window.innerHeight;
+      if (totalTravel <= 0) return;
+
+      // Only engage when the sticky section is actively pinned in viewport
+      const isPinned = rect.top <= 20 && rect.bottom >= window.innerHeight - 20;
+      if (!isPinned) return;
+
+      const runwayTop = window.scrollY + rect.top;
+      const progress = Math.max(0, Math.min(1, -rect.top / totalTravel));
+
+      let activeStep = 0;
+      if (progress >= 0.78) activeStep = 3;
+      else if (progress >= 0.46) activeStep = 2;
+      else if (progress >= 0.16) activeStep = 1;
+
+      // Downward scroll
+      if (e.deltaY > 0) {
+        if (activeStep < 3) {
+          e.preventDefault();
+          if (cooldownRef.current) return;
+          cooldownRef.current = true;
+          setTimeout(() => {
+            cooldownRef.current = false;
+          }, 650);
+
+          const nextStep = activeStep + 1;
+          const targetY = runwayTop + (nextStep / 3) * totalTravel;
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+      } else {
+        // Upward scroll
+        if (activeStep > 0) {
+          e.preventDefault();
+          if (cooldownRef.current) return;
+          cooldownRef.current = true;
+          setTimeout(() => {
+            cooldownRef.current = false;
+          }, 650);
+
+          const prevStep = activeStep - 1;
+          const targetY = runwayTop + (prevStep / 3) * totalTravel;
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
+  // Weighted, buttery spring physics for a slow, premium kinetic feel
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 22,
-    mass: 0.5,
+    stiffness: 65,
+    damping: 26,
+    mass: 0.8,
     restDelta: 0.001,
   });
 
   // Card 0 (Spatial Micro-Interactions)
-  const card0Y = useTransform(smoothProgress, [0.20, 0.40, 0.62], [0, -12, -24]);
-  const card0Scale = useTransform(smoothProgress, [0.20, 0.40, 0.62], [1.0, 0.96, 0.92]);
-  const card0Dim = useTransform(smoothProgress, [0.20, 0.40, 0.62], [0, 0.25, 0.45]);
+  const card0Y = useTransform(smoothProgress, [0.20, 0.42, 0.47, 0.67, 0.72, 0.90], [0, -12, -12, -24, -24, -36]);
+  const card0Scale = useTransform(smoothProgress, [0.20, 0.42, 0.47, 0.67, 0.72, 0.90], [1.0, 0.96, 0.96, 0.92, 0.92, 0.88]);
+  const card0Dim = useTransform(smoothProgress, [0.20, 0.42, 0.47, 0.67, 0.72, 0.90], [0, 0.22, 0.22, 0.40, 0.40, 0.55]);
 
   // Card 1 (Direct Code Ownership)
-  const card1Y = useTransform(smoothProgress, [0.15, 0.35, 0.45, 0.65], [420, 0, 0, -12]);
-  const card1Scale = useTransform(smoothProgress, [0.15, 0.35, 0.45, 0.65], [0.94, 1.0, 1.0, 0.96]);
-  const card1Opacity = useTransform(smoothProgress, [0.12, 0.18], [0, 1]);
-  const card1Dim = useTransform(smoothProgress, [0.45, 0.65], [0, 0.25]);
+  const card1Y = useTransform(smoothProgress, [0.18, 0.42, 0.47, 0.67, 0.72, 0.90], [450, 0, 0, -12, -12, -24]);
+  const card1Scale = useTransform(smoothProgress, [0.18, 0.42, 0.47, 0.67, 0.72, 0.90], [0.94, 1.0, 1.0, 0.96, 0.96, 0.92]);
+  const card1Opacity = useTransform(smoothProgress, [0.15, 0.24], [0, 1]);
+  const card1Dim = useTransform(smoothProgress, [0.47, 0.67, 0.72, 0.90], [0, 0.22, 0.22, 0.40]);
 
   // Card 2 (Core Web Vitals First)
-  const card2Y = useTransform(smoothProgress, [0.38, 0.58, 0.68, 0.85], [420, 0, 0, -12]);
-  const card2Scale = useTransform(smoothProgress, [0.38, 0.58, 0.68, 0.85], [0.94, 1.0, 1.0, 0.96]);
-  const card2Opacity = useTransform(smoothProgress, [0.35, 0.41], [0, 1]);
-  const card2Dim = useTransform(smoothProgress, [0.68, 0.85], [0, 0.25]);
+  const card2Y = useTransform(smoothProgress, [0.42, 0.67, 0.72, 0.90], [450, 0, 0, -12]);
+  const card2Scale = useTransform(smoothProgress, [0.42, 0.67, 0.72, 0.90], [0.94, 1.0, 1.0, 0.96]);
+  const card2Opacity = useTransform(smoothProgress, [0.39, 0.48], [0, 1]);
+  const card2Dim = useTransform(smoothProgress, [0.72, 0.90], [0, 0.22]);
 
   // Card 3 (Strict TypeScript & ARIA)
-  const card3Y = useTransform(smoothProgress, [0.62, 0.82], [420, 0]);
-  const card3Scale = useTransform(smoothProgress, [0.62, 0.82], [0.94, 1.0]);
-  const card3Opacity = useTransform(smoothProgress, [0.59, 0.65], [0, 1]);
+  const card3Y = useTransform(smoothProgress, [0.67, 0.90], [450, 0]);
+  const card3Scale = useTransform(smoothProgress, [0.67, 0.90], [0.94, 1.0]);
+  const card3Opacity = useTransform(smoothProgress, [0.64, 0.72], [0, 1]);
 
   // Sync HUD indicators and percentage
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     let count = 1;
-    if (latest >= 0.76) count = 4;
-    else if (latest >= 0.52) count = 3;
-    else if (latest >= 0.30) count = 2;
+    if (latest >= 0.82) count = 4;
+    else if (latest >= 0.58) count = 3;
+    else if (latest >= 0.34) count = 2;
 
     const pct = Math.min(
       100,
-      Math.max(25, Math.round((Math.min(latest, 0.76) / 0.76) * 100))
+      Math.max(25, Math.round((Math.min(latest, 0.88) / 0.88) * 100))
     );
 
     setLockedCount(count);
@@ -81,12 +145,12 @@ export function DocsPillars() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full select-none md:h-[220vh]"
+      className="relative w-full select-none md:h-[380vh]"
     >
       {/* 
         1. Desktop Unified Sticky Stage (md+)
         - Pin to top-0 with min-h-screen and vertical centering
-        - Eliminates awkward bottom empty void across all viewport heights
+        - Extended 380vh runway ensures slow, deliberate, luxury scrolling
         - Unpins cleanly as one unified block when transitioning into FAQ
       */}
       <div className="hidden md:flex flex-col items-center justify-center sticky top-0 min-h-screen z-20 w-full max-w-3xl mx-auto px-4 py-8">
@@ -96,7 +160,7 @@ export function DocsPillars() {
         </div>
 
         {/* Pinned Card Deck */}
-        <div className="relative w-full h-[270px] flex items-center justify-center">
+        <div className="relative w-full h-[285px] flex items-center justify-center">
           {/* Pillar 01: Base Card */}
           <motion.div
             style={{
