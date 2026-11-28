@@ -60,7 +60,7 @@ export const MobileCanvasView = React.memo(function MobileCanvasView({
               onStepChange={(idx) => effectiveTocItems[idx] && handleTocItemClick(effectiveTocItems[idx].id)}
               duration={5000}
               loop={false}
-              defaultPlaying={true}
+              defaultPlaying={false}
               size="sm"
               animation="flip"
             />

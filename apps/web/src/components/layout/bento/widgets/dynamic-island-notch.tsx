@@ -29,6 +29,7 @@ export const DynamicIslandNotch = React.memo(function DynamicIslandNotch({
 }: DynamicIslandNotchProps) {
   const totalSvgWidth = width + earRadius * 2;
   const totalSvgHeight = height + 1;
+  const touchHeight = Math.max(height, 48);
 
   // Exact concave ear fillets connecting to convex bottom pill (flush with top border)
   const fillPath = `
@@ -69,10 +70,10 @@ export const DynamicIslandNotch = React.memo(function DynamicIslandNotch({
       aria-label="Click to open fullscreen screensaver"
       title="Click to open fullscreen screensaver"
       className={cn(
-        "relative flex items-center justify-center select-none cursor-pointer transition-transform active:scale-[0.98]",
+        "relative flex flex-col items-center justify-start select-none cursor-pointer transition-transform active:scale-[0.98]",
         className
       )}
-      style={{ width, height }}
+      style={{ width, height: touchHeight }}
     >
       {/* SVG Notch Backing with Concave Ears */}
       <svg
@@ -96,8 +97,11 @@ export const DynamicIslandNotch = React.memo(function DynamicIslandNotch({
         />
       </svg>
 
-      {/* Island Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-between px-3.5 text-white">
+      {/* Island Content centered within visual SVG notch height */}
+      <div
+        className="relative z-10 w-full flex items-center justify-between px-3.5 text-white"
+        style={{ height }}
+      >
         {children}
       </div>
     </div>

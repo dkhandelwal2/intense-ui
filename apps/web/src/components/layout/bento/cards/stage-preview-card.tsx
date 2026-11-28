@@ -32,6 +32,11 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
   const displayLabel = currentTocLabel || title;
   const { activeDeckCard, isBottomSheetOpen, bottomSheetTab } = useComponentPlayground();
   const isCodeOpen = isCodeOpened !== undefined ? isCodeOpened : isDesktop ? activeDeckCard === 6 : isBottomSheetOpen && bottomSheetTab === "code";
+  const isFirstMountRef = React.useRef(true);
+
+  React.useEffect(() => {
+    isFirstMountRef.current = false;
+  }, []);
 
   return (
     <div
@@ -81,7 +86,7 @@ export const StagePreviewCard = React.memo(function StagePreviewCard({
           <motion.div
             key={isCustomizing ? "customization" : activeTocId}
             variants={animation ? STEP_CAROUSEL_ANIMATIONS[animation] : undefined}
-            initial={animation ? "initial" : false}
+            initial={isFirstMountRef.current ? false : (animation ? "initial" : false)}
             animate={animation ? "animate" : { opacity: 1, scale: 1, y: 0 }}
             exit={animation ? "exit" : { opacity: 0, scale: 0.94, y: -8 }}
             transition={animation ? { type: "spring", stiffness: 320, damping: 26 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
